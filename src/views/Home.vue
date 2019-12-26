@@ -1,5 +1,5 @@
 <template>
-  <div class="home">
+  <div class="app__box-page">
   </div>
 </template>
 

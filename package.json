@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "core-js": "^3.4.3",
+    "element-ui": "^2.4.5",
     "tcon": "^1.0.5",
     "vue": "^2.6.10",
     "vue-router": "^3.1.3",
@@ -27,11 +28,13 @@
     "@vue/eslint-config-standard": "^4.0.0",
     "@vue/eslint-config-typescript": "^4.0.0",
     "@vue/test-utils": "1.0.0-beta.29",
+    "babel-plugin-component": "^1.1.1",
     "eslint": "^5.16.0",
     "eslint-plugin-vue": "^5.0.0",
     "less": "^3.0.4",
     "less-loader": "^5.0.0",
     "typescript": "~3.5.3",
+    "vue-cli-plugin-element": "^1.0.1",
     "vue-template-compiler": "^2.6.10"
   }
 }
