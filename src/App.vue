@@ -1,20 +1,34 @@
 <template>
   <div id="app">
     <div class="app-header"></div>
+    <div class="app-header__bar"></div>
     <div class="app-content flex">
       <div class="app__side-bar">
         <div class="app__block height-50">
           <el-tabs class="height-100" type="border-card">
-            <el-tab-pane label="项目设置">项目设置</el-tab-pane>
-            <el-tab-pane label="页面列表">页面列表</el-tab-pane>
-            <el-tab-pane label="节点树">节点树</el-tab-pane>
+            <el-tab-pane label="项目设置">
+              <project-set />
+            </el-tab-pane>
+            <el-tab-pane label="页面列表">
+              <page-list />
+            </el-tab-pane>
+            <el-tab-pane label="节点树">
+              <p>当前选中页面的 节点树</p>
+            </el-tab-pane>
           </el-tabs>
         </div>
         <div class="app__block height-50">
           <el-tabs class="height-100" type="border-card">
-            <el-tab-pane label="通用组件">基础组件</el-tab-pane>
-            <el-tab-pane label="业务组件">高级组件</el-tab-pane>
-            <el-tab-pane label="工具函数">高级组件</el-tab-pane>
+            <el-tab-pane label="通用组件">
+              <p>万能节点容器</p>
+              <p>三栏布局、两栏布局</p>
+            </el-tab-pane>
+            <el-tab-pane label="业务组件">
+              <p>业务组件</p>
+            </el-tab-pane>
+            <el-tab-pane label="工具函数">
+              <p>toast / alert / 打点 / 获取 cookie</p>
+            </el-tab-pane>
           </el-tabs>
         </div>
       </div>
@@ -32,7 +46,9 @@
       <div class="app__config">
         <div class="app__block height-100">
           <el-tabs class="height-100" type="border-card">
-            <el-tab-pane label="页面设置">页面设置</el-tab-pane>
+            <el-tab-pane label="页面设置">
+              <page-set />
+            </el-tab-pane>
             <el-tab-pane label="属性">属性</el-tab-pane>
             <el-tab-pane label="样式">样式</el-tab-pane>
             <el-tab-pane label="动画">动画</el-tab-pane>
@@ -42,6 +58,21 @@
     </div>
   </div>
 </template>
+
+<script lang="ts">
+import { createComponent } from '@vue/composition-api'
+import ProjectSet from './components/project-set/index.vue'
+import PageList from './components/page-list/index.vue'
+import PageSet from './components/page-set/index.vue'
+
+export default createComponent({
+  components: {
+    ProjectSet,
+    PageList,
+    PageSet
+  }
+})
+</script>
 
 <style lang="less">
 .el-tabs {
@@ -64,15 +95,22 @@
   }
 }
 
+@side-width: 300px;
 .app-header {
   height: 50px;
   background-color: #4a4c55;
+  &__bar {
+    position: relative;
+    height: 30px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, .1);
+    z-index: 100;
+  }
 }
 .app-content {
-  height: e('calc(100vh - 50px)');
+  height: e('calc(100vh - 50px - 30px)');
 }
 .app__side-bar {
-  width: 300px;
+  width: @side-width;
   height: 100%;
 }
 .app__box {
@@ -82,7 +120,7 @@
   padding: 10px;
 }
 .app__config {
-  width: 300px;
+  width: @side-width;
   height: 100%;
 }
 .app__box-center {

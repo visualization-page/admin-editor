@@ -9,6 +9,7 @@
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
+    "@vue/composition-api": "^0.3.4",
     "core-js": "^3.4.3",
     "element-ui": "^2.4.5",
     "tcon": "^1.0.5",
@@ -29,6 +30,7 @@
     "@vue/eslint-config-typescript": "^4.0.0",
     "@vue/test-utils": "1.0.0-beta.29",
     "babel-plugin-component": "^1.1.1",
+    "babel-preset-vca-jsx": "^0.3.4",
     "eslint": "^5.16.0",
     "eslint-plugin-vue": "^5.0.0",
     "less": "^3.0.4",
