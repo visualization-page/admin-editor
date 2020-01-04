@@ -4,7 +4,7 @@ export const getParentRef = (field: string, data: any) => {
   const fieldSpace = field.split('.')
   if (fieldSpace.length > 1) {
     let res = data[fieldSpace.shift()!]
-    while (fieldSpace.length > 1) {
+    while (fieldSpace.length > 1 && res !== undefined) {
       res = res[fieldSpace.shift()!]
     }
     return {

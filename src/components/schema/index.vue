@@ -1,5 +1,6 @@
 <script lang="jsx">
-import { createComponent, reactive } from '@vue/composition-api'
+import Vue from 'vue'
+import { createComponent, reactive, watch } from '@vue/composition-api'
 import { renderInput, renderSelect, renderCheckbox } from './render-item'
 import RenderUrlMap from './render-url-map.vue'
 
@@ -48,36 +49,32 @@ export default createComponent({
       }
     }
 
-    const rules = props.schema.reduce((obj, x) => {
-      if (x.rulers) {
-        return Object.assign(obj, { [x.field]: x.rulers })
-      }
-      return obj
-    }, {})
-
-    const validate = () => new Promise((resolve, reject) => {
-      ctx.refs.form.validate((valid) => {
-        if (valid) {
-          resolve(props.schemaData)
-        } else {
-          // eslint-disable-next-line
-          reject()
-        }
-      })
-    })
-
-    const propsForm = {
+    const propsForm = reactive({
       props: {
         model: props.schemaData,
-        rules,
+        rules: {},
         'label-width': '80px',
         'label-position': 'left'
       },
       ref: 'form'
-    }
+    })
+
+    watch(() => props.schema, schema => {
+      const rules = {}
+      schema.forEach(x => {
+        if (x.rules) {
+          rules[x.field] = x.rules
+        }
+      })
+      Vue.set(propsForm.props, 'rules', rules)
+    })
+    watch(() => props.schemaData, schemaData => {
+      propsForm.props.model = schemaData
+    })
+
     return () => (
       <div class="schema-form">
-        <el-form {...propsForm} >
+        <el-form {...propsForm}>
           { props.schema.map(renderFormItem) }
         </el-form>
       </div>

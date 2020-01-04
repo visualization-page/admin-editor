@@ -12,5 +12,19 @@ export default {
   createdUser: {
     id: 0,
     name: 'jmingzi'
+  },
+  props: {
+    buttonText: '立即提交'
   }
 }
+
+export const localSchema = [
+  {
+    type: 'input',
+    label: '按钮',
+    field: 'props.buttonText',
+    rules: [
+      { required: true, message: '请输入项目目录名称', trigger: 'blur' }
+    ]
+  }
+]

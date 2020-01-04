@@ -42,15 +42,7 @@
         </div>
       </div>
       <div class="app__box relative">
-        <div class="app__box-center absolute z2">
-          <div class="app__mobile">
-            <div class="app__mobile-header relative bb bd-eee">
-              <img src="http://file.iming.work/85bcf0d2af175231da45.png" width="100%" alt="">
-              <span class="absolute l0 b0 width-100 pb10 tc f16">标题</span>
-            </div>
-            <div class="app__mobile-webview"></div>
-          </div>
-        </div>
+        <mobile-render />
       </div>
       <div class="app__config">
         <div class="app__block height-100">
@@ -83,6 +75,7 @@ import PageSet from './components/page-set/index.vue'
 import NodeTree from './components/node-tree/index.vue'
 import NodeProperty from './components/node-property/index.vue'
 import BasicComponent from './components/basic-components/index.vue'
+import MobileRender from './components/mobile-render/index.vue'
 import { tabCurrent, setTabName, tabName } from '@/assets/tab'
 
 export default createComponent({
@@ -92,7 +85,8 @@ export default createComponent({
     PageSet,
     NodeProperty,
     BasicComponent,
-    NodeTree
+    NodeTree,
+    MobileRender
   },
   setup () {
     return {

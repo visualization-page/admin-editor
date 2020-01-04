@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import Composition, { reactive, ref } from '@vue/composition-api'
+import Composition, { reactive } from '@vue/composition-api'
 Vue.use(Composition)
 
 export const tabName = {
