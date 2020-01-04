@@ -4,7 +4,7 @@
       v-if="showSchema"
       :schema="local"
       :schema-data="detail"
-      @change="updatePage"
+      @updateByField="updatePageByField"
     />
     <div v-else class="flex-center p30">
       <p class="c-999">请新建页面</p>
@@ -16,7 +16,8 @@
 import { createComponent, computed } from '@vue/composition-api'
 import SchemaForm from '../schema/index.vue'
 import local from './config'
-import { currentPage, updatePages } from '@/assets/page'
+import { currentPage } from '@/assets/page'
+import { updateByField } from '@/assets/util'
 
 export default createComponent({
   components: {
@@ -28,8 +29,8 @@ export default createComponent({
       local,
       showSchema,
       detail: currentPage,
-      updatePage (val) {
-        updatePages({ pageId: currentPage.value.id }, val)
+      updatePageByField (field, val) {
+        updateByField(currentPage.value, field, val)
       }
     }
   }
