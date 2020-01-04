@@ -6,7 +6,7 @@ export const local = [
     elProps: {
     },
     elAttrs: {
-      disabled: true
+      readonly: true
     }
   },
   {

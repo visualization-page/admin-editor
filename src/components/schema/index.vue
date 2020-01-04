@@ -1,7 +1,6 @@
 <script lang="jsx">
-import { Form, FormItem, Input, Select, Option, Button } from 'element-ui'
-import { createComponent, reactive, isRef, watch } from '@vue/composition-api'
-import { renderInput, renderSelect } from './render-item'
+import { createComponent, reactive } from '@vue/composition-api'
+import { renderInput, renderSelect, renderCheckbox } from './render-item'
 import RenderUrlMap from './render-url-map.vue'
 
 export default createComponent({
@@ -10,17 +9,10 @@ export default createComponent({
     schemaData: Object
   },
 
-  components: {
-    ElForm: Form,
-    ElFormItem: FormItem,
-    ElInput: Input,
-    ElSelect: Select,
-    ElOption: Option,
-    ElButton: Button
-  },
-
   setup (props, ctx) {
-    const schemaData = reactive(JSON.parse(JSON.stringify(props.schemaData)))
+    const updateField = (field, val) => {
+      ctx.emit('updateByField', field, val)
+    }
     const renderFormItem = (schema) => {
       return (
         <el-form-item
@@ -32,27 +24,23 @@ export default createComponent({
         </el-form-item>
       )
     }
-
-    watch(() => schemaData, val => {
-      // console.log(val)
-      // 返回一个新的对象
-      ctx.emit('change', val)
-    }, { deep: true, lazy: true })
-
     const renderItem = (schema) => {
       switch (schema.type) {
         case 'input':
         case 'textarea':
-          return renderInput(schema, schemaData)
+          return renderInput(schema, props.schemaData, updateField)
         case 'select':
-          return renderSelect(schema, schemaData)
+          return renderSelect(schema, props.schemaData, updateField)
+        case 'checkbox':
+          return renderCheckbox(schema, props.schemaData, updateField)
         case 'input-group':
-          // return renderInputGroup(schema, schemaData)
           return (
             <RenderUrlMap
               schema={schema}
-              schemaData={schemaData}
-              onChange={(val) => { schemaData.httpOptions.urlMap = reactive(val) }}
+              schemaData={props.schemaData}
+              onChange={(val) => {
+                updateField('httpOptions.urlMap', reactive(val))
+              }}
             />
           )
         default:
@@ -70,7 +58,7 @@ export default createComponent({
     const validate = () => new Promise((resolve, reject) => {
       ctx.refs.form.validate((valid) => {
         if (valid) {
-          resolve(schemaData)
+          resolve(props.schemaData)
         } else {
           // eslint-disable-next-line
           reject()
@@ -78,14 +66,18 @@ export default createComponent({
       })
     })
 
+    const propsForm = {
+      props: {
+        model: props.schemaData,
+        rules,
+        'label-width': '80px',
+        'label-position': 'left'
+      },
+      ref: 'form'
+    }
     return () => (
       <div class="schema-form">
-        <el-form
-          rules={rules}
-          label-width="80px"
-          label-position="left"
-          ref="form"
-        >
+        <el-form {...propsForm} >
           { props.schema.map(renderFormItem) }
         </el-form>
       </div>

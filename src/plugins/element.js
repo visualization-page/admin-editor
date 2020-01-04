@@ -1,5 +1,17 @@
 import Vue from 'vue'
-import { Button, Tabs, TabPane, Form, FormItem, Input, Select } from 'element-ui'
+import {
+  Button,
+  Tabs,
+  TabPane,
+  Form,
+  FormItem,
+  Input,
+  Select,
+  Option,
+  Checkbox,
+  Dialog,
+  Tree
+} from 'element-ui'
 
 Vue.prototype.$ELEMENT = { size: 'mini', zIndex: 3000 }
 Vue.use(Button)
@@ -9,3 +21,7 @@ Vue.use(Button)
   .use(FormItem)
   .use(Input)
   .use(Select)
+  .use(Option)
+  .use(Checkbox)
+  .use(Dialog)
+  .use(Tree)

@@ -5,35 +5,44 @@
     <div class="app-content flex">
       <div class="app__side-bar">
         <div class="app__block height-50">
-          <el-tabs class="height-100" type="border-card">
-            <el-tab-pane label="项目设置">
+          <el-tabs
+            :value="tabCurrent.tab1"
+            class="height-100"
+            type="border-card"
+            @input="val => handleClick([val])"
+          >
+            <el-tab-pane label="项目设置" :name="tabName.projectSet">
               <project-set />
             </el-tab-pane>
-            <el-tab-pane label="页面列表">
+            <el-tab-pane label="页面列表" :name="tabName.pageList">
               <page-list />
             </el-tab-pane>
-            <el-tab-pane label="节点树">
-              <p>当前选中页面的 节点树</p>
+            <el-tab-pane label="节点树" :name="tabName.nodeTree">
+              <node-tree />
             </el-tab-pane>
           </el-tabs>
         </div>
         <div class="app__block height-50">
-          <el-tabs class="height-100" type="border-card">
-            <el-tab-pane label="通用组件">
-              <p>万能节点容器</p>
-              <p>三栏布局、两栏布局</p>
+          <el-tabs
+            :value="tabCurrent.tab2"
+            class="height-100"
+            type="border-card"
+            @input="val => handleClick(['', val])"
+          >
+            <el-tab-pane label="通用组件" :name="tabName.basicComponent">
+              <basic-component />
             </el-tab-pane>
-            <el-tab-pane label="业务组件">
+            <el-tab-pane label="高级组件" :name="tabName.highComponent">
               <p>业务组件</p>
             </el-tab-pane>
-            <el-tab-pane label="工具函数">
+            <el-tab-pane label="工具函数" :name="tabName.fx">
               <p>toast / alert / 打点 / 获取 cookie</p>
             </el-tab-pane>
           </el-tabs>
         </div>
       </div>
       <div class="app__box relative">
-        <div class="app__box-center absolute">
+        <div class="app__box-center absolute z2">
           <div class="app__mobile">
             <div class="app__mobile-header relative bb bd-eee">
               <img src="http://file.iming.work/85bcf0d2af175231da45.png" width="100%" alt="">
@@ -45,13 +54,20 @@
       </div>
       <div class="app__config">
         <div class="app__block height-100">
-          <el-tabs class="height-100" type="border-card">
-            <el-tab-pane label="页面设置">
+          <el-tabs
+            :value="tabCurrent.tab3"
+            class="height-100"
+            type="border-card"
+            @input="val => handleClick(['', '', val])"
+          >
+            <el-tab-pane label="页面设置" :name="tabName.pageSet">
               <page-set />
             </el-tab-pane>
-            <el-tab-pane label="属性">属性</el-tab-pane>
-            <el-tab-pane label="样式">样式</el-tab-pane>
-            <el-tab-pane label="动画">动画</el-tab-pane>
+            <el-tab-pane label="属性"  :name="tabName.nodeProperty">
+              <node-property />
+            </el-tab-pane>
+            <el-tab-pane label="样式" :name="tabName.nodeStyle">样式</el-tab-pane>
+            <el-tab-pane label="动画" :name="tabName.nodeAnimate">动画</el-tab-pane>
           </el-tabs>
         </div>
       </div>
@@ -64,12 +80,28 @@ import { createComponent } from '@vue/composition-api'
 import ProjectSet from './components/project-set/index.vue'
 import PageList from './components/page-list/index.vue'
 import PageSet from './components/page-set/index.vue'
+import NodeTree from './components/node-tree/index.vue'
+import NodeProperty from './components/node-property/index.vue'
+import BasicComponent from './components/basic-components/index.vue'
+import { tabCurrent, setTabName, tabName } from '@/assets/tab'
 
 export default createComponent({
   components: {
     ProjectSet,
     PageList,
-    PageSet
+    PageSet,
+    NodeProperty,
+    BasicComponent,
+    NodeTree
+  },
+  setup () {
+    return {
+      tabCurrent,
+      tabName,
+      handleClick (obj: any) {
+        setTabName(obj)
+      }
+    }
   }
 })
 </script>

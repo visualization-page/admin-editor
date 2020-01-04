@@ -3,6 +3,7 @@
     <schema-form
       :schema="local"
       :schema-data="detail"
+      @updateByField="updateProjectByField"
     />
   </div>
 </template>
@@ -11,6 +12,8 @@
 import { createComponent } from '@vue/composition-api'
 import SchemaForm from '../schema/index.vue'
 import { local } from './config'
+import { project } from '@/assets/project'
+import { updateByField } from '@/assets/util'
 
 export default createComponent({
   components: {
@@ -21,28 +24,9 @@ export default createComponent({
     return {
       // validate: null,
       local,
-      detail: {
-        desc: '',
-        dir: '',
-        thumbCover: '',
-        interactiveType: 'long-page',
-        httpOptions: {
-          baseUrl: '',
-          contentType: 'application/json',
-          urlMap: {
-            test: '/path/to/get'
-          }
-        },
-        url: '',
-        pages: [
-          {
-            title: '',
-            url: '',
-            id: '',
-            nodes: [
-            ]
-          }
-        ]
+      detail: project,
+      updateProjectByField (field: string, val: any) {
+        updateByField(project, field, val)
       }
     }
   }
