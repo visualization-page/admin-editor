@@ -19,8 +19,8 @@ export default [
     }
   },
   {
-    label: 'url',
-    field: '页面地址',
+    label: '页面地址',
+    field: 'url',
     type: 'input',
     elProps: {
     },

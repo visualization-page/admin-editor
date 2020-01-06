@@ -1,4 +1,5 @@
 import Vue from 'vue'
+import { NodeItem } from './node'
 
 export const getParentRef = (field: string, data: any) => {
   const fieldSpace = field.split('.')
@@ -25,4 +26,30 @@ export const updateByField = (target: any, str: string, val: any) => {
   } else {
     Vue.set(pref, field, val)
   }
+}
+
+export const findTreePath = (
+  target: NodeItem,
+  nodes: Array<NodeItem>,
+  res: string[] = []
+) => {
+  for (let item of nodes.values()) {
+    res.push(item.id as string)
+    if (item.id === target.id) {
+      return res
+    } else if (item.children && item.children.length) {
+      const hasRes = findTreePath(target, item.children, res)
+      if (hasRes) {
+        return res
+      } else {
+        res.pop()
+      }
+    } else {
+      res.pop()
+    }
+  }
+}
+
+export const deepClone = (obj: any) => {
+  return JSON.parse(JSON.stringify(obj))
 }

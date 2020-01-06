@@ -15,10 +15,11 @@ export default {
   },
   props: {
     buttonText: '立即提交'
-  }
+  },
+  events: []
 }
 
-export const localSchema = [
+export const specialSchema = [
   {
     type: 'input',
     label: '按钮',

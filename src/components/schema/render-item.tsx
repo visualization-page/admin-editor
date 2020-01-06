@@ -11,7 +11,7 @@ export const renderInput = (item: any, data: any, updateField: any) => {
       ...(item.elAttrs || {}),
       type: item.type,
       placeholder: '请输入',
-      value: pref[field]
+      value: pref && pref[field]
     },
     props: {
       ...(item.elProps || {})

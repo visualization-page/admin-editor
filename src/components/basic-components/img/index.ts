@@ -12,5 +12,6 @@ export default {
   createdUser: {
     id: 0,
     name: 'jmingzi'
-  }
+  },
+  events: []
 }

@@ -120,6 +120,13 @@ export default createComponent({
     overflow: auto;
   }
 }
+.c-blue {
+  color: #409eff;
+}
+
+.cp {
+  cursor: pointer;
+}
 
 @side-width: 300px;
 .app-header {

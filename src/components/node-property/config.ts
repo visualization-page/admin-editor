@@ -27,5 +27,10 @@ export default [
     label: '脱离文档流',
     field: 'outDocFlow',
     type: 'checkbox'
+  },
+  {
+    label: '事件管理',
+    field: 'events',
+    type: 'events'
   }
 ]

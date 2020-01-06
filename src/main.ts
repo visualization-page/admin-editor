@@ -6,6 +6,12 @@ import store from './store'
 import './plugins/element'
 import 'tcon'
 
+declare module '@vue/composition-api/dist/component/component' {
+  interface SetupContext {
+    readonly refs: { [key: string]: Vue | Element | Vue[] | Element[] }
+  }
+}
+
 Vue.config.productionTip = false
 Vue.use(Composition)
 new Vue({

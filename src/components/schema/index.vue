@@ -3,6 +3,7 @@ import Vue from 'vue'
 import { createComponent, reactive, watch } from '@vue/composition-api'
 import { renderInput, renderSelect, renderCheckbox } from './render-item'
 import RenderUrlMap from './render-url-map.vue'
+import RenderEvents from './render-events.vue'
 
 export default createComponent({
   props: {
@@ -40,7 +41,17 @@ export default createComponent({
               schema={schema}
               schemaData={props.schemaData}
               onChange={(val) => {
-                updateField('httpOptions.urlMap', reactive(val))
+                updateField(schema.field, reactive(val))
+              }}
+            />
+          )
+        case 'events':
+          return (
+            <RenderEvents
+              schema={schema}
+              schemaData={props.schemaData}
+              onChange={(val) => {
+                updateField(schema.field, val)
               }}
             />
           )
