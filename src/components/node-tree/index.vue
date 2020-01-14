@@ -4,12 +4,16 @@
       v-if="nodes"
       :data="nodes"
       :props="defaultProps"
+      :allow-drop="allowDrop"
+      :allow-drag="allowDrag"
       :expand-on-click-node="false"
       node-key="id"
       default-expand-all
       highlight-current
+      draggable
       ref="tree"
       @node-click="handleNodeClick"
+      @node-drop="handleDrop"
     />
     <div v-else class="flex-center p30">
       <p class="c-999">请新建页面</p>
@@ -45,7 +49,17 @@ export default createComponent({
         children: 'children',
         label: 'title'
       },
-      handleNodeClick
+      handleNodeClick,
+      handleDrop (draggingNode: any, dropNode: any, dropType: any, ev: any) {
+        console.log('tree drop: ', dropNode, dropType)
+      },
+      allowDrop (draggingNode: any, dropNode: any, dropType: any) {
+        const { id, type } = dropNode.data
+        return id !== -1 && ((type !== 'div' && dropType !== 'inner') || type === 'div')
+      },
+      allowDrag (draggingNode: any) {
+        return draggingNode.data.id !== -1
+      }
     }
   }
 })

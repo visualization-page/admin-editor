@@ -1,9 +1,10 @@
 <script lang="jsx">
 import Vue from 'vue'
-import { createComponent, reactive, watch } from '@vue/composition-api'
+import { createComponent, createElement, reactive, watch } from '@vue/composition-api'
 import { renderInput, renderSelect, renderCheckbox } from './render-item'
 import RenderUrlMap from './render-url-map.vue'
 import RenderEvents from './render-events.vue'
+import RenderUnitSize from './render-unit-size.vue'
 
 export default createComponent({
   props: {
@@ -26,6 +27,19 @@ export default createComponent({
         </el-form-item>
       )
     }
+    const renderCompositeComponent = (component, schema) => {
+      return createElement(component, {
+        props: {
+          schema,
+          schemaData: props.schemaData
+        },
+        on: {
+          change (val) {
+            updateField(schema.field, reactive(val))
+          }
+        }
+      })
+    }
     const renderItem = (schema) => {
       switch (schema.type) {
         case 'input':
@@ -36,25 +50,11 @@ export default createComponent({
         case 'checkbox':
           return renderCheckbox(schema, props.schemaData, updateField)
         case 'input-group':
-          return (
-            <RenderUrlMap
-              schema={schema}
-              schemaData={props.schemaData}
-              onChange={(val) => {
-                updateField(schema.field, reactive(val))
-              }}
-            />
-          )
+          return renderCompositeComponent(RenderUrlMap, schema)
+        case 'unit-size':
+          return renderCompositeComponent(RenderUnitSize, schema)
         case 'events':
-          return (
-            <RenderEvents
-              schema={schema}
-              schemaData={props.schemaData}
-              onChange={(val) => {
-                updateField(schema.field, val)
-              }}
-            />
-          )
+          return renderCompositeComponent(RenderEvents, schema)
         default:
           return <p />
       }

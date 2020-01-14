@@ -12,6 +12,12 @@ declare module '@vue/composition-api/dist/component/component' {
   }
 }
 
+declare global {
+  interface Window {
+    require: () => void
+  }
+}
+
 Vue.config.productionTip = false
 Vue.use(Composition)
 new Vue({

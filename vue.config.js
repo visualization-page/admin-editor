@@ -1,11 +1,15 @@
-const MonacoWebpackPlugin = require('monaco-editor-webpack-plugin')
+// const MonacoWebpackPlugin = require('monaco-editor-webpack-plugin')
 
 module.exports = {
   configureWebpack: {
     plugins: [
-      new MonacoWebpackPlugin({
-        languages: ['javascript']
-      })
-    ]
+      // new MonacoWebpackPlugin({
+      //   languages: ['javascript']
+      // })
+    ],
+    externals: {
+      // 'element-ui': 'ELEMENT',
+      vue: 'Vue'
+    }
   }
 }

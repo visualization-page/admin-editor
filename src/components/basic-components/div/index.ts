@@ -9,6 +9,7 @@ export default {
   title: '万能容器',
   cover: '',
   type: 'div',
+  className: '',
   createdUser: {
     id: 0,
     name: 'jmingzi'
@@ -16,10 +17,11 @@ export default {
   props: {
     buttonText: '立即提交'
   },
-  events: []
+  events: [],
+  style: {}
 }
 
-export const specialSchema = [
+export const schema = [
   {
     type: 'input',
     label: '按钮',

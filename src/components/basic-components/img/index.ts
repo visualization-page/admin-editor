@@ -9,9 +9,34 @@ export default {
   title: '图片',
   type: 'img',
   cover: '',
+  className: '',
   createdUser: {
     id: 0,
     name: 'jmingzi'
   },
-  events: []
+  events: [],
+  props: {
+    width: '',
+    height: ''
+  },
+  style: {}
 }
+
+export const schema = [
+  {
+    type: 'input',
+    label: '宽度',
+    field: 'props.width',
+    rules: [
+    ],
+    placeholder: '例如 100px，不填为 auto'
+  },
+  {
+    type: 'input',
+    label: '高度',
+    field: 'props.height',
+    rules: [
+    ],
+    placeholder: '例如 100px，不填为 auto'
+  }
+]

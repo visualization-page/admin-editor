@@ -10,7 +10,8 @@ import {
   Option,
   Checkbox,
   Dialog,
-  Tree
+  Tree,
+  Cascader
 } from 'element-ui'
 
 Vue.prototype.$ELEMENT = { size: 'mini', zIndex: 3000 }
@@ -25,3 +26,4 @@ Vue.use(Button)
   .use(Checkbox)
   .use(Dialog)
   .use(Tree)
+  .use(Cascader)

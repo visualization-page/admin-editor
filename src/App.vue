@@ -58,7 +58,9 @@
             <el-tab-pane label="属性"  :name="tabName.nodeProperty">
               <node-property />
             </el-tab-pane>
-            <el-tab-pane label="样式" :name="tabName.nodeStyle">样式</el-tab-pane>
+            <el-tab-pane label="样式" :name="tabName.nodeStyle">
+              <node-style />
+            </el-tab-pane>
             <el-tab-pane label="动画" :name="tabName.nodeAnimate">动画</el-tab-pane>
           </el-tabs>
         </div>
@@ -73,6 +75,7 @@ import ProjectSet from './components/project-set/index.vue'
 import PageList from './components/page-list/index.vue'
 import PageSet from './components/page-set/index.vue'
 import NodeTree from './components/node-tree/index.vue'
+import NodeStyle from './components/node-style/index.vue'
 import NodeProperty from './components/node-property/index.vue'
 import BasicComponent from './components/basic-components/index.vue'
 import MobileRender from './components/mobile-render/index.vue'
@@ -86,7 +89,8 @@ export default createComponent({
     NodeProperty,
     BasicComponent,
     NodeTree,
-    MobileRender
+    MobileRender,
+    NodeStyle
   },
   setup () {
     return {

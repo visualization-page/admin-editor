@@ -18,6 +18,7 @@
       :visible.sync="showModal"
       title="事件管理"
       width="500px"
+      class="events-manage-dialog"
     >
       <el-form
         :model="form"
@@ -52,7 +53,7 @@
             clearable
           />
         </el-form-item>
-        <el-form-item label="动作" prop="fx">
+        <el-form-item class="events-btn" label="动作" prop="fx">
           <el-button
             v-for="(item, i) in fxList"
             :key="i"
@@ -63,8 +64,12 @@
           </el-button>
         </el-form-item>
         <el-form-item label="动作代码" prop="fxCode">
-          <vue-monaco
+          <monaco-editor
             v-model="form.fxCode"
+            :amdRequire="amdRequire"
+            style="height: 300px"
+            language="javascript"
+            theme="vs-dark"
           />
         </el-form-item>
       </el-form>
@@ -83,8 +88,8 @@ import { eventType, fxList } from '@/assets/event'
 import { currentPage } from '@/assets/page'
 import { currentNode } from '@/assets/node'
 import { findTreePath, getParentRef, deepClone } from '@/assets/util'
-import VueMonaco from '@/components/vue-monaco/index.vue'
-import { Cascader, ButtonGroup, MessageBox } from 'element-ui'
+// import VueMonaco from '@/components/vue-monaco/index.vue'
+import { MessageBox } from 'element-ui'
 
 export default createComponent({
   props: {
@@ -93,9 +98,6 @@ export default createComponent({
   },
 
   components: {
-    Cascader,
-    ButtonGroup,
-    VueMonaco
   },
 
   setup (props, ctx) {
@@ -188,7 +190,8 @@ export default createComponent({
           eventList.value.splice(i, 1)
           ctx.emit('change', eventList)
         })
-      }
+      },
+      amdRequire: window.require
     }
   }
 })
@@ -197,6 +200,11 @@ export default createComponent({
 <style lang="less">
 .events-manage {
   &__editor {
+  }
+  &-dialog {
+    .events-btn .el-button {
+      margin: 0 10px 10px 0;
+    }
   }
 }
 </style>

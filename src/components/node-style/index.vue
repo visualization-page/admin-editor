@@ -1,9 +1,9 @@
 <template>
-  <div class="node-property">
+  <div class="node-style">
     <schema-form
-      v-if="detail && detail.id !== -1"
+      v-if="currentNode && currentNode.id !== -1"
       :schema="schema"
-      :schema-data="detail"
+      :schema-data="currentNode"
       @updateByField="updateNodeByField"
     />
     <div v-else class="flex-center p30">
@@ -18,27 +18,30 @@ import SchemaForm from '../schema/index.vue'
 import local from './config'
 import { currentNode } from '@/assets/node'
 import { updateByField } from '@/assets/util'
-import * as schema from '@/components/basic-components/props-schema'
+// import * as schema from '@/components/basic-components/props-schema'
 
 export default {
   components: {
     SchemaForm
   },
   setup () {
-    const state = reactive({
-      schema: []
-    })
+    // const state = reactive({
+    //   schema: []
+    // })
     const detail = computed(() => currentNode.value)
     // 根据当前 node 合并通用 schema 和组件特有的 schema
-    watch(() => currentNode.value, node => {
-      state.schema = node && node.id !== -1 && schema[node.type]
-        ? [ ...local, ...schema[node.type] ]
-        : []
-    })
+    // watch(() => currentNode.value, node => {
+    //   state.schema = node && node.id !== -1 && schema[node.type]
+    //     ? [ ...local, ...schema[node.type] ]
+    //     : []
+    // })
     return {
-      ...toRefs(state),
-      detail,
+      // ...toRefs(state),
+      schema: local,
+      // detail,
+      currentNode,
       updateNodeByField (field, val) {
+        console.log(val)
         updateByField(currentNode.value, field, val)
       }
     }

@@ -8,9 +8,9 @@ export const renderInput = (item: any, data: any, updateField: any) => {
   const { pref, field } = getParentRef(item.field, data)
   const props = {
     attrs: {
+      placeholder: item.placeholder || '请输入',
       ...(item.elAttrs || {}),
       type: item.type,
-      placeholder: '请输入',
       value: pref && pref[field]
     },
     props: {

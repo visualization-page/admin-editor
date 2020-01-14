@@ -10,6 +10,16 @@ export default [
     }
   },
   {
+    label: 'class',
+    field: 'className',
+    type: 'input',
+    elProps: {
+    },
+    elAttrs: {
+      placeholder: '支持 tcon.css，空格分隔'
+    }
+  },
+  {
     label: '标题',
     field: 'title',
     type: 'input',
