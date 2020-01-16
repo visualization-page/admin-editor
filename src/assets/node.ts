@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Composition, { reactive, ref } from '@vue/composition-api'
 import { currentPage } from './page'
+import { deepClone } from './util'
 
 Vue.use(Composition)
 
@@ -32,11 +33,8 @@ export const addNode = (item: any) => {
     }
     const index = target.length
     Vue.set(target, index, {
-      children: [],
-      ...item,
-      id: `node-${Date.now()}`,
-      show: true,
-      outDocFlow: false
+      ...deepClone(item),
+      id: `node-${Date.now()}`
     })
     setCurrentNode(target[index])
   }

@@ -1,15 +1,18 @@
 <script lang="jsx">
 import Vue from 'vue'
 import { createComponent, createElement, reactive, watch } from '@vue/composition-api'
-import { renderInput, renderSelect, renderCheckbox } from './render-item'
+import { renderInput, renderSelect, renderCheckbox, renderUniversal } from './render-item'
 import RenderUrlMap from './render-url-map.vue'
 import RenderEvents from './render-events.vue'
 import RenderUnitSize from './render-unit-size.vue'
+import RenderDirectionSize from './render-direction-size.vue'
+import RenderRichText from './render-rich-text.vue'
 
 export default createComponent({
   props: {
     schema: Array,
-    schemaData: Object
+    schemaData: Object,
+    from: String
   },
 
   setup (props, ctx) {
@@ -17,7 +20,15 @@ export default createComponent({
       ctx.emit('updateByField', field, val)
     }
     const renderFormItem = (schema) => {
-      return (
+      // 检查 relation
+      let showSchemaField = true
+      if (schema.relation) {
+        showSchemaField = schema.relation.every(item => props.schemaData[item.field] === item.value)
+      }
+      if (showSchemaField === false) {
+        return null
+      }
+      return schema.label ? (
         <el-form-item
           key={schema.field}
           label={schema.label}
@@ -25,13 +36,14 @@ export default createComponent({
         >
           { renderItem(schema) }
         </el-form-item>
-      )
+      ) : renderItem(schema)
     }
     const renderCompositeComponent = (component, schema) => {
       return createElement(component, {
         props: {
           schema,
-          schemaData: props.schemaData
+          schemaData: props.schemaData,
+          from: props.from
         },
         on: {
           change (val) {
@@ -49,10 +61,18 @@ export default createComponent({
           return renderSelect(schema, props.schemaData, updateField)
         case 'checkbox':
           return renderCheckbox(schema, props.schemaData, updateField)
+        case 'slider':
+          return renderUniversal('el-slider', schema, props.schemaData, updateField, true)
+        case 'color':
+          return renderUniversal('el-color-picker', schema, props.schemaData, updateField)
         case 'input-group':
           return renderCompositeComponent(RenderUrlMap, schema)
         case 'unit-size':
           return renderCompositeComponent(RenderUnitSize, schema)
+        case 'direction-size':
+          return renderCompositeComponent(RenderDirectionSize, schema)
+        case 'rich-text':
+          return renderCompositeComponent(RenderRichText, schema)
         case 'events':
           return renderCompositeComponent(RenderEvents, schema)
         default:

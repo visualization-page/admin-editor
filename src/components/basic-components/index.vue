@@ -18,6 +18,7 @@
 import { Message } from 'element-ui'
 import div from './div'
 import img from './img'
+import rich from './rich-text'
 import { addNode, currentNode } from '@/assets/node'
 import { setTabName, tabName } from '@/assets/tab'
 
@@ -41,7 +42,8 @@ export default {
     return {
       list: [
         div,
-        img
+        img,
+        rich
       ],
       handleClick
     }

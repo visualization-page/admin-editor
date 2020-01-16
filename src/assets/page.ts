@@ -23,7 +23,14 @@ export const addPage = () => {
     title: '',
     url: '',
     id: `page-${Date.now()}`,
-    nodes: []
+    nodes: [],
+    share: {
+      title: '',
+      desc: '',
+      pic: '',
+      link: ''
+    },
+    events: []
   })
   setCurrentPage(project.pages[index])
   if (index === 0) {

@@ -20,7 +20,7 @@ export default [
     }
   },
   {
-    label: '标题',
+    label: '节点名称',
     field: 'title',
     type: 'input',
     elProps: {

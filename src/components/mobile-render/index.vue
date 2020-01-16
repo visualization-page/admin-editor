@@ -7,7 +7,9 @@
           {{ currentPage ? (currentPage.title || '请输入标题') : '未创建页面' }}
         </span>
       </div>
-      <div class="app__mobile-webview"></div>
+      <div class="app__mobile-webview relative">
+        <render />
+      </div>
     </div>
   </div>
 </template>
@@ -15,8 +17,13 @@
 <script lang="ts">
 import { createComponent } from '@vue/composition-api'
 import { currentPage } from '@/assets/page'
+import Render from './render/index.vue'
 
 export default createComponent({
+  components: {
+    Render
+  },
+
   setup () {
     // const title = computed(() => currentPage.value && currentPage.value.title)
     return {

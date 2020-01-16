@@ -4,6 +4,7 @@
       v-if="showSchema"
       :schema="local"
       :schema-data="detail"
+      from="page"
       @updateByField="updatePageByField"
     />
     <div v-else class="flex-center p30">

@@ -1,15 +1,9 @@
 import { schema as div } from './div'
 import { schema as img } from './img'
+import { schema as rich } from './rich-text'
 
-// export const getSpecialByType = (type?: 'div' | 'img') => {
-//   switch (type) {
-//     case 'div':
-//       return div
-//     default:
-//       return []
-//   }
-// }
-export {
+export default {
   div,
-  img
+  img,
+  'rich-text': rich
 }

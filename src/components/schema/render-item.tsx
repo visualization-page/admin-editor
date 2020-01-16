@@ -1,6 +1,6 @@
 import Vue from 'vue'
-import CompositionApi, { ref, reactive } from '@vue/composition-api'
-import { getParentRef } from '@/assets/util'
+import CompositionApi, { createElement } from '@vue/composition-api'
+import { getParentRef, getUnitValue } from '@/assets/util'
 
 Vue.use(CompositionApi)
 
@@ -39,6 +39,27 @@ export const renderSelect = (item: any, data: any, updateField: any) => {
       { item.options.map((x: any) => <el-option label={x.label} value={x.value} />) }
     </el-select>
   )
+}
+
+export const renderUniversal = (
+  name: string,
+  item: any,
+  data: any,
+  updateField: any,
+  valueHasUnit: boolean
+) => {
+  const { pref, field } = getParentRef(item.field, data)
+  const { value, unit } = getUnitValue(pref[field])
+  return createElement(name, {
+    props: {
+      value: valueHasUnit ? value : pref[field]
+    },
+    on: {
+      input (val: string) {
+        updateField(item.field, valueHasUnit ? (val + unit) : val)
+      }
+    }
+  })
 }
 
 export const renderCheckbox = (item: any, data: any, updateField: any) => {

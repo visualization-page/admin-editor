@@ -53,3 +53,17 @@ export const findTreePath = (
 export const deepClone = (obj: any) => {
   return JSON.parse(JSON.stringify(obj))
 }
+
+export const getUnitValue = (str: string): { value?: string, unit?: string } => {
+  if (str === null || str === undefined) {
+    return {
+      value: undefined,
+      unit: undefined
+    }
+  }
+  const m = String(str).match(/px|%|vw/)
+  return {
+    value: m ? str.replace(m[0], '') : undefined,
+    unit: m ? m[0] : 'px'
+  }
+}

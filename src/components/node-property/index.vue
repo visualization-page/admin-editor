@@ -18,7 +18,7 @@ import SchemaForm from '../schema/index.vue'
 import local from './config'
 import { currentNode } from '@/assets/node'
 import { updateByField } from '@/assets/util'
-import * as schema from '@/components/basic-components/props-schema'
+import schema from '@/components/basic-components/props-schema'
 
 export default {
   components: {
@@ -31,8 +31,8 @@ export default {
     const detail = computed(() => currentNode.value)
     // 根据当前 node 合并通用 schema 和组件特有的 schema
     watch(() => currentNode.value, node => {
-      state.schema = node && node.id !== -1 && schema[node.type]
-        ? [ ...local, ...schema[node.type] ]
+      state.schema = node && node.id !== -1
+        ? [ ...local, ...(schema[node.type] || {}) ]
         : []
     })
     return {

@@ -33,16 +33,19 @@
         <el-form-item label="类型" prop="eventType">
           <el-select v-model="form.eventType">
             <el-option
-              v-for="item in eventType"
+              v-for="item in eventTypeOptions"
               :key="item"
               :label="item"
               :value="item"
             />
           </el-select>
         </el-form-item>
-        <el-form-item label="目标节点" prop="targetNodeIdPath">
-          <cascader
-            v-if="currentPage"
+        <el-form-item
+          v-if="!isFromPage"
+          label="目标节点"
+          prop="targetNodeIdPath"
+        >
+          <el-cascader
             v-model="form.targetNodeIdPath"
             :options="currentPage.nodes"
             :props="{
@@ -53,17 +56,17 @@
             clearable
           />
         </el-form-item>
-        <el-form-item class="events-btn" label="动作" prop="fx">
+        <el-form-item class="events-btn" label="内置动作" prop="fx">
           <el-button
             v-for="(item, i) in fxList"
             :key="i"
-            :type="form.fx === item.name ? 'primary' : 'default'"
-            @click="form.fx = item.name"
+            type="default"
+            @click="handleClickFx(item)"
           >
             {{ item.name }}
           </el-button>
         </el-form-item>
-        <el-form-item label="动作代码" prop="fxCode">
+        <el-form-item label="逻辑代码" prop="fxCode">
           <monaco-editor
             v-model="form.fxCode"
             :amdRequire="amdRequire"
@@ -83,8 +86,8 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { createComponent, ref, reactive, watch } from '@vue/composition-api'
-import { eventType, fxList } from '@/assets/event'
+import { createComponent, ref, reactive, watch, computed } from '@vue/composition-api'
+import { eventType, eventTypePage, fxList } from '@/assets/event'
 import { currentPage } from '@/assets/page'
 import { currentNode } from '@/assets/node'
 import { findTreePath, getParentRef, deepClone } from '@/assets/util'
@@ -94,17 +97,17 @@ import { MessageBox } from 'element-ui'
 export default createComponent({
   props: {
     schema: Object,
-    schemaData: Object
-  },
-
-  components: {
+    schemaData: Object,
+    from: {
+      type: String,
+      default: 'node'
+    }
   },
 
   setup (props, ctx) {
     type FormEvent = {
       eventType: string
       targetNodeIdPath?: string[]
-      fx: string
       fxCode: string
       desc: string
       [k: string]: any
@@ -113,13 +116,14 @@ export default createComponent({
     const showModal = ref(false)
     const editItemIndex = ref(-1)
     const defaultForm: FormEvent = {
-      eventType: 'click',
+      eventType: '',
       targetNodeIdPath: [],
-      fx: '',
-      fxCode: 'const noop = () => {}',
+      fxCode: '',
       desc: ''
     }
+    const isFromPage = computed(() => props.from === 'page')
     const form = reactive<FormEvent>(deepClone(defaultForm))
+    const eventTypeOptions = computed(() => isFromPage.value ? eventTypePage : eventType)
 
     watch(() => props.schemaData, val => {
       if (val) {
@@ -149,32 +153,39 @@ export default createComponent({
         form[k] = obj[k]
       })
     }
+    const handleClickFx = (item: any) => {
+      // console.log(item)
+      form.fxCode += `\n${item.code}`
+    }
 
     return {
       showModal,
       form,
       eventList,
-      eventType,
+      eventTypeOptions,
+      isFromPage,
       fxList,
       currentPage,
       rules: {
         desc: [
           { required: true, message: '请输入描述', trigger: 'blur' }
         ],
-        fx: [
-          { required: true, message: '请选择动作', trigger: 'blur' }
+        eventType: [
+          { required: true, message: '请选择类型', trigger: 'blur' }
         ]
       },
       handleConfirm,
       handleAdd () {
         showModal.value = true
         resetForm(defaultForm)
-        // 从树形中查找节点并记录 path
-        form.targetNodeIdPath = findTreePath(currentNode.value!, currentPage.value!.nodes, [])
-        Vue.nextTick(() => {
-          // @ts-ignore
-          ctx.refs.form.clearValidate()
-        })
+        if (!isFromPage.value) {
+          // 从树形中查找节点并记录 path
+          form.targetNodeIdPath = findTreePath(currentNode.value!, currentPage.value!.nodes, [])
+          Vue.nextTick(() => {
+            // @ts-ignore
+            ctx.refs.form.clearValidate()
+          })
+        }
       },
       handleEdit (item: FormEvent, i: number) {
         showModal.value = true
@@ -191,7 +202,8 @@ export default createComponent({
           ctx.emit('change', eventList)
         })
       },
-      amdRequire: window.require
+      amdRequire: window.require,
+      handleClickFx
     }
   }
 })

@@ -1,12 +1,16 @@
 <template>
   <div class="unit-size flex">
     <el-input placeholder="请输入" :value="valueNum" @input="handleInputNum" />
-    <div class="ml10" />
+    <div :class="space" />
     <el-select :value="valueUnit" @change="handleInputUnit">
       <el-option label="px" value="px" />
       <el-option label="vw" value="vw" />
       <el-option label="%" value="%" />
     </el-select>
+    <div :class="space" />
+    <el-tooltip effect="dark" content="设为auto" placement="left">
+      <el-button icon="el-icon-circle-close" @click="handleInputNum('')" />
+    </el-tooltip>
   </div>
 </template>
 
@@ -17,7 +21,11 @@ import { getParentRef } from '@/assets/util'
 export default {
   props: {
     schema: Object,
-    schemaData: Object
+    schemaData: Object,
+    space: {
+      type: String,
+      default: 'ml10'
+    }
   },
 
   setup (props, ctx) {
@@ -36,10 +44,10 @@ export default {
       valueUnit,
       valueNum,
       handleInputNum (val) {
-        ctx.emit('change', val + valueUnit.value)
+        ctx.emit('change', val.trim() === '' ? undefined : (val || 0) + valueUnit.value)
       },
       handleInputUnit (val) {
-        ctx.emit('change', valueNum.value + val)
+        ctx.emit('change', valueNum.value.trim() === '' ? undefined : valueNum.value + val)
       }
     }
   }
