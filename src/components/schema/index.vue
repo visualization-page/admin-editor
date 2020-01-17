@@ -1,8 +1,8 @@
 <script lang="jsx">
 import Vue from 'vue'
 import { createComponent, createElement, reactive, watch } from '@vue/composition-api'
-import { renderInput, renderSelect, renderCheckbox, renderUniversal } from './render-item'
-import RenderUrlMap from './render-url-map.vue'
+import { renderInput, renderSelect, renderCheckbox, renderUniversal, renderCodeEditor } from './render-item'
+import RenderInputGroup from './render-input-group.vue'
 import RenderEvents from './render-events.vue'
 import RenderUnitSize from './render-unit-size.vue'
 import RenderDirectionSize from './render-direction-size.vue'
@@ -28,7 +28,7 @@ export default createComponent({
       if (showSchemaField === false) {
         return null
       }
-      return schema.label ? (
+      return !schema.block ? (
         <el-form-item
           key={schema.field}
           label={schema.label}
@@ -36,7 +36,12 @@ export default createComponent({
         >
           { renderItem(schema) }
         </el-form-item>
-      ) : renderItem(schema)
+      ) : (
+        <div>
+          <p class="c-666 mb10">{ schema.label }</p>
+          { renderItem(schema) }
+        </div>
+      )
     }
     const renderCompositeComponent = (component, schema) => {
       return createElement(component, {
@@ -52,6 +57,7 @@ export default createComponent({
         }
       })
     }
+
     const renderItem = (schema) => {
       switch (schema.type) {
         case 'input':
@@ -66,7 +72,7 @@ export default createComponent({
         case 'color':
           return renderUniversal('el-color-picker', schema, props.schemaData, updateField)
         case 'input-group':
-          return renderCompositeComponent(RenderUrlMap, schema)
+          return renderCompositeComponent(RenderInputGroup, schema)
         case 'unit-size':
           return renderCompositeComponent(RenderUnitSize, schema)
         case 'direction-size':
@@ -75,6 +81,8 @@ export default createComponent({
           return renderCompositeComponent(RenderRichText, schema)
         case 'events':
           return renderCompositeComponent(RenderEvents, schema)
+        case 'code':
+          return renderCodeEditor(schema, props.schemaData, updateField)
         default:
           return <p />
       }

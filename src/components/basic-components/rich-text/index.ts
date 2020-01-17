@@ -16,7 +16,8 @@ export default {
 export const schema = [
   {
     type: 'rich-text',
-    label: '',
+    label: '文本内容',
+    block: true,
     field: 'props.content'
   }
 ]

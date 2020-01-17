@@ -75,3 +75,24 @@ export const renderCheckbox = (item: any, data: any, updateField: any) => {
     />
   )
 }
+
+export const renderCodeEditor = (schema: any, data: any, updateField: any) => {
+  const { pref, field } = getParentRef(schema.field, data)
+  return createElement('monaco-editor', {
+    style: { height: '300px' },
+    props: {
+      amdRequire: window.require,
+      language: 'javascript',
+      theme: 'vs-dark',
+      value: pref[field]
+    },
+    on: {
+      change (val: string) {
+        updateField(schema.field, val)
+      },
+      blur (val: string) {
+        console.log(val)
+      }
+    }
+  })
+}

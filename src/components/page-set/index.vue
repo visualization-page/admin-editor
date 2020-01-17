@@ -3,7 +3,7 @@
     <schema-form
       v-if="showSchema"
       :schema="local"
-      :schema-data="detail"
+      :schema-data="currentPage"
       from="page"
       @updateByField="updatePageByField"
     />
@@ -29,7 +29,7 @@ export default createComponent({
     return {
       local,
       showSchema,
-      detail: currentPage,
+      currentPage,
       updatePageByField (field, val) {
         updateByField(currentPage.value, field, val)
       }

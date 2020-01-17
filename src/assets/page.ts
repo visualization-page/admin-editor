@@ -9,6 +9,8 @@ export type Page = {
   url: string
   id: string
   nodes: NodeItem[]
+  state: string
+  events: any[]
 }
 
 export const currentPage = ref<Page | null>(null)
@@ -24,13 +26,15 @@ export const addPage = () => {
     url: '',
     id: `page-${Date.now()}`,
     nodes: [],
+    hasShare: false,
     share: {
       title: '',
       desc: '',
       pic: '',
       link: ''
     },
-    events: []
+    events: [],
+    state: '{\n  test: getConstant(\'test\')\n}'
   })
   setCurrentPage(project.pages[index])
   if (index === 0) {

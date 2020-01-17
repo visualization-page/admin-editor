@@ -15,6 +15,11 @@ declare module '@vue/composition-api/dist/component/component' {
 declare global {
   interface Window {
     require: () => void
+    $$global: {
+      constant: any
+      state: any
+    }
+    getConstant: (key: string) => string
   }
 }
 

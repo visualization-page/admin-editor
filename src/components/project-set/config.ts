@@ -75,5 +75,11 @@ export const local = [
     label: 'urlMap',
     field: 'httpOptions.urlMap',
     type: 'input-group'
+  },
+  {
+    label: '项目常量',
+    field: 'constant',
+    block: true,
+    type: 'code'
   }
 ]
