@@ -1,7 +1,9 @@
 <template>
   <div id="app">
     <div class="app-header"></div>
-    <div class="app-header__bar"></div>
+    <div class="app-header__bar flex-center">
+      <node-style-tools />
+    </div>
     <div class="app-content flex">
       <div class="app__side-bar">
         <div class="app__block height-50">
@@ -76,6 +78,7 @@ import PageList from './components/page-list/index.vue'
 import PageSet from './components/page-set/index.vue'
 import NodeTree from './components/node-tree/index.vue'
 import NodeStyle from './components/node-style/index.vue'
+import NodeStyleTools from './components/node-style-tools/index.vue'
 import NodeProperty from './components/node-property/index.vue'
 import BasicComponent from './components/basic-components/index.vue'
 import MobileRender from './components/mobile-render/index.vue'
@@ -90,7 +93,8 @@ export default createComponent({
     BasicComponent,
     NodeTree,
     MobileRender,
-    NodeStyle
+    NodeStyle,
+    NodeStyleTools
   },
   setup () {
     return {
@@ -173,6 +177,7 @@ export default createComponent({
     &-webview {
       height: 480px;
       background-color: #fff;
+      transform: translate3d(0, 0, 0);
     }
   }
 }

@@ -10,7 +10,11 @@ export default {
   events: [],
   style: {
     width: '100%',
-    height: '60px'
+    height: '60px',
+    positionType: 'absolute',
+    position: {},
+    margin: {},
+    padding: {}
   },
   children: [],
   show: true,

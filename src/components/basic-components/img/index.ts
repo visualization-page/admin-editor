@@ -9,26 +9,17 @@ export default {
   type: 'img',
   ...common,
   props: {
-    width: '',
-    height: ''
+    src: ''
   }
 }
 
 export const schema = [
   {
     type: 'input',
-    label: '宽度',
-    field: 'props.width',
+    label: '图片地址',
+    field: 'props.src',
     rules: [
     ],
-    placeholder: '例如 100px，不填为 auto'
-  },
-  {
-    type: 'input',
-    label: '高度',
-    field: 'props.height',
-    rules: [
-    ],
-    placeholder: '例如 100px，不填为 auto'
+    placeholder: ''
   }
 ]

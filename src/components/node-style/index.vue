@@ -19,6 +19,7 @@ import local from './config'
 import { currentNode } from '@/assets/node'
 import { updateByField } from '@/assets/util'
 // import * as schema from '@/components/basic-components/props-schema'
+import { removeCenter } from '../node-style-tools/config'
 
 export default {
   components: {
@@ -31,6 +32,9 @@ export default {
       // detail,
       currentNode,
       updateNodeByField (field, val) {
+        if (field === 'style.position') {
+          updateByField(currentNode.value, 'className', removeCenter(currentNode.value.className))
+        }
         updateByField(currentNode.value, field, val)
       }
     }

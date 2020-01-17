@@ -15,6 +15,7 @@
           class="direction-size__input"
           :value="position.top"
           @input="val => handleInput(val, 'top')"
+          @keydown.native="e => handleKeycode(e, 'top')"
           placeholder="上"
         />
       </div>
@@ -24,6 +25,7 @@
           :value="position.left"
           @input="val => handleInput(val, 'left')"
           placeholder="左"
+          @keydown.native="e => handleKeycode(e, 'left')"
         />
       </div>
       <div class="absolute w30" style="top: 35px;right: -5px;">
@@ -32,6 +34,7 @@
           :value="position.right"
           @input="val => handleInput(val, 'right')"
           placeholder="右"
+          @keydown.native="e => handleKeycode(e, 'right')"
         />
       </div>
       <div class="absolute w30 b0" style="left: 35px">
@@ -40,6 +43,7 @@
           :value="position.bottom"
           @input="val => handleInput(val, 'bottom')"
           placeholder="下"
+          @keydown.native="e => handleKeycode(e, 'bottom')"
         />
       </div>
     </div>
@@ -62,56 +66,74 @@ export default {
   setup (props, ctx) {
     const position = computed(() => {
       const { pref, field } = getParentRef(props.schema.field, props.schemaData)
-      return stringToPosition(pref[field])
+      return positionToRaw(pref[field]).obj
     })
     const unit = computed(() => {
       const { pref, field } = getParentRef(props.schema.field, props.schemaData)
-      const m = pref[field] && pref[field].match(/px|%|vw/)
-      return m ? m[0] : 'px'
+      return positionToRaw(pref[field]).unit
     })
-    const get = (str, paramsUnit = unit.value) => str ? (str + paramsUnit) : 0
-    const stringToPosition = (str) => {
-      if (typeof str !== 'string') {
-        return {}
-      }
-      const strArr = str.split(' ').map(x => {
-        const { value } = getUnitValue(x)
-        return value
-      })
-      return {
-        top: strArr[0],
-        right: strArr[1],
-        bottom: strArr[2],
-        left: strArr[3]
+    const get = (str, paramsUnit = unit.value) => {
+      if (str) {
+        return /^\d*.{0,1}\d+$/.test(str)
+          ? (str + paramsUnit)
+          : str
       }
     }
-    const positionToString = (position, paramsUnit) => {
-      if (
-        get(position.top, paramsUnit) ||
-        get(position.right, paramsUnit) ||
-        get(position.bottom, paramsUnit) ||
-        get(position.left, paramsUnit)
-      ) {
-        return `${get(position.top, paramsUnit)} ${get(position.right, paramsUnit)} ${get(position.bottom, paramsUnit)} ${get(position.left, paramsUnit)}`
+    const positionToRaw = (str = {}) => {
+      const obj = {
+        top: undefined,
+        right: undefined,
+        bottom: undefined,
+        left: undefined
       }
-      return '0'
+      const unitArr = []
+      Object.keys(str).forEach(k => {
+        const { unit, value } = getUnitValue(str[k])
+        obj[k] = value
+        unitArr.push(unit)
+      })
+      return {
+        obj,
+        unit: unitArr.find(x => x !== 'px') || 'px'
+      }
+    }
+    const positionAddUnit = (position, paramsUnit) => {
+      return {
+        top: get(position.top, paramsUnit),
+        right: get(position.right, paramsUnit),
+        bottom: get(position.bottom, paramsUnit),
+        left: get(position.left, paramsUnit)
+      }
     }
 
     const handleInput = (val, dir) => {
-      ctx.emit('change', positionToString({
+      ctx.emit('change', positionAddUnit({
         ...position.value,
         [dir]: val
       }))
     }
     const handleInputChange = (val) => {
-      ctx.emit('change', positionToString(position.value, val))
+      ctx.emit('change', positionAddUnit(position.value, val))
+    }
+    const handleKeycode = (e, dir) => {
+      const isUp = e.keyCode === 38
+      const isDown = e.keyCode === 40
+      if (isUp || isDown) {
+        e.preventDefault()
+        if (isUp) {
+          handleInput(Number(position.value[dir] || 0) + 1, dir)
+        } else {
+          handleInput(position.value[dir] - 1 || 0, dir)
+        }
+      }
     }
 
     return {
       position,
       unit,
       handleInput,
-      handleInputChange
+      handleInputChange,
+      handleKeycode
     }
   }
 }

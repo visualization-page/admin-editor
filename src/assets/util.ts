@@ -58,12 +58,12 @@ export const getUnitValue = (str: string): { value?: string, unit?: string } => 
   if (str === null || str === undefined) {
     return {
       value: undefined,
-      unit: undefined
+      unit: 'px'
     }
   }
   const m = String(str).match(/px|%|vw/)
   return {
-    value: m ? str.replace(m[0], '') : undefined,
+    value: m ? str.replace(m[0], '') : str,
     unit: m ? m[0] : 'px'
   }
 }

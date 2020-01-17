@@ -1,6 +1,7 @@
 <script lang="tsx">
 import { createComponent, createElement } from '@vue/composition-api'
 import { NodeItem, currentNode, setCurrentNode } from '@/assets/node'
+import { isEdit } from '@/assets/render'
 
 export default createComponent<{ nodes: NodeItem[] }>({
   name: 'RenderItem',
@@ -9,14 +10,11 @@ export default createComponent<{ nodes: NodeItem[] }>({
   },
   setup (props, ctx) {
     const renderDiv = (item: NodeItem) => {
-      return (
-        <div class="render-item__div">
-          { item.children.length ? renderChildren(item.children) : null }
-        </div>
-      )
+      return item.children.length ? renderChildren(item.children) : null
     }
     const renderImg = (item: NodeItem) => {
-      return <img width="100%" height="100%" />
+      const _r = () => item.props.src && <img src={item.props.src} width="100%" height="100%" />
+      return isEdit ? <div class="height-100 bg-f2">{ _r() }</div> : _r()
     }
     const renderRichText = (item: NodeItem) => {
       const props = {
@@ -25,9 +23,7 @@ export default createComponent<{ nodes: NodeItem[] }>({
           innerHTML: item.props.content
         }
       }
-      return (
-        <div {...props} />
-      )
+      return <div {...props} />
     }
     const renderChildren = (nodes: NodeItem[]) => {
       return createElement('RenderItem', { props: { nodes } })
@@ -44,37 +40,46 @@ export default createComponent<{ nodes: NodeItem[] }>({
       }
     }
 
+    const mergeDirectionSize = (target: any, obj: any, type: 'position' | 'margin' | 'padding') => {
+      if (typeof obj !== 'object') {
+        return
+      }
+      if (type === 'position') {
+        Object.assign(target, obj)
+      } else {
+        const newObj: any = {}
+        Object.keys(obj).forEach(k => {
+          newObj[`${type}${k[0].toUpperCase()}${k.slice(1)}`] = obj[k]
+        })
+        Object.assign(target, newObj)
+      }
+      delete target[type]
+    }
+
     return () => (
-      <div class="render-item">
+      <div class="render-item height-100">
         {
           props.nodes.map(item => {
             const active = currentNode.value && currentNode.value.id === item.id
             const props = {
               style: { ...item.style },
-              class: `render-item__item ${active ? 'active' : ''}`,
+              class: `render-item__item ${active ? 'active' : ''} ${item.className}`,
               key: item.id,
               on: {
-                click (e) {
+                click (e: any) {
                   e.stopPropagation()
                   setCurrentNode(item)
                 }
               }
             }
-            if (item.outDocFlow) {
+            mergeDirectionSize(props.style, item.style.margin, 'margin')
+            mergeDirectionSize(props.style, item.style.padding, 'padding')
+            if (item.outDocFlow && item.style.position) {
               // 合并位置
-              if (item.style.position) {
-                const arr = item.style.position.split(' ')
-                const getNum = (num: string) => /px|vw|%/.test(num) ? num : undefined
-                props.style.top = getNum(arr[0])
-                props.style.right = getNum(arr[1])
-                props.style.bottom = getNum(arr[2])
-                props.style.left = getNum(arr[3])
-              }
-              // 设置 position
-              props.style.position = item.style.positionType
-            } else {
-              props.style.position = undefined
+              mergeDirectionSize(props.style, item.style.position, 'position')
             }
+            props.style.position = item.outDocFlow ? item.style.positionType : undefined
+            console.log(props.style)
             return (
               <div {...props}>
                 { renderItem(item) }
@@ -95,6 +100,21 @@ export default createComponent<{ nodes: NodeItem[] }>({
     &.active {
       border-color: #409eff;
     }
+  }
+  &__img-bg {
+  }
+  .center-v {
+    top: 50%;
+    transform: translateY(-50%)
+  }
+  .center-h {
+    left: 50%;
+    transform: translateX(-50%)
+  }
+  .center {
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%)
   }
 }
 </style>

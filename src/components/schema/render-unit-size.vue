@@ -16,7 +16,7 @@
 
 <script>
 import { computed } from '@vue/composition-api'
-import { getParentRef } from '@/assets/util'
+import { getParentRef, getUnitValue } from '@/assets/util'
 
 export default {
   props: {
@@ -32,13 +32,15 @@ export default {
     // 本地解析单位
     const valueUnit = computed(() => {
       const { pref, field } = getParentRef(props.schema.field, props.schemaData)
-      const mat = pref[field] ? pref[field].match(/px|%|vw/) : ''
-      return mat ? mat[0] : 'px'
+      // const mat = pref[field] ? pref[field].match(/px|%|vw/) : ''
+      // return mat ? mat[0] : 'px'
+      return getUnitValue(pref[field]).unit
     })
     const valueNum = computed(() => {
       const { pref, field } = getParentRef(props.schema.field, props.schemaData)
-      const mat = pref[field] ? pref[field].match(/px|%|vw/) : ''
-      return mat ? pref[field].replace(mat[0], '') : ''
+      // const mat = pref[field] ? pref[field].match(/px|%|vw/) : ''
+      // return mat ? pref[field].replace(mat[0], '') : ''
+      return getUnitValue(pref[field]).value
     })
     return {
       valueUnit,
