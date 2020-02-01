@@ -32,11 +32,13 @@ import { createComponent, onMounted, ref, watch } from '@vue/composition-api'
 import { setTabName, tabCurrent, tabName } from '@/assets/tab'
 import { setState, isEdit, currentCode } from '@/assets/code-edit'
 import { getDocHeight, parseCodeValid } from '@/assets/util'
+import { Message, MessageBox } from 'element-ui'
 
 export default createComponent({
   setup () {
     const areaHeight = ref(0)
     const code = ref('')
+    const isCodeValid = ref(true)
     // tab 隐藏时编辑器无法正常渲染，并不是因为高度问题
     // 用一个变量来标记初始化
     const canMount = ref(false)
@@ -62,17 +64,21 @@ export default createComponent({
         setState(false)
         setTabName(['', '', '', tabName.previewArea])
       },
-      handleConfirm () {
+      async handleConfirm () {
+        if (!isCodeValid.value) {
+          await MessageBox.confirm('代码存在语法错误，不会保存错误的代码，是否继续？')
+        }
         currentCode.update(code.value)
+        Message.success(`保存成功`)
       },
       handleCodeChange (val: string) {
         // 校验语法规则
         // 错误则提示不更新
         const { ok, msg } = parseCodeValid(val)
+        isCodeValid.value = ok
         if (ok) {
           code.value = val
         } else {
-          // Message.error(msg)
           console.log(msg)
         }
       }
