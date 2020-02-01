@@ -37,7 +37,7 @@
     "less": "^3.0.4",
     "less-loader": "^5.0.0",
     "monaco-editor-webpack-plugin": "^1.8.1",
-    "typescript": "~3.5.3",
+    "typescript": "^3.7.5",
     "vue-cli-plugin-element": "^1.0.1",
     "vue-template-compiler": "^2.6.10"
   }

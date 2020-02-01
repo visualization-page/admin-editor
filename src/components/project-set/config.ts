@@ -79,7 +79,7 @@ export const local = [
   {
     label: '项目常量',
     field: 'constant',
-    block: true,
+    block: false,
     type: 'code'
   }
 ]

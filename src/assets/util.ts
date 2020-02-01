@@ -1,6 +1,14 @@
 import Vue from 'vue'
 import { NodeItem } from './node'
 
+export const getDocHeight = () => {
+  let h = 0
+  return h || (() => {
+    h = document.documentElement.offsetHeight
+    return h
+  })()
+}
+
 export const getParentRef = (field: string, data: any) => {
   const fieldSpace = field.split('.')
   if (fieldSpace.length > 1) {
@@ -66,4 +74,16 @@ export const getUnitValue = (str: string): { value?: string, unit?: string } => 
     value: m ? str.replace(m[0], '') : str,
     unit: m ? m[0] : 'px'
   }
+}
+
+export const parseCodeValid = (code: string | null) => {
+  const res = { ok: false, msg: '', value: null }
+  try {
+    // eslint-disable-next-line no-new-func
+    res.value = new Function(`return ${code}`)()
+    res.ok = true
+  } catch (e) {
+    res.msg = e.message || e.name || '语法错误'
+  }
+  return res
 }

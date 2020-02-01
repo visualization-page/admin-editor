@@ -12,13 +12,16 @@ export const tabName = {
   pageSet: 'page-set',
   nodeProperty: 'node-property',
   nodeStyle: 'node-style',
-  nodeAnimate: 'node-animate'
+  nodeAnimate: 'node-animate',
+  previewArea: 'preview-area',
+  codeEdit: 'code-edit'
 }
 
 export const tabCurrent = reactive({
   tab1: tabName.projectSet,
   tab2: tabName.basicComponent,
-  tab3: tabName.pageSet
+  tab3: tabName.pageSet,
+  tab4: tabName.previewArea
 })
 export const setTabName = (arr: any) => {
   arr.forEach((name: string, i: number) => {

@@ -44,7 +44,19 @@
         </div>
       </div>
       <div class="app__box relative">
-        <mobile-render />
+        <el-tabs
+          :value="tabCurrent.tab4"
+          class="height-100"
+          type="border-card"
+          @input="val => handleClick(['', '', '', val])"
+        >
+          <el-tab-pane label="场景预览" :name="tabName.previewArea">
+            <mobile-render />
+          </el-tab-pane>
+          <el-tab-pane label="代码编辑" :name="tabName.codeEdit">
+            <code-editor />
+          </el-tab-pane>
+        </el-tabs>
       </div>
       <div class="app__config">
         <div class="app__block height-100">
@@ -82,6 +94,7 @@ import NodeStyleTools from './components/node-style-tools/index.vue'
 import NodeProperty from './components/node-property/index.vue'
 import BasicComponent from './components/basic-components/index.vue'
 import MobileRender from './components/mobile-render/index.vue'
+import CodeEditor from './components/code-editor/index.vue'
 import { tabCurrent, setTabName, tabName } from '@/assets/tab'
 
 export default createComponent({
@@ -94,7 +107,8 @@ export default createComponent({
     NodeTree,
     MobileRender,
     NodeStyle,
-    NodeStyleTools
+    NodeStyleTools,
+    CodeEditor
   },
   setup () {
     return {
@@ -157,8 +171,11 @@ export default createComponent({
 .app__box {
   flex-grow: 1;
   height: 100%;
-  background-color: #eee;
-  padding: 10px;
+  // padding: 10px;
+  .el-tabs__content {
+    background-color: #eee;
+    padding: 0 !important;
+  }
 }
 .app__config {
   width: @side-width;

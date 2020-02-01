@@ -34,7 +34,7 @@ export const addPage = () => {
       link: ''
     },
     events: [],
-    state: '{\n  test: getConstant(\'test\')\n}'
+    state: '(function () {\n  return {\n    test: getConstant(\'test\')\n  }\n})()'
   })
   setCurrentPage(project.pages[index])
   if (index === 0) {

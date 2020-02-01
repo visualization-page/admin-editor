@@ -1,6 +1,9 @@
 import Vue from 'vue'
 import CompositionApi, { createElement } from '@vue/composition-api'
 import { getParentRef, getUnitValue } from '@/assets/util'
+// import { Message } from 'element-ui'
+import { setCodeState } from '@/assets/code-edit'
+import { setTabName, tabName } from '@/assets/tab'
 
 Vue.use(CompositionApi)
 
@@ -77,22 +80,43 @@ export const renderCheckbox = (item: any, data: any, updateField: any) => {
 }
 
 export const renderCodeEditor = (schema: any, data: any, updateField: any) => {
-  const { pref, field } = getParentRef(schema.field, data)
-  return createElement('monaco-editor', {
-    style: { height: '300px' },
-    props: {
-      amdRequire: window.require,
-      language: 'javascript',
-      theme: 'vs-dark',
-      value: pref[field]
-    },
-    on: {
-      change (val: string) {
-        updateField(schema.field, val)
-      },
-      blur (val: string) {
-        console.log(val)
-      }
-    }
-  })
+  const setCurrentCode = () => {
+    const { pref, field } = getParentRef(schema.field, data)
+    setTabName(['', '', '', tabName.codeEdit])
+    setCodeState(schema.label, pref[field], (val: string) => {
+      updateField(schema.field, val)
+    })
+  }
+  return <el-button type="text" onClick={setCurrentCode}>编辑代码片段</el-button>
 }
+
+// export const renderCodeEditor2 = (schema: any, data: any, updateField: any, editorProps?: any) => {
+//   const { pref, field } = getParentRef(schema.field, data)
+//   const height = (editorProps && editorProps.height) || 300
+//   return createElement('monaco-editor', {
+//     style: { height: `${height}px` },
+//     props: {
+//       amdRequire: window.require,
+//       language: 'javascript',
+//       theme: 'vs-dark',
+//       // lineNumbers: 'off',
+//       value: pref[field]
+//     },
+//     on: {
+//       change (val: string) {
+//         // 校验语法规则
+//         // 错误则提示不更新
+//         const { ok, msg } = parseCodeValid(val)
+//         if (ok) {
+//           updateField(schema.field, val)
+//         } else {
+//           // Message.error(msg)
+//           console.log(msg)
+//         }
+//       },
+//       blur (val: string) {
+//         console.log(val)
+//       }
+//     }
+//   })
+// }

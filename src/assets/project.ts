@@ -17,7 +17,7 @@ export const project = reactive({
   },
   url: '',
   pages: [],
-  constant: '{\n  test: \'test\'\n}'
+  constant: '(function () {\n  return {\n    test: \'test\'\n  }\n})()'
 })
 
 export const updateProject = (obj: typeof project) => {

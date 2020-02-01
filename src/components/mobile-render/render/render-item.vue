@@ -7,7 +7,7 @@ const renderDiv = (item: NodeItem) => {
   return item.children.length ? renderChildren(item.children) : null
 }
 const renderImg = (item: NodeItem) => {
-  const _r = () => item.props.src && <img src={item.props.src} width="100%" height="100%" />
+  const _r = () => item.props.src ? <img src={item.props.src} width="100%" height="100%" /> : null
   return isEdit ? <div class="height-100 bg-f2">{ _r() }</div> : _r()
 }
 const renderRichText = (item: NodeItem) => {

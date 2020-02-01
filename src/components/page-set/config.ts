@@ -73,7 +73,7 @@ export default [
   {
     label: '响应式状态',
     field: 'state',
-    block: true,
+    block: false,
     type: 'code'
   }
 ]
