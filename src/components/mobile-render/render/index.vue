@@ -7,7 +7,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { MessageBox } from 'element-ui'
+// import { MessageBox } from 'element-ui'
 import { createComponent, watch, reactive } from '@vue/composition-api'
 import { currentPage } from '@/assets/page'
 import { project } from '@/assets/project'
@@ -40,25 +40,10 @@ export default createComponent({
   setup () {
     // 挂载页面 state 和项目常量
     watch(() => project.constant, cons => {
-      // try {
-      //   // eslint-disable-next-line
-      //   const value = cons ? new Function(`return ${cons}`)() : {}
-      //   updateField(window.$$global.constant, value)
-      // } catch (e) {
-      //   MessageBox.confirm(`常量语法错误：${e.message}`)
-      // }
       const { ok, value } = parseCodeValid(cons)
       ok && updateField(window.$$global.constant, value)
     }, { deep: true })
     watch(() => currentPage.value && currentPage.value.state, state => {
-      // try {
-      //   // eslint-disable-next-line
-      //   const value = state ? new Function(`return ${state}`)() : {}
-      //   updateField(window.$$global.state, value)
-      // } catch (e) {
-      //   window.$$global.state = {}
-      //   MessageBox.confirm(`页面响应式状态错误：${e.message}`)
-      // }
       const { ok, value } = parseCodeValid(state)
       ok && updateField(window.$$global.state, value)
     }, { deep: true })

@@ -2,13 +2,14 @@
 import { createComponent, createElement } from '@vue/composition-api'
 import { NodeItem, currentNode, setCurrentNode } from '@/assets/node'
 import { isEdit } from '@/assets/render'
+import Resize from '../resize/index.vue'
 
 const renderDiv = (item: NodeItem) => {
   return item.children.length ? renderChildren(item.children) : null
 }
 const renderImg = (item: NodeItem) => {
-  const _r = () => item.props.src ? <img src={item.props.src} width="100%" height="100%" /> : null
-  return isEdit ? <div class="height-100 bg-f2">{ _r() }</div> : _r()
+  const _r = () => item.props.src && createElement('img', { props: { attrs: { src: item.props.src, width: '100%', height: '100%' } } })
+  return isEdit ? createElement('div', { class: 'height-100 bg-f2' }, [_r()]) : _r()
 }
 const renderRichText = (item: NodeItem) => {
   const props = {
@@ -17,7 +18,7 @@ const renderRichText = (item: NodeItem) => {
       innerHTML: item.props.content
     }
   }
-  return <div {...props} />
+  return createElement('div', props)
 }
 const renderChildren = (nodes: NodeItem[]) => {
   return createElement('RenderItem', { props: { nodes } })
@@ -56,38 +57,33 @@ export default createComponent<{ nodes: NodeItem[] }>({
     nodes: Array
   },
   setup (props, ctx) {
-    return () => (
-      <div class="render-item height-100">
-        {
-          props.nodes.map(item => {
-            const active = currentNode.value && currentNode.value.id === item.id
-            const props = {
-              style: { ...item.style },
-              class: `render-item__item ${active ? 'active' : ''} ${item.className}`,
-              key: item.id,
-              on: {
-                click (e: any) {
-                  e.stopPropagation()
-                  setCurrentNode(item)
-                }
-              }
+    return () => createElement('div', { class: 'render-item height-100' },
+      props.nodes.map(item => {
+        const active = currentNode.value && currentNode.value.id === item.id
+        const props = {
+          style: { ...item.style },
+          class: `render-item__item ${active ? 'active' : ''} ${item.className}`,
+          key: item.id,
+          on: {
+            click (e: any) {
+              e.stopPropagation()
+              setCurrentNode(item)
             }
-            mergeDirectionSize(props.style, item.style.margin, 'margin')
-            mergeDirectionSize(props.style, item.style.padding, 'padding')
-            if (item.outDocFlow && item.style.position) {
-              // 合并位置
-              mergeDirectionSize(props.style, item.style.position, 'position')
-            }
-            props.style.position = item.outDocFlow ? item.style.positionType : undefined
-            console.log(props.style)
-            return (
-              <div {...props}>
-                { renderItem(item) }
-              </div>
-            )
-          })
+          }
         }
-      </div>
+        mergeDirectionSize(props.style, item.style.margin, 'margin')
+        mergeDirectionSize(props.style, item.style.padding, 'padding')
+        if (item.outDocFlow && item.style.position) {
+          // 合并位置
+          mergeDirectionSize(props.style, item.style.position, 'position')
+        }
+        props.style.position = item.outDocFlow ? item.style.positionType : undefined
+        // console.log(props.style)
+        return createElement('div', props, [
+          active && createElement(Resize),
+          renderItem(item)
+        ])
+      })
     )
   }
 })
@@ -96,6 +92,7 @@ export default createComponent<{ nodes: NodeItem[] }>({
 <style lang="less">
 .render-item {
   &__item {
+    position: relative;
     border: 1px transparent dashed;
     &.active {
       border-color: #409eff;

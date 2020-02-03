@@ -14,7 +14,8 @@ export const tabName = {
   nodeStyle: 'node-style',
   nodeAnimate: 'node-animate',
   previewArea: 'preview-area',
-  codeEdit: 'code-edit'
+  codeEdit: 'code-edit',
+  eventEdit: 'event-edit'
 }
 
 export const tabCurrent = reactive({

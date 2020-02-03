@@ -1,3 +1,11 @@
+export type FormEvent = {
+  eventType: string
+  targetNodeIdPath?: string[]
+  fxCode: string
+  desc: string
+  [k: string]: any
+}
+
 export const eventType = ['click', 'change', 'input', 'focus', 'blur']
 export const eventTypePage = ['onMounted', 'onUnMounted']
 

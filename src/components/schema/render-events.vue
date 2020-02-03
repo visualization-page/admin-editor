@@ -17,8 +17,9 @@
     <el-dialog
       :visible.sync="showModal"
       title="事件管理"
-      width="500px"
+      width="700px"
       class="events-manage-dialog"
+      top="0"
     >
       <el-form
         :model="form"
@@ -60,9 +61,10 @@
           <el-button
             v-for="(item, i) in fxList"
             :key="i"
-            type="default"
+            type="warning"
             @click="handleClickFx(item)"
           >
+            <i class="iconfont icon-function" />
             {{ item.name }}
           </el-button>
         </el-form-item>
@@ -77,8 +79,8 @@
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
+        <el-button type="warning" @click="handleConfirm">保 存</el-button>
         <el-button @click="showModal = false">取 消</el-button>
-        <el-button type="primary" @click="handleConfirm">确 定</el-button>
       </div>
     </el-dialog>
   </div>
@@ -214,8 +216,42 @@ export default createComponent({
   &__editor {
   }
   &-dialog {
+    & > div {
+      top: 50%;
+      transform: translateY(-50%);
+    }
+    .el-form-item__label {
+      color: #ccc;
+    }
+    .el-input__inner {
+      background-color: transparent;
+      border-color: #666;
+    }
     .events-btn .el-button {
       margin: 0 10px 10px 0;
+    }
+    .el-dialog {
+      &__header {
+        padding: 5px 10px;
+        background-color: #333;
+      }
+      &__title {
+        color: #ccc;
+        font-size: 14px;
+      }
+      &__headerbtn {
+        top: 5px;
+        right: 10px;
+      }
+      &__body {
+        padding: 20px;
+        background-color: #222;
+      }
+      &__footer {
+        padding: 10px;
+        text-align: center;
+        background-color: #333;
+      }
     }
   }
 }

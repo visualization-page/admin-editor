@@ -32,3 +32,9 @@ export default createComponent({
   }
 })
 </script>
+
+<style lang="less">
+.app__mobile {
+  user-select: none;
+}
+</style>

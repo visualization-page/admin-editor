@@ -4,7 +4,6 @@
     <div :class="space" />
     <el-select :value="valueUnit" @change="handleInputUnit">
       <el-option label="px" value="px" />
-      <el-option label="vw" value="vw" />
       <el-option label="%" value="%" />
     </el-select>
     <div :class="space" />

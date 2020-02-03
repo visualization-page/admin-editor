@@ -2,7 +2,6 @@
   <div class="direction-size">
     <el-select :value="unit" @change="handleInputChange" placeholder="请选择尺寸单位">
       <el-option label="px" value="px" />
-      <el-option label="vw" value="vw" />
       <el-option label="%" value="%" />
     </el-select>
     <div

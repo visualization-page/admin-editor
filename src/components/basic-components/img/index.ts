@@ -8,6 +8,9 @@ export default {
   title: '图片',
   type: 'img',
   ...common,
+  // style: {
+  //   ...common.style
+  // },
   props: {
     src: ''
   }
