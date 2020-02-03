@@ -46,9 +46,9 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue'
+// import Vue from 'vue'
 import { createComponent, reactive, computed } from '@vue/composition-api'
-import { currentNode } from '@/assets/node'
+import { currentNode, updateNodeStyle, updateNodePosition } from '@/assets/node'
 import { getUnitValue } from '@/assets/util'
 
 type UnitValue = { unit?: string, value?: string }
@@ -78,30 +78,20 @@ document.addEventListener('mousemove', e => {
     const _changeHeight = (symbol: 1 | -1) => {
       const h = Number(state.height.value) + (e.pageY - state.startY) * symbol
       if (h >= 0 && h < 480) {
-        node.style.height = `${h}px`
+        updateNodeStyle({ height: `${h}px` })
       }
     }
     const _changeWidth = (symbol: 1 | -1) => {
       const w = Number(state.width.value) + (e.pageX - state.startX) * symbol
       if (w >= 0 && w < 320) {
-        node.style.width = `${w}px`
+        updateNodeStyle({ width: `${w}px` })
       }
     }
     const _changeLeft = () => {
-      const val = `${Number(state.left.value || 0) + e.pageX - state.startX}px`
-      if (node.style.position.left === undefined) {
-        Vue.set(node.style.position, 'left', val)
-      } else {
-        node.style.position.left = val
-      }
+      updateNodePosition('left', `${Number(state.left.value || 0) + e.pageX - state.startX}px`)
     }
     const _changeTop = () => {
-      const val = `${Number(state.top.value || 0) + e.pageY - state.startY}px`
-      if (node.style.position.top === undefined) {
-        Vue.set(node.style.position, 'top', val)
-      } else {
-        node.style.position.top = val
-      }
+      updateNodePosition('top', `${Number(state.top.value || 0) + e.pageY - state.startY}px`)
     }
     // const
     if (state.dir === 'bottom') {

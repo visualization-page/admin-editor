@@ -31,12 +31,15 @@ export const addNode = (item: any) => {
     if (currentNode.value && currentNode.value.id !== -1) {
       target = currentNode.value.children
     }
-    const index = target.length
-    Vue.set(target, index, {
+    const newNode = {
       ...deepClone(item),
       id: `node-${Date.now()}`
+    }
+    target.push(newNode)
+    // el-tree 中的更新逻辑在下一个 task 后
+    setTimeout(() => {
+      setCurrentNode(newNode)
     })
-    setCurrentNode(target[index])
   }
 }
 
@@ -49,7 +52,6 @@ export const delNode = (target: { nodeIndex?: number, nodeId?: string }) => {
     if (target.nodeIndex !== undefined && target.nodeIndex > -1) {
       nodes.splice(target.nodeIndex, 1)
     }
-
     setCurrentNode(rootNode)
   }
 }
@@ -65,6 +67,19 @@ export const updateNode = (target: { nodeIndex?: number, nodeId?: string }, obj:
         ...nodes[target.nodeIndex],
         ...obj
       })
+      setCurrentNode(nodes[target.nodeIndex])
     }
+  }
+}
+
+export const updateNodeStyle = (obj: { width?: string, height?: string }) => {
+  Object.assign(currentNode.value!.style, obj)
+}
+
+export const updateNodePosition = (dir: 'top' | 'left', val: string) => {
+  if (currentNode.value!.style.position[dir] === undefined) {
+    Vue.set(currentNode.value!.style.position, dir, val)
+  } else {
+    currentNode.value!.style.position[dir] = val
   }
 }
