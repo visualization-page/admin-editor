@@ -182,21 +182,4 @@ export default createComponent({
   width: @side-width;
   height: 100%;
 }
-.app__box-center {
-  width: 320px;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  .app__mobile {
-    width: 100%;
-    box-shadow: 0 4px 10px 0 rgba(0,0,0,.1);
-    &-header {
-    }
-    &-webview {
-      height: 480px;
-      background-color: #fff;
-      transform: translate3d(0, 0, 0);
-    }
-  }
-}
 </style>

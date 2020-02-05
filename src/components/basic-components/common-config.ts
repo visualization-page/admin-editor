@@ -14,7 +14,8 @@ export default {
     positionType: 'absolute',
     position: {},
     margin: {},
-    padding: {}
+    padding: {},
+    zIndex: 0
   },
   children: [],
   show: true,

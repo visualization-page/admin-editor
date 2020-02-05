@@ -8,7 +8,9 @@
         </span>
       </div>
       <div class="app__mobile-webview relative">
-        <render />
+        <div class="app__mobile-webview-mock">
+          <render />
+        </div>
       </div>
     </div>
   </div>
@@ -36,5 +38,33 @@ export default createComponent({
 <style lang="less">
 .app__mobile {
   user-select: none;
+}
+.app__box-center {
+  width: 320px;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  .app__mobile {
+    width: 100%;
+    box-shadow: 0 4px 10px 0 rgba(0,0,0,.1);
+    &-header {
+    }
+    &-webview {
+      height: 480px;
+      background-color: #eee;
+      margin: 0 -10px;
+      padding: 0 10px;
+      overflow: auto;
+      &::-webkit-scrollbar {
+        width: 0;
+      }
+      &-mock {
+        min-height: 100%;
+        background-color: #fff;
+        transform: translate3d(0, 0, 0);
+        box-shadow: 0 4px 10px 0 rgba(0,0,0,.1);
+      }
+    }
+  }
 }
 </style>

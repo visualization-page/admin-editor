@@ -28,11 +28,12 @@ export default createComponent<{ nodes: NodeItem[] }>({
   },
   setup (props, ctx) {
     const renderItem = (items: NodeItem[]) => {
-      return items.map(item => {
+      return items.filter(x => x.show).map(item => {
         const active = currentNode.value && currentNode.value.id === item.id
+        // `${active ? ' active' : ''} ${}`
         const props = {
           style: { ...item.style },
-          class: `render-item__item ${active ? 'active' : ''} ${item.className}`,
+          class: ['render-item__item', { active }, item.className],
           key: item.id,
           on: {},
           props: item.props
@@ -64,7 +65,7 @@ export default createComponent<{ nodes: NodeItem[] }>({
 
     return () => createElement(
       'div',
-      { class: 'render-item height-100', attrs: { 'overflow-a': true } },
+      { class: 'render-item', attrs: {} },
       renderItem(props.nodes).concat(createElement(ContextMenu))
     )
   }
