@@ -33,15 +33,11 @@ export default {
     // 本地解析单位
     const valueUnit = computed(() => {
       const { pref, field } = getParentRef(props.schema.field, props.schemaData)
-      // const mat = pref[field] ? pref[field].match(/px|%|vw/) : ''
-      // return mat ? mat[0] : 'px'
-      return getUnitValue(pref[field]).unit
+      return pref && getUnitValue(pref[field]).unit
     })
     const valueNum = computed(() => {
       const { pref, field } = getParentRef(props.schema.field, props.schemaData)
-      // const mat = pref[field] ? pref[field].match(/px|%|vw/) : ''
-      // return mat ? pref[field].replace(mat[0], '') : ''
-      return getUnitValue(pref[field]).value
+      return pref && getUnitValue(pref[field]).value
     })
     return {
       valueUnit,

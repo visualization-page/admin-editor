@@ -52,6 +52,9 @@ export const renderUniversal = (
   valueHasUnit: boolean
 ) => {
   const { pref, field } = getParentRef(item.field, data)
+  if (!pref) {
+    return null
+  }
   const { value, unit } = getUnitValue(pref[field])
   return createElement(name, {
     props: {
@@ -89,34 +92,3 @@ export const renderCodeEditor = (schema: any, data: any, updateField: any) => {
   }
   return <el-button type="text" onClick={setCurrentCode}>编辑代码片段</el-button>
 }
-
-// export const renderCodeEditor2 = (schema: any, data: any, updateField: any, editorProps?: any) => {
-//   const { pref, field } = getParentRef(schema.field, data)
-//   const height = (editorProps && editorProps.height) || 300
-//   return createElement('monaco-editor', {
-//     style: { height: `${height}px` },
-//     props: {
-//       amdRequire: window.require,
-//       language: 'javascript',
-//       theme: 'vs-dark',
-//       // lineNumbers: 'off',
-//       value: pref[field]
-//     },
-//     on: {
-//       change (val: string) {
-//         // 校验语法规则
-//         // 错误则提示不更新
-//         const { ok, msg } = parseCodeValid(val)
-//         if (ok) {
-//           updateField(schema.field, val)
-//         } else {
-//           // Message.error(msg)
-//           console.log(msg)
-//         }
-//       },
-//       blur (val: string) {
-//         console.log(val)
-//       }
-//     }
-//   })
-// }

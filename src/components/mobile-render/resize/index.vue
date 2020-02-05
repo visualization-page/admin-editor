@@ -47,91 +47,10 @@
 </template>
 
 <script lang="ts">
-// import Vue from 'vue'
 import { createComponent, reactive, computed } from '@vue/composition-api'
-import { currentNode, updateNodeStyle, updateNodePosition } from '@/assets/node'
+import { currentNode } from '@/assets/node'
 import { getUnitValue } from '@/assets/util'
-
-type UnitValue = { unit?: string, value?: string }
-const state = reactive<{
-  startX: number
-  startY: number
-  width: UnitValue
-  height: UnitValue
-  left: UnitValue
-  top: UnitValue
-  dragging: boolean
-  dir: string
-}>({
-  startX: 0,
-  startY: 0,
-  width: {},
-  height: {},
-  left: {},
-  top: {},
-  dragging: false,
-  dir: ''
-})
-
-document.addEventListener('mousemove', e => {
-  if (state.dragging) {
-    const node = currentNode.value!
-    const _changeHeight = (symbol: 1 | -1) => {
-      const h = Number(state.height.value) + (e.pageY - state.startY) * symbol
-      if (h >= 0 && h <= 480) {
-        updateNodeStyle({ height: `${h}px` })
-      }
-    }
-    const _changeWidth = (symbol: 1 | -1) => {
-      const w = Number(state.width.value) + (e.pageX - state.startX) * symbol
-      if (w >= 0 && w <= 320) {
-        updateNodeStyle({ width: `${w}px` })
-      }
-    }
-    const _changeLeft = () => {
-      updateNodePosition('left', `${Number(state.left.value || 0) + e.pageX - state.startX}px`)
-    }
-    const _changeTop = () => {
-      updateNodePosition('top', `${Number(state.top.value || 0) + e.pageY - state.startY}px`)
-    }
-    // const
-    if (state.dir === 'bottom') {
-      _changeHeight(1)
-    } else if (state.dir === 'right') {
-      _changeWidth(1)
-    } else if (node.outDocFlow) {
-      if (state.dir === 'left') {
-        _changeLeft()
-        _changeWidth(-1)
-      } else if (state.dir === 'top') {
-        _changeTop()
-        _changeHeight(-1)
-      } else if (state.dir === 'top-right') {
-        _changeTop()
-        _changeWidth(1)
-        _changeHeight(-1)
-      } else if (state.dir === 'bottom-right') {
-        _changeWidth(1)
-        _changeHeight(1)
-      } else if (state.dir === 'left-top') {
-        _changeTop()
-        _changeLeft()
-        _changeWidth(-1)
-        _changeHeight(-1)
-      } else if (state.dir === 'left-bottom') {
-        _changeLeft()
-        _changeWidth(-1)
-        _changeHeight(1)
-      } else if (state.dir === 'move') {
-        _changeTop()
-        _changeLeft()
-      }
-    }
-  }
-})
-document.addEventListener('mouseup', e => {
-  state.dragging = false
-})
+import { state, UnitValue } from './state'
 
 function percent2px (val: string, dir: 'vertical' | 'horizontal'): UnitValue {
   const obj = getUnitValue(val)
@@ -143,11 +62,7 @@ function percent2px (val: string, dir: 'vertical' | 'horizontal'): UnitValue {
 }
 
 export default createComponent({
-  // props: {
-  //   item: Object
-  // },
-
-  setup (props) {
+  setup () {
     const handleResizeDown = (e: MouseEvent, dir: string) => {
       const node = currentNode.value!
       state.startX = e.pageX
