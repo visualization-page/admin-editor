@@ -175,6 +175,7 @@ export default createComponent({
   .el-tabs__content {
     background-color: #eee;
     padding: 0 !important;
+    overflow: visible;
   }
 }
 .app__config {

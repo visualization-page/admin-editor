@@ -49,6 +49,8 @@ export const delPage = (target: { pageIndex?: number, pageId?: string }) => {
   if (target.pageIndex !== undefined && target.pageIndex > -1) {
     project.pages.splice(target.pageIndex, 1)
   }
+  setCurrentPage(null)
+  setCurrentNode()
 }
 
 export const updatePages = (target: { pageId?: string, pageIndex?: number }, obj: Page) => {

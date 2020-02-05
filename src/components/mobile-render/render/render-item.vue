@@ -1,39 +1,9 @@
 <script lang="tsx">
 import { createComponent, createElement } from '@vue/composition-api'
-import { NodeItem, currentNode, setCurrentNode } from '@/assets/node'
+import { NodeItem, currentNode } from '@/assets/node'
 import { isEdit } from '@/assets/render'
-import Resize from '../resize/index.vue'
-
-const renderDiv = (item: NodeItem) => {
-  return item.children.length ? renderChildren(item.children) : null
-}
-const renderImg = (item: NodeItem) => {
-  const _r = () => item.props.src && createElement('img', { props: { attrs: { src: item.props.src, width: '100%', height: '100%' } } })
-  return isEdit ? createElement('div', { class: 'height-100 bg-f2' }, [_r()]) : _r()
-}
-const renderRichText = (item: NodeItem) => {
-  const props = {
-    class: 'render-item__rich-text',
-    domProps: {
-      innerHTML: item.props.content
-    }
-  }
-  return createElement('div', props)
-}
-const renderChildren = (nodes: NodeItem[]) => {
-  return createElement('RenderItem', { props: { nodes } })
-}
-const renderItem = (item: NodeItem) => {
-  if (item.type === 'div') {
-    return renderDiv(item)
-  } else if (item.type === 'img') {
-    return renderImg(item)
-  } else if (item.type === 'rich-text') {
-    return renderRichText(item)
-  } else if (item.children && item.children.length) {
-    return renderChildren(item.children)
-  }
-}
+import EditWrap from '../edit-wrap.vue'
+import ContextMenu from '../context-menu/index.vue'
 
 const mergeDirectionSize = (target: any, obj: any, type: 'position' | 'margin' | 'padding') => {
   if (typeof obj !== 'object') {
@@ -57,19 +27,15 @@ export default createComponent<{ nodes: NodeItem[] }>({
     nodes: Array
   },
   setup (props, ctx) {
-    return () => createElement('div', { class: 'render-item height-100' },
-      props.nodes.map(item => {
+    const renderItem = (items: NodeItem[]) => {
+      return items.map(item => {
         const active = currentNode.value && currentNode.value.id === item.id
         const props = {
           style: { ...item.style },
           class: `render-item__item ${active ? 'active' : ''} ${item.className}`,
           key: item.id,
-          on: {
-            click (e: any) {
-              e.stopPropagation()
-              setCurrentNode(item)
-            }
-          }
+          on: {},
+          props: item.props
         }
         mergeDirectionSize(props.style, item.style.margin, 'margin')
         mergeDirectionSize(props.style, item.style.padding, 'padding')
@@ -79,11 +45,27 @@ export default createComponent<{ nodes: NodeItem[] }>({
         }
         props.style.position = item.outDocFlow ? item.style.positionType : undefined
         // console.log(props.style)
-        return createElement('div', props, [
-          active && createElement(Resize),
-          renderItem(item)
-        ])
+        const children: any = item.type === 'div' ? renderItem(item.children) : []
+        if (isEdit()) {
+          return createElement('div', {
+            style: props.style,
+            class: props.class
+          }, [
+            createElement(EditWrap, { props: { item, active } }),
+            createElement(item.componentName, {
+              props: props.props,
+              class: 'width-100 height-100'
+            }, children)
+          ])
+        }
+        return createElement(item.componentName, props, children)
       })
+    }
+
+    return () => createElement(
+      'div',
+      { class: 'render-item height-100', attrs: { 'overflow-a': true } },
+      renderItem(props.nodes).concat(createElement(ContextMenu))
     )
   }
 })

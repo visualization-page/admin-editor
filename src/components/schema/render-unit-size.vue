@@ -1,15 +1,17 @@
 <template>
   <div class="unit-size flex">
     <el-input placeholder="请输入" :value="valueNum" @input="handleInputNum" />
-    <div :class="space" />
-    <el-select :value="valueUnit" @change="handleInputUnit">
-      <el-option label="px" value="px" />
-      <el-option label="%" value="%" />
-    </el-select>
-    <div :class="space" />
-    <el-tooltip effect="dark" content="设为auto" placement="left">
-      <el-button icon="el-icon-circle-close" @click="handleInputNum('')" />
-    </el-tooltip>
+    <template v-if="!schema.noAuto">
+      <div :class="space" />
+      <el-select :value="valueUnit" @change="handleInputUnit">
+        <el-option label="px" value="px" />
+        <el-option label="%" value="%" />
+      </el-select>
+      <div :class="space" />
+      <el-tooltip effect="dark" content="设为auto" placement="left">
+        <el-button icon="el-icon-circle-close" @click="handleInputNum('')" />
+      </el-tooltip>
+    </template>
   </div>
 </template>
 

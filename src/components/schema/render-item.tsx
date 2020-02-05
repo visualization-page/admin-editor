@@ -55,7 +55,7 @@ export const renderUniversal = (
   const { value, unit } = getUnitValue(pref[field])
   return createElement(name, {
     props: {
-      value: valueHasUnit ? value : pref[field]
+      value: valueHasUnit ? Number(value) : pref[field]
     },
     on: {
       input (val: string) {

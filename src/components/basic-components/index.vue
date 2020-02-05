@@ -1,5 +1,5 @@
 <template>
-  <div class="flex">
+  <div class="flex flex-wrap">
     <div
       v-for="item in list"
       :key="item.id"
@@ -19,6 +19,7 @@ import { Message } from 'element-ui'
 import div from './div'
 import img from './img'
 import rich from './rich-text'
+import button from './button'
 import { addNode, currentNode } from '@/assets/node'
 import { setTabName, tabName } from '@/assets/tab'
 
@@ -43,7 +44,8 @@ export default {
       list: [
         div,
         img,
-        rich
+        rich,
+        button
       ],
       handleClick
     }
@@ -60,9 +62,12 @@ export default {
   text-align: center;
   cursor: pointer;
   margin: 0 7px 7px 0;
+  &:nth-of-type(4n) {
+    margin-right: 0;
+  }
   &__cover {
-    width: 50px;
-    height: 50px;
+    width: 45px;
+    height: 45px;
     background-color: #f2f2f2;
   }
 }

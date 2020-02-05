@@ -2,6 +2,7 @@
   <div
     class="resize"
     @mousedown="e => handleResizeDown(e, 'move')"
+    @contextmenu.prevent="e => $emit('context', e)"
     :style="outDocFlow && { cursor: 'move' }"
   >
     <div
@@ -77,13 +78,13 @@ document.addEventListener('mousemove', e => {
     const node = currentNode.value!
     const _changeHeight = (symbol: 1 | -1) => {
       const h = Number(state.height.value) + (e.pageY - state.startY) * symbol
-      if (h >= 0 && h < 480) {
+      if (h >= 0 && h <= 480) {
         updateNodeStyle({ height: `${h}px` })
       }
     }
     const _changeWidth = (symbol: 1 | -1) => {
       const w = Number(state.width.value) + (e.pageX - state.startX) * symbol
-      if (w >= 0 && w < 320) {
+      if (w >= 0 && w <= 320) {
         updateNodeStyle({ width: `${w}px` })
       }
     }
@@ -142,7 +143,11 @@ function percent2px (val: string, dir: 'vertical' | 'horizontal'): UnitValue {
 }
 
 export default createComponent({
-  setup () {
+  // props: {
+  //   item: Object
+  // },
+
+  setup (props) {
     const handleResizeDown = (e: MouseEvent, dir: string) => {
       const node = currentNode.value!
       state.startX = e.pageX
@@ -154,8 +159,16 @@ export default createComponent({
       state.left = percent2px(node.style.position.left, 'horizontal')
       state.top = percent2px(node.style.position.top, 'vertical')
     }
+    // const showContextMenu = (e: MouseEvent) => {
+    //   handleClick()
+    // }
+    // const handleClick = () => {
+    //   setCurrentNode(props.item)
+    // }
     return {
       handleResizeDown,
+      // showContextMenu,
+      // handleClick,
       outDocFlow: computed(() => currentNode.value && currentNode.value.outDocFlow)
     }
   }
@@ -164,17 +177,18 @@ export default createComponent({
 
 <style lang="less">
 .resize {
-  position: absolute;
+  /*position: absolute;*/
   width: 100%;
   height: 100%;
-  left: 0;
-  top: 0;
+  /*left: 0;*/
+  /*top: 0;*/
   &__dot {
     position: absolute;
     width: 8px;
     height: 8px;
     border: 1px #409eff dashed;
     background-color: #ffffff;
+    z-index: 9998;
     &:hover {
       background-color: #f2f2f2;
     }

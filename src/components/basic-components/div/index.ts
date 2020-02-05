@@ -9,18 +9,11 @@ export default {
   cover: '',
   type: 'div',
   ...common,
-  props: {
-    buttonText: '立即提交'
+  style: {
+    ...common.style,
+    height: undefined
   }
 }
 
 export const schema = [
-  {
-    type: 'input',
-    label: '按钮',
-    field: 'props.buttonText',
-    rules: [
-      { required: true, message: '请输入项目目录名称', trigger: 'blur' }
-    ]
-  }
 ]

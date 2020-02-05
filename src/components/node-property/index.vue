@@ -1,11 +1,15 @@
 <template>
   <div class="node-property">
-    <schema-form
-      v-if="detail && detail.id !== -1"
-      :schema="schema"
-      :schema-data="detail"
-      @updateByField="updateNodeByField"
-    />
+    <template v-if="detail && detail.id !== -1">
+      <schema-form
+        :schema="schema"
+        :schema-data="detail"
+        @updateByField="updateNodeByField"
+      />
+      <div class="tc mt20">
+        <el-button class="width-100" type="danger" @click="handleDel">删除节点</el-button>
+      </div>
+    </template>
     <div v-else class="flex-center p30">
       <p class="c-999">请选中非根组件</p>
     </div>
@@ -16,9 +20,10 @@
 import { computed, reactive, watch, toRefs } from '@vue/composition-api'
 import SchemaForm from '../schema/index.vue'
 import local from './config'
-import { currentNode } from '@/assets/node'
+import { currentNode, delNode } from '@/assets/node'
 import { updateByField } from '@/assets/util'
 import schema from '@/components/basic-components/props-schema'
+import { MessageBox } from 'element-ui'
 
 export default {
   components: {
@@ -40,6 +45,10 @@ export default {
       detail,
       updateNodeByField (field, val) {
         updateByField(currentNode.value, field, val)
+      },
+      async handleDel () {
+        await MessageBox.confirm('确定要删除吗')
+        delNode({ nodeId: currentNode.value.id })
       }
     }
   }

@@ -25,6 +25,9 @@ export default {
   setup (props, ctx) {
     const value = computed(() => {
       const { pref, field } = getParentRef(props.schema.field, props.schemaData)
+      if (tinymce && tinymce.activeEditor) {
+        tinymce.activeEditor.setContent(pref[field])
+      }
       return pref[field]
     })
     const handleChange = (event, editor) => {
