@@ -79,7 +79,7 @@ export default createComponent({
         if (ok) {
           code.value = val
         } else {
-          console.log(msg)
+          // console.log(msg)
         }
       }
     }

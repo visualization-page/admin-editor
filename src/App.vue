@@ -1,6 +1,8 @@
 <template>
   <div id="app">
-    <div class="app-header"></div>
+    <div class="app-header">
+      <header-opt />
+    </div>
     <div class="app-header__bar flex-center">
       <node-style-tools />
     </div>
@@ -95,6 +97,7 @@ import NodeProperty from './components/node-property/index.vue'
 import BasicComponent from './components/basic-components/index.vue'
 import MobileRender from './components/mobile-render/index.vue'
 import CodeEditor from './components/code-editor/index.vue'
+import HeaderOpt from './components/header-opts/index.vue'
 import { tabCurrent, setTabName, tabName } from '@/assets/tab'
 
 export default createComponent({
@@ -108,7 +111,8 @@ export default createComponent({
     MobileRender,
     NodeStyle,
     NodeStyleTools,
-    CodeEditor
+    CodeEditor,
+    HeaderOpt
   },
   setup () {
     return {

@@ -48,5 +48,13 @@ export const fxList = [
   {
     name: '彩云右上角菜单',
     code: '$$system.native.defineCallback(\'分享\', () => {\n})'
+  },
+  {
+    name: '设置节点属性',
+    code: '$$system.setNodeProperty(\'id\', \'\', \'\')'
+  },
+  {
+    name: '获取节点属性',
+    code: '$$system.getNodeProperty(\'id\', \'\')'
   }
 ]

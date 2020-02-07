@@ -1,7 +1,7 @@
 <template>
   <render-item
     v-if="currentPage"
-    :nodes="deepClone(currentPage.nodes)"
+    :nodes="currentPage.nodes"
   />
 </template>
 

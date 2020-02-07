@@ -24,6 +24,7 @@ import { currentNode, delNode } from '@/assets/node'
 import { updateByField } from '@/assets/util'
 import schema from '@/components/basic-components/props-schema'
 import { MessageBox } from 'element-ui'
+// import Vue from 'vue'
 
 export default {
   components: {
@@ -45,6 +46,10 @@ export default {
       detail,
       updateNodeByField (field, val) {
         updateByField(currentNode.value, field, val)
+        // currentNode.value[field] = val
+        // console.log(currentNode.value[field])
+        // console.log(field, currentNode.value)
+        // currentNode.value.title = '111'
       },
       async handleDel () {
         await MessageBox.confirm('确定要删除吗')

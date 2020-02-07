@@ -14,7 +14,19 @@
       ref="tree"
       @node-click="handleNodeClick"
       @node-drop="handleDrop"
-    />
+    >
+      <div class="flex-center-between width-100" slot-scope="{ node, data }">
+        <span>{{ node.label }}</span>
+        <span v-if="data.id !== -1">
+          <el-button
+            type="text"
+            size="mini"
+            @click="handleCopy(data, node.parent)">
+            复制
+          </el-button>
+        </span>
+      </div>
+    </el-tree>
     <div v-else class="flex-center p30">
       <p class="c-999">请新建页面</p>
     </div>
@@ -24,7 +36,7 @@
 <script lang="ts">
 import { createComponent, computed, watch } from '@vue/composition-api'
 import { currentPage } from '@/assets/page'
-import { rootNode, currentNode, setCurrentNode } from '@/assets/node'
+import { rootNode, currentNode, setCurrentNode, getNewNode } from '@/assets/node'
 
 export default createComponent({
   setup (props, ctx) {
@@ -38,10 +50,22 @@ export default createComponent({
     })
     watch(() => currentNode.value && currentNode.value.id, val => {
       // @ts-ignore
-      ctx.refs.tree.setCurrentKey(val)
+      val && ctx.refs.tree.setCurrentKey(val)
     }, { lazy: true })
     const handleNodeClick = (data: any) => {
       setCurrentNode(data)
+    }
+    const handleCopy = (data: any, parent: any) => {
+      const index = parent.data.children.findIndex((x: any) => x.id === data.id)
+      let target = parent.data.children
+      if (parent.data.id === -1) {
+        target = currentPage.value!.nodes
+      }
+      target.splice(
+        index + 1,
+        0,
+        getNewNode(data, { title: `${data.title}_copy` })
+      )
     }
     return {
       nodes,
@@ -59,7 +83,8 @@ export default createComponent({
       },
       allowDrag (draggingNode: any) {
         return draggingNode.data.id !== -1
-      }
+      },
+      handleCopy
     }
   }
 })

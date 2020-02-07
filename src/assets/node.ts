@@ -25,17 +25,24 @@ export const setCurrentNode = (item?: any) => {
   currentNode.value = item
 }
 
+export const getNewNode = (item: any, obj?: any): NodeItem => ({
+  ...deepClone(item),
+  ...(obj || {}),
+  id: `node-${Date.now()}`
+})
+
+export const getNewNodeParent = () => {
+  let target: Array<NodeItem> = currentPage.value!.nodes
+  if (currentNode.value && currentNode.value.id !== -1) {
+    target = currentNode.value.children
+  }
+  return target
+}
+
 export const addNode = (item: any) => {
   if (currentPage.value) {
-    let target: Array<NodeItem> = currentPage.value.nodes
-    if (currentNode.value && currentNode.value.id !== -1) {
-      target = currentNode.value.children
-    }
-    const newNode = {
-      ...deepClone(item),
-      id: `node-${Date.now()}`
-    }
-    target.push(newNode)
+    const newNode = getNewNode(item)
+    getNewNodeParent().push(newNode)
     // el-tree 中的更新逻辑在下一个 task 后
     setTimeout(() => {
       setCurrentNode(newNode)

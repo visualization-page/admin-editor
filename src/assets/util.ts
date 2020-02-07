@@ -27,13 +27,21 @@ export const getParentRef = (field: string, data: any) => {
   }
 }
 
-export const updateByField = (target: any, str: string, val: any) => {
-  const { pref, field } = getParentRef(str, target)
+export const updateByField = (target: any, path: string, val: any) => {
+  const { pref, field } = getParentRef(path, target)
   if (pref[field] !== undefined) {
-    pref[field] = val
+    if (Array.isArray(pref[field])) {
+      pref[field].splice(0, pref[field].length)
+      pref[field].push.apply(pref[field], val)
+    } else if (typeof pref[field] === 'object') {
+      Vue.set(pref, field, val)
+    } else {
+      pref[field] = val
+    }
   } else {
     Vue.set(pref, field, val)
   }
+  // Vue.set(pref, field, val)
 }
 
 export const findTreePath = (

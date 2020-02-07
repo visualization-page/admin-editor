@@ -29,6 +29,16 @@ export default [
     }
   },
   {
+    label: 'class',
+    field: 'className',
+    type: 'input',
+    elProps: {
+    },
+    elAttrs: {
+      placeholder: '支持 tcon.css，空格分隔'
+    }
+  },
+  {
     label: '开启分享',
     field: 'hasShare',
     type: 'checkbox'
@@ -69,11 +79,11 @@ export default [
     label: '事件管理',
     field: 'events',
     type: 'events'
-  },
-  {
-    label: '响应式状态',
-    field: 'state',
-    block: false,
-    type: 'code'
   }
+  // {
+  //   label: '响应式状态',
+  //   field: 'state',
+  //   block: false,
+  //   type: 'code'
+  // }
 ]

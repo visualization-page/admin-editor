@@ -46,9 +46,61 @@ export default [
     type: 'direction-size'
   },
   {
-    label: '背景',
-    field: 'style.background',
-    type: 'background'
+    label: '背景颜色',
+    field: 'style.backgroundColor',
+    type: 'color'
+  },
+  {
+    label: '背景图片',
+    field: 'style.backgroundImage',
+    type: 'input',
+    placeholder: '请输入图片地址'
+  },
+  {
+    label: '背景位置',
+    field: 'style.backgroundPosition',
+    type: 'select',
+    options: [
+      { label: 'center', value: 'center' },
+      { label: 'left top', value: 'left top' },
+      { label: 'left center', value: 'left center' }
+    ],
+    props: {
+      filterable: true,
+      'allow-create': true,
+      clearable: true
+    }
+  },
+  {
+    label: '背景尺寸',
+    field: 'style.backgroundSize',
+    type: 'select',
+    options: [
+      { label: 'cover', value: 'cover' },
+      { label: 'contain', value: 'contain' },
+      { label: '100%', value: '100%' },
+      { label: '100% 100%', value: '100% 100%' }
+    ],
+    props: {
+      filterable: true,
+      'allow-create': true,
+      clearable: true
+    }
+  },
+  {
+    label: '背景重复',
+    field: 'style.backgroundRepeat',
+    type: 'select',
+    options: [
+      { label: 'no-repeat', value: 'no-repeat' },
+      { label: 'repeat-x', value: 'repeat-x' },
+      { label: 'repeat-y', value: 'repeat-y' }
+    ],
+    props: {
+      filterable: true,
+      'allow-create': true,
+      clearable: true
+    }
   },
   {
     label: '边框',
@@ -74,5 +126,10 @@ export default [
     label: '圆角',
     field: 'style.borderRadius',
     type: 'slider'
+  },
+  {
+    label: '代码补充',
+    field: 'style.code',
+    type: 'code'
   }
 ]

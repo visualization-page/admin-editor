@@ -21,6 +21,7 @@ import img from './img'
 import rich from './rich-text'
 import button from './button'
 import { addNode, currentNode } from '@/assets/node'
+import { currentPage } from '@/assets/page'
 import { setTabName, tabName } from '@/assets/tab'
 
 export default {
@@ -28,12 +29,12 @@ export default {
   },
   setup () {
     const handleClick = (item) => {
-      if (!currentNode.value) {
+      if (!currentPage.value) {
         Message.info('请新建页面')
         setTabName([tabName.pageList])
         return
       }
-      if (currentNode.value.type !== 'div') {
+      if (currentNode.value && currentNode.value.type !== 'div') {
         Message.error('容器组件才能添加子组件')
       } else {
         addNode(item)

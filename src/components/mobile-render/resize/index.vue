@@ -99,55 +99,56 @@ export default createComponent({
   /*top: 0;*/
   &__dot {
     position: absolute;
-    width: 8px;
-    height: 8px;
-    border: 1px #409eff dashed;
+    width: 12px;
+    height: 12px;
+    border: 1px #409eff solid;
     background-color: #ffffff;
+    border-radius: 50%;
     z-index: 9998;
     &:hover {
       background-color: #f2f2f2;
     }
     &-lt {
-      top: -4px;
-      left: -4px;
+      top: -6px;
+      left: -6px;
       cursor: nw-resize;
     }
     &-t {
-      top: -4px;
+      top: -6px;
       left: 50%;
       transform: translateX(-50%);
       cursor: n-resize;
     }
     &-tr {
-      top: -4px;
-      right: -4px;
+      top: -6px;
+      right: -6px;
       cursor: ne-resize;
     }
     &-lb {
-      bottom: -4px;
-      left: -4px;
+      bottom: -6px;
+      left: -6px;
       cursor: sw-resize;
     }
     &-b {
-      bottom: -4px;
+      bottom: -6px;
       left: 50%;
       transform: translateX(-50%);
       cursor: s-resize;
     }
     &-br {
-      bottom: -4px;
-      right: -4px;
+      bottom: -6px;
+      right: -6px;
       cursor: se-resize;
     }
     &-l {
       top: 50%;
-      left: -4px;
+      left: -6px;
       transform: translateY(-50%);
       cursor: w-resize;
     }
     &-r {
       top: 50%;
-      right: -4px;
+      right: -6px;
       transform: translateY(-50%);
       cursor: e-resize;
     }

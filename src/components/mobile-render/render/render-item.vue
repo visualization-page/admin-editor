@@ -28,12 +28,13 @@ export default createComponent<{ nodes: NodeItem[] }>({
   },
   setup (props, ctx) {
     const renderItem = (items: NodeItem[]) => {
+      const isEditState = isEdit()
       return items.filter(x => x.show).map(item => {
         const active = currentNode.value && currentNode.value.id === item.id
         // `${active ? ' active' : ''} ${}`
         const props = {
           style: { ...item.style },
-          class: ['render-item__item', { active }, item.className],
+          class: ['render-item__item', { active, [item.className]: !isEditState }],
           key: item.id,
           on: {},
           props: item.props
@@ -47,15 +48,12 @@ export default createComponent<{ nodes: NodeItem[] }>({
         props.style.position = item.outDocFlow ? item.style.positionType : undefined
         // console.log(props.style)
         const children: any = item.type === 'div' ? renderItem(item.children) : []
-        if (isEdit()) {
-          return createElement('div', {
-            style: props.style,
-            class: props.class
-          }, [
+        if (isEditState) {
+          return createElement('div', { style: props.style, class: props.class }, [
             createElement(EditWrap, { props: { item, active } }),
             createElement(item.componentName, {
               props: props.props,
-              class: 'width-100 height-100'
+              class: ['width-100 height-100', { [item.className]: isEditState }]
             }, children)
           ])
         }

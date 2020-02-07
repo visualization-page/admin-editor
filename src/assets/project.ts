@@ -1,5 +1,6 @@
 import Vue from 'vue'
-import Composition, { reactive, ref, watch } from '@vue/composition-api'
+import Composition, { reactive, watch } from '@vue/composition-api'
+// import { updateByField } from './util'
 Vue.use(Composition)
 
 export const project = reactive({
@@ -30,8 +31,22 @@ export const updateProject = (obj: typeof project) => {
       // @ts-ignore
       Vue.set(project, key, obj[key])
     }
+    // updateByField(project, key, obj[key])
   })
 }
+
+export const exportProjectLocal = () => {
+  localStorage.setItem('local', JSON.stringify(project))
+}
+
+export const importProjectLocal = () => {
+  const item = localStorage.getItem('local')
+  if (item) {
+    updateProject(JSON.parse(item))
+  }
+}
+
+// importProjectLocal()
 
 watch(() => project, val => {
   console.log(val)

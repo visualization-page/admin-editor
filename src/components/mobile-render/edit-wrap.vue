@@ -3,6 +3,7 @@ import { createComponent, createElement } from '@vue/composition-api'
 import Resizer from './resize/index.vue'
 import { setCurrentNode } from '@/assets/node'
 import { setPosition } from './context-menu/position'
+import { tabName, setTabName } from '@/assets/tab'
 
 export default createComponent({
   props: {
@@ -13,6 +14,7 @@ export default createComponent({
   setup (props, ctx) {
     const handleClick = () => {
       setCurrentNode(props.item)
+      setTabName(['', '', tabName.nodeProperty])
     }
     const handleContext = (e: MouseEvent) => {
       e.preventDefault()

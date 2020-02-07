@@ -27,6 +27,7 @@
         label-position="left"
         label-width="60px"
         ref="form"
+        style="height: 500px;overflow: auto"
       >
         <el-form-item label="描述" prop="desc">
           <el-input v-model="form.desc" placeholder="请输入" />
@@ -130,7 +131,7 @@ export default createComponent({
     watch(() => props.schemaData, val => {
       if (val) {
         const { pref, field } = getParentRef(props.schema!.field, val)
-        eventList.value = pref[field]
+        eventList.value = deepClone(pref[field])
       }
     }, { deep: true })
 
@@ -144,7 +145,7 @@ export default createComponent({
           } else {
             eventList.value.push(deepClone(form))
           }
-          ctx.emit('change', eventList)
+          ctx.emit('change', eventList.value)
           // @ts-ignore
           ctx.refs.form.resetFields()
         }
@@ -201,7 +202,7 @@ export default createComponent({
       handleDel (i: number) {
         MessageBox.confirm('确定要删除吗？').then(() => {
           eventList.value.splice(i, 1)
-          ctx.emit('change', eventList)
+          ctx.emit('change', eventList.value)
         })
       },
       amdRequire: window.require,
