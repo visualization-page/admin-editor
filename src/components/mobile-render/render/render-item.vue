@@ -2,6 +2,8 @@
 import { createComponent, createElement } from '@vue/composition-api'
 import { NodeItem, currentNode } from '@/assets/node'
 import { isEdit } from '@/assets/render'
+import { FormEvent } from '@/assets/event'
+import { parseCodeValid } from '@/assets/util'
 import EditWrap from '../edit-wrap.vue'
 import ContextMenu from '../context-menu/index.vue'
 
@@ -31,12 +33,30 @@ export default createComponent<{ nodes: NodeItem[] }>({
       const isEditState = isEdit()
       return items.filter(x => x.show).map(item => {
         const active = currentNode.value && currentNode.value.id === item.id
-        // `${active ? ' active' : ''} ${}`
+        // 处理事件
+        const on: any = {}
+        const nativeOn: any = {}
+        item.events.forEach((ev: FormEvent) => {
+          const handler = () => {
+            const { ok, msg, value } = parseCodeValid(`(function() {${ev.fxCode}})()`)
+            if (!ok) {
+              console.log(`event [${ev.eventType}] error: ${msg}`)
+            }
+            return value
+          }
+          if (ev.eventType === 'click') {
+            nativeOn[ev.eventType] = handler
+          } else {
+            on[ev.eventType] = handler
+          }
+        })
+        // 处理 props
         const props = {
           style: { ...item.style },
-          class: ['render-item__item', { active, [item.className]: !isEditState }],
+          class: ['render-item__item'].concat(isEditState ? { active } : item.className),
           key: item.id,
-          on: {},
+          on,
+          nativeOn,
           props: item.props
         }
         mergeDirectionSize(props.style, item.style.margin, 'margin')

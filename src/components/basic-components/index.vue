@@ -23,6 +23,7 @@ import button from './button'
 import { addNode, currentNode } from '@/assets/node'
 import { currentPage } from '@/assets/page'
 import { setTabName, tabName } from '@/assets/tab'
+import { isEdit } from '@/assets/render'
 
 export default {
   components: {
@@ -32,6 +33,10 @@ export default {
       if (!currentPage.value) {
         Message.info('请新建页面')
         setTabName([tabName.pageList])
+        return
+      }
+      if (!isEdit()) {
+        Message.error('请切换至编辑模式')
         return
       }
       if (currentNode.value && currentNode.value.type !== 'div') {

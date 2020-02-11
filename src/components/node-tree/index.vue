@@ -36,7 +36,7 @@
 <script lang="ts">
 import { createComponent, computed, watch } from '@vue/composition-api'
 import { currentPage } from '@/assets/page'
-import { rootNode, currentNode, setCurrentNode, getNewNode } from '@/assets/node'
+import { rootNode, currentNode, setCurrentNode, getNewNode, NodeItem } from '@/assets/node'
 
 export default createComponent({
   setup (props, ctx) {
@@ -55,16 +55,24 @@ export default createComponent({
     const handleNodeClick = (data: any) => {
       setCurrentNode(data)
     }
+    const deepCopyNode = (data: NodeItem) => {
+      const item = getNewNode(data, { title: `${data.title}_copy` })
+      if (item.children && item.children.length) {
+        item.children = item.children.map(x => deepCopyNode(x))
+      }
+      return item
+    }
     const handleCopy = (data: any, parent: any) => {
       const index = parent.data.children.findIndex((x: any) => x.id === data.id)
       let target = parent.data.children
       if (parent.data.id === -1) {
         target = currentPage.value!.nodes
       }
+      // 复制时，需要递归所有节点，生成新的 id
       target.splice(
         index + 1,
         0,
-        getNewNode(data, { title: `${data.title}_copy` })
+        deepCopyNode(data)
       )
     }
     return {

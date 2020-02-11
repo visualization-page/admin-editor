@@ -46,7 +46,7 @@ export const importProjectLocal = () => {
   }
 }
 
-// importProjectLocal()
+importProjectLocal()
 
 watch(() => project, val => {
   console.log(val)

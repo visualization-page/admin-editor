@@ -6,6 +6,14 @@
         <span class="absolute l0 b0 width-100 pb10 tc f16">
           {{ currentPage ? (currentPage.title || '请输入标题') : '未创建页面' }}
         </span>
+        <el-button
+          v-if="currentPage"
+          class="absolute r10 b0 pb10"
+          type="text"
+          @click="handleMode"
+        >
+          {{ isEdit() ? '预览模式' : '编辑模式' }}
+        </el-button>
       </div>
       <div class="app__mobile-webview relative">
         <div class="app__mobile-webview-mock">
@@ -20,6 +28,7 @@
 import { createComponent } from '@vue/composition-api'
 import { currentPage } from '@/assets/page'
 import Render from './render/index.vue'
+import { isEdit, setRenderEdit, setRenderPreview } from '@/assets/render'
 
 export default createComponent({
   components: {
@@ -27,9 +36,17 @@ export default createComponent({
   },
 
   setup () {
-    // const title = computed(() => currentPage.value && currentPage.value.title)
+    const handleMode = () => {
+      if (isEdit()) {
+        setRenderPreview()
+      } else {
+        setRenderEdit()
+      }
+    }
     return {
-      currentPage
+      currentPage,
+      isEdit,
+      handleMode
     }
   }
 })

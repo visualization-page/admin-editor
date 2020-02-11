@@ -8,14 +8,6 @@ export type FormEvent = {
 
 export const eventType = ['click', 'change', 'input', 'focus', 'blur']
 export const eventTypePage = ['onMounted', 'onUnMounted']
-
-// const events = [
-//   {
-//     type: 'click',
-//     target: '',
-//     action: ''
-//   }
-// ]
 export const fxList = [
   {
     name: 'toast 提示',

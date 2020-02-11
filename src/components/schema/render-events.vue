@@ -17,7 +17,7 @@
     <el-dialog
       :visible.sync="showModal"
       title="事件管理"
-      width="700px"
+      width="900px"
       class="events-manage-dialog"
       top="0"
     >
@@ -43,7 +43,7 @@
           </el-select>
         </el-form-item>
         <el-form-item
-          v-if="!isFromPage"
+          v-if="!isFromPage && false"
           label="目标节点"
           prop="targetNodeIdPath"
         >
@@ -70,12 +70,12 @@
           </el-button>
         </el-form-item>
         <el-form-item label="逻辑代码" prop="fxCode">
-          <monaco-editor
             v-model="form.fxCode"
             :amdRequire="amdRequire"
             style="height: 300px"
             language="javascript"
             theme="vs-dark"
+            ref="editor"
           />
         </el-form-item>
       </el-form>
@@ -89,7 +89,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { createComponent, ref, reactive, watch, computed } from '@vue/composition-api'
+import { createComponent, ref, reactive, watch, computed, onMounted } from '@vue/composition-api'
 import { eventType, eventTypePage, fxList } from '@/assets/event'
 import { currentPage } from '@/assets/page'
 import { currentNode } from '@/assets/node'
@@ -158,7 +158,7 @@ export default createComponent({
     }
     const handleClickFx = (item: any) => {
       // console.log(item)
-      form.fxCode += `\n${item.code}`
+      form.fxCode += `${item.code}`
     }
 
     return {
@@ -197,6 +197,11 @@ export default createComponent({
         Vue.nextTick(() => {
           // @ts-ignore
           ctx.refs.form.clearValidate()
+          // @ts-ignore
+          // todo 获取鼠标位置插入值
+          // ctx.refs.editor.editor.onDidChangeCursorPosition((position: any) => {
+          //   console.log(position.position.toString())
+          // })
         })
       },
       handleDel (i: number) {

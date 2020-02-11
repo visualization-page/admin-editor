@@ -19,6 +19,10 @@ declare global {
       constant: any
       state: any
     }
+    $$system: {
+      getNodeProperty: (id: string, property: string) => any
+      setNodeProperty: (id: string, property: string, val: unknown) => any
+    }
     getConstant: (key: string) => string
   }
 }
