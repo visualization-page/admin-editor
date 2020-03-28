@@ -34,6 +34,14 @@ export default [
     type: 'checkbox'
   },
   {
+    label: 'v-if',
+    field: 'vIf',
+    type: 'input',
+    elAttrs: {
+      placeholder: '请输入'
+    }
+  },
+  {
     label: '脱离文档流',
     field: 'outDocFlow',
     type: 'checkbox'

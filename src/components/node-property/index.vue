@@ -22,9 +22,7 @@ import SchemaForm from '../schema/index.vue'
 import local from './config'
 import { currentNode, delNode } from '@/assets/node'
 import { updateByField } from '@/assets/util'
-import schema from '@/components/basic-components/props-schema'
 import { MessageBox } from 'element-ui'
-// import Vue from 'vue'
 
 export default {
   components: {
@@ -38,7 +36,7 @@ export default {
     // 根据当前 node 合并通用 schema 和组件特有的 schema
     watch(() => currentNode.value, node => {
       state.schema = node && node.id !== -1
-        ? [ ...local, ...(schema[node.type] || {}) ]
+        ? [ ...local, ...(window[node.name].schema || {}) ]
         : []
     })
     return {

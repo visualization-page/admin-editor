@@ -33,11 +33,13 @@
             type="border-card"
             @input="val => handleClick(['', val])"
           >
-            <el-tab-pane label="通用组件" :name="tabName.basicComponent">
+            <el-tab-pane label="内置组件" :name="tabName.basicComponent">
               <basic-component />
             </el-tab-pane>
-            <el-tab-pane label="高级组件" :name="tabName.highComponent">
+            <el-tab-pane label="封装组件" :name="tabName.highComponent">
               <p>业务组件</p>
+            </el-tab-pane>
+            <el-tab-pane label="组件库" :name="tabName.libraryComponent">
             </el-tab-pane>
             <el-tab-pane label="工具函数" :name="tabName.fx">
               <p>toast / alert / 打点 / 获取 cookie</p>

@@ -5,6 +5,14 @@ module.exports = {
   ],
   plugins: [
     [
+      'import',
+      {
+        libraryName: 'esc-ui',
+        style: true
+      },
+      'esc-ui'
+    ],
+    [
       'component',
       {
         libraryName: 'element-ui',

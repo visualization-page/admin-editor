@@ -70,6 +70,7 @@
           </el-button>
         </el-form-item>
         <el-form-item label="逻辑代码" prop="fxCode">
+          <monaco-editor
             v-model="form.fxCode"
             :amdRequire="amdRequire"
             style="height: 300px"

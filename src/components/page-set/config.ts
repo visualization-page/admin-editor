@@ -79,11 +79,11 @@ export default [
     label: '事件管理',
     field: 'events',
     type: 'events'
+  },
+  {
+    label: '视图模型',
+    field: 'state',
+    block: false,
+    type: 'code'
   }
-  // {
-  //   label: '响应式状态',
-  //   field: 'state',
-  //   block: false,
-  //   type: 'code'
-  // }
 ]

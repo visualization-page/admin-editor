@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Composition, { reactive, ref } from '@vue/composition-api'
 import { currentPage } from './page'
 import { deepClone } from './util'
+import { loadItem } from '@/components/mobile-render/render/utils'
 
 Vue.use(Composition)
 
@@ -39,9 +40,11 @@ export const getNewNodeParent = () => {
   return target
 }
 
-export const addNode = (item: any) => {
+export const addNode = async (item: any) => {
   if (currentPage.value) {
-    const newNode = getNewNode(item)
+    const data = await loadItem(item)
+    // @ts-ignore
+    const newNode = getNewNode({ ...data.default, name: item.name })
     getNewNodeParent().push(newNode)
     // el-tree 中的更新逻辑在下一个 task 后
     setTimeout(() => {

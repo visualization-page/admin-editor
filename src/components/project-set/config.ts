@@ -12,19 +12,19 @@ export const local = [
   {
     label: '项目名称',
     field: 'desc',
-    type: 'textarea',
+    type: 'input',
     elProps: {
     },
     elAttrs: {
       rows: 2
     },
     rulers: [
-      { required: true, message: '请输入项目描述', trigger: 'blur' },
+      { required: true, message: '请输入项目名称', trigger: 'blur' },
       { min: 3, max: 500, message: '长度在 3 到 500 个字符', trigger: 'blur' }
     ]
   },
   {
-    label: '项目目录',
+    label: '英文名称',
     field: 'dir',
     type: 'input',
     rulers: [

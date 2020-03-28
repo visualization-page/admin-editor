@@ -18,7 +18,6 @@ import SchemaForm from '../schema/index.vue'
 import local from './config'
 import { currentNode } from '@/assets/node'
 import { updateByField } from '@/assets/util'
-// import * as schema from '@/components/basic-components/props-schema'
 import { removeCenter } from '../node-style-tools/config'
 
 export default {
