@@ -21,9 +21,9 @@
 
 <script>
 import { ref } from '@vue/composition-api'
-import { addNode, addBeforeValidate } from '@/assets/node'
-import { project } from '@/assets/project'
-import { setTabName, tabName } from '@/assets/tab'
+import { addComposeNode, addBeforeValidate } from '@/assets/node'
+import { diffDownloadDeps } from '@/assets/project'
+// import { setTabName, tabName } from '@/assets/tab'
 import { http } from '@/api'
 
 export default {
@@ -31,19 +31,20 @@ export default {
   },
   setup () {
     const list = ref([])
-    http.get('component/list', { type: 'basic' }).then(res => {
+    http.get('component/list', { type: 'compose' }).then(res => {
       list.value = res.data
     })
     const handleRefresh = () => {
-      http.post('component/update', { type: 'basic' }).then(res => {
+      http.post('component/update', { type: 'compose' }).then(res => {
         list.value = res.data
       })
     }
-    const handleClick = (item) => {
+    const handleClick = async (item) => {
       if (addBeforeValidate()) {
-        addNode({ ...item, nodeType: 1 << 0 })
-        setTabName([tabName.nodeTree, '', tabName.nodeProperty])
-        project.componentDownload.push(item)
+        // 安装组件依赖
+        // 合并节点数据
+        await diffDownloadDeps(item.componentDeps)
+        addComposeNode(item.node)
       }
     }
     return {
@@ -56,25 +57,4 @@ export default {
 </script>
 
 <style lang="less">
-.basic-component {
-  &__list {
-    border-top: 1px #e2e2e2 solid;
-    border-left: 1px #e2e2e2 solid;
-  }
-  &__item {
-    width: 89px;
-    padding: 10px 0;
-    border-right: 1px #e2e2e2 solid;
-    border-bottom: 1px #e2e2e2 solid;
-    color: #696969;
-    text-align: center;
-    cursor: pointer;
-  }
-  &__cover {
-    width: 30px;
-    height: 30px;
-    background-color: #f2f2f2;
-    margin: 0 auto;
-  }
-}
 </style>

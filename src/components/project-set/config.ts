@@ -77,6 +77,12 @@ export const local = [
     type: 'input-group'
   },
   {
+    label: 'api补充选项',
+    field: 'options',
+    block: false,
+    type: 'code'
+  },
+  {
     label: '项目常量',
     field: 'constant',
     block: false,

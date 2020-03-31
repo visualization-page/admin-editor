@@ -10,5 +10,11 @@ module.exports = {
       const data = await component.update(req.params.type)
       res.json({ success: true, data })
     }
+  },
+  '/component/export/:type': {
+    post: async (req, res) => {
+      const ok = await component.export(req.params.type, req.body)
+      res.json({ success: ok, msg: ok ? '' : '组件名称已存在' })
+    }
   }
 }

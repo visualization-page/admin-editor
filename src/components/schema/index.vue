@@ -28,11 +28,11 @@ export default createComponent({
       if (showSchemaField === false) {
         return null
       }
+      // prop={/* schema.field */}
       return !schema.block ? (
         <el-form-item
           key={schema.field}
           label={schema.label}
-          prop={schema.field}
         >
           { renderItem(schema) }
         </el-form-item>

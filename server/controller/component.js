@@ -28,10 +28,9 @@ const handle = {
     for (let i = 0; i < dirs.length; i++) {
       const data = await fs.readJSON(path.join(typeDir, dirs[i], 'data.json'))
       const p = `/butterfly/static/${type}/${dirs[i]}`
-      // const existCss = await fs.pathExists(path.join(pubPath, type, dirs[i], 'index.css'))
       content.push({
         ...data,
-        jsUrl: `${p}/index.js`,
+        jsUrl: data.componentDeps ? undefined : `${p}/index.js`,
         cssUrl: data.existCss && `${p}/index.css`
       })
     }
@@ -39,6 +38,31 @@ const handle = {
     // 遍历 type 文件夹
     await fs.writeJSON(getPath(type), content)
     return content
+  },
+
+  /**
+   * 新增封装组件
+   * @param type
+   * @param data
+   * @returns {Promise<boolean>}
+   */
+  export: async (type, data) => {
+    // 检查名称是否存在
+    const exist = await fs.pathExists(getPath(type))
+    if (exist) {
+      const arr = fs.readJSON(getPath(type))
+      if (arr.findIndex(x => x.name === data.name) > -1) {
+        return false
+      }
+    }
+    // const result = {
+    //   componentDeps
+    //   name
+    //   node
+    // }
+    await fs.outputJSON(path.join(getPath(type, false), data.name, 'data.json'), data)
+    await handle.update(type)
+    return true
   }
 }
 

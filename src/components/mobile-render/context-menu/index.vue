@@ -21,15 +21,13 @@
 import { createComponent, toRefs, computed } from '@vue/composition-api'
 import { contextPosition } from './position'
 import { delNode, currentNode } from '@/assets/node'
-import { MessageBox } from 'element-ui'
 
 export default createComponent({
   setup () {
     return {
       ...toRefs(contextPosition),
       outDocFlow: computed(() => currentNode.value && currentNode.value.outDocFlow),
-      async handleDel () {
-        await MessageBox.confirm('确定要删除吗')
+      handleDel () {
         delNode({ nodeId: currentNode.value.id })
       }
     }

@@ -24,6 +24,8 @@
             <el-tab-pane label="节点树" :name="tabName.nodeTree">
               <node-tree />
             </el-tab-pane>
+            <el-tab-pane label="页面模版" :name="tabName.pageTemplate">
+            </el-tab-pane>
           </el-tabs>
         </div>
         <div class="app__block height-50">
@@ -37,9 +39,10 @@
               <basic-component />
             </el-tab-pane>
             <el-tab-pane label="封装组件" :name="tabName.highComponent">
-              <p>业务组件</p>
+              <component-compose />
             </el-tab-pane>
             <el-tab-pane label="组件库" :name="tabName.libraryComponent">
+              <component-library />
             </el-tab-pane>
             <el-tab-pane label="工具函数" :name="tabName.fx">
               <p>toast / alert / 打点 / 获取 cookie</p>
@@ -100,6 +103,8 @@ import BasicComponent from './components/basic-components/index.vue'
 import MobileRender from './components/mobile-render/index.vue'
 import CodeEditor from './components/code-editor/index.vue'
 import HeaderOpt from './components/header-opts/index.vue'
+import ComponentLibrary from './components/component-library/index.vue'
+import ComponentCompose from './components/component-compose/index.vue'
 import { tabCurrent, setTabName, tabName } from '@/assets/tab'
 
 export default createComponent({
@@ -114,7 +119,9 @@ export default createComponent({
     NodeStyle,
     NodeStyleTools,
     CodeEditor,
-    HeaderOpt
+    HeaderOpt,
+    ComponentLibrary,
+    ComponentCompose
   },
   setup () {
     return {

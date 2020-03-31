@@ -5,6 +5,7 @@ Vue.use(Composition)
 export const tabName = {
   projectSet: 'project-set',
   pageList: 'page-list',
+  pageTemplate: 'page-template',
   nodeTree: 'node-tree',
   basicComponent: 'basic-component',
   highComponent: 'high-component',

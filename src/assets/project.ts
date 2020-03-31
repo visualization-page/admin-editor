@@ -1,9 +1,33 @@
 import Vue from 'vue'
-import Composition, { reactive, watch } from '@vue/composition-api'
-// import { updateByField } from './util'
-Vue.use(Composition)
+import { reactive, watch } from '@vue/composition-api'
+import { loadItem } from '@/components/mobile-render/render/utils'
+import { Page } from './page'
+import { NodeItemBasic } from './node'
 
-export const project = reactive({
+type Project = {
+  id: number
+  desc: string
+  dir: string
+  thumbCover: string
+  interactiveType: string
+  httpOptions: {
+    baseUrl: string
+    contentType: string
+    urlMap: {
+      [k: string]: string
+    }
+    options: string
+  }
+  url: string
+  pages: Array<Page>
+  constant: string
+  componentLibrary: {
+    [k: string]: string[]
+  }
+  componentDownload: NodeItemBasic[]
+}
+
+export const project: Project = reactive({
   id: 1,
   desc: '',
   dir: '',
@@ -14,11 +38,22 @@ export const project = reactive({
     contentType: 'application/json',
     urlMap: {
       test: '/path/to/get'
-    }
+    },
+    options: '(function () {\n  return {\n    test: \'test\'\n  }\n})()'
   },
   url: '',
   pages: [],
-  constant: '(function () {\n  return {\n    test: \'test\'\n  }\n})()'
+  constant: '(function () {\n  return {\n    test: \'test\'\n  }\n})()',
+  componentLibrary: {
+    // vant: ['Button']
+  },
+  componentDownload: [
+    // {
+    //   name: '',
+    //   cssUrl: '',
+    //   jsUrl: ''
+    // }
+  ]
 })
 
 export const updateProject = (obj: typeof project) => {
@@ -31,7 +66,6 @@ export const updateProject = (obj: typeof project) => {
       // @ts-ignore
       Vue.set(project, key, obj[key])
     }
-    // updateByField(project, key, obj[key])
   })
 }
 
@@ -39,15 +73,29 @@ export const exportProjectLocal = () => {
   localStorage.setItem('local', JSON.stringify(project))
 }
 
-export const importProjectLocal = () => {
-  const item = localStorage.getItem('local')
+export const importProjectLocal = async (item: string) => {
   if (item) {
-    updateProject(JSON.parse(item))
+    const parseItem = JSON.parse(item)
+    // 下载资源
+    if (parseItem.componentDownload) {
+      await diffDownloadDeps(parseItem.componentDownload)
+    }
+    updateProject(parseItem)
   }
 }
 
-importProjectLocal()
+export const diffDownloadDeps = async (items: NodeItemBasic[]) => {
+  const res = items.filter(x => project.componentDownload.every(y => y.name !== x.name))
+  if (res.length) {
+    await Promise.all(res.map(loadItem))
+  }
+}
 
 watch(() => project, val => {
-  console.log(val)
+  console.dir(val)
 }, { lazy: true, deep: true })
+
+const localItem = localStorage.getItem('local')
+if (localItem) {
+  importProjectLocal(localItem)
+}

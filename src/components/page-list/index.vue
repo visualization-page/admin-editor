@@ -1,9 +1,9 @@
 <template>
   <div class="page-list">
     <div
-      v-for="(item) in pages"
+      v-for="(item) in project.pages"
       :key="item.id"
-      class="page-list__item flex items-center c-999 relative pl15"
+      class="page-list__item flex items-center c-999 relative pl15 cp"
       :class="{
         active: selected && selected.id === item.id
       }"
@@ -11,7 +11,7 @@
     >
       <span>{{ item.title || item.id }}</span>
     </div>
-    <div class="page-list__item flex-center c-999" @click="addPage">
+    <div class="page-list__item flex-center c-999 cp" @click="addPage">
       <i class="el-icon-plus f14" />
       <span>新建空白页面</span>
     </div>
@@ -31,7 +31,7 @@ export default createComponent({
 
   setup () {
     return {
-      pages: project.pages,
+      project,
       selected: currentPage,
       setSelect (item) {
         setTabName(['', '', tabName.pageSet])

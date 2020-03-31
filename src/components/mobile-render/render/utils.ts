@@ -1,25 +1,18 @@
-import { http } from '@/api'
+import { NodeItemBasic } from '@/assets/node'
 
-type Item = {
-  name: string
-  jsUrl: string
-  cssUrl: string
-  existCss: boolean
-}
-
-export const loadItem = (item: Item) => {
+export const loadItem = (item: NodeItemBasic): Promise<{ default: any }> => {
   // @ts-ignore
   const defineBak = window.define
   return new Promise((resolve, reject) => {
     // @ts-ignore
     window.define = undefined
     const script = document.createElement('script')
-    script.src = `${http.options.baseUrl}${item.jsUrl}`
+    script.src = `${process.env.VUE_APP_FILE_SERVER}${item.jsUrl}`
     // script.className = item.name
-    script.setAttribute('class', item.name)
+    script.setAttribute('class', item.name!)
     if (item.existCss) {
       const link = document.createElement('link')
-      link.href = `${http.options.baseUrl}${item.cssUrl}`
+      link.href = `${process.env.VUE_APP_FILE_SERVER}${item.cssUrl}`
       link.rel = 'stylesheet'
       document.head.appendChild(link)
     }

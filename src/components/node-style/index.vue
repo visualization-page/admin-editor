@@ -1,7 +1,7 @@
 <template>
   <div class="node-style">
     <schema-form
-      v-if="currentNode && currentNode.id !== -1"
+      v-if="currentNode && currentNode.id !== '-1'"
       :schema="schema"
       :schema-data="currentNode"
       @updateByField="updateNodeByField"

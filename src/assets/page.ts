@@ -1,8 +1,7 @@
 import Vue from 'vue'
-import Composition, { reactive, ref } from '@vue/composition-api'
+import { reactive, ref } from '@vue/composition-api'
 import { project } from './project'
 import { rootNode, setCurrentNode, NodeItem } from './node'
-Vue.use(Composition)
 
 export type Page = {
   title: string
