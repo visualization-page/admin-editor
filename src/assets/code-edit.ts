@@ -1,6 +1,4 @@
-import Vue from 'vue'
-import CompositionApi, { ref, reactive } from '@vue/composition-api'
-Vue.use(CompositionApi)
+import { ref, reactive } from '@vue/composition-api'
 
 export const isEdit = ref(false)
 export function setState (type: boolean) {

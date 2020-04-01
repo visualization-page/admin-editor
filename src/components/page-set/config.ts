@@ -84,6 +84,8 @@ export default [
     label: '视图模型',
     field: 'state',
     block: false,
-    type: 'code'
+    type: 'code',
+    'info-icon': 'el-icon-warning-outline',
+    info: '使用方法：在当前页面组件属性的输入框内可以绑定字段，例如：$state.test'
   }
 ]

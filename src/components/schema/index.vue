@@ -1,6 +1,7 @@
 <script lang="jsx">
 import Vue from 'vue'
-import { createComponent, createElement, reactive, watch } from '@vue/composition-api'
+import { MessageBox } from 'element-ui'
+import { defineComponent, createElement, reactive, watch } from '@vue/composition-api'
 import { renderInput, renderSelect, renderCheckbox, renderUniversal, renderCodeEditor } from './render-item'
 import RenderInputGroup from './render-input-group.vue'
 import RenderEvents from './render-events.vue'
@@ -8,7 +9,7 @@ import RenderUnitSize from './render-unit-size.vue'
 import RenderDirectionSize from './render-direction-size.vue'
 import RenderRichText from './render-rich-text.vue'
 
-export default createComponent({
+export default defineComponent({
   props: {
     schema: Array,
     schemaData: Object,
@@ -33,6 +34,22 @@ export default createComponent({
         <el-form-item
           key={schema.field}
           label={schema.label}
+          scopedSlots={{
+            label: () => {
+              return createElement('span', {
+                on: {
+                  click () {
+                    if (schema.info) {
+                      MessageBox.alert(schema.info)
+                    }
+                  }
+                }
+              }, [
+                schema.label,
+                schema.info && createElement('i', { class: schema['info-icon'] })
+              ])
+            }
+          }}
         >
           { renderItem(schema) }
         </el-form-item>

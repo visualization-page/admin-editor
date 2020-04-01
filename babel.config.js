@@ -11,13 +11,6 @@ module.exports = {
         style: true
       },
       'esc-ui'
-    ],
-    [
-      'component',
-      {
-        libraryName: 'element-ui',
-        styleLibraryName: 'theme-chalk'
-      }
     ]
   ]
 }

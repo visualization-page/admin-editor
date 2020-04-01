@@ -91,11 +91,13 @@ export const diffDownloadDeps = async (items: NodeItemBasic[]) => {
   }
 }
 
-watch(() => project, val => {
-  console.dir(val)
-}, { lazy: true, deep: true })
+export const initProject = () => {
+  watch(() => project, val => {
+    console.dir(val)
+  }, { lazy: true, deep: true })
 
-const localItem = localStorage.getItem('local')
-if (localItem) {
-  importProjectLocal(localItem)
+  const localItem = localStorage.getItem('local')
+  if (localItem) {
+    importProjectLocal(localItem)
+  }
 }

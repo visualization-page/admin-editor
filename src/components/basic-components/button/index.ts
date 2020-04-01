@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Component from './index.vue'
-import { common } from '@/assets/node'
+import { common } from '@/assets/node.ts'
 Vue.component(Component.name, Component)
 
 export default {
