@@ -10,6 +10,7 @@
     "server": "node server/index.js"
   },
   "dependencies": {
+    "@chenfengyuan/vue-qrcode": "^1.0.2",
     "@tinymce/tinymce-vue": "^3.0.1",
     "@vue/composition-api": "^0.5.0",
     "@xm/native": "^1.0.50",

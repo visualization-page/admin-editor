@@ -44,5 +44,8 @@ module.exports = {
   },
   configureWebpack: config => {
     config.externals = externals
+  },
+  devServer: {
+    disableHostCheck: true
   }
 }

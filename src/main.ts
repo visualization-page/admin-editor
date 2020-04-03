@@ -1,11 +1,19 @@
 import Vue from 'vue'
-// import Composition from '@vue/composition-api'
 import App from './App.vue'
 import router from './router'
 import store from './store'
+// @ts-ignore
+import Native from '@xm/native'
 import './plugins/element'
 import 'tcon'
 import { initProject } from '@/assets/project'
+
+const native = Vue.prototype.$native = new Native()
+if (!native.uid) {
+  location.href = `//admin.jituancaiyun.${location.protocol === 'https:' ? 'com' : 'net'}/power/user/view/login.html?referPageUrl=${decodeURIComponent(location.href)}`
+} else {
+  native.name = native.cookie('userName')
+}
 
 declare module '@vue/composition-api/dist/component/component' {
   interface SetupContext {
