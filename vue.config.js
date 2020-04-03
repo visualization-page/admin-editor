@@ -1,5 +1,3 @@
-// const MonacoWebpackPlugin = require('monaco-editor-webpack-plugin')
-
 // fuck! build application usage is not same with build lib
 const externals = process.env.VUE_APP_FILE_SERVER ? {
   vue: 'Vue',
@@ -30,6 +28,20 @@ const externals = process.env.VUE_APP_FILE_SERVER ? {
 }
 
 module.exports = {
+  pages: {
+    index: {
+      entry: 'src/main.ts',
+      outputDir: 'dist/',
+      template: 'public/index.html',
+      chunks: ['chunk-vendors', 'chunk-common', 'index']
+    },
+    render: {
+      entry: 'src/render/src/main.js',
+      outputDir: 'dist/render/',
+      template: 'src/render/index.html',
+      chunks: ['chunk-vendors', 'chunk-common', 'render']
+    }
+  },
   configureWebpack: config => {
     config.externals = externals
   }

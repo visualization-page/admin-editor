@@ -1,6 +1,9 @@
 <template>
   <div class="page-set">
-    <template v-if="showSchema">
+    <div class="flex-center p30" v-if="!isEdit()">
+      <p class="c-999">请切换为编辑模式</p>
+    </div>
+    <template v-else-if="showSchema">
       <schema-form
         :schema="local"
         :schema-data="currentPage"
@@ -24,6 +27,7 @@ import local from './config'
 import { currentPage, delPage } from '@/assets/page'
 import { updateByField } from '@/assets/util'
 import { MessageBox } from 'element-ui'
+import { isEdit } from '@/assets/render'
 
 export default createComponent({
   components: {
@@ -33,6 +37,7 @@ export default createComponent({
     const showSchema = computed(() => !!currentPage.value)
     return {
       local,
+      isEdit,
       showSchema,
       currentPage,
       updatePageByField (field, val) {

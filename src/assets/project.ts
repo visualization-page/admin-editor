@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import { reactive, watch } from '@vue/composition-api'
 import { loadItem } from '@/components/mobile-render/render/utils'
-import { Page } from './page'
+import { Page, setCurrentPage } from './page'
 import { NodeItemBasic } from './node'
 
 type Project = {
@@ -81,6 +81,9 @@ export const importProjectLocal = async (item: string) => {
       await diffDownloadDeps(parseItem.componentDownload)
     }
     updateProject(parseItem)
+    if (parseItem.pages.length) {
+      setCurrentPage(parseItem.pages[0])
+    }
   }
 }
 
@@ -91,13 +94,13 @@ export const diffDownloadDeps = async (items: NodeItemBasic[]) => {
   }
 }
 
-export const initProject = () => {
+export const initProject = async () => {
   watch(() => project, val => {
     console.dir(val)
   }, { lazy: true, deep: true })
 
   const localItem = localStorage.getItem('local')
   if (localItem) {
-    importProjectLocal(localItem)
+    await importProjectLocal(localItem)
   }
 }

@@ -128,7 +128,7 @@ export default [
     type: 'slider'
   },
   {
-    label: '代码补充',
+    label: '样式补充',
     field: 'style.code',
     type: 'code'
   }

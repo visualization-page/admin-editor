@@ -12,7 +12,7 @@ export default [
   {
     label: 'class',
     field: 'className',
-    type: 'input',
+    type: 'textarea',
     elProps: {
     },
     elAttrs: {
@@ -40,7 +40,8 @@ export default [
     type: 'input',
     elAttrs: {
       placeholder: '请输入'
-    }
+    },
+    model: 'blur'
   },
   {
     label: '脱离文档流',

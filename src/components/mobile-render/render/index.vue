@@ -1,5 +1,5 @@
 <template>
-  <div v-if="currentPage">
+  <div v-if="currentPage" :class="['render-page', currentPage.className]">
     <render-item
       :nodes="currentPage.nodes"
       :page-config="pageConfig"
@@ -9,10 +9,8 @@
 </template>
 
 <script lang="ts">
-import { createComponent, watch, reactive, ref, onMounted } from '@vue/composition-api'
-import { currentPage } from '@/assets/page'
-import { project } from '@/assets/project'
-import { deepClone, parseCodeValid, getParentRef } from '@/assets/util'
+import { createComponent, watch, ref, onMounted } from '@vue/composition-api'
+import { parseCodeValid, sleepUntil } from '@/assets/util'
 import RenderItem from './render-item.vue'
 import { initGlobalConfig, getEventHandler } from './utils'
 import { FormEvent } from '@/assets/event'
@@ -22,34 +20,62 @@ export default createComponent({
   components: {
     RenderItem
   },
-  setup () {
-    const globalConfig = ref(initGlobalConfig(currentPage.value))
+  props: {
+    currentPage: {
+      type: Object
+    },
+    project: {
+      type: Object
+    }
+  },
+  setup (props) {
+    // @ts-ignore
+    const globalConfig = ref(initGlobalConfig(props.currentPage))
     const pageConfig = ref({ state: {} })
-    watch(() => project.constant, cons => {
-      const { ok, value } = parseCodeValid(cons)
-      if (ok) {
-        globalConfig.value.constant = value!
+    const mounted = ref(false)
+    // 更新全局 constant
+    watch(() => props.project && props.project.constant, cons => {
+      if (cons) {
+        const { ok, value } = parseCodeValid(cons)
+        if (ok) {
+          globalConfig.value.constant = value!
+        }
       }
     }, { deep: true })
-    watch(() => currentPage.value && currentPage.value.state, state => {
+    // 更新 page
+    watch(() => props.currentPage, async (page, oldPage) => {
+      if (page) {
+        // 执行页面钩子
+        if (isEdit()) {
+          globalConfig.value.updatePage(page)
+        } else {
+          const ctx = { $$page: pageConfig.value, $$global: globalConfig.value }
+          // 上一个页面 unMounted 钩子
+          if (oldPage) {
+            oldPage.events.filter((x: FormEvent) => x.eventType === 'onUnMounted').forEach((ev: FormEvent) => {
+              getEventHandler(ev, ctx)
+            })
+          }
+          await sleepUntil(() => mounted.value)
+          globalConfig.value.updatePage(page)
+          // 当前页面的 mounted 钩子
+          page.events.filter((x: FormEvent) => x.eventType === 'onMounted').forEach((ev: FormEvent) => {
+            getEventHandler(ev, ctx)
+          })
+        }
+      }
+    })
+    // 更新 page.state
+    watch(() => props.currentPage && props.currentPage.state, state => {
       const { ok, value } = parseCodeValid(state)
       if (ok) {
         pageConfig.value.state = value!
       }
     }, { deep: true })
-    // 页面事件
     onMounted(() => {
-      watch(() => currentPage.value && currentPage.value.events, events => {
-        if (events && !isEdit()) {
-          const ctx = { $$page: pageConfig.value, $$global: globalConfig.value }
-          events.forEach((ev: FormEvent) => {
-            getEventHandler(ev, ctx)
-          })
-        }
-      })
+      mounted.value = true
     })
     return {
-      currentPage,
       pageConfig,
       globalConfig
     }

@@ -1,7 +1,10 @@
 <template>
   <div class="node-style">
+    <div class="flex-center p30" v-if="!isEdit()">
+      <p class="c-999">请切换为编辑模式</p>
+    </div>
     <schema-form
-      v-if="currentNode && currentNode.id !== '-1'"
+      v-else-if="currentNode && currentNode.id !== '-1'"
       :schema="schema"
       :schema-data="currentNode"
       @updateByField="updateNodeByField"
@@ -19,6 +22,7 @@ import local from './config'
 import { currentNode } from '@/assets/node'
 import { updateByField } from '@/assets/util'
 import { removeCenter } from '../node-style-tools/config'
+import { isEdit } from '@/assets/render'
 
 export default {
   components: {
@@ -29,6 +33,7 @@ export default {
       // ...toRefs(state),
       schema: local,
       // detail,
+      isEdit,
       currentNode,
       updateNodeByField (field, val) {
         if (field === 'style.position') {

@@ -6,7 +6,7 @@ export default [
     elProps: {
     },
     elAttrs: {
-      disabled: true
+      disabled: false
     }
   },
   {
@@ -31,12 +31,13 @@ export default [
   {
     label: 'class',
     field: 'className',
-    type: 'input',
+    type: 'textarea',
     elProps: {
     },
     elAttrs: {
       placeholder: '支持 tcon.css，空格分隔'
-    }
+    },
+    model: 'blur'
   },
   {
     label: '开启分享',

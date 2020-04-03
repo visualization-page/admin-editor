@@ -1,14 +1,12 @@
-// import Vue from 'vue'
-import { createElement, ref } from '@vue/composition-api'
+import { createElement } from '@vue/composition-api'
 import { getParentRef, getUnitValue } from '@/assets/util'
-// import { Message } from 'element-ui'
 import { setCodeState } from '@/assets/code-edit'
 import { setTabName, tabName } from '@/assets/tab'
+import Input from './input.vue'
 
-// const localInputContent = ref<{ [k: string]: string }>({})
 export const renderInput = (item: any, data: any, updateField: any) => {
   const { pref, field } = getParentRef(item.field, data)
-  // Vue.set(localInputContent.value, item.field, pref && pref[field])
+  const isBlur = item.model === 'blur'
   const props = {
     attrs: {
       placeholder: item.placeholder || '请输入',
@@ -21,15 +19,14 @@ export const renderInput = (item: any, data: any, updateField: any) => {
     },
     on: {
       input (val: string) {
-        // localInputContent.value[item.field] = val
         updateField(item.field, val)
       }
-      // blur (val: string) {
-      //   updateField(item.field, val)
-      // }
     }
   }
-  return <el-input {...props} />
+  return isBlur
+    // @ts-ignore
+    ? <Input value={pref && pref[field]} item={item} onInput={val => updateField(item.field, val)} />
+    : <el-input {...props} />
 }
 
 export const renderSelect = (item: any, data: any, updateField: any) => {

@@ -1,6 +1,8 @@
 <template>
   <div class="node-style-tools">
-    <ul class="flex">
+    <div class="flex-center p30" v-if="!isEdit()">
+    </div>
+    <ul v-else-if="false" class="flex">
       <li
         v-for="item in list"
         :key="item.title"
@@ -20,6 +22,7 @@ import { computed } from '@vue/composition-api'
 import items, { Item, handleCenter } from './config'
 import { currentNode } from '@/assets/node'
 import { updateByField } from '@/assets/util'
+import { isEdit } from '@/assets/render'
 
 export default {
   setup () {
@@ -151,6 +154,7 @@ export default {
 
     return {
       list,
+      isEdit,
       handleClick
     }
   }

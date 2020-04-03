@@ -58,7 +58,7 @@ export default defineComponent<{
         const on: any = {}
         const nativeOn: any = {}
         item.events.forEach((ev: FormEvent) => {
-          const handler = getEventHandler(ev, codeExecuteContext)
+          const handler = () => getEventHandler(ev, codeExecuteContext)
           if (ev.eventType === 'click') {
             nativeOn[ev.eventType] = handler
           } else {
@@ -67,7 +67,11 @@ export default defineComponent<{
         })
         // 处理 props
         const props = {
-          style: { ...item.style },
+          style: {
+            ...item.style,
+            // 处理圆角
+            borderRadius: item.style.borderRadius === '0px' ? undefined : item.style.borderRadius
+          },
           class: ['render-item__item'].concat(isEditState ? { active } : item.className),
           key: item.id,
           on,

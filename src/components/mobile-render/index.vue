@@ -17,7 +17,10 @@
       </div>
       <div class="app__mobile-webview relative">
         <div class="app__mobile-webview-mock">
-          <render />
+          <render
+            :project="project"
+            :currentPage="currentPage"
+          />
         </div>
       </div>
     </div>
@@ -76,7 +79,7 @@ export default createComponent({
         width: 0;
       }
       &-mock {
-        min-height: 100%;
+        height: 100%;
         background-color: #fff;
         transform: translate3d(0, 0, 0);
         box-shadow: 0 4px 10px 0 rgba(0,0,0,.1);

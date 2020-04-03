@@ -2,16 +2,15 @@ import { NodeItem, NodeItemBasic } from '@/assets/node'
 import { Page } from '@/assets/page'
 import { getParentRef, parseCodeValid } from '@/assets/util'
 import { FormEvent } from '@/assets/event'
+import { Toast, Loading, Dialog } from 'esc-ui'
+// @ts-ignore
+import Native from '@xm/native'
 
+const native = new Native()
 export const loadItem = (item: NodeItemBasic): Promise<{ default: any }> => {
-  // @ts-ignore
-  // const defineBak = window.define
   return new Promise((resolve, reject) => {
-    // @ts-ignore
-    // window.define = undefined
     const script = document.createElement('script')
     script.src = `${process.env.VUE_APP_FILE_SERVER}${item.jsUrl}`
-    // script.className = item.name
     script.setAttribute('class', item.name!)
     // if (item.existCss) {
     //   const link = document.createElement('link')
@@ -23,17 +22,9 @@ export const loadItem = (item: NodeItemBasic): Promise<{ default: any }> => {
     script.onload = () => {
       // @ts-ignore
       resolve(window[item.name])
-      // setTimeout(() => {
-      //   // @ts-ignore
-      //   window.define = defineBak
-      // })
     }
     script.onerror = () => {
       reject(new Error(`${item.jsUrl} download fail`))
-      // setTimeout(() => {
-      //   // @ts-ignore
-      //   window.define = defineBak
-      // })
     }
   })
 }
@@ -76,11 +67,14 @@ export const findNode = (nodes: NodeItem[], id: string): NodeItem | undefined =>
 
 export const initGlobalConfig = (page: Page | null) => {
   return {
+    page,
     constant: {},
+    updatePage (page: Page) {
+      this.page = page
+    },
     getNodeProperty (id: string, property: string) {
-      if (page) {
-        const { nodes } = page
-        const it = findNode(nodes, id)
+      if (this.page) {
+        const it = findNode(this.page.nodes, id)
         if (it) {
           const { pref, field } = getParentRef(property, it)
           return pref && pref[field]
@@ -88,14 +82,35 @@ export const initGlobalConfig = (page: Page | null) => {
       }
     },
     setNodeProperty (id: string, property: string, val: any) {
-      if (page) {
-        const { nodes } = page
-        const it = findNode(nodes, id)
+      if (this.page) {
+        const it = findNode(this.page.nodes, id)
         if (it) {
           const { pref, field } = getParentRef(property, it)
           pref && (pref[field] = val)
         }
       }
+    },
+    toast (message: string) {
+      Toast(message)
+    },
+    loading: Loading.instance,
+    dialog: Dialog,
+    cookie: {
+      get: native.cookieGet
+    },
+    toPage (pageId: string) {
+      location.href = `#/page/${pageId}`
+    },
+    showNode (nodeId: string, show = true) {
+      if (this.page) {
+        const it = findNode(this.page.nodes, nodeId)
+        if (it) {
+          it.show = show
+        }
+      }
+    },
+    hideNode (nodeId: string) {
+      this.showNode(nodeId, false)
     }
   }
 }

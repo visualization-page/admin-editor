@@ -101,3 +101,27 @@ export const parseCodeValid = (code: string | null, ctx?: any) => {
   }
   return res
 }
+
+export const sleepUntil = (assets: () => boolean) => {
+  let handler: any
+  let count = 0
+  return new Promise((resolve, reject) => {
+    if (assets()) {
+      resolve()
+    } else {
+      handler = setInterval(() => {
+        count += 1
+        if (assets()) {
+          clearInterval(handler)
+          handler = null
+          resolve()
+        } else if (count === 10) {
+          clearInterval(handler)
+          handler = null
+          // eslint-disable-next-line prefer-promise-reject-errors
+          reject()
+        }
+      }, 1000)
+    }
+  })
+}

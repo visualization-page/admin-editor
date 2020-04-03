@@ -1,6 +1,9 @@
 <template>
   <div class="node-property">
-    <template v-if="currentNode && currentNode.id !== '-1'">
+    <div class="flex-center p30" v-if="!isEdit()">
+      <p class="c-999">请切换为编辑模式</p>
+    </div>
+    <template v-else-if="currentNode && currentNode.id !== '-1'">
       <schema-form
         :schema="schema"
         :schema-data="currentNode"
@@ -22,6 +25,7 @@ import SchemaForm from '../schema/index.vue'
 import local from './config'
 import { currentNode, delNode } from '@/assets/node'
 import { updateByField } from '@/assets/util'
+import { isEdit } from '@/assets/render'
 
 export default {
   components: {
@@ -34,7 +38,10 @@ export default {
       if (node && node.id !== '-1') {
         let schema = []
         if (node.nodeType === 1 << 0) {
-          schema = window[node.name].schema
+          schema = window[node.name].schema.map(x => ({
+            ...x,
+            model: x.type === 'input' ? 'blur' : 'input'
+          }))
         } else if (node.nodeType === 1 << 2) {
           schema = [
             {
@@ -52,6 +59,7 @@ export default {
     return {
       schema,
       currentNode,
+      isEdit,
       updateNodeByField (field, val) {
         updateByField(currentNode.value, field, val)
       },
