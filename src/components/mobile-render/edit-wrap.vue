@@ -43,5 +43,6 @@ export default createComponent({
   height: 100%;
   left: 0;
   top: 0;
+  z-index: 1;
 }
 </style>

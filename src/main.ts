@@ -16,15 +16,12 @@ declare module '@vue/composition-api/dist/component/component' {
 declare global {
   interface Window {
     require: () => void
-    $$global: {
-      constant: any
-      state: any
-    }
-    $$system: {
-      getNodeProperty: (id: string, property: string) => any
-      setNodeProperty: (id: string, property: string, val: unknown) => any
-    }
-    getConstant: (key: string) => string
+    // $$global: {
+    //   constant: any
+    //   state: any
+    //   getNodeProperty?: (id: string, property: string) => any
+    //   setNodeProperty?: (id: string, property: string, val: unknown) => any
+    // }
   }
 }
 

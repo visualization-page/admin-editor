@@ -31,7 +31,7 @@ export const common = {
   children: [],
   show: true,
   outDocFlow: false,
-  propsString: '(function () {\n  return {\n  }\n})()'
+  renderString: '(function (h) {\n  return {\n    option: {\n      props: {}\n    },\n    children: [\n    ]\n  }\n})(vueCompositionApi.createElement)'
 }
 
 // 1 << 0 基础组件
@@ -54,6 +54,7 @@ export type NodeItemLibrary = {
   library: string
   nodeType: number
   name: string
+  type: 'div'
 }
 
 export const rootNode: NodeItem = {
@@ -158,6 +159,11 @@ export const addNode = async (item: NodeItemBasic | NodeItemLibrary) => {
     const it = item as NodeItemLibrary
     newNode = getNewNode({
       ...common,
+      style: {
+        ...common.style,
+        width: undefined,
+        height: undefined
+      },
       ...item,
       title: `${it.library}/${it.name}`,
       nodeType: item.nodeType

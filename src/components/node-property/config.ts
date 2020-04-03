@@ -17,7 +17,8 @@ export default [
     },
     elAttrs: {
       placeholder: '支持 tcon.css，空格分隔'
-    }
+    },
+    model: 'blur'
   },
   {
     label: '节点名称',

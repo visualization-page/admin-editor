@@ -86,6 +86,8 @@ export const local = [
     label: '项目常量',
     field: 'constant',
     block: false,
-    type: 'code'
+    type: 'code',
+    'info-icon': 'el-icon-warning-outline',
+    info: '使用方法：在项目全局中任何地方，例如：$$global.constant.[fieldName]'
   }
 ]

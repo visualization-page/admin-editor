@@ -3,7 +3,7 @@ var webpack = require('webpack')
 const VueLoaderPlugin = require('vue-loader/lib/plugin')
 
 module.exports = {
-  entry: path.resolve(__dirname, '../', `src/components/basic-components/${process.env.dir}/index.ts`),
+  entry: process.env.entry || path.resolve(__dirname, '../', `src/components/basic-components/${process.env.dir}/index.ts`),
   output: {
     path: path.resolve(__dirname, '../dist'),
     publicPath: './',
@@ -69,7 +69,8 @@ module.exports = {
   externals: {
     vue: 'Vue',
     'element-ui': 'ELEMENT',
-    '@vue/composition-api': 'vueCompositionApi'
+    '@vue/composition-api': 'vueCompositionApi',
+    vant: 'vant'
   },
   // devServer: {
   //   historyApiFallback: true,

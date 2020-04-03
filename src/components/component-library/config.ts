@@ -1,21 +1,23 @@
 const treeData = [
-  {
-    label: 'esc-ui',
-    children: [
-      'Dialog',
-      'Button',
-      'Toast',
-      'Empty',
-      'Skeleton'
-    ]
-  },
+  // {
+  //   label: 'esc-ui',
+  //   children: [
+  //     'Dialog',
+  //     'Button',
+  //     'Toast',
+  //     'Empty',
+  //     'Skeleton'
+  //   ]
+  // },
   {
     label: 'vant',
     children: [
-      'Cell',
-      'Checkbox',
-      'DatetimePicker',
-      'Icon'
+      'VanButton',
+      'VanField',
+      'VanCell',
+      'VanCheckbox',
+      'VanDatetimePicker',
+      'VanIcon'
     ]
   }
 ]

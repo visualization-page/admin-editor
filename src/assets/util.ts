@@ -84,11 +84,17 @@ export const getUnitValue = (str: string): { value?: string, unit?: string } => 
   }
 }
 
-export const parseCodeValid = (code: string | null) => {
+export const parseCodeValid = (code: string | null, ctx?: any) => {
   const res = { ok: false, msg: '', value: null }
+  if (!code) {
+    return res
+  }
   try {
-    // eslint-disable-next-line no-new-func
-    res.value = new Function(`return ${code}`)()
+    if (ctx) {
+      res.value = new Function(`var _this = arguments[0];return ${code.replace(/(\$\$)/g, '_this.$1')}`)(ctx) // eslint-disable-line no-new-func
+    } else {
+      res.value = new Function(`return ${code}`)() // eslint-disable-line no-new-func
+    }
     res.ok = true
   } catch (e) {
     res.msg = e.message || e.name || '语法错误'

@@ -5,6 +5,7 @@
       :data="data"
       show-checkbox
       :check-strictly="true"
+      check-on-click-node
       :default-checked-keys="defaultCheck"
       :props="{ disabled: handleDisabled }"
       node-key="id"
@@ -28,7 +29,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { defineComponent, reactive, computed } from '@vue/composition-api'
+import { defineComponent, ref, computed, watch } from '@vue/composition-api'
 import { getTreeData } from './config'
 import { TreeNode } from 'element-ui/types/tree'
 import { updateProject, project } from '@/assets/project'
@@ -37,28 +38,31 @@ import { setTabName, tabName } from '@/assets/tab'
 
 export default defineComponent({
   setup () {
-    const checkData = reactive<{ [k: string]: Array<string> }>({ ...project.componentLibrary })
+    const checkData = ref<{ [k: string]: Array<string> }>({})
+    watch(() => project.componentLibrary, val => {
+      checkData.value = { ...val }
+    })
     const defaultCheck = computed(() => {
       const res: string[] = []
-      Object.keys(checkData).forEach(x => {
-        checkData[x].forEach(y => {
+      Object.keys(checkData.value).forEach(x => {
+        checkData.value[x].forEach(y => {
           res.push(`${x}-${y}`)
         })
       })
       return res
     })
     const handleCheck = (data: { label: string, library: string }, check: boolean) => {
-      if (!checkData[data.library]) {
-        Vue.set(checkData, data.library, [])
+      if (!checkData.value[data.library]) {
+        Vue.set(checkData.value, data.library, [])
       }
       if (check) {
-        checkData[data.library].push(data.label)
+        checkData.value[data.library].push(data.label)
       } else {
-        const i = checkData[data.library].findIndex(x => x === data.label)
-        checkData[data.library].splice(i, 1)
+        const i = checkData.value[data.library].findIndex(x => x === data.label)
+        checkData.value[data.library].splice(i, 1)
       }
       // @ts-ignore
-      updateProject({ componentLibrary: checkData })
+      updateProject({ componentLibrary: checkData.value })
     }
     const handleDisabled = (
       data: { label: string },
@@ -68,7 +72,7 @@ export default defineComponent({
     }
     const handleAdd = (library: string, name: string) => {
       if (addBeforeValidate()) {
-        addNode({ library, name, nodeType: 1 << 2 })
+        addNode({ library, name, nodeType: 1 << 2, type: 'div' })
         setTabName([tabName.nodeTree, '', tabName.nodeProperty])
       }
     }

@@ -53,6 +53,10 @@ export default createComponent({
     onMounted(() => {
       areaHeight.value = getDocHeight() - 105
     })
+    const handleCancel = () => {
+      setState(false)
+      setTabName(['', '', '', tabName.previewArea])
+    }
     return {
       isEdit,
       areaHeight,
@@ -60,16 +64,14 @@ export default createComponent({
       code,
       currentCode,
       amdRequire: window.require,
-      handleCancel () {
-        setState(false)
-        setTabName(['', '', '', tabName.previewArea])
-      },
+      handleCancel,
       async handleConfirm () {
         if (!isCodeValid.value) {
           await MessageBox.confirm('代码存在语法错误，不会保存错误的代码，是否继续？')
         }
         currentCode.update(code.value)
         Message.success(`保存成功`)
+        handleCancel()
       },
       handleCodeChange (val: string) {
         // 校验语法规则

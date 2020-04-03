@@ -41,6 +41,9 @@
             <el-tab-pane label="封装组件" :name="tabName.highComponent">
               <component-compose />
             </el-tab-pane>
+            <el-tab-pane label="上传组件" :name="tabName.uploadComponent">
+              <component-upload />
+            </el-tab-pane>
             <el-tab-pane label="组件库" :name="tabName.libraryComponent">
               <component-library />
             </el-tab-pane>
@@ -105,6 +108,7 @@ import CodeEditor from './components/code-editor/index.vue'
 import HeaderOpt from './components/header-opts/index.vue'
 import ComponentLibrary from './components/component-library/index.vue'
 import ComponentCompose from './components/component-compose/index.vue'
+import ComponentUpload from './components/component-upload/index.vue'
 import { tabCurrent, setTabName, tabName } from '@/assets/tab'
 
 export default createComponent({
@@ -121,7 +125,8 @@ export default createComponent({
     CodeEditor,
     HeaderOpt,
     ComponentLibrary,
-    ComponentCompose
+    ComponentCompose,
+    ComponentUpload
   },
   setup () {
     return {

@@ -2,23 +2,26 @@ const { request } = require('http')
 const { spawn } = require('child_process')
 const fs = require('fs-extra')
 const path = require('path')
-let [,, dir, cli = 'true'] = process.argv
+let [,, dir, cli = 'true', entry, type = 'basic'] = process.argv
+// eslint-disable-next-line no-eval
 cli = eval(cli)
 if (!dir) {
   console.log('请输入组件名')
   process.exit(0)
 }
+entry = entry || `src/components/basic-components/${dir}/index.ts`
 
 console.log('打包中...')
 const handle = spawn(
-  cli ? './node_modules/.bin/vue-cli-service' : 'webpack',
+  cli ? './node_modules/.bin/vue-cli-service' : './node_modules/.bin/webpack',
   cli
-    ? ['build', '--target', 'lib', '--name', `bf-${dir}`, `src/components/basic-components/${dir}/index.ts`]
+    ? ['build', '--target', 'lib', '--name', `bf-${dir}`, entry]
     : ['--config', path.resolve(__dirname, './webpack.config.js'), '--mode', 'production'],
   {
     env: {
       ...process.env,
-      dir
+      dir,
+      entry
     }
   },
   (err) => {
@@ -45,14 +48,14 @@ handle.on('close', code => {
   // const content = fs.readFileSync(`./build/dist/build.js`, 'utf8')
   // fs.writeFileSync(`./server/public/basic/${dir}/index.js`, content.replace(replaceString, 'typeof define_bak&&define_bak.amd?define_bak'), 'utf8')
   cli
-    ? fs.copySync(`./dist/bf-${dir}.umd.min.js`, `./server/public/basic/${dir}/index.js`)
-    : fs.copySync(`./dist/build.js`, `./server/public/basic/${dir}/index.js`)
+    ? fs.copySync(`./dist/bf-${dir}.umd.min.js`, `./server/public/${type}/${dir}/index.js`)
+    : fs.copySync(`./dist/build.js`, `./server/public/${type}/${dir}/index.js`)
 
   const existCss = fs.pathExistsSync(`./dist/bf-${dir}.css`)
   if (existCss) {
-    fs.copySync(`./dist/bf-${dir}.css`, `./server/public/basic/${dir}/index.css`)
+    fs.copySync(`./dist/bf-${dir}.css`, `./server/public/${type}/${dir}/index.css`)
   }
-  fs.outputJSON(`./server/public/basic/${dir}/data.json`, {
+  fs.outputJSON(`./server/public/${type}/${dir}/data.json`, {
     name: `bf-${dir}`,
     existCss
   })
@@ -61,7 +64,7 @@ handle.on('close', code => {
   const req = request({
     hostname: 'localhost',
     port: 3000,
-    path: '/butterfly/component/basic',
+    path: `/butterfly/component/${type}`,
     method: 'POST'
   }, (res) => {
     res.setEncoding('utf8')

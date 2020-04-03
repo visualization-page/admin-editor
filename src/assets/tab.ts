@@ -9,6 +9,7 @@ export const tabName = {
   nodeTree: 'node-tree',
   basicComponent: 'basic-component',
   highComponent: 'high-component',
+  uploadComponent: 'upload-component',
   libraryComponent: 'library-component',
   fx: 'fx',
   pageSet: 'page-set',

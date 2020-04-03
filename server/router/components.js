@@ -1,6 +1,25 @@
 const component = require('../controller/component')
+const path = require('path')
+const tmpPath = path.resolve(__dirname, '../tmp')
 
 module.exports = {
+  '/upload': {
+    post: async (req, res) => {
+      const ok = req.files.file
+      if (ok) {
+        const file = path.join(tmpPath, ok.name)
+        ok.mv(file, async (err) => {
+          if (err) {
+            throw err
+          }
+          const msg = await component.upload(file, tmpPath)
+          res.json({ success: !msg, msg })
+        })
+      } else {
+        res.json({ success: !!ok, msg: '' })
+      }
+    }
+  },
   '/component/:type': {
     get: async (req, res) => {
       const data = await component.list(req.params.type)

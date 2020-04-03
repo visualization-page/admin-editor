@@ -4,12 +4,18 @@
 const externals = process.env.VUE_APP_FILE_SERVER ? {
   vue: 'Vue',
   'element-ui': 'ELEMENT',
-  '@vue/composition-api': 'vueCompositionApi'
+  '@vue/composition-api': 'vueCompositionApi',
+  vant: 'vant'
 } : {
   vue: {
     commonjs: 'Vue',
     commonjs2: 'Vue',
     root: 'Vue'
+  },
+  vant: {
+    commonjs: 'vant',
+    commonjs2: 'vant',
+    root: 'vant'
   },
   'element-ui': {
     commonjs: 'ELEMENT',

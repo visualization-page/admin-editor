@@ -38,8 +38,8 @@ export default {
         } else if (node.nodeType === 1 << 2) {
           schema = [
             {
-              label: '组件props',
-              field: 'propsString',
+              label: 'render',
+              field: 'renderString',
               block: false,
               type: 'code'
             }
