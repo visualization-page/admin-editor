@@ -21,7 +21,8 @@ export const local = [
     rulers: [
       { required: true, message: '请输入项目名称', trigger: 'blur' },
       { min: 3, max: 500, message: '长度在 3 到 500 个字符', trigger: 'blur' }
-    ]
+    ],
+    model: 'blur'
   },
   {
     label: '英文名称',
@@ -44,12 +45,29 @@ export const local = [
         label: '滑动海报',
         value: 'poster'
       }
-    ]
+    ],
+    elAttrs: {
+      disabled: true
+    }
   },
   {
     label: '封面图',
     field: 'thumbCover',
     type: 'input'
+  },
+  {
+    label: '开发环境',
+    field: 'config.dev',
+    type: 'input-group',
+    'info-icon': 'el-icon-warning-outline',
+    info: '开发环境用到的变量键值对，使用: $$global.config.baseUrl'
+  },
+  {
+    label: '正式环境',
+    field: 'config.pro',
+    type: 'input-group',
+    'info-icon': 'el-icon-warning-outline',
+    info: '正式环境用到的变量键值对，使用: $$global.config.baseUrl'
   },
   {
     label: 'baseUrl',
@@ -77,10 +95,12 @@ export const local = [
     type: 'input-group'
   },
   {
-    label: 'api补充选项',
-    field: 'options',
+    label: 'Http选项',
+    field: 'httpOptions.options',
     block: false,
-    type: 'code'
+    type: 'code',
+    'info-icon': 'el-icon-warning-outline',
+    info: '上面的字段如果不够用，可以在这里补充其它选项。'
   },
   {
     label: '项目常量',

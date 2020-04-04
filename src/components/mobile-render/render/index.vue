@@ -33,6 +33,13 @@ export default createComponent({
     const globalConfig = ref(initGlobalConfig(props.currentPage))
     const pageConfig = ref({ state: {} })
     const mounted = ref(false)
+    const getCtx = () => ({ $$page: pageConfig.value, $$global: globalConfig.value })
+    // 更新 http
+    watch(() => props.project && props.project.httpOptions, opt => {
+      if (opt) {
+        globalConfig.value.initHttp(opt, getCtx())
+      }
+    }, { deep: true })
     // 更新全局 constant
     watch(() => props.project && props.project.constant, cons => {
       if (cons) {
@@ -49,7 +56,7 @@ export default createComponent({
         if (isEdit()) {
           globalConfig.value.updatePage(page)
         } else {
-          const ctx = { $$page: pageConfig.value, $$global: globalConfig.value }
+          const ctx = getCtx()
           // 上一个页面 unMounted 钩子
           if (oldPage) {
             oldPage.events.filter((x: FormEvent) => x.eventType === 'onUnMounted').forEach((ev: FormEvent) => {

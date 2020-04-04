@@ -1,8 +1,9 @@
-import { NodeItem, NodeItemBasic } from '@/assets/node'
+import { project, Project } from '@/assets/project'
 import { Page } from '@/assets/page'
+import { NodeItem, NodeItemBasic } from '@/assets/node'
 import { getParentRef, parseCodeValid } from '@/assets/util'
 import { FormEvent } from '@/assets/event'
-import { Toast, Loading, Dialog } from 'esc-ui'
+import { Toast, Loading, Dialog, Dot, Http } from 'esc-ui'
 // @ts-ignore
 import Native from '@xm/native'
 
@@ -10,7 +11,7 @@ const native = new Native()
 export const loadItem = (item: NodeItemBasic): Promise<{ default: any }> => {
   return new Promise((resolve, reject) => {
     const script = document.createElement('script')
-    script.src = `${process.env.VUE_APP_FILE_SERVER}${item.jsUrl}`
+    script.src = `${project.config[project.env].componentAbsoluteUrl}${item.jsUrl}`
     script.setAttribute('class', item.name!)
     // if (item.existCss) {
     //   const link = document.createElement('link')
@@ -68,6 +69,33 @@ export const findNode = (nodes: NodeItem[], id: string): NodeItem | undefined =>
 export const initGlobalConfig = (page: Page | null) => {
   return {
     page,
+    dotInstance: null,
+    config: project.config[project.env],
+    http: null,
+    initHttp: function (httpOptions: Project['httpOptions'], ctx: any) {
+      let other: any = {}
+      const { ok, value } = parseCodeValid(httpOptions.options, ctx)
+      if (ok) {
+        other = value
+      }
+      // @ts-ignore
+      this.http = new Http({
+        baseUrl: httpOptions.baseUrl,
+        urlMap: httpOptions.urlMap,
+        contentType: httpOptions.contentType,
+        ...other
+      })
+    },
+    dot: function (base: string) {
+      if (!this.dotInstance) {
+        // @ts-ignore
+        this.dotInstance = new Dot({
+          base
+        })
+      }
+      return this.dotInstance
+    },
+    native,
     constant: {},
     updatePage (page: Page) {
       this.page = page
@@ -90,9 +118,7 @@ export const initGlobalConfig = (page: Page | null) => {
         }
       }
     },
-    toast (message: string) {
-      Toast(message)
-    },
+    toast: Toast,
     loading: Loading.instance,
     dialog: Dialog,
     cookie: {
@@ -100,6 +126,11 @@ export const initGlobalConfig = (page: Page | null) => {
     },
     toPage (pageId: string) {
       location.href = `#/page/${pageId}`
+    },
+    findNodeById (nodeId: string) {
+      if (this.page) {
+        return findNode(this.page.nodes, nodeId)
+      }
     },
     showNode (nodeId: string, show = true) {
       if (this.page) {

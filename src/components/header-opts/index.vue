@@ -19,14 +19,14 @@
           </span>
           </el-button>
         </div>
-        <div :key="i" v-if="i < opts.length - 1" class="h30 bg-666 mt10" style="width:2px" />
+        <div :key="i" class="h30 bg-666 mt10" style="width:2px" />
       </template>
       <div class="avatar flex-center c-aaa ml20">
-        <div class="avatar-img mr10 relative c-fff flex-center" overflow-h >
-          {{ name }}
-          <div class="absolute t0 l0 b0 r0" :style="{ background: `url(${avatar}) center / cover no-repeat` }" />
+        <div class="avatar-img relative c-fff flex-center" overflow-h >
+          {{ name.substr(-2) }}
+          <div v-if="false" class="absolute t0 l0 b0 r0" :style="{ background: `url(${avatar}) center / cover no-repeat` }" />
         </div>
-        <p>{{ name }}</p>
+        <p class="ml10" v-if="false">{{ name }}</p>
       </div>
     </div>
   </div>
@@ -35,18 +35,35 @@
 <script lang="ts">
 import Vue from 'vue'
 import { defineComponent, ref } from '@vue/composition-api'
-import { exportProjectLocal } from '@/assets/project'
-import { Message } from 'element-ui'
+import { project, initProject } from '@/assets/project'
+import { Message, MessageBox } from 'element-ui'
+import { http } from '@/api'
 
 export default defineComponent({
   setup () {
     const native = Vue.prototype.$native
     const avatar = ref(process.env.VUE_APP_AVATAR + native.uid)
-    const handleSave = () => {
-      exportProjectLocal()
-      Message.success('保存成功')
-    }
     const opts = [
+      {
+        label: '导入项目',
+        icon: 'el-icon-upload f16',
+        action: async () => {
+          const { value }: any = await MessageBox.prompt('请输入项目英文名称')
+          if (!value) {
+            return Message.error('名称不能为空')
+          }
+          const item = await http.get('project/get', { dir: value })
+          // @ts-ignore
+          await initProject(item.data.project)
+          Message.success('导入成功')
+        }
+      },
+      {
+        label: '同步组件到cdn',
+        icon: 'el-icon-refresh-right f16',
+        action: () => {
+        }
+      },
       {
         label: '下载',
         icon: 'el-icon-download f16',
@@ -54,23 +71,52 @@ export default defineComponent({
         }
       },
       {
-        label: '保存',
-        icon: 'iconfont icon-save',
-        action: () => {
-        }
-      },
-      {
-        label: '构建',
+        label: '发布',
         icon: 'el-icon-position f16',
         action: () => {
         }
       },
       {
-        label: '同步到Git',
-        icon: 'el-icon-sort f16',
-        action: () => {
+        label: '保存',
+        icon: 'iconfont icon-save',
+        action: async () => {
+          if (!project.dir) {
+            return Message.error('请输入英文名 dir')
+          }
+          const { value }: any = await MessageBox.prompt('请输入改动描述')
+          if (!value || value.length < 5) {
+            return Message.error('描述至少5个字')
+          }
+          const _save = (force?: boolean) => http.post('project/save', {
+            dir: project.dir,
+            force,
+            project: {
+              ...project,
+              info: {
+                userName: Vue.prototype.$native.name,
+                remark: value,
+                time: Date.now()
+              }
+            }
+          }, {
+            codeCallback: {
+              6001: async () => {
+                await MessageBox.confirm('项目已存在，确认覆盖？')
+                await _save(true)
+                Message.success('保存成功')
+              }
+            }
+          })
+          await _save()
+          Message.success('保存成功')
         }
       },
+      // {
+      //   label: '同步到Git',
+      //   icon: 'el-icon-sort f16',
+      //   action: () => {
+      //   }
+      // },
       {
         label: '预览',
         icon: 'el-icon-view f16',
@@ -91,8 +137,8 @@ export default defineComponent({
 
 <style lang="less">
 .avatar-img {
-  width: 35px;
-  height: 35px;
+  width: 30px;
+  height: 30px;
   border-radius: 4px;
   background-color: #488ff9;
 }

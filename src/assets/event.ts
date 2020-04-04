@@ -11,15 +11,23 @@ export const eventTypePage = ['onMounted', 'onUnMounted']
 export const fxList = [
   {
     name: 'toast 提示',
-    code: '$$system.toast(\'提示语\')'
+    code: '$$global.toast(\'提示语\')'
+  },
+  {
+    name: 'dialog 提示',
+    code: '$$global.dialog(\'提示语\')'
+  },
+  {
+    name: '获取 cookie',
+    code: '$$global.cookie(\'userId\')'
   },
   {
     name: '打点',
-    code: '$$system.dot.hit(\'gid.0.mid.eid\')'
+    code: '$$global.dot(/* base */).hit(\'gid.0.mid.eid\')'
   },
   {
     name: '内部跳转',
-    code: '$$system.router.push(\'/path\')'
+    code: '$$global.toPage(\'/pageId\')'
   },
   {
     name: '外部跳转',
@@ -27,26 +35,34 @@ export const fxList = [
   },
   {
     name: '接口调用',
-    code: '$$system.http.get(\'test\', {})'
+    code: '$$global.http.get(\'test\', {})'
   },
   {
     name: '显示组件',
-    code: '$$system.showNode(\'id\')'
+    code: '$$global.showNode(\'nodeId\')'
   },
   {
     name: '隐藏组件',
-    code: '$$system.hideNode(\'id\')'
+    code: '$$global.hideNode(\'nodeId\')'
   },
   {
-    name: '彩云右上角菜单',
-    code: '$$system.native.defineCallback(\'分享\', () => {\n})'
+    name: '客户端native',
+    code: '$$global.native'
+  },
+  {
+    name: '客户端右上角菜单',
+    code: '$$global.native.defineCallback(\'分享\', () => {\n})'
+  },
+  {
+    name: '获取节点',
+    code: '$$global.findNodeById(\'id\')'
   },
   {
     name: '设置节点属性',
-    code: '$$system.setNodeProperty(\'id\', \'\', \'\')'
+    code: '$$global.setNodeProperty(\'id\', \'\', \'\')'
   },
   {
     name: '获取节点属性',
-    code: '$$system.getNodeProperty(\'id\', \'\')'
+    code: '$$global.getNodeProperty(\'id\', \'\')'
   }
 ]

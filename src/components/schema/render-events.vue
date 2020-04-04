@@ -90,7 +90,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { createComponent, ref, reactive, watch, computed, onMounted } from '@vue/composition-api'
+import { createComponent, ref, reactive, watch, computed } from '@vue/composition-api'
 import { eventType, eventTypePage, fxList } from '@/assets/event'
 import { currentPage } from '@/assets/page'
 import { currentNode } from '@/assets/node'

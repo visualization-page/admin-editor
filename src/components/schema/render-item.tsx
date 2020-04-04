@@ -33,7 +33,7 @@ export const renderSelect = (item: any, data: any, updateField: any) => {
   const { pref, field } = getParentRef(item.field, data)
   return (
     <el-select
-      props={item.props}
+      props={{ ...item.elProps, ...item.elAttrs }}
       value={pref[field]}
       on={{
         change (val: string) {

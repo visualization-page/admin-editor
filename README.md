@@ -47,4 +47,22 @@ type $$page = {
 
 不挂载到 window 上，但 $$global 必须和 $$page 合并，因为在执行 fxCode 时，需要在当前上下文中查找到。最好是使用 `with({ $$global, $$page }) {}` 办法。
 
+> 20/04/04
 
+- 添加环境配置选项
+
+```js
+$$global.config = project.config = {
+  dev: {
+  
+  },
+  pro: {
+  
+  }
+}
+```
+
+- 编辑器或预览时 http 请求跨域的问题
+- 测试环境部署：系统在测试环境部署 api.jituancaiyun.net 域名，测试就可以直接用系统测。
+- 多省活动发布流程：系统将文件拷贝到git工程，并提交git，然后发布系统发布。
+- 组件引用的绝对地址可配置，project.componentAbsoluteUrl

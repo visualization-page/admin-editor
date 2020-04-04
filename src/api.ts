@@ -25,6 +25,10 @@ export const http = new Http({
       list: '/butterfly/component/:type',
       update: '/butterfly/component/:type',
       export: '/butterfly/component/export/:type'
+    },
+    project: {
+      save: '/butterfly/project/:dir',
+      get: '/butterfly/project/:dir'
     }
   },
   notify: Message.error,

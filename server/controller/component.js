@@ -20,20 +20,25 @@ const handle = {
   /**
    * 更新组件列表文件
    * @param type
+   * @param scopeCallback
    */
-  update: async (type) => {
+  update: async (type, scopeCallback) => {
     const typeDir = getPath(type, false)
     let dirs = await fs.readdir(typeDir)
     dirs = dirs.filter(x => !/\./.test(x))
     const content = []
     for (let i = 0; i < dirs.length; i++) {
       const data = await fs.readJSON(path.join(typeDir, dirs[i], 'data.json'))
-      const p = `/butterfly/static/${type}/${dirs[i]}`
-      content.push({
-        ...data,
-        jsUrl: data.componentDeps ? undefined : `${p}/index.js`,
-        cssUrl: data.existCss && `${p}/index.css`
-      })
+      if (scopeCallback) {
+        content.push(scopeCallback(data))
+      } else {
+        const p = `/butterfly/static/${type}/${dirs[i]}`
+        content.push({
+          ...data,
+          jsUrl: data.componentDeps ? undefined : `${p}/index.js`,
+          cssUrl: data.existCss ? `${p}/index.css` : undefined
+        })
+      }
     }
 
     // 遍历 type 文件夹
@@ -66,6 +71,12 @@ const handle = {
     return true
   },
 
+  /**
+   * 上传自定义组件
+   * @param file
+   * @param tmpPath
+   * @returns {Promise<string>}
+   */
   upload: async (file, tmpPath) => {
     let msg = ''
     // 解压到 tmp/data 目录下
@@ -112,6 +123,20 @@ const handle = {
     }
     utils.rm(tmpPath)
     return msg
+  },
+  saveProject: async (dir, data) => {
+    await fs.outputFile(path.join(pubPath, 'project', dir, 'data.json'), data)
+    await handle.update('project', ({ project }) => {
+      return {
+        thumbCover: project.thumbCover,
+        dir: project.dir,
+        desc: project.desc,
+        info: project.info
+      }
+    })
+  },
+  getProject: (dir) => {
+    return fs.readJson(path.join(pubPath, 'project', dir, 'data.json'))
   }
 }
 
