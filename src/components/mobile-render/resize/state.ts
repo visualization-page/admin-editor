@@ -1,7 +1,7 @@
 // import Vue from 'vue'
 import { reactive } from '@vue/composition-api'
 import { currentNode, updateNodePosition, updateNodeStyle } from '@/assets/node'
-import { throttle } from 'lodash'
+// import { throttle } from 'lodash'
 
 export type UnitValue = { unit?: string, value?: string }
 export const state = reactive<{

@@ -136,5 +136,6 @@ export const initProject = async (item?: Project) => {
     if (localItem) {
       await importProjectLocal(JSON.parse(localItem))
     }
+    return !!localItem
   }
 }

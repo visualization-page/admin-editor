@@ -6,7 +6,6 @@ import store from './store'
 import Native from '@xm/native'
 import './plugins/element'
 import 'tcon'
-import { initProject } from '@/assets/project'
 
 const native = Vue.prototype.$native = new Native()
 if (!native.uid) {
@@ -34,7 +33,6 @@ declare global {
 }
 
 Vue.config.productionTip = false
-initProject()
 document.addEventListener('DOMContentLoaded', () => {
   new Vue({
     router,

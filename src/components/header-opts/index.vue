@@ -35,7 +35,7 @@
 <script lang="ts">
 import Vue from 'vue'
 import { defineComponent, ref } from '@vue/composition-api'
-import { project, initProject } from '@/assets/project'
+import { project, initProject, exportProjectLocal } from '@/assets/project'
 import { currentPage } from '@/assets/page'
 import { Message, MessageBox } from 'element-ui'
 import { http } from '@/api'
@@ -69,19 +69,19 @@ export default defineComponent({
         }
       },
       {
-        label: '下载',
+        label: '下载项目',
         icon: 'el-icon-download f16',
         action: () => {
         }
       },
       {
-        label: '发布',
+        label: '发布项目',
         icon: 'el-icon-position f16',
         action: () => {
         }
       },
       {
-        label: '保存',
+        label: '保存项目',
         icon: 'iconfont icon-save',
         action: async () => {
           if (!project.dir) {
@@ -115,12 +115,14 @@ export default defineComponent({
           Message.success('保存成功')
         }
       },
-      // {
-      //   label: '同步到Git',
-      //   icon: 'el-icon-sort f16',
-      //   action: () => {
-      //   }
-      // },
+      {
+        label: '保存本地',
+        icon: 'el-icon-finished f16',
+        action: () => {
+          exportProjectLocal()
+          Message.success('保存成功')
+        }
+      },
       {
         label: '预览页面',
         icon: 'el-icon-document-remove f16',

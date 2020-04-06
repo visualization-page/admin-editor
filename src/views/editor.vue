@@ -113,6 +113,7 @@ import ComponentUpload from '@/components/component-upload/index.vue'
 import { tabCurrent, setTabName, tabName } from '@/assets/tab'
 import { http } from '@/api'
 import { initProject } from '@/assets/project'
+import { Message } from 'element-ui'
 
 export default defineComponent({
   components: {
@@ -137,6 +138,12 @@ export default defineComponent({
       http.get('project/get', { dir }).then(item => {
         // @ts-ignore
         initProject(item.data.project)
+      })
+    } else {
+      initProject().then(isLocalExist => {
+        if (isLocalExist) {
+          Message.success('已从本地导入草稿')
+        }
       })
     }
     return {

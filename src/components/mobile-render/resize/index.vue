@@ -47,7 +47,7 @@
 </template>
 
 <script lang="ts">
-import { createComponent, reactive, computed } from '@vue/composition-api'
+import { defineComponent, reactive, computed } from '@vue/composition-api'
 import { currentNode } from '@/assets/node'
 import { getUnitValue } from '@/assets/util'
 import { state, UnitValue } from './state'
@@ -61,7 +61,7 @@ function percent2px (val: string, dir: 'vertical' | 'horizontal'): UnitValue {
   return obj
 }
 
-export default createComponent({
+export default defineComponent({
   setup () {
     const handleResizeDown = (e: MouseEvent, dir: string) => {
       const node = currentNode.value!
@@ -92,11 +92,12 @@ export default createComponent({
 
 <style lang="less">
 .resize {
-  /*position: absolute;*/
+  position: absolute;
   width: 100%;
   height: 100%;
-  /*left: 0;*/
-  /*top: 0;*/
+  left: 0;
+  top: 0;
+  // z-index: 1;
   &__dot {
     position: absolute;
     width: 12px;

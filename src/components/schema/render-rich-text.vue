@@ -33,6 +33,11 @@ export default {
       }
     })
     const handleChange = (event, editor) => {
+      if (event.originalEvent && event.originalEvent.is_removing) {
+        // 编辑器卸载触发的 change
+        console.log('removing rich text editor')
+        return
+      }
       ctx.emit('change', editor.getContent())
     }
 

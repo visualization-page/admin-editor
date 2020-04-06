@@ -2,7 +2,7 @@
 import { createComponent, createElement } from '@vue/composition-api'
 import Resizer from './resize/index.vue'
 import { setCurrentNode } from '@/assets/node'
-import { setPosition } from './context-menu/position'
+import { setPosition, contextPosition } from './context-menu/position'
 import { tabName, setTabName } from '@/assets/tab'
 
 export default createComponent({
@@ -12,13 +12,16 @@ export default createComponent({
   },
 
   setup (props, ctx) {
-    const handleClick = () => {
+    const handleClick = (e: any) => {
+      // console.log('click edit wrap')
+      e.stopPropagation()
+      contextPosition.show = false
       setCurrentNode(props.item)
       setTabName(['', '', tabName.nodeProperty])
     }
     const handleContext = (e: MouseEvent) => {
       e.preventDefault()
-      handleClick()
+      handleClick(e)
       setPosition(e)
     }
 
@@ -30,7 +33,8 @@ export default createComponent({
         contextmenu: handleContext
       }
     }, [
-      props.active && createElement(Resizer, { props: { item: props.item } })
+      props.active && createElement(Resizer, { props: { item: props.item } }),
+      ctx.slots.default && ctx.slots.default()
     ])
   }
 })
@@ -38,11 +42,11 @@ export default createComponent({
 
 <style lang="less">
 .edit-wrap {
-  position: absolute;
+  // position: absolute;
   width: 100%;
   height: 100%;
-  left: 0;
-  top: 0;
-  z-index: 1;
+  // left: 0;
+  // top: 0;
+  // z-index: 1;
 }
 </style>

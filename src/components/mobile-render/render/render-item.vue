@@ -72,7 +72,7 @@ export default defineComponent<{
             // 处理圆角
             borderRadius: item.style.borderRadius === '0px' ? undefined : item.style.borderRadius
           },
-          class: ['render-item__item'].concat(isEditState ? { active } : item.className),
+          class: ['render-item__item', item.className, { active }],
           key: item.id,
           on,
           nativeOn,
@@ -103,8 +103,9 @@ export default defineComponent<{
               }
             }
             return createElement(item.componentName, {
+              // 编辑时，组件本身关心 props 就好
               props: props.props,
-              class: ['width-100 height-100', item.className]
+              class: ['width-100 height-100']
             }, children)
           }
           if (isLibrary) {
@@ -122,10 +123,12 @@ export default defineComponent<{
         }
 
         if (isEditState) {
-          return createElement('div', { style: props.style, class: [props.class, { dib: isLibrary }] }, [
-            createElement(EditWrap, { props: { item, active } }),
-            _renderItemSelf()
-          ])
+          // 编辑时，容器需要带上组件样式，不用管事件
+          return createElement('div', {
+            style: props.style,
+            class: [props.class, { dib: isLibrary }],
+            key: props.key
+          }, [ createElement(EditWrap, { props: { item, active } }, [ _renderItemSelf() ]) ])
         }
         return _renderItemSelf()
       })
@@ -149,8 +152,6 @@ export default defineComponent<{
     &.active {
       border-color: #409eff;
     }
-  }
-  &__img-bg {
   }
   .center-v {
     top: 50%;
