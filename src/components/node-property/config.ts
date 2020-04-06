@@ -27,7 +27,8 @@ export default [
     elProps: {
     },
     elAttrs: {
-    }
+    },
+    model: 'blur'
   },
   {
     label: '显示',

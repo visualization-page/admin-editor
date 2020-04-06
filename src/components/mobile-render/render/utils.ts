@@ -74,7 +74,7 @@ export const initGlobalConfig = (page: Page | null) => {
     http: null,
     initHttp: function (httpOptions: Project['httpOptions'], ctx: any) {
       let other: any = {}
-      const { ok, value } = parseCodeValid(httpOptions.options, ctx)
+      const { ok, value } = parseCodeValid(httpOptions.options!, ctx)
       if (ok) {
         other = value
       }

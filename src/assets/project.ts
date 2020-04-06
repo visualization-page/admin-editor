@@ -17,7 +17,7 @@ export type Project = {
     urlMap: {
       [k: string]: string
     }
-    options: string
+    options?: string
   }
   url: string
   pages: Array<Page>
@@ -77,10 +77,13 @@ export const project: Project = reactive({
       componentAbsoluteUrl: 'https://statics.e.uban360.com/'
     }
   },
+  // 后台第一次创建时赋值
+  createUser: '',
   info: {
     userName: '',
     remark: '',
-    time: 0
+    time: 0,
+    whitelist: ''
   }
 })
 
@@ -97,8 +100,8 @@ export const updateProject = (obj: typeof project) => {
   })
 }
 
-export const exportProjectLocal = () => {
-  localStorage.setItem('local', JSON.stringify(project))
+export const exportProjectLocal = (item?: Project) => {
+  localStorage.setItem('local', JSON.stringify(item || project))
 }
 
 export const importProjectLocal = async (parseItem: Project) => {

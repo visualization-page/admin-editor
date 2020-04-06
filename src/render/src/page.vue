@@ -10,8 +10,8 @@
 <script>
 import Render from '@/components/mobile-render/render/index.vue'
 import { defineComponent } from '@vue/composition-api'
-import { project, initProject } from '@/assets/project'
-import { setRenderPreview } from '../../assets/render'
+import { project } from '@/assets/project'
+import { getProject } from './utils'
 
 export default defineComponent({
   components: {
@@ -29,12 +29,12 @@ export default defineComponent({
     }
   },
   async created () {
-    setRenderPreview()
-    if (project.pages.length === 0) {
+    let data = project
+    if (!project.dir) {
       console.log('init project')
-      await initProject()
+      data = await getProject(this.$route.params.dir)
     }
-    this.project = project
+    this.project = data
     this.setPageById(this.$route.params.id)
   },
   methods: {

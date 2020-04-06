@@ -38,20 +38,41 @@ module.exports = {
       res.json({ success: ok, msg: ok ? '' : '组件名称已存在' })
     }
   },
+  '/component/download/:type': {
+    get: async (req, res) => {
+      const dir = req.query.name.split('-')[1]
+      res.download(path.join(pubPath, req.params.type, dir, `${dir}.zip`), err => {
+        if (err) {
+          throw err
+        }
+      })
+    }
+  },
   '/project/:dir': {
     get: async (req, res) => {
       const data = await component.getProject(req.params.dir)
       res.json({ success: true, data })
     },
     post: async (req, res) => {
-      if (!req.body.force && fs.pathExistsSync(path.join(pubPath, 'project', req.params.dir))) {
+      const exist = fs.pathExistsSync(path.join(pubPath, 'project', req.params.dir))
+      if (!req.body.force && exist) {
         // 检查是否已存在
         res.json({ success: false, msg: '项目英文名称已存在', code: 6001 })
       } else {
+        // 初次创建保存创建人
+        if (!exist) {
+          req.body.project.createUser = req.body.project.info.userName
+        }
         // 保存项目
         await component.saveProject(req.params.dir, JSON.stringify(req.body))
         res.json({ success: true, msg: '' })
       }
+    }
+  },
+  '/delete/:type/:dir': {
+    post: async (req, res) => {
+      await component.delete(req.params.type, req.params.dir)
+      res.json({ success: true, msg: '' })
     }
   }
 }

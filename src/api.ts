@@ -24,14 +24,16 @@ export const http = new Http({
     component: {
       list: '/butterfly/component/:type',
       update: '/butterfly/component/:type',
-      export: '/butterfly/component/export/:type'
+      export: '/butterfly/component/export/:type',
+      download: '/butterfly/component/download/:type'
     },
     project: {
       save: '/butterfly/project/:dir',
       get: '/butterfly/project/:dir'
-    }
+    },
+    delete: '/butterfly/delete/:type/:dir'
   },
-  notify: Message.error,
+  notify: Message,
   loadingMethods,
   contentType: 'application/json'
 })

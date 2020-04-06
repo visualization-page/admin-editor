@@ -5,11 +5,11 @@ Vue.use(VueRouter)
 
 const routes = [
   {
-    path: '/',
+    path: '/project/:dir',
     component: () => import('./index.vue')
   },
   {
-    path: '/page/:id',
+    path: '/page/:dir/:id',
     name: 'page',
     component: () => import(/* webpackChunkName: "page" */ './page.vue')
   },

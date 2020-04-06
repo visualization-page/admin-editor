@@ -1,14 +1,15 @@
-<script lang="ts">
-import { setRenderPreview } from '@/assets/render'
-import { initProject } from '@/assets/project'
+<script>
 import { currentPage } from '@/assets/page'
+import { getProject } from './utils'
 
 export default {
   async created () {
-    setRenderPreview()
-    await initProject()
-    // @ts-ignore
-    this.$router.replace(`/page/${currentPage.value.id}`)
+    const { dir } = this.$route.params
+    await getProject(dir)
+    if (currentPage.value) {
+      // @ts-ignore
+      this.$router.replace(`/page/${dir}/${currentPage.value.id}`)
+    }
   }
 }
 </script>

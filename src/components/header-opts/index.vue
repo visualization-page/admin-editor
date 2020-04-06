@@ -1,14 +1,14 @@
 <template>
   <div class="header-opt height-100 flex-center-between plr20">
-    <div class="flex items-center">
+    <div class="flex items-center cp" @click="$router.push('/')">
       <span class="f32 c-fff">Butterfly</span>
       <div class="ml10">
         <img height="14px" src="https://img.shields.io/badge/-beta 0.0.1-lightgrey" alt="">
-        <p class="c-aaa">让写业务变得简单</p>
+        <p class="c-aaa">快速搭建h5</p>
       </div>
     </div>
     <div class="flex">
-      <template v-for="(item, i) in opts">
+      <template v-for="(item, i) in opts || localOpts">
         <div :key="item.label" class="plr15">
           <el-button type="text" @click="item.action()">
           <span class="flex-center flex-column">
@@ -36,14 +36,18 @@
 import Vue from 'vue'
 import { defineComponent, ref } from '@vue/composition-api'
 import { project, initProject } from '@/assets/project'
+import { currentPage } from '@/assets/page'
 import { Message, MessageBox } from 'element-ui'
 import { http } from '@/api'
 
 export default defineComponent({
+  props: {
+    opts: Array
+  },
   setup () {
     const native = Vue.prototype.$native
     const avatar = ref(process.env.VUE_APP_AVATAR + native.uid)
-    const opts = [
+    const localOpts = [
       {
         label: '导入项目',
         icon: 'el-icon-upload f16',
@@ -118,16 +122,26 @@ export default defineComponent({
       //   }
       // },
       {
-        label: '预览',
-        icon: 'el-icon-view f16',
+        label: '预览页面',
+        icon: 'el-icon-document-remove f16',
         action: () => {
-          window.open(process.env.VUE_APP_MOBILE)
+          if (currentPage.value) {
+            window.open(process.env.VUE_APP_MOBILE + `/#/page/${project.dir}/${currentPage.value.id}`)
+          } else {
+            Message.info('请选中一个页面')
+          }
+        }
+      },
+      {
+        label: '预览项目',
+        icon: 'el-icon-folder-opened f16',
+        action: () => {
+          window.open(process.env.VUE_APP_MOBILE + `/#/project/${project.dir}`)
         }
       }
     ]
-
     return {
-      opts,
+      localOpts,
       avatar,
       name: native.name
     }

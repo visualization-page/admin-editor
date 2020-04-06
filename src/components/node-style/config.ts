@@ -61,6 +61,7 @@ export default [
     field: 'style.backgroundPosition',
     type: 'select',
     options: [
+      { label: '-', value: '' },
       { label: 'center', value: 'center' },
       { label: 'left top', value: 'left top' },
       { label: 'left center', value: 'left center' }
@@ -76,6 +77,7 @@ export default [
     field: 'style.backgroundSize',
     type: 'select',
     options: [
+      { label: '-', value: '' },
       { label: 'cover', value: 'cover' },
       { label: 'contain', value: 'contain' },
       { label: '100%', value: '100%' },
@@ -92,6 +94,7 @@ export default [
     field: 'style.backgroundRepeat',
     type: 'select',
     options: [
+      { label: '-', value: '' },
       { label: 'no-repeat', value: 'no-repeat' },
       { label: 'repeat-x', value: 'repeat-x' },
       { label: 'repeat-y', value: 'repeat-y' }
@@ -112,7 +115,8 @@ export default [
     field: 'style.borderStyle',
     type: 'select',
     options: [
-      { label: '实现', value: 'solid' },
+      { label: '-', value: '' },
+      { label: '实线', value: 'solid' },
       { label: '虚线', value: 'dashed' },
       { label: '小圆点', value: 'dotted' }
     ]

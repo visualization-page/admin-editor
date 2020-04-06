@@ -1,16 +1,16 @@
 export const local = [
+  // {
+  //   label: '访问地址',
+  //   field: 'url',
+  //   type: 'input',
+  //   elProps: {
+  //   },
+  //   elAttrs: {
+  //     readonly: true
+  //   }
+  // },
   {
-    label: '访问地址',
-    field: 'url',
-    type: 'input',
-    elProps: {
-    },
-    elAttrs: {
-      readonly: true
-    }
-  },
-  {
-    label: '项目名称',
+    label: '项目描述',
     field: 'desc',
     type: 'input',
     elProps: {
@@ -109,5 +109,10 @@ export const local = [
     type: 'code',
     'info-icon': 'el-icon-warning-outline',
     info: '使用方法：在项目全局中任何地方，例如：$$global.constant.[fieldName]'
+  },
+  {
+    label: '项目白名单',
+    field: 'info.whitelist',
+    type: 'textarea'
   }
 ]

@@ -46,6 +46,15 @@ const handle = {
     return content
   },
 
+  async delete (type, dir) {
+    utils.rm(path.join(pubPath, type, dir))
+    if (type === 'project') {
+      await handle.updateProjectList()
+    } else {
+      await handle.update(type)
+    }
+  },
+
   /**
    * 新增封装组件
    * @param type
@@ -115,6 +124,8 @@ const handle = {
         console.log('---- entryPath', entryPath, entryContent)
         await utils.webpack(name, entryPath)
         console.log('---- webpack done')
+        // 将 zip 包 copy 到目标目录
+        await fs.copy(file, path.join(pubPath, 'upload', name, `${name}.zip`))
       } else {
         msg = 'schema.js 不存在'
       }
@@ -124,16 +135,20 @@ const handle = {
     utils.rm(tmpPath)
     return msg
   },
-  saveProject: async (dir, data) => {
-    await fs.outputFile(path.join(pubPath, 'project', dir, 'data.json'), data)
+  updateProjectList: async () => {
     await handle.update('project', ({ project }) => {
       return {
         thumbCover: project.thumbCover,
         dir: project.dir,
         desc: project.desc,
-        info: project.info
+        info: project.info,
+        createUser: project.createUser
       }
     })
+  },
+  saveProject: async (dir, data) => {
+    await fs.outputFile(path.join(pubPath, 'project', dir, 'data.json'), data)
+    await handle.updateProjectList()
   },
   getProject: (dir) => {
     return fs.readJson(path.join(pubPath, 'project', dir, 'data.json'))
