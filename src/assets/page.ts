@@ -5,7 +5,7 @@ import { rootNode, setCurrentNode, NodeItem } from './node'
 
 export type Page = {
   title: string
-  url: string
+  // url: string
   id: string
   nodes: NodeItem[]
   state: string

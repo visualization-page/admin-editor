@@ -9,20 +9,21 @@
 </template>
 
 <script lang="ts">
-import { createComponent } from '@vue/composition-api'
+import { defineComponent } from '@vue/composition-api'
 import SchemaForm from '../schema/index.vue'
 import { local } from './config'
 import { project } from '@/assets/project'
 import { updateByField } from '@/assets/util'
 
-export default createComponent({
+export default defineComponent({
   components: {
     SchemaForm
   },
 
-  setup () {
+  setup (props, ctx) {
+    // @ts-ignore
+    local[1].elAttrs.disabled = !!ctx.root.$route.params.dir
     return {
-      // validate: null,
       local,
       detail: project,
       updateProjectByField (field: string, val: any) {

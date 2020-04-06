@@ -18,16 +18,16 @@ export default [
     elAttrs: {
     }
   },
-  {
-    label: '页面地址',
-    field: 'url',
-    type: 'input',
-    elProps: {
-    },
-    elAttrs: {
-      readonly: true
-    }
-  },
+  // {
+  //   label: '页面地址',
+  //   field: 'url',
+  //   type: 'input',
+  //   elProps: {
+  //   },
+  //   elAttrs: {
+  //     readonly: true
+  //   }
+  // },
   {
     label: 'class',
     field: 'className',

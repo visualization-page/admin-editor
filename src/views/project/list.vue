@@ -22,17 +22,17 @@
         <el-table-column
           prop="createUser"
           label="创建人"
-          width="80">
+          width="60">
         </el-table-column>
         <el-table-column
           prop="info.userName"
           label="修改人"
-          width="80">
+          width="60">
         </el-table-column>
         <el-table-column
           prop="info.time"
           label="修改时间"
-          width="120">
+          width="130">
         </el-table-column>
         <el-table-column
           prop="info.remark"
@@ -59,6 +59,7 @@
 import HeaderOpt from '@/components/header-opts/index.vue'
 import { http } from '@/api'
 import { MessageBox } from 'element-ui'
+import dayjs from 'dayjs'
 
 export default {
   components: {
@@ -94,7 +95,13 @@ export default {
   },
   created () {
     http.get('component/list', { type: 'project' }).then(res => {
-      this.tableData = res.data
+      this.tableData = res.data.map(x => ({
+        ...x,
+        info: {
+          ...(x.info || {}),
+          time: x.info.time ? dayjs(x.info.time).format('YYYY/MM/DD HH:mm') : '-'
+        }
+      }))
     })
   },
   methods: {

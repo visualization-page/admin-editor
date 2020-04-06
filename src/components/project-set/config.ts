@@ -30,7 +30,10 @@ export const local = [
     type: 'input',
     rulers: [
       { required: true, message: '请输入项目目录名称', trigger: 'blur' }
-    ]
+    ],
+    elAttrs: {
+      disabled: false
+    }
   },
   {
     label: '页面类型',

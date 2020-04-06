@@ -26,6 +26,7 @@
               <node-tree />
             </el-tab-pane>
             <el-tab-pane label="页面模版" :name="tabName.pageTemplate">
+              <span>敬请期待</span>
             </el-tab-pane>
           </el-tabs>
         </div>
@@ -49,7 +50,7 @@
               <component-library />
             </el-tab-pane>
             <el-tab-pane label="工具函数" :name="tabName.fx">
-              <p>toast / alert / 打点 / 获取 cookie</p>
+              <p>敬请期待</p>
             </el-tab-pane>
           </el-tabs>
         </div>
@@ -86,7 +87,7 @@
             <el-tab-pane label="样式" :name="tabName.nodeStyle">
               <node-style />
             </el-tab-pane>
-            <el-tab-pane label="动画" :name="tabName.nodeAnimate">动画</el-tab-pane>
+            <el-tab-pane label="动画" :name="tabName.nodeAnimate">敬请期待</el-tab-pane>
           </el-tabs>
         </div>
       </div>

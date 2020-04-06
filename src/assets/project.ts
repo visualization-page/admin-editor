@@ -19,7 +19,7 @@ export type Project = {
     }
     options?: string
   }
-  url: string
+  // url: string
   pages: Array<Page>
   constant: string
   componentLibrary: {
@@ -104,7 +104,7 @@ export const exportProjectLocal = (item?: Project) => {
   localStorage.setItem('local', JSON.stringify(item || project))
 }
 
-export const importProjectLocal = async (parseItem: Project) => {
+export const importProject = async (parseItem: Project) => {
   if (parseItem) {
     // 下载资源
     if (parseItem.componentDownload) {
@@ -130,11 +130,11 @@ export const initProject = async (item?: Project) => {
   }, { lazy: true, deep: true })
 
   if (item) {
-    await importProjectLocal(item)
+    await importProject(item)
   } else {
     const localItem = localStorage.getItem('local')
     if (localItem) {
-      await importProjectLocal(JSON.parse(localItem))
+      await importProject(JSON.parse(localItem))
     }
     return !!localItem
   }
