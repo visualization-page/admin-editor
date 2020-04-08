@@ -18,6 +18,7 @@
       <div class="app__mobile-webview relative">
         <div class="app__mobile-webview-mock">
           <render
+            v-if="project.depLoaded"
             :project="project"
             :currentPage="currentPage"
           />
@@ -30,6 +31,7 @@
 <script lang="ts">
 import { createComponent } from '@vue/composition-api'
 import { currentPage } from '@/assets/page'
+import { project } from '@/assets/project'
 import Render from './render/index.vue'
 import { isEdit, setRenderEdit, setRenderPreview } from '@/assets/render'
 
@@ -47,6 +49,7 @@ export default createComponent({
       }
     }
     return {
+      project,
       currentPage,
       isEdit,
       handleMode

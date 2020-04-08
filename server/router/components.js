@@ -69,6 +69,12 @@ module.exports = {
       }
     }
   },
+  '/project/release/:dir': {
+    post: async (req, res) => {
+      await component.releaseProject(req.params.dir)
+      res.json({ success: true, msg: '' })
+    }
+  },
   '/delete/:type/:dir': {
     post: async (req, res) => {
       await component.delete(req.params.type, req.params.dir)

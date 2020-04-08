@@ -6,6 +6,7 @@ import { NodeItemBasic } from './node'
 
 export type Project = {
   // id: number
+  depLoaded: boolean
   env: 'dev' | 'pro'
   desc: string
   dir: string
@@ -42,6 +43,7 @@ export type Project = {
 
 export const project: Project = reactive({
   // id: 1,
+  depLoaded: false,
   // 环境 默认 dev，可切换 pro，目前只关联了 config 字段
   env: 'dev',
   desc: '',
@@ -110,19 +112,22 @@ export const exportProjectLocal = (item?: Project) => {
 
 export const importProject = async (parseItem: Project) => {
   if (parseItem) {
+    parseItem.depLoaded = false
+    updateProject(parseItem)
     // 下载资源
     if (parseItem.componentDownload) {
-      await diffDownloadDeps(parseItem.componentDownload)
+      await diffDownloadDeps(parseItem.componentDownload, true)
     }
-    updateProject(parseItem)
+    // @ts-ignore
+    updateProject({ depLoaded: true })
     if (parseItem.pages.length) {
       setCurrentPage(parseItem.pages[0])
     }
   }
 }
 
-export const diffDownloadDeps = async (items: NodeItemBasic[]) => {
-  const res = items.filter(x => project.componentDownload.every(y => y.name !== x.name))
+export const diffDownloadDeps = async (items: NodeItemBasic[], init = false) => {
+  const res = init ? project.componentDownload : items.filter(x => project.componentDownload.every(y => y.name !== x.name))
   if (res.length) {
     await Promise.all(res.map(loadItem))
   }

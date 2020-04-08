@@ -1,5 +1,5 @@
 <script lang="tsx">
-import { defineComponent, createElement, watch } from '@vue/composition-api'
+import { defineComponent, createElement } from '@vue/composition-api'
 import { NodeItem, currentNode } from '@/assets/node'
 import { isEdit } from '@/assets/render'
 import { FormEvent } from '@/assets/event'
@@ -85,7 +85,19 @@ export default defineComponent<{
           mergeDirectionSize(props.style, item.style.position, 'position')
         }
         props.style.position = item.outDocFlow ? item.style.positionType : undefined
-        // console.log(props.style)
+        // 处理 style.code
+        const styleCodeRes = parseCodeValid(props.style.code, codeExecuteContext)
+        if (styleCodeRes.ok) {
+          // delete props.style.code
+          props.style = {
+            code: undefined,
+            ...props.style,
+            // @ts-ignore
+            ...styleCodeRes.value
+          }
+        } else {
+          throw styleCodeRes.msg
+        }
         const children: any = item.type === 'div'
           ? renderItem(item.children, superProps.pageConfig, superProps.globalConfig)
           : []

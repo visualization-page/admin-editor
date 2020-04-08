@@ -77,11 +77,9 @@ export default defineComponent({
       {
         label: '发布项目',
         icon: 'el-icon-position f16',
-        action: () => {
-          // 编译 code
-          // copy dist 容器
-          // 替换 publicPath
-          // 生成 zip 包
+        action: async () => {
+          await MessageBox.confirm('发布不会自动保存项目，请确认已保存?')
+          await http.post('project/release', { dir: project.dir }, { successMessage: '项目打包成功，请到发布系统发布项目' })
         }
       },
       {

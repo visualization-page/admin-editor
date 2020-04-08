@@ -28,6 +28,7 @@ const externals = process.env.VUE_APP_FILE_SERVER ? {
 }
 
 module.exports = {
+  publicPath: './',
   outputDir: process.env.VUE_APP_FILE_SERVER ? 'dist-system/' : 'dist/',
   pages: {
     index: {

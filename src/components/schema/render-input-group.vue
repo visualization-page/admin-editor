@@ -49,7 +49,7 @@ export default createComponent({
           arr.value = Object.keys(pref[field]).map((name: string) => ({ name, path: pref[field][name] }))
         }
       }
-    })
+    }, { deep: true })
 
     const handleAdd = () => {
       noUpdate = true

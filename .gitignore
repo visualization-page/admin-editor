@@ -2,6 +2,7 @@
 node_modules
 /dist
 /dist-system
+/release
 
 # local env files
 .env.local

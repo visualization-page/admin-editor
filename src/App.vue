@@ -38,6 +38,7 @@ export default {
 }
 
 @side-width: 400px;
+@side-width-right: 300px;
 .app-header {
   height: 50px;
   background-color: #4a4c55;
@@ -66,7 +67,7 @@ export default {
   }
 }
 .app__config {
-  width: @side-width;
+  width: @side-width-right;
   height: 100%;
 }
 </style>

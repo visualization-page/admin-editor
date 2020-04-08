@@ -29,7 +29,8 @@ export const http = new Http({
     },
     project: {
       save: '/butterfly/project/:dir',
-      get: '/butterfly/project/:dir'
+      get: '/butterfly/project/:dir',
+      release: '/butterfly/project/release/:dir'
     },
     delete: '/butterfly/delete/:type/:dir'
   },

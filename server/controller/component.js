@@ -1,6 +1,7 @@
 const fs = require('fs-extra')
 const path = require('path')
 const utils = require('./utils')
+const dayjs = require('dayjs')
 const pubPath = path.resolve(__dirname, '../public')
 
 function getPath (type, isIndex = true) {
@@ -152,6 +153,35 @@ const handle = {
   },
   getProject: (dir) => {
     return fs.readJson(path.join(pubPath, 'project', dir, 'data.json'))
+  },
+  releaseProject: async (dir) => {
+    const releasePath = path.resolve(__dirname, '../../release', dir)
+    const distPath = path.resolve(__dirname, '../../dist-system')
+    // copy dist-system/ => release/项目 目录下
+    await fs.copy(distPath, releasePath)
+    // 改写 data.json
+    const dirPath = path.join(pubPath, 'project', dir, 'data.json')
+    const globalProject = await fs.readJson(dirPath)
+    const releaseDataFileName = `data.${dayjs().format('MM-DD-HH-mm')}.js`
+    await fs.outputFile(path.join(releasePath, releaseDataFileName), `var globalProject = ${JSON.stringify(globalProject)}`)
+    // 改写 render.html 中的 publicPath
+    const releaseRenderPath = path.join(releasePath, 'render.html')
+    const publicPath = globalProject.project.config.pro.publicPath || ''
+    let renderContent = await fs.readFile(releaseRenderPath, 'utf8')
+    // href=css href=js src=js
+    renderContent = renderContent
+      .replace(/(href=css|href=js|src=js)/g, (match, group) => {
+        const arr = group.split('=')
+        return arr[0] + '=' + publicPath + '/' + arr[1]
+      })
+      // 编译 code
+      // 插入 data 引入 window.globalProject
+      .replace('</head>', `<script src="${publicPath}/${releaseDataFileName}"></script></head>`)
+    await fs.outputFile(path.join(releasePath, 'index.html'), renderContent)
+    // 同步提交 git
+    await utils.spawn('git', ['add', '.'])
+    await utils.spawn('git', ['commit', '-m', `build: release ${releaseDataFileName}`])
+    await utils.spawn('git', ['push'])
   }
 }
 
