@@ -16,7 +16,7 @@ const handle = {
       handle.stdout.on('data', (data) => {
         console.log(`${cmd} stdout: \n${data}`)
         if (/working tree clean/.test(data)) {
-          process.exit(0)
+          reject(data)
         }
       })
       handle.stderr.setEncoding('utf8')

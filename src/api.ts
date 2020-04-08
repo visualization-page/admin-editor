@@ -34,7 +34,10 @@ export const http = new Http({
     },
     delete: '/butterfly/delete/:type/:dir'
   },
-  notify: Message,
+  notify: {
+    success: Message.success,
+    error: Message.error
+  },
   loadingMethods,
   contentType: 'application/json'
 })
