@@ -20,7 +20,8 @@ const handle = {
       handle.stderr.on('data', (data) => {
         console.error(`${cmd} stderr: \n${data}`)
       })
-      handle.on('close', (code) => {
+      handle.on('close', (code, a) => {
+        console.log('code', code, a)
         if (code === 0) {
           resolve()
         } else {
