@@ -10,25 +10,26 @@ const handle = {
     execSync(`rm -rf ${file}`)
   },
   spawn (cmd, option) {
-    let stdout
     return new Promise((resolve, reject) => {
       const handle = spawn(cmd, option)
       handle.stdout.setEncoding('utf8')
       handle.stdout.on('data', (data) => {
-        stdout += stdout
         console.log(`${cmd} stdout: \n${data}`)
+        if (/working tree clean/.test(data)) {
+          process.exit(0)
+        }
       })
       handle.stderr.setEncoding('utf8')
       handle.stderr.on('data', (data) => {
         console.error(`${cmd} stderr: \n${data}`)
       })
-      handle.on('close', (code, a) => {
+      handle.on('close', (code) => {
         // console.log('code', code, a)
         if (code === 0) {
           resolve()
         } else {
           // eslint-disable-next-line prefer-promise-reject-errors
-          reject(stdout)
+          reject()
         }
       })
     })
