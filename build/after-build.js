@@ -6,7 +6,10 @@ console.log('====> 打包完成，拷贝到 butterfly 工程提交')
 
 const target = path.resolve(__dirname, '../../../shinemo-gitlab/butterfly')
 fs.copySync(path.resolve(__dirname, `../dist-system`), path.join(target, 'dist-system'))
-fs.copySync(path.resolve(__dirname, `../server`), path.join(target, 'server'))
+// 不能直接覆盖 server/public
+fs.copySync(path.resolve(__dirname, `../server/controller`), path.join(target, 'server/controller'))
+fs.copySync(path.resolve(__dirname, `../server/router`), path.join(target, 'server/router'))
+fs.copySync(path.resolve(__dirname, `../server/index.js`), path.join(target, 'server/index.js'))
 // fs.copySync(path.resolve(__dirname, `../package.json`), path.join(target, 'package.json'))
 // fs.copySync(path.resolve(__dirname, `../.gitignore`), path.join(target, '.gitignore'))
 

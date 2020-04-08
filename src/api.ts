@@ -32,7 +32,10 @@ export const http = new Http({
       get: '/butterfly/project/:dir',
       release: '/butterfly/project/release/:dir'
     },
-    delete: '/butterfly/delete/:type/:dir'
+    delete: '/butterfly/delete/:type/:dir',
+    login: {
+      login: '/butterfly/login'
+    }
   },
   notify: {
     success: Message.success,
