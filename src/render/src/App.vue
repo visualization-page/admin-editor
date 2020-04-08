@@ -18,7 +18,7 @@ export default {
   data () {
     return {
       isPc: this.checkPc(true),
-      codeUrl: process.env.VUE_APP_MOBILE
+      codeUrl: location.href
     }
   },
   created () {

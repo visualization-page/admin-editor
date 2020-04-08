@@ -22,13 +22,14 @@ const handle = {
       handle.stderr.setEncoding('utf8')
       handle.stderr.on('data', (data) => {
         console.error(`${cmd} stderr: \n${data}`)
+        reject(new Error(data))
       })
       handle.on('close', (code) => {
         if (code === 0) {
           resolve()
         } else {
           // eslint-disable-next-line prefer-promise-reject-errors
-          reject()
+          reject(new Error(`${cmd} spawn fail !`))
         }
       })
     })

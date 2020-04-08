@@ -162,6 +162,8 @@ const handle = {
     // 改写 data.json
     const dirPath = path.join(pubPath, 'project', dir, 'data.json')
     const globalProject = await fs.readJson(dirPath)
+    // 切换为正式环境
+    globalProject.project.env = 'pro'
     const releaseDataFileName = `data.${dayjs().format('MM-DD-HH-mm')}.js`
     await fs.outputFile(path.join(releasePath, releaseDataFileName), `var globalProject = ${JSON.stringify(globalProject)}`)
     // 改写 render.html 中的 publicPath
@@ -179,17 +181,19 @@ const handle = {
       .replace('</head>', `<script src="${publicPath}/${releaseDataFileName}"></script></head>`)
     await fs.outputFile(path.join(releasePath, 'index.html'), renderContent)
     // 同步提交 git
-    await utils.spawn('git', ['add', '.'])
-    return utils.spawn('git', ['commit', '-m', `build: release ${releaseDataFileName}`])
-      .then(() => {
-        return utils.spawn('git', ['push'])
-      })
-      .catch(err => {
-        if (typeof err === 'string') {
-          return
-        }
-        return Promise.reject(err)
-      })
+    // 不提交 git，忽略 release 目录
+    // await utils.spawn('git', ['add', '.'])
+    // return utils.spawn('git', ['commit', '-m', `build: release ${releaseDataFileName}`])
+    //   .then(() => {
+    //     // 已经是目标机器，不需要 push
+    //     // return utils.spawn('git', ['push'])
+    //   })
+    //   .catch(err => {
+    //     if (typeof err === 'string') {
+    //       return
+    //     }
+    //     return Promise.reject(err)
+    //   })
   }
 }
 
