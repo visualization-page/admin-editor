@@ -180,8 +180,15 @@ const handle = {
     await fs.outputFile(path.join(releasePath, 'index.html'), renderContent)
     // 同步提交 git
     await utils.spawn('git', ['add', '.'])
-    await utils.spawn('git', ['commit', '-m', `build: release ${releaseDataFileName}`])
-    await utils.spawn('git', ['push'])
+    return utils.spawn('git', ['commit', '-m', `build: release ${releaseDataFileName}`]).then(() => {
+      return utils.spawn('git', ['push'])
+    }).catch(err => {
+      if (typeof err === 'string') {
+        // eslint-disable-next-line prefer-promise-reject-errors
+        return Promise.reject({ message: err })
+      }
+      return Promise.reject(err)
+    })
   }
 }
 

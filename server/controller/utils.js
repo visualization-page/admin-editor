@@ -14,11 +14,11 @@ const handle = {
       const handle = spawn(cmd, option)
       handle.stdout.setEncoding('utf8')
       handle.stdout.on('data', (data) => {
-        console.log(data)
+        console.log(`${cmd} stdout: \n${data}`)
       })
       handle.stderr.setEncoding('utf8')
       handle.stderr.on('data', (data) => {
-        console.error(data)
+        console.error(`${cmd} stderr: \n${data}`)
       })
       handle.on('close', (code) => {
         if (code === 0) {
