@@ -37,7 +37,7 @@ export default {
   cursor: pointer;
 }
 
-@side-width: 300px;
+@side-width: 400px;
 .app-header {
   height: 50px;
   background-color: #4a4c55;

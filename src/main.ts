@@ -6,13 +6,7 @@ import store from './store'
 import Native from '@xm/native'
 import './plugins/element'
 import 'tcon'
-
-const native = Vue.prototype.$native = new Native()
-if (!native.uid) {
-  location.href = `//admin.jituancaiyun.${location.protocol === 'https:' ? 'com' : 'net'}/power/user/view/login.html?referPageUrl=${decodeURIComponent(location.href)}`
-} else {
-  native.name = native.cookie('userName')
-}
+import { MessageBox } from 'element-ui'
 
 declare module '@vue/composition-api/dist/component/component' {
   interface SetupContext {
@@ -33,10 +27,40 @@ declare global {
 }
 
 Vue.config.productionTip = false
-document.addEventListener('DOMContentLoaded', () => {
+const native = Vue.prototype.$native = new Native()
+native.name = native.cookie('userName')
+
+if (!native.name) {
+  let doReload = false
+  document.addEventListener('visibilitychange', function () {
+    if (document.visibilityState === 'hidden') {
+      if (doReload) {
+        MessageBox.close()
+      }
+    } else {
+      location.reload()
+    }
+  })
   new Vue({
-    router,
-    store,
-    render: h => h(App)
+    render: h => h('p', { class: 'tc pt50 mt50 f32 c-999' }, ['登录中...']),
+    mounted () {
+      this.showLogin()
+    },
+    methods: {
+      showLogin () {
+        MessageBox.alert('当前状态未登录，即将跳转 web 版彩云选择一家企业登录').then(() => {
+          doReload = true
+          window.open(`//web.jituancaiyun.${location.protocol === 'https:' ? 'com' : 'net'}`)
+        }).catch(this.showLogin)
+      }
+    }
   }).$mount('#app')
-})
+} else {
+  document.addEventListener('DOMContentLoaded', () => {
+    new Vue({
+      router,
+      store,
+      render: h => h(App)
+    }).$mount('#app')
+  })
+}

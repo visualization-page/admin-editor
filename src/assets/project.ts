@@ -30,10 +30,12 @@ export type Project = {
     dev: {
       baseUrl: string
       componentAbsoluteUrl: string
+      publicPath: string
     }
     pro: {
       baseUrl: string
       componentAbsoluteUrl: string
+      publicPath: string
     }
   }
 }
@@ -70,11 +72,13 @@ export const project: Project = reactive({
   config: {
     dev: {
       baseUrl: 'http://localhost:8080',
-      componentAbsoluteUrl: 'http://localhost:3000'
+      componentAbsoluteUrl: 'http://localhost:3000',
+      publicPath: './'
     },
     pro: {
       baseUrl: '/',
-      componentAbsoluteUrl: 'https://statics.e.uban360.com/'
+      componentAbsoluteUrl: 'https://statics.e.uban360.com/',
+      publicPath: 'https://statics.jituancaiyun.com/'
     }
   },
   // 后台第一次创建时赋值

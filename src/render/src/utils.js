@@ -6,6 +6,11 @@ let http = null
 export const getProject = async (dir) => {
   // 测试环境预览才需要，正式环境直接走文件
   setRenderPreview()
+  // 正式环境
+  if (location.protocol === 'https') {
+    return window.globalProject
+  }
+  // 非正式环境
   if (!http) {
     const global = initGlobalConfig(null)
     global.initHttp({

@@ -28,16 +28,17 @@ const externals = process.env.VUE_APP_FILE_SERVER ? {
 }
 
 module.exports = {
+  outputDir: process.env.VUE_APP_FILE_SERVER ? 'dist-system/' : 'dist/',
   pages: {
     index: {
       entry: 'src/main.ts',
-      outputDir: 'dist/',
+      // outputDir: 'dist-system/',
       template: 'public/index.html',
       chunks: ['chunk-vendors', 'chunk-common', 'index']
     },
     render: {
       entry: 'src/render/src/main.js',
-      outputDir: 'dist/render/',
+      // outputDir: 'dist-render/',
       template: 'src/render/index.html',
       chunks: ['chunk-vendors', 'chunk-common', 'render']
     }
@@ -46,6 +47,7 @@ module.exports = {
     config.externals = externals
   },
   devServer: {
-    disableHostCheck: true
+    disableHostCheck: true,
+    host: 'local.jituancaiyun.net'
   }
 }

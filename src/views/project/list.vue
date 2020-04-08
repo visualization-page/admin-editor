@@ -109,7 +109,7 @@ export default {
       return item.createUser === this.$native.name || (item.info.whitelist || '').indexOf(this.$native.name) > -1
     },
     handlePreview (item) {
-      window.open(process.env.VUE_APP_MOBILE + `/#/project/${item.dir}`)
+      window.open(process.env.VUE_APP_MOBILE + `#/project/${item.dir}`)
     },
     async handleDel (item) {
       await MessageBox.confirm('确认删除吗？')

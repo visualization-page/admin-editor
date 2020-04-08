@@ -15,9 +15,31 @@ const treeData = [
       'VanButton',
       'VanField',
       'VanCell',
+      'VanIcon',
+      'VanImage',
+      'VanStyle',
+      'VanCalendar',
       'VanCheckbox',
       'VanDatetimePicker',
-      'VanIcon'
+      'VanPicker',
+      'VanSearch',
+      'VanSwitch',
+      'VanUploader',
+      'VanActionSheet',
+      'VanDropdownMenu',
+      'VanSwipeCell',
+      'VanCollapse',
+      'VanCountDown',
+      'VanDivider',
+      'VanImagePreview',
+      'VanList',
+      'VanNoticeBar',
+      'VanProgress',
+      'VanSkeleton',
+      'VanSwipe',
+      'VanGrid',
+      'VanTabs',
+      'VanTabbar'
     ]
   }
 ]

@@ -78,6 +78,10 @@ export default defineComponent({
         label: '发布项目',
         icon: 'el-icon-position f16',
         action: () => {
+          // 编译 code
+          // copy dist 容器
+          // 替换 publicPath
+          // 生成 zip 包
         }
       },
       {
@@ -128,7 +132,7 @@ export default defineComponent({
         icon: 'el-icon-document-remove f16',
         action: () => {
           if (currentPage.value) {
-            window.open(process.env.VUE_APP_MOBILE + `/#/page/${project.dir}/${currentPage.value.id}`)
+            window.open(process.env.VUE_APP_MOBILE + `#/page/${project.dir}/${currentPage.value.id}`)
           } else {
             Message.info('请选中一个页面')
           }
@@ -138,7 +142,7 @@ export default defineComponent({
         label: '预览项目',
         icon: 'el-icon-folder-opened f16',
         action: () => {
-          window.open(process.env.VUE_APP_MOBILE + `/#/project/${project.dir}`)
+          window.open(process.env.VUE_APP_MOBILE + `#/project/${project.dir}`)
         }
       }
     ]
