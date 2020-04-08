@@ -60,6 +60,7 @@ import HeaderOpt from '@/components/header-opts/index.vue'
 import { http } from '@/api'
 import { MessageBox } from 'element-ui'
 import dayjs from 'dayjs'
+import { resetProject } from '@/assets/project'
 
 export default {
   components: {
@@ -86,6 +87,8 @@ export default {
           label: '创建项目',
           icon: 'el-icon-plus f16',
           action: () => {
+            // project 置空
+            resetProject()
             this.$router.push('/editor')
           }
         }

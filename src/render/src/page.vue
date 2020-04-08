@@ -32,13 +32,16 @@ export default defineComponent({
     let data = project
     if (!project.dir) {
       console.log('init project')
-      data = await getProject(this.$route.params.dir)
+      data = await getProject(this.$route.params.dir, this.$route.query.preview)
     }
     this.project = data
     this.setPageById(this.$route.params.id)
   },
   methods: {
     setPageById (id) {
+      if (!this.project) {
+        return window.vant.Toast('未获取到项目，请检查是否已经保存项目')
+      }
       const page = this.project.pages.find(x => x.id === id)
       if (id && page) {
         this.setPage(page)

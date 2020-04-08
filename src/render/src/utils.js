@@ -13,7 +13,11 @@ const loadVConsole = () => {
 }
 
 let http = null
-export const getProject = async (dir) => {
+export const getProject = async (dir, isPreview) => {
+  if (isPreview) {
+    const local = await initProject()
+    return local ? JSON.parse(local) : null
+  }
   // 测试环境预览才需要，正式环境直接走文件
   setRenderPreview()
   // 正式环境
@@ -35,7 +39,7 @@ export const getProject = async (dir) => {
   }
   // @ts-ignore
   const { data: { project } } = await http.get('get', { dir })
-  if (project.env) {
+  if (project.env === 'dev') {
     loadVConsole()
   }
   await initProject(project)

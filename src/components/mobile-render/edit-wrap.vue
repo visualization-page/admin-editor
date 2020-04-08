@@ -16,6 +16,7 @@ export default createComponent({
       // console.log('click edit wrap')
       e.stopPropagation()
       contextPosition.show = false
+      // @ts-ignore
       setCurrentNode(props.item)
       setTabName(['', '', tabName.nodeProperty])
     }

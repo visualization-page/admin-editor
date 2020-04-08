@@ -3,7 +3,8 @@
     <div class="flex items-center cp" @click="$router.push('/')">
       <span class="f32 c-fff">Butterfly</span>
       <div class="ml10">
-        <img height="14px" src="https://img.shields.io/badge/-beta 0.0.1-lightgrey" alt="">
+        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="67" height="20"><linearGradient id="b" x2="0" y2="100%"><stop offset="0" stop-color="#bbb" stop-opacity=".1"/><stop offset="1" stop-opacity=".1"/></linearGradient><clipPath id="a"><rect width="67" height="20" rx="3" fill="#fff"/></clipPath><g clip-path="url(#a)"><path fill="#9f9f9f" d="M0 0h0v20H0z"/><path fill="#9f9f9f" d="M0 0h67v20H0z"/><path fill="url(#b)" d="M0 0h67v20H0z"/></g><g fill="#fff" text-anchor="middle" font-family="DejaVu Sans,Verdana,Geneva,sans-serif" font-size="110"> <text x="335" y="150" fill="#010101" fill-opacity=".3" transform="scale(.1)" textLength="570">beta 0.0.1</text><text x="335" y="140" transform="scale(.1)" textLength="570">beta 0.0.1</text></g> </svg>
+<!--        <img height="14px" src="https://img.shields.io/badge/-beta 0.0.1-lightgrey" alt="">-->
         <p class="c-aaa">快速搭建h5</p>
       </div>
     </div>
@@ -35,8 +36,8 @@
 <script lang="ts">
 import Vue from 'vue'
 import { defineComponent, ref } from '@vue/composition-api'
-import { project, initProject, exportProjectLocal } from '@/assets/project'
-import { currentPage } from '@/assets/page'
+import { project, initProject, exportProjectLocal, resetProject } from '@/assets/project'
+// import { currentPage } from '@/assets/page'
 import { Message, MessageBox } from 'element-ui'
 import { http } from '@/api'
 
@@ -83,6 +84,15 @@ export default defineComponent({
         }
       },
       {
+        label: '清除本地',
+        icon: 'el-icon-delete f16',
+        action: () => {
+          localStorage.removeItem('local')
+          resetProject()
+          Message.success('清除成功')
+        }
+      },
+      {
         label: '保存项目',
         icon: 'iconfont icon-save',
         action: async () => {
@@ -125,22 +135,22 @@ export default defineComponent({
           Message.success('保存成功')
         }
       },
-      {
-        label: '预览页面',
-        icon: 'el-icon-document-remove f16',
-        action: () => {
-          if (currentPage.value) {
-            window.open(process.env.VUE_APP_MOBILE + `#/page/${project.dir}/${currentPage.value.id}`)
-          } else {
-            Message.info('请选中一个页面')
-          }
-        }
-      },
+      // {
+      //   label: '预览页面',
+      //   icon: 'el-icon-document-remove f16',
+      //   action: () => {
+      //     if (currentPage.value) {
+      //       window.open(process.env.VUE_APP_MOBILE + `#/page/${project.dir}/${currentPage.value.id}`)
+      //     } else {
+      //       Message.info('请选中一个页面')
+      //     }
+      //   }
+      // },
       {
         label: '预览项目',
         icon: 'el-icon-folder-opened f16',
         action: () => {
-          window.open(process.env.VUE_APP_MOBILE + `#/project/${project.dir}`)
+          window.open(process.env.VUE_APP_MOBILE + `#/project/${project.dir}?preview=true`)
         }
       }
     ]

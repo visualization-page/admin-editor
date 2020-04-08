@@ -66,7 +66,7 @@ export const rootNode: NodeItem = {
 
 export const currentNode = ref<NodeItem | null>(null)
 
-export const setCurrentNode = (item?: any) => {
+export const setCurrentNode = (item: NodeItem | null) => {
   currentNode.value = item
 }
 

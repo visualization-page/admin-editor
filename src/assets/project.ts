@@ -2,10 +2,10 @@ import Vue from 'vue'
 import { reactive, watch } from '@vue/composition-api'
 import { loadItem } from '@/components/mobile-render/render/utils'
 import { Page, setCurrentPage } from './page'
-import { NodeItemBasic } from './node'
+import { NodeItemBasic, setCurrentNode } from './node'
+import { deepClone } from '@/assets/util'
 
 export type Project = {
-  // id: number
   depLoaded: boolean
   env: 'dev' | 'pro'
   desc: string
@@ -20,7 +20,6 @@ export type Project = {
     }
     options?: string
   }
-  // url: string
   pages: Array<Page>
   constant: string
   componentLibrary: {
@@ -39,11 +38,17 @@ export type Project = {
       publicPath: string
     }
   }
+  createUser: string
+  info: {
+    userName: string
+    remark: string
+    time: number
+    whitelist: string
+  }
 }
 
-export const project: Project = reactive({
-  // id: 1,
-  depLoaded: false,
+const defaultProject: Project = {
+  depLoaded: true,
   // 环境 默认 dev，可切换 pro，目前只关联了 config 字段
   env: 'dev',
   desc: '',
@@ -58,7 +63,7 @@ export const project: Project = reactive({
     },
     options: '(function () {\n  return {\n    // EscHttpOptions\n    successRequestAssert: res => res.success,\n    beforeRequest: (data, attaches) => data\n  }\n})()'
   },
-  url: '',
+  // url: '',
   pages: [],
   constant: '(function () {\n  return {\n    test: \'\'\n  }\n})()',
   componentLibrary: {
@@ -73,8 +78,8 @@ export const project: Project = reactive({
   ],
   config: {
     dev: {
-      baseUrl: 'http://localhost:8080',
-      componentAbsoluteUrl: 'http://localhost:3000',
+      baseUrl: process.env.VUE_APP_FILE_SERVER,
+      componentAbsoluteUrl: process.env.VUE_APP_FILE_SERVER,
       publicPath: './'
     },
     pro: {
@@ -91,9 +96,11 @@ export const project: Project = reactive({
     time: 0,
     whitelist: ''
   }
-})
+}
 
-export const updateProject = (obj: typeof project) => {
+export const project: Project = reactive(deepClone(defaultProject))
+
+export const updateProject = (obj: Partial<Project>) => {
   Object.keys(obj).forEach(key => {
     // @ts-ignore
     if (project[key] !== undefined && project[key] !== obj[key]) {
@@ -145,6 +152,12 @@ export const initProject = async (item?: Project) => {
     if (localItem) {
       await importProject(JSON.parse(localItem))
     }
-    return !!localItem
+    return localItem
   }
+}
+
+export const resetProject = () => {
+  updateProject(defaultProject)
+  setCurrentPage(null)
+  setCurrentNode(null)
 }

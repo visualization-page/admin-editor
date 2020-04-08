@@ -10,9 +10,10 @@
           v-if="currentPage"
           class="absolute r10 b0 pb10"
           type="text"
-          @click="handleMode"
+          @click="handlePreviewPage"
         >
-          {{ isEdit() ? '预览模式' : '编辑模式' }}
+          <i class="el-icon-document-remove" />
+          <span>预览页面</span>
         </el-button>
       </div>
       <div class="app__mobile-webview relative">
@@ -34,6 +35,7 @@ import { currentPage } from '@/assets/page'
 import { project } from '@/assets/project'
 import Render from './render/index.vue'
 import { isEdit, setRenderEdit, setRenderPreview } from '@/assets/render'
+import { Message } from 'element-ui'
 
 export default createComponent({
   components: {
@@ -48,11 +50,19 @@ export default createComponent({
         setRenderEdit()
       }
     }
+    const handlePreviewPage = () => {
+      if (currentPage.value && project.dir) {
+        window.open(process.env.VUE_APP_MOBILE + `#/page/${project.dir}/${currentPage.value.id}?preview=true`)
+      } else {
+        Message.error('项目英文名称必填')
+      }
+    }
     return {
       project,
       currentPage,
       isEdit,
-      handleMode
+      handleMode,
+      handlePreviewPage
     }
   }
 })
