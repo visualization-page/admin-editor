@@ -1,9 +1,10 @@
 const express = require('express')
 const router = express.Router()
 const components = require('./components')
+const dayjs = require('dayjs')
 
 router.use(function timeLog (req, res, next) {
-  console.log('%s %s %s %s', Date.now(), req.method, req.url, req.path)
+  console.log('%s %s %s %s', dayjs().format('YYYY/MM/DD HH:mm:ss'), req.method, req.url, req.path)
   next()
 })
 

@@ -24,7 +24,6 @@ const handle = {
         console.error(`${cmd} stderr: \n${data}`)
       })
       handle.on('close', (code) => {
-        // console.log('code', code, a)
         if (code === 0) {
           resolve()
         } else {
