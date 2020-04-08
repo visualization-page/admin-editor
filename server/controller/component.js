@@ -162,7 +162,7 @@ const handle = {
     // 改写 data.json
     const dirPath = path.join(pubPath, 'project', dir, 'data.json')
     const globalProject = await fs.readJson(dirPath)
-    const releaseDataFileName = `data.${dayjs().format('MM-DD-HH-mm')}.js`
+    const releaseDataFileName = `data.${dayjs().format('MM-DD')}.js`
     await fs.outputFile(path.join(releasePath, releaseDataFileName), `var globalProject = ${JSON.stringify(globalProject)}`)
     // 改写 render.html 中的 publicPath
     const releaseRenderPath = path.join(releasePath, 'render.html')
@@ -185,6 +185,7 @@ const handle = {
         return utils.spawn('git', ['push'])
       })
       .catch(err => {
+        console.log('----err', err)
         if (typeof err === 'string') {
           return
         }
