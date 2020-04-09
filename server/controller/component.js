@@ -148,8 +148,19 @@ const handle = {
     })
   },
   saveProject: async (dir, data) => {
-    await fs.outputFile(path.join(pubPath, 'project', dir, 'data.json'), data)
-    await handle.updateProjectList()
+    const exist = fs.pathExistsSync(path.join(pubPath, 'project', dir))
+    if (!data.force && exist) {
+      // 检查是否已存在
+      return { success: false, msg: `项目 ${dir} 名称已存在`, code: 6001 }
+    } else {
+      // 初次创建保存创建人
+      if (!exist) {
+        data.project.createUser = data.project.info.userName
+      }
+      delete data.force
+      await fs.outputFile(path.join(pubPath, 'project', dir, 'data.json'), JSON.stringify(data))
+      await handle.updateProjectList()
+    }
   },
   getProject: (dir) => {
     return fs.readJson(path.join(pubPath, 'project', dir, 'data.json'))

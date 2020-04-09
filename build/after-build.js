@@ -7,11 +7,20 @@ console.log('====> 打包完成，拷贝到 butterfly 工程提交')
 const target = path.resolve(__dirname, '../../../shinemo-gitlab/butterfly')
 fs.copySync(path.resolve(__dirname, `../dist-system`), path.join(target, 'dist-system'))
 // 不能直接覆盖 server/public
-fs.copySync(path.resolve(__dirname, `../server/controller`), path.join(target, 'server/controller'))
-fs.copySync(path.resolve(__dirname, `../server/router`), path.join(target, 'server/router'))
-fs.copySync(path.resolve(__dirname, `../server/index.js`), path.join(target, 'server/index.js'))
-// fs.copySync(path.resolve(__dirname, `../package.json`), path.join(target, 'package.json'))
+const copyDirs = [
+  'server/controller',
+  'server/router',
+  'server/public/basic',
+  'server/public/upload-entry-template.tpl',
+  'server/index.js'
+]
+copyDirs.forEach(item => {
+  fs.copySync(path.resolve(__dirname, `../`, item), path.join(target, item))
+})
 // fs.copySync(path.resolve(__dirname, `../.gitignore`), path.join(target, '.gitignore'))
+const json = fs.readJsonSync(path.resolve(__dirname, `../package.json`))
+delete json.dependencies['@xm/native']
+fs.outputFileSync(path.join(target, 'package.json'), JSON.stringify(json, null, 2))
 
 let noPush = false
 try {

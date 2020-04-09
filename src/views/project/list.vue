@@ -41,9 +41,10 @@
         <el-table-column
           fixed="right"
           label="操作"
-          width="130">
+          width="160">
           <template slot-scope="scope">
             <el-button @click="handlePreview(scope.row)" type="text" size="small">查看</el-button>
+            <el-button @click="handleCopy(scope.row)" type="text" size="small">复制</el-button>
             <template v-if="hasPriv(scope.row)">
               <el-button @click="handleDel(scope.row)" type="text" size="small">删除</el-button>
               <el-button @click="$router.push(`/editor/${scope.row.dir}`)" type="text" size="small">编辑</el-button>
@@ -61,6 +62,7 @@ import { http } from '@/api'
 import { MessageBox } from 'element-ui'
 import dayjs from 'dayjs'
 import { resetProject } from '@/assets/project'
+import { project } from '../../assets/project'
 
 export default {
   components: {
@@ -97,22 +99,33 @@ export default {
     }
   },
   created () {
-    http.get('component/list', { type: 'project' }).then(res => {
-      this.tableData = res.data.map(x => ({
-        ...x,
-        info: {
-          ...(x.info || {}),
-          time: x.info.time ? dayjs(x.info.time).format('YYYY/MM/DD HH:mm') : '-'
-        }
-      }))
-    })
+    this.getList()
   },
   methods: {
+    getList () {
+      http.get('component/list', { type: 'project' }).then(res => {
+        this.tableData = res.data.map(x => ({
+          ...x,
+          info: {
+            ...(x.info || {}),
+            time: x.info.time ? dayjs(x.info.time).format('YYYY/MM/DD HH:mm') : '-'
+          }
+        }))
+      })
+    },
     hasPriv (item) {
       return item.createUser === this.$native.name || (item.info.whitelist || '').indexOf(this.$native.name) > -1
     },
     handlePreview (item) {
       window.open(process.env.VUE_APP_MOBILE + `#/project/${item.dir}`)
+    },
+    handleCopy (item) {
+      http.post('project/copy', {
+        dir: item.dir,
+        name: this.$native.name
+      }, { successMessage: '复制成功' }).then(() => {
+        this.getList()
+      })
     },
     async handleDel (item) {
       await MessageBox.confirm('确认删除吗？')

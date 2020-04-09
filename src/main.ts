@@ -43,16 +43,16 @@ if (!native.name) {
           '请输入【手机号/密码】，密码不填默认是a1234567',
           '测试环境web版登录',
           {
-            inputValue: localStorage.getItem('local-login') || ''
+            inputValue: localStorage.getItem('local-login') || '',
+            inputPlaceholder: '例如：18358185826/a1234567'
           }
         ).then(({ value }: any) => {
           const arr = value.split('/')
           if (/^1\d{10}$/.test(arr[0])) {
             const password = arr[1] || 'a1234567'
             http.post('login/login', {
-              mobile: value,
-              password,
-              url: 'http://web.jituancaiyun.net/access/IMLogin/webCypherLogin'
+              mobile: arr[0],
+              password
             }, { notify: false }).then(res => {
               localStorage.setItem('local-login', value)
               Message.success('登录成功')
@@ -67,6 +67,8 @@ if (!native.name) {
           } else {
             Message.error('请输入正确的手机号')
           }
+        }).catch(() => {
+          this.showLogin()
         })
       }
     }

@@ -74,13 +74,18 @@ export const initGlobalConfig = (page: Page | null) => {
     http: null,
     initHttp: function (httpOptions: Project['httpOptions'], ctx: any) {
       let other: any = {}
-      const { ok, value } = parseCodeValid(httpOptions.options!, ctx)
-      if (ok) {
-        other = value
+      const options = parseCodeValid(httpOptions.options!, ctx)
+      if (options.ok) {
+        other = options.value
+      }
+      let baseUrl
+      const baseUrlRes = parseCodeValid(httpOptions.baseUrl, ctx)
+      if (baseUrlRes.ok) {
+        baseUrl = baseUrlRes.value
       }
       // @ts-ignore
       this.http = new Http({
-        baseUrl: httpOptions.baseUrl,
+        baseUrl,
         urlMap: httpOptions.urlMap,
         contentType: httpOptions.contentType,
         ...other
