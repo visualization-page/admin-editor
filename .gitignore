@@ -3,6 +3,9 @@ node_modules
 /dist
 /dist-system
 /release
+/server/public/project
+/server/public/upload
+/server/public/compose
 
 # local env files
 .env.local

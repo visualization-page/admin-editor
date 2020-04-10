@@ -9,7 +9,7 @@ if (!dir) {
   console.log('请输入组件名')
   process.exit(0)
 }
-entry = entry || `src/components/basic-components/${dir}/index.ts`
+entry = entry || path.resolve(__dirname, '../', `src/components/basic-components/${dir}/index.ts`)
 
 console.log('打包中...')
 const handle = spawn(
@@ -63,7 +63,7 @@ handle.on('close', code => {
   console.log('更新组件列表')
   const req = request({
     hostname: 'localhost',
-    port: 3000,
+    port: 9420,
     path: `/butterfly/component/${type}`,
     method: 'POST'
   }, (res) => {

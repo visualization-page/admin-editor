@@ -13,13 +13,13 @@ const loadVConsole = () => {
 }
 
 let http = null
-export const getProject = async (dir, isPreview) => {
-  if (isPreview) {
-    const local = await initProject()
-    return local ? JSON.parse(local) : null
-  }
-  // 测试环境预览才需要，正式环境直接走文件
+export const getProject = async (dir) => {
   setRenderPreview()
+  // 预览走本地
+  // if (isPreview) {
+  //   const local = await initProject()
+  //   return local ? JSON.parse(local) : null
+  // }
   // 正式环境
   if (location.protocol === 'https') {
     return window.globalProject
@@ -37,7 +37,6 @@ export const getProject = async (dir, isPreview) => {
     }, { $$global: global })
     http = global.http
   }
-  // @ts-ignore
   const { data: { project } } = await http.get('get', { dir })
   if (project.env === 'dev') {
     loadVConsole()

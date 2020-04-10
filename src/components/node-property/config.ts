@@ -1,3 +1,5 @@
+import { currentNode } from '@/assets/node'
+
 export default [
   {
     label: 'ID',
@@ -43,6 +45,18 @@ export default [
       placeholder: '请输入'
     },
     model: 'blur'
+  },
+  {
+    label: '绑定状态',
+    field: 'bindState',
+    type: 'input',
+    elAttrs: {
+      placeholder: '请输入'
+    },
+    model: 'blur',
+    relationCallback: (schema: any) => {
+      return schema.label === '绑定状态' && currentNode.value && currentNode.value.title === '列表容器'
+    }
   },
   {
     label: '脱离文档流',

@@ -1,6 +1,6 @@
 <template>
   <div
-    v-show="show"
+    v-if="show"
     class="context-menu"
     :style="{
       left: left + 'px',

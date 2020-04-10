@@ -1,6 +1,6 @@
 <template>
   <div class="page-set">
-    <div class="flex-center p30" v-if="!isEdit()">
+    <div class="flex-center p30" v-if="false && !isEdit()">
       <p class="c-999">请切换为编辑模式</p>
     </div>
     <template v-else-if="showSchema">

@@ -2,6 +2,7 @@ const component = require('../controller/component')
 const service = require('../controller/service')
 const fs = require('fs-extra')
 const path = require('path')
+const utils = require('../controller/utils')
 const tmpPath = path.resolve(__dirname, '../tmp')
 const pubPath = path.resolve(__dirname, '../public')
 
@@ -86,6 +87,25 @@ module.exports = {
       delete data.force
       const result = await component.saveProject(data.project.dir, data)
       res.json(result || { success: true, msg: '' })
+    }
+  },
+  '/project/download/:dir': {
+    get: async (req, res) => {
+      const dir = req.params.dir
+      const releasePath = path.resolve(__dirname, '../../release', dir)
+      if (fs.pathExistsSync(releasePath)) {
+        const zipPath = path.join(releasePath, `${dir}.zip`)
+        if (!fs.pathExistsSync(zipPath)) {
+          await utils.spawn('zip', ['-qr', `${dir}.zip`, './'], { cwd: releasePath })
+        }
+        res.download(zipPath, err => {
+          if (err) {
+            throw err
+          }
+        })
+      } else {
+        res.json({ success: false, msg: `${dir} 项目未发布正式版` })
+      }
     }
   },
   '/delete/:type/:dir': {

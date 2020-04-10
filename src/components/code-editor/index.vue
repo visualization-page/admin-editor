@@ -76,13 +76,14 @@ export default createComponent({
       handleCodeChange (val: string) {
         // 校验语法规则
         // 错误则提示不更新
-        const { ok, msg } = parseCodeValid(val)
-        isCodeValid.value = ok
-        if (ok) {
-          code.value = val
-        } else {
-          // console.log(msg)
-        }
+        // const { ok, msg } = parseCodeValid(val)
+        // isCodeValid.value = ok
+        // if (ok) {
+        //   code.value = val
+        // } else {
+        //   console.log(msg)
+        // }
+        code.value = val
       }
     }
   }

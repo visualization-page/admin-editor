@@ -9,9 +9,9 @@ const handle = {
   rm (file) {
     execSync(`rm -rf ${file}`)
   },
-  spawn (cmd, option) {
+  spawn (cmd, args, options = {}) {
     return new Promise((resolve, reject) => {
-      const handle = spawn(cmd, option)
+      const handle = spawn(cmd, args, options)
       handle.stdout.setEncoding('utf8')
       handle.stdout.on('data', (data) => {
         console.log(`${cmd} stdout: \n${data}`)

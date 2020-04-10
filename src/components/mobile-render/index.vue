@@ -13,16 +13,22 @@
           @click="handlePreviewPage"
         >
           <i class="el-icon-document-remove" />
-          <span>预览页面</span>
+          <span>查看页面</span>
         </el-button>
       </div>
-      <div class="app__mobile-webview relative">
-        <div class="app__mobile-webview-mock">
-          <render
-            v-if="project.depLoaded"
-            :project="project"
-            :currentPage="currentPage"
-          />
+      <div class="app__mobile-webview">
+        <div ref="scrollContainer" class="app__mobile-webview-mock">
+          <div class="edit-wrap-parent relative">
+            <render
+              v-if="project.depLoaded"
+              :project="project"
+              :currentPage="currentPage"
+            />
+            <template v-if="isEdit()">
+              <edit-wrap />
+              <context-menu />
+            </template>
+          </div>
         </div>
       </div>
     </div>
@@ -33,13 +39,18 @@
 import { createComponent } from '@vue/composition-api'
 import { currentPage } from '@/assets/page'
 import { project } from '@/assets/project'
+import { currentNode } from '@/assets/node'
 import Render from './render/index.vue'
 import { isEdit, setRenderEdit, setRenderPreview } from '@/assets/render'
 import { Message } from 'element-ui'
+import EditWrap from './edit-wrap.vue'
+import ContextMenu from './context-menu/index.vue'
 
 export default createComponent({
   components: {
-    Render
+    Render,
+    EditWrap,
+    ContextMenu
   },
 
   setup () {
@@ -52,7 +63,7 @@ export default createComponent({
     }
     const handlePreviewPage = () => {
       if (currentPage.value && project.dir) {
-        window.open(process.env.VUE_APP_MOBILE + `#/page/${project.dir}/${currentPage.value.id}?preview=true`)
+        window.open(process.env.VUE_APP_MOBILE + `#/page/${project.dir}/${currentPage.value.id}`)
       } else {
         Message.error('项目英文名称必填')
       }
@@ -60,6 +71,7 @@ export default createComponent({
     return {
       project,
       currentPage,
+      currentNode,
       isEdit,
       handleMode,
       handlePreviewPage
@@ -90,17 +102,20 @@ export default createComponent({
     &-webview {
       height: 480px;
       background-color: #eee;
-      margin: 0 -10px;
-      padding: 0 10px;
-      overflow: auto;
+      // margin: 0 -10px;
+      // padding: 0 10px;
+      // overflow: auto;
+      transform: translate3d(0, 0, 0);
       &::-webkit-scrollbar {
         width: 0;
       }
       &-mock {
+        position: relative;
         height: 100%;
         background-color: #fff;
-        transform: translate3d(0, 0, 0);
+        // transform: translate3d(0, 0, 0);
         box-shadow: 0 4px 10px 0 rgba(0,0,0,.1);
+        overflow: auto;
       }
     }
   }

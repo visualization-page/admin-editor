@@ -1,6 +1,6 @@
 <template>
   <div class="node-property">
-    <div class="flex-center p30" v-if="!isEdit()">
+    <div class="flex-center p30" v-if="false && !isEdit()">
       <p class="c-999">请切换为编辑模式</p>
     </div>
     <template v-else-if="currentNode && currentNode.id !== '-1'">
@@ -20,18 +20,23 @@
 </template>
 
 <script>
-import { computed } from '@vue/composition-api'
+import { computed, watch } from '@vue/composition-api'
 import SchemaForm from '../schema/index.vue'
 import local from './config'
-import { currentNode, delNode } from '@/assets/node'
+import { currentNode, delNode, setCurrentNode } from '@/assets/node'
 import { updateByField } from '@/assets/util'
 import { isEdit } from '@/assets/render'
+import { currentPage } from '@/assets/page'
 
 export default {
   components: {
     SchemaForm
   },
   setup () {
+    // 页面切换时，清空 node
+    watch(() => currentPage.value, () => {
+      setCurrentNode(null)
+    }, { lazy: true })
     // 根据当前 node 合并通用 schema 和组件特有的 schema
     const schema = computed(() => {
       const node = currentNode.value

@@ -5,7 +5,9 @@
     </div>
     <div class="app-header__bar flex-center-between plr20">
       <el-button icon="el-icon-back" type="text" @click="$router.push('/project/list')">返回项目列表</el-button>
-      <node-style-tools />
+      <el-button type="text" @click="handleMode">{{ isEdit() ? '预览' : '编辑' }}模式</el-button>
+      <node-style-tools v-if="false" />
+      <span />
     </div>
     <div class="app-content flex">
       <div class="app__side-bar">
@@ -115,6 +117,7 @@ import { tabCurrent, setTabName, tabName } from '@/assets/tab'
 import { http } from '@/api'
 import { initProject } from '@/assets/project'
 import { Message } from 'element-ui'
+import { isEdit, setRenderEdit, setRenderPreview } from '@/assets/render'
 
 export default defineComponent({
   components: {
@@ -147,9 +150,18 @@ export default defineComponent({
         }
       })
     }
+    const handleMode = () => {
+      if (isEdit()) {
+        setRenderPreview()
+      } else {
+        setRenderEdit()
+      }
+    }
     return {
       tabCurrent,
       tabName,
+      handleMode,
+      isEdit,
       handleClick (obj: any) {
         setTabName(obj)
       }

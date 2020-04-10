@@ -32,7 +32,7 @@ export default defineComponent({
     let data = project
     if (!project.dir) {
       console.log('init project')
-      data = await getProject(this.$route.params.dir, this.$route.query.preview)
+      data = await getProject(this.$route.params.dir)
     }
     this.project = data
     this.setPageById(this.$route.params.id)

@@ -9,10 +9,12 @@
       <el-table
         :data="tableData"
         border
+        stripe
         style="width: 100%">
         <el-table-column
           prop="dir"
           label="项目"
+          fixed
           width="120">
         </el-table-column>
         <el-table-column
@@ -36,7 +38,7 @@
         </el-table-column>
         <el-table-column
           prop="info.remark"
-          label="修改备注">
+          label="发布备注">
         </el-table-column>
         <el-table-column
           fixed="right"
@@ -59,10 +61,10 @@
 <script>
 import HeaderOpt from '@/components/header-opts/index.vue'
 import { http } from '@/api'
-import { MessageBox } from 'element-ui'
+import { MessageBox, Message } from 'element-ui'
 import dayjs from 'dayjs'
 import { resetProject } from '@/assets/project'
-import { project } from '../../assets/project'
+// import { initProject, project } from '../../assets/project'
 
 export default {
   components: {
@@ -75,7 +77,8 @@ export default {
           label: '关于',
           icon: 'el-icon-s-flag f16',
           action: () => {
-            this.$router.push('/')
+            // this.$router.push('/')
+            window.open('http://api.jituancaiyun.net/butterfly-fe/dist-system/render.html#/project/butterfly-about')
           }
         },
         {
@@ -83,6 +86,21 @@ export default {
           icon: 'el-icon-question f16',
           action: () => {
             this.$router.push('/tourism')
+          }
+        },
+        {
+          label: '导入项目',
+          icon: 'el-icon-upload f16',
+          action: async () => {
+            Message.info('敬请期待')
+            // const { value }: any = await MessageBox.prompt('请输入项目英文名称')
+            // if (!value) {
+            //   return Message.error('名称不能为空')
+            // }
+            // const item = await http.get('project/get', { dir: value })
+            // // @ts-ignore
+            // await initProject(item.data.project)
+            // Message.success('导入成功')
           }
         },
         {
@@ -114,7 +132,9 @@ export default {
       })
     },
     hasPriv (item) {
-      return item.createUser === this.$native.name || (item.info.whitelist || '').indexOf(this.$native.name) > -1
+      return item.createUser === this.$native.name ||
+        (item.info.whitelist || '').indexOf(this.$native.name) > -1 ||
+        this.$native.name === '杨明'
     },
     handlePreview (item) {
       window.open(process.env.VUE_APP_MOBILE + `#/project/${item.dir}`)

@@ -171,12 +171,13 @@ const handle = {
     // copy dist-system/ => release/项目 目录下
     await fs.copy(distPath, releasePath)
     // 改写 data.json
-    const dirPath = path.join(pubPath, 'project', dir, 'data.json')
-    const globalProject = await fs.readJson(dirPath)
+    const dataPath = path.join(pubPath, 'project', dir, 'data.json')
+    await fs.copy(dataPath, path.join(releasePath, 'data.json'))
+    const globalProject = await fs.readJson(dataPath)
     // 切换为正式环境
     globalProject.project.env = 'pro'
-    const releaseDataFileName = `data.${dayjs().format('MM-DD-HH-mm')}.js`
-    await fs.outputFile(path.join(releasePath, releaseDataFileName), `var globalProject = ${JSON.stringify(globalProject)}`)
+    // const releaseDataFileName = `data.${dayjs().format('MM-DD-HH-mm')}.js`
+    // await fs.outputFile(path.join(releasePath, releaseDataFileName), `var globalProject = ${JSON.stringify(globalProject)}`)
     // 改写 render.html 中的 publicPath
     const releaseRenderPath = path.join(releasePath, 'render.html')
     const publicPath = globalProject.project.config.pro.publicPath || ''
@@ -189,8 +190,12 @@ const handle = {
       })
       // 编译 code
       // 插入 data 引入 window.globalProject
-      .replace('</head>', `<script src="${publicPath}/${releaseDataFileName}"></script></head>`)
+      .replace(
+        '</head>',
+        `<script>/* ${dayjs().format('YYYY/MM/DD HH:mm')} */ var globalProject = ${JSON.stringify(globalProject)}</script></head>`
+      )
     await fs.outputFile(path.join(releasePath, 'index.html'), renderContent)
+    utils.rm(path.join(releasePath, 'render.html'))
     // 同步提交 git
     // 不提交 git，忽略 release 目录
     // await utils.spawn('git', ['add', '.'])
@@ -205,6 +210,10 @@ const handle = {
     //     }
     //     return Promise.reject(err)
     //   })
+    const zipPath = path.join(releasePath, `${dir}.zip`)
+    if (fs.pathExistsSync(zipPath)) {
+      utils.rm(zipPath)
+    }
   }
 }
 

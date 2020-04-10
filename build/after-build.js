@@ -13,11 +13,11 @@ const copyDirs = [
   'server/public/basic',
   'server/public/upload-entry-template.tpl',
   'server/index.js'
+  // '.gitignore'
 ]
 copyDirs.forEach(item => {
   fs.copySync(path.resolve(__dirname, `../`, item), path.join(target, item))
 })
-// fs.copySync(path.resolve(__dirname, `../.gitignore`), path.join(target, '.gitignore'))
 const json = fs.readJsonSync(path.resolve(__dirname, `../package.json`))
 delete json.dependencies['@xm/native']
 fs.outputFileSync(path.join(target, 'package.json'), JSON.stringify(json, null, 2))

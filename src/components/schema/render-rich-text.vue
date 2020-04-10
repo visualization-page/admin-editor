@@ -1,6 +1,6 @@
 <template>
   <editor
-    :value="value"
+    :value="content"
     :init="editorOptions"
     apiKey="1f4dburbo223re9wxcocxgqhrueu0424ae4dnnfm6b8m4mgj"
     @onChange="handleChange"
@@ -9,8 +9,9 @@
 
 <script>
 import Editor from '@tinymce/tinymce-vue'
-import { computed } from '@vue/composition-api'
+import { watch, ref } from '@vue/composition-api'
 import { getParentRef } from '@/assets/util'
+import { currentNode } from '@/assets/node'
 
 export default {
   props: {
@@ -23,15 +24,22 @@ export default {
   },
 
   setup (props, ctx) {
-    const value = computed(() => {
+    const content = ref('')
+    const setContent = (setEditor = false) => {
       const { pref, field } = getParentRef(props.schema.field, props.schemaData)
       if (pref && pref[field]) {
-        if (tinymce && tinymce.activeEditor) {
+        content.value = pref[field]
+        if (setEditor && tinymce && tinymce.activeEditor) {
           tinymce.activeEditor.setContent(pref[field])
         }
-        return pref[field]
       }
-    })
+    }
+    setContent()
+    watch(() => currentNode.value, node => {
+      if (node && node.type === 'rich-text') {
+        setContent(true)
+      }
+    }, { lazy: true })
     const handleChange = (event, editor) => {
       if (event.originalEvent && event.originalEvent.is_removing) {
         // 编辑器卸载触发的 change
@@ -42,13 +50,13 @@ export default {
     }
 
     return {
-      value,
+      content,
       handleChange,
       editorOptions: {
         height: 500,
         menubar: false,
         language: 'zh_CN',
-        language_url: '/tinymce/langs/zh_CN.js',
+        language_url: './tinymce/langs/zh_CN.js',
         fontsize_formats: '11px 12px 14px 16px 18px 24px 36px 48px',
         plugins: [
           'advlist autolink lists link image charmap',

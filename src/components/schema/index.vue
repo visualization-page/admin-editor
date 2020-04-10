@@ -26,6 +26,9 @@ export default defineComponent({
       if (schema.relation) {
         showSchemaField = schema.relation.every(item => props.schemaData[item.field] === item.value)
       }
+      if (schema.relationCallback) {
+        showSchemaField = schema.relationCallback(schema)
+      }
       if (showSchemaField === false) {
         return null
       }

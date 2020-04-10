@@ -4,35 +4,10 @@ import { currentPage } from './page'
 import { deepClone } from './util'
 import { loadItem } from '@/components/mobile-render/render/utils'
 import { setTabName, tabName } from '@/assets/tab'
-import { isEdit } from '@/assets/render'
+// import { isEdit } from '@/assets/render'
 import { Message, MessageBox } from 'element-ui'
 import { project } from '@/assets/project'
-
-export const common = {
-  id: 2,
-  version: '0.0.1',
-  cover: '',
-  className: '',
-  createdUser: {
-    id: 0,
-    name: 'jmingzi'
-  },
-  events: [],
-  style: {
-    width: '100%',
-    height: '60px',
-    positionType: 'absolute',
-    position: {},
-    margin: {},
-    padding: {},
-    zIndex: 0,
-    code: '(function () {\n  return {\n  }\n})()'
-  },
-  children: [],
-  show: true,
-  outDocFlow: false,
-  renderString: '(function (h) {\n  return {\n    option: {\n      props: {}\n    },\n    children: [\n    ]\n  }\n})(vueCompositionApi.createElement)'
-}
+import { common } from '@/components/basic-components/common'
 
 // 1 << 0 基础组件
 // 1 << 1 封装的组件
@@ -122,9 +97,10 @@ export const addBeforeValidate = (): boolean => {
     Message.info('请选中页面')
     setTabName([tabName.pageList])
     return false
-  } else if (!isEdit()) {
-    Message.error('请切换至编辑模式')
-    return false
+    // else if (!isEdit()) {
+    //   Message.error('请切换至编辑模式')
+    //   return false
+    // }
   } else if (currentNode.value && currentNode.value.type !== 'div') {
     Message.error('容器组件才能添加子组件')
     return false
@@ -228,7 +204,20 @@ export const dragNode = (current: NodeItem, target: NodeItem, type: string) => {
 // }
 
 export const updateNodeStyle = (obj: { width?: string, height?: string }) => {
-  Object.assign(currentNode.value!.style, obj)
+  if (obj.width) {
+    if (currentNode.value!.style.width !== undefined) {
+      currentNode.value!.style.width = obj.width
+    } else {
+      Vue.set(currentNode.value!.style, 'width', obj.width)
+    }
+  }
+  if (obj.height) {
+    if (currentNode.value!.style.height !== undefined) {
+      currentNode.value!.style.height = obj.height
+    } else {
+      Vue.set(currentNode.value!.style, 'height', obj.height)
+    }
+  }
 }
 
 export const updateNodePosition = (dir: 'top' | 'left', val: string) => {

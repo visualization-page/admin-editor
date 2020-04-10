@@ -5,14 +5,18 @@ Vue.component(Component.name, Component)
 
 export default {
   componentName: Component.name,
-  title: '万能容器',
+  title: '列表容器',
   cover: '',
   type: 'div',
   ...common,
   style: {
     ...common.style,
-    height: undefined
-  }
+    width: undefined,
+    height: undefined,
+    borderRadius: undefined,
+    backgroundColor: undefined
+  },
+  bindState: ''
 }
 
 export const schema = [

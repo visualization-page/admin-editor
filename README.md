@@ -84,3 +84,13 @@ $$global.config = project.config = {
 - 复制项目功能
 - 下载项目，直接去 release/ 目录压缩 zip 下载
 - 导入项目需要通过 zip 压缩包(包含 data.json)
+
+> 20/04/09
+
+- 需要新增列表容器组件，用于 v-for 循环输出，绑定 state
+
+> 20/04/10
+
+- 需要透出页面的url，并提供 copy 
+- 节点大小变化时，编辑框也需要跟着变化
+- 列表容器的 subNodeType 

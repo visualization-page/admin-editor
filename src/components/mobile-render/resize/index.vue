@@ -47,32 +47,26 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, computed } from '@vue/composition-api'
+import { defineComponent, computed } from '@vue/composition-api'
 import { currentNode } from '@/assets/node'
-import { getUnitValue } from '@/assets/util'
-import { state, UnitValue } from './state'
-
-function percent2px (val: string, dir: 'vertical' | 'horizontal'): UnitValue {
-  const obj = getUnitValue(val)
-  if (obj.unit === '%') {
-    obj.unit = 'px'
-    obj.value = String((dir === 'horizontal' ? 320 : 480) * Number(obj.value || 0) / 100)
-  }
-  return obj
-}
+// import { getUnitValue } from '@/assets/util'
+import { state, percent2px } from './state'
+import { editWrapState } from '@/assets/render'
 
 export default defineComponent({
   setup () {
     const handleResizeDown = (e: MouseEvent, dir: string) => {
-      const node = currentNode.value!
-      state.startX = e.pageX
-      state.startY = e.pageY
+      // const node = currentNode.value!
+      state.startX = e.x
+      state.startY = e.y
       state.dragging = true
       state.dir = dir
-      state.width = percent2px(node.style.width, 'horizontal')
-      state.height = percent2px(node.style.height, 'vertical')
-      state.left = percent2px(node.style.position.left, 'horizontal')
-      state.top = percent2px(node.style.position.top, 'vertical')
+      if (editWrapState.style) {
+        state.width = percent2px(String(editWrapState.style.width), 'horizontal')
+        state.height = percent2px(String(editWrapState.style.height), 'vertical')
+        state.left = percent2px(String(editWrapState.style.left), 'horizontal')
+        state.top = percent2px(String(editWrapState.style.top), 'vertical')
+      }
     }
     // const showContextMenu = (e: MouseEvent) => {
     //   handleClick()

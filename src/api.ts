@@ -31,7 +31,8 @@ export const http = new Http({
       save: '/butterfly/project/:dir',
       get: '/butterfly/project/:dir',
       release: '/butterfly/project/release/:dir',
-      copy: '/butterfly/project/copy/:dir'
+      copy: '/butterfly/project/copy/:dir',
+      download: '/butterfly/project/download/:dir'
     },
     delete: '/butterfly/delete/:type/:dir',
     login: {

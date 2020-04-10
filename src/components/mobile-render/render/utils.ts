@@ -78,10 +78,10 @@ export const initGlobalConfig = (page: Page | null) => {
       if (options.ok) {
         other = options.value
       }
-      let baseUrl
+      let baseUrl = httpOptions.baseUrl
       const baseUrlRes = parseCodeValid(httpOptions.baseUrl, ctx)
       if (baseUrlRes.ok) {
-        baseUrl = baseUrlRes.value
+        baseUrl = baseUrlRes.value!
       }
       // @ts-ignore
       this.http = new Http({

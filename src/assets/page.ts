@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import { reactive, ref } from '@vue/composition-api'
+import { ref } from '@vue/composition-api'
 import { project } from './project'
 import { rootNode, setCurrentNode, NodeItem } from './node'
 

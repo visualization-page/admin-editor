@@ -36,7 +36,7 @@
 <script lang="ts">
 import Vue from 'vue'
 import { defineComponent, ref } from '@vue/composition-api'
-import { project, initProject, exportProjectLocal, resetProject } from '@/assets/project'
+import { project, exportProjectLocal, resetProject } from '@/assets/project'
 // import { currentPage } from '@/assets/page'
 import { Message, MessageBox } from 'element-ui'
 import { http } from '@/api'
@@ -45,96 +45,108 @@ export default defineComponent({
   props: {
     opts: Array
   },
-  setup () {
+  setup (props, ctx) {
     const native = Vue.prototype.$native
     const avatar = ref(process.env.VUE_APP_AVATAR + native.uid)
+    const handleSave = (force?: boolean, remark?: string, notify?: boolean) => http.post('project/save', {
+      dir: project.dir,
+      force,
+      project: {
+        ...project,
+        info: {
+          ...project.info,
+          remark,
+          userName: Vue.prototype.$native.name,
+          time: Date.now()
+        }
+      }
+    }, {
+      codeCallback: {
+        6001: async () => {
+          // await MessageBox.confirm('项目已存在，不允许覆盖！')
+          // await handleSave(true)
+          Message.error('项目已存在')
+        }
+      },
+      notify: notify !== false
+    })
     const localOpts = [
-      {
-        label: '导入项目',
-        icon: 'el-icon-upload f16',
-        action: async () => {
-          const { value }: any = await MessageBox.prompt('请输入项目英文名称')
-          if (!value) {
-            return Message.error('名称不能为空')
-          }
-          const item = await http.get('project/get', { dir: value })
-          // @ts-ignore
-          await initProject(item.data.project)
-          Message.success('导入成功')
-        }
-      },
-      {
-        label: '同步组件到cdn',
-        icon: 'el-icon-refresh-right f16',
-        action: () => {
-        }
-      },
+      // {
+      //   label: '同步组件到cdn',
+      //   icon: 'el-icon-refresh-right f16',
+      //   action: () => {
+      //   }
+      // },
       {
         label: '下载项目',
         icon: 'el-icon-download f16',
         action: () => {
+          if (!project.dir) {
+            return Message.error('项目名称必填！')
+          }
+          location.href = process.env.VUE_APP_FILE_SERVER + `/butterfly/project/download/${project.dir}`
         }
       },
       {
         label: '发布项目',
         icon: 'el-icon-position f16',
         action: async () => {
-          await MessageBox.confirm('发布不会自动保存项目，请确认已保存?')
-          await http.post('project/release', { dir: project.dir }, { successMessage: '项目打包成功，请到发布系统发布项目' })
-        }
-      },
-      {
-        label: '清除本地',
-        icon: 'el-icon-delete f16',
-        action: () => {
-          localStorage.removeItem('local')
-          resetProject()
-          Message.success('清除成功')
-        }
-      },
-      {
-        label: '保存项目',
-        icon: 'iconfont icon-save',
-        action: async () => {
           if (!project.dir) {
-            return Message.error('请输入英文名 dir')
+            return Message.error('项目名称必填！')
           }
           const { value }: any = await MessageBox.prompt('请输入改动描述')
           if (!value || value.length < 5) {
             return Message.error('描述至少5个字')
           }
-          const _save = (force?: boolean) => http.post('project/save', {
-            dir: project.dir,
-            force,
-            project: {
-              ...project,
+          await handleSave(true, value, false)
+          // await MessageBox.confirm('发布不会自动保存项目，请确认已保存?')
+          await http.post(
+            'project/release',
+            {
+              dir: project.dir,
               info: {
                 userName: Vue.prototype.$native.name,
                 remark: value,
                 time: Date.now()
               }
-            }
-          }, {
-            codeCallback: {
-              6001: async () => {
-                await MessageBox.confirm('项目已存在，确认覆盖？')
-                await _save(true)
-                Message.success('保存成功')
-              }
-            }
-          })
-          await _save()
-          Message.success('保存成功')
+            },
+            { successMessage: '项目打包成功，请到发布系统发布项目' }
+          )
         }
       },
+      // {
+      //   label: '清除本地',
+      //   icon: 'el-icon-delete f16',
+      //   action: () => {
+      //     localStorage.removeItem('local')
+      //     resetProject()
+      //     Message.success('清除成功')
+      //   }
+      // },
       {
-        label: '保存本地',
-        icon: 'el-icon-finished f16',
-        action: () => {
-          exportProjectLocal()
+        label: '保存项目',
+        icon: 'iconfont icon-save',
+        action: async () => {
+          if (!project.dir) {
+            return Message.error('项目名称必填！')
+          }
+          const params = ctx.root.$route.params
+          // const _save =
+          await handleSave(!!params.dir)
           Message.success('保存成功')
+          if (!params.dir) {
+            ctx.root.$router.replace(`/editor/${project.dir}`)
+          }
         }
       },
+      // {
+      //   label: '保存本地',
+      //   icon: 'el-icon-finished f16',
+      //   action: () => {
+      //     exportProjectLocal()
+      //     Message.success('保存成功')
+      //   }
+      // },
       // {
       //   label: '预览页面',
       //   icon: 'el-icon-document-remove f16',
@@ -147,10 +159,10 @@ export default defineComponent({
       //   }
       // },
       {
-        label: '预览项目',
+        label: '查看项目',
         icon: 'el-icon-folder-opened f16',
         action: () => {
-          window.open(process.env.VUE_APP_MOBILE + `#/project/${project.dir}?preview=true`)
+          window.open(process.env.VUE_APP_MOBILE + `#/project/${project.dir}`)
         }
       }
     ]
