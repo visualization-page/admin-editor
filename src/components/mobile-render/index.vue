@@ -63,7 +63,7 @@ export default createComponent({
     }
     const handlePreviewPage = () => {
       if (currentPage.value && project.dir) {
-        window.open(process.env.VUE_APP_MOBILE + `#/page/${project.dir}/${currentPage.value.id}`)
+        window.open(currentPage.value.url)
       } else {
         Message.error('项目英文名称必填')
       }

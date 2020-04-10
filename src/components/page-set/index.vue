@@ -21,13 +21,14 @@
 </template>
 
 <script>
-import { createComponent, computed } from '@vue/composition-api'
+import { createComponent, computed, watch } from '@vue/composition-api'
 import SchemaForm from '../schema/index.vue'
 import local from './config'
 import { currentPage, delPage } from '@/assets/page'
 import { updateByField } from '@/assets/util'
 import { MessageBox } from 'element-ui'
 import { isEdit } from '@/assets/render'
+import { project } from '@/assets/project'
 
 export default createComponent({
   components: {
@@ -35,6 +36,11 @@ export default createComponent({
   },
   setup () {
     const showSchema = computed(() => !!currentPage.value)
+    watch(() => currentPage.value, page => {
+      if (page && !page.url) {
+        page.url = process.env.VUE_APP_MOBILE + `#/page/${project.dir}/${currentPage.value.id}`
+      }
+    })
     return {
       local,
       isEdit,

@@ -8,6 +8,7 @@ export default {
   title: '列表容器',
   cover: '',
   type: 'div',
+  subType: 'list',
   ...common,
   style: {
     ...common.style,

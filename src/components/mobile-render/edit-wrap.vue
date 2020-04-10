@@ -50,8 +50,8 @@ export default {
       () => currentNode.value && currentNode.value.style,
       () => currentNode.value && currentNode.value.className
     ], ([node, style, className]) => {
-      console.log(node.id, style, className)
       if (node) {
+        console.log(node.id, style, className)
         setTabName(['', '', tabName.nodeProperty])
         if (!nodeElCache[node.id]) {
           nodeElCache[node.id] = ctx.parent.$refs.scrollContainer.querySelector(`div[data-id="${node.id}"]`)

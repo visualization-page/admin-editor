@@ -55,7 +55,7 @@ export default [
     },
     model: 'blur',
     relationCallback: (schema: any) => {
-      return schema.label === '绑定状态' && currentNode.value && currentNode.value.title === '列表容器'
+      return schema.label === '绑定状态' && currentNode.value && currentNode.value.subType === 'list'
     }
   },
   {
