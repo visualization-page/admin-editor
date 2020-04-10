@@ -5,6 +5,10 @@ Vue.use(VueRouter)
 
 const routes = [
   {
+    path: '/',
+    component: () => import('./index.vue')
+  },
+  {
     path: '/project/:dir',
     component: () => import('./index.vue')
   },

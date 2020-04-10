@@ -1,5 +1,11 @@
 # admin-editor
 
+## build basic component
+
+```
+node build/build.component.js [dir] false
+```
+
 ## Type
 
 内置全局对象
@@ -94,3 +100,4 @@ $$global.config = project.config = {
 - 需要透出页面的url，并提供 copy 
 - 节点大小变化时，编辑框也需要跟着变化
 - 列表容器的 subNodeType 
+- 组件列表用 grid 布局

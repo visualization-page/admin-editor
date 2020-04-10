@@ -12,18 +12,22 @@
       @check-change="handleCheck"
     />
     <p class="c-666 mtb10">2. 点击已勾选的组件添加到页面中</p>
-    <div class="basic-component__list flex flex-wrap">
+    <van-grid
+      :column-num="4"
+      clickable
+    >
       <template v-for="item in Object.keys(checkData)">
-        <div
+        <van-grid-item
           v-for="k in checkData[item]"
           :key="item + k"
-          class="basic-component__item"
+          class="cp"
           @click="handleAdd(item, k)"
         >
-          <p>{{ item }}/{{ k }}</p>
-        </div>
+          <div v-if="false" class="w40 h40 bg-f2"></div>
+          <span class="c-666">{{ k }}</span>
+        </van-grid-item>
       </template>
-    </div>
+    </van-grid>
   </div>
 </template>
 

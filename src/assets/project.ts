@@ -123,7 +123,15 @@ export const importProject = async (parseItem: Project) => {
     updateProject(parseItem)
     // 下载资源
     if (parseItem.componentDownload) {
-      await diffDownloadDeps(parseItem.componentDownload, true)
+      // parseItem.componentDownload = [...new Set(parseItem.componentDownload)]
+      const arr: any[] = []
+      parseItem.componentDownload.forEach(x => {
+        if (arr.every(y => y.name !== x.name)) {
+          arr.push(x)
+        }
+      })
+      project.componentDownload = arr
+      await diffDownloadDeps(arr, true)
     }
     // @ts-ignore
     updateProject({ depLoaded: true })

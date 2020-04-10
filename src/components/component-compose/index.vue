@@ -3,19 +3,22 @@
     <div>
       <el-button type="text" icon="el-icon-refresh" @click="handleRefresh">刷新列表</el-button>
     </div>
-    <div class="basic-component__list flex flex-wrap">
-      <div
+    <van-grid
+      :column-num="4"
+      clickable
+    >
+      <van-grid-item
         v-for="item in list"
         :key="item.id"
-        class="basic-component__item"
+        class="cp"
         @click="handleClick(item)"
       >
-        <div class="basic-component__cover">
+        <div class="w40 h40 bg-f2">
           <img :src="item.cover" width="100%" alt="">
         </div>
-        <p class="mt5">{{ item.name }}</p>
-      </div>
-    </div>
+        <span class="c-666">{{ item.name }}</span>
+      </van-grid-item>
+    </van-grid>
   </div>
 </template>
 

@@ -10,6 +10,10 @@ import Native from '@xm/native'
 const native = new Native()
 export const loadItem = (item: NodeItemBasic): Promise<{ default: any }> => {
   return new Promise((resolve, reject) => {
+    if (document.querySelector(`script.${item.name}`)) {
+      // @ts-ignore
+      return resolve(window[item.name])
+    }
     const script = document.createElement('script')
     script.src = `${project.config[project.env].componentAbsoluteUrl}${item.jsUrl}`
     script.setAttribute('class', item.name!)

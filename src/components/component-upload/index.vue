@@ -20,7 +20,24 @@
         <div v-if="false" slot="tip" class="el-upload__tip">只能上传 .zip 文件</div>
       </el-upload>
     </div>
-    <div class="basic-component__list flex flex-wrap">
+    <van-grid
+      :column-num="4"
+      clickable
+    >
+      <van-grid-item
+        v-for="item in list"
+        :key="item.id"
+        class="cp relative"
+        @click="handleClick(item)"
+      >
+        <div class="w40 h40 bg-f2">
+          <img :src="item.cover" width="100%" alt="">
+        </div>
+        <span class="c-666">{{ item.name }}</span>
+        <div @click.stop="downloadItem(item)" class="cp absolute r10 t0"><i class="el-icon-download"></i></div>
+      </van-grid-item>
+    </van-grid>
+    <div v-if="false" class="basic-component__list flex flex-wrap">
       <div
         v-for="item in list"
         :key="item.id"

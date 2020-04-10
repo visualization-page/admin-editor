@@ -21,8 +21,9 @@ export const getProject = async (dir) => {
   //   return local ? JSON.parse(local) : null
   // }
   // 正式环境
-  if (location.protocol === 'https') {
-    return window.globalProject
+  if (window.globalProject) {
+    await initProject(window.globalProject.project)
+    return window.globalProject.project
   }
   // 非正式环境
   if (!http) {

@@ -192,8 +192,11 @@ const handle = {
       // 插入 data 引入 window.globalProject
       .replace(
         '</head>',
-        `<script>/* ${dayjs().format('YYYY/MM/DD HH:mm')} */ var globalProject = ${JSON.stringify(globalProject)}</script></head>`
+        `<script>/* ${dayjs().format('YYYY/MM/DD HH:mm')} */ var globalProject = %%%%</script></head>`
       )
+    // 正则匹配中 $$ 是关键词，必须绕开
+    renderContent = renderContent.split('%%%%')
+    renderContent = renderContent[0] + JSON.stringify(globalProject) + renderContent[1]
     await fs.outputFile(path.join(releasePath, 'index.html'), renderContent)
     utils.rm(path.join(releasePath, 'render.html'))
     // 同步提交 git
