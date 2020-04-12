@@ -49,6 +49,23 @@ export default createComponent({
         }
       }
     }, { deep: true })
+    // 全局 css
+    let styleEl: any
+    watch(() => props.project && props.project.css, css => {
+      if (css) {
+        if (!styleEl) {
+          styleEl = document.getElementById('butterfly-css')
+        }
+        if (!styleEl) {
+          const el = document.createElement('style')
+          el.id = 'butterfly-css'
+          el.setAttribute('type', 'text/css')
+          document.head.appendChild(el)
+          styleEl = el
+        }
+        styleEl.innerHTML = css
+      }
+    })
     // 更新 page
     watch(() => props.currentPage, async (page, oldPage) => {
       if (page) {

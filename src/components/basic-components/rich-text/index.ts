@@ -13,7 +13,7 @@ export default {
     height: undefined
   },
   props: {
-    content: '富文本',
+    content: '',
     bindState: ''
   }
 }

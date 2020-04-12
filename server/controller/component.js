@@ -176,6 +176,7 @@ const handle = {
     const globalProject = await fs.readJson(dataPath)
     // 切换为正式环境
     globalProject.project.env = 'pro'
+    await utils.babel(globalProject.project)
     // const releaseDataFileName = `data.${dayjs().format('MM-DD-HH-mm')}.js`
     // await fs.outputFile(path.join(releasePath, releaseDataFileName), `var globalProject = ${JSON.stringify(globalProject)}`)
     // 改写 render.html 中的 publicPath

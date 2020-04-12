@@ -98,8 +98,8 @@ export default defineComponent({
           if (!value || value.length < 5) {
             return Message.error('描述至少5个字')
           }
-          await handleSave(true, value, false)
-          // await MessageBox.confirm('发布不会自动保存项目，请确认已保存?')
+          // await handleSave(true, value, false)
+          await MessageBox.confirm('发布不会自动保存项目，请确认已保存?')
           await http.post(
             'project/release',
             {
@@ -110,7 +110,7 @@ export default defineComponent({
                 time: Date.now()
               }
             },
-            { successMessage: '项目打包成功，请到发布系统发布项目' }
+            { successMessage: '项目发布成功' }
           )
         }
       },

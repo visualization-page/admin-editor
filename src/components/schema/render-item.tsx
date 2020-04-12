@@ -90,7 +90,7 @@ export const renderCodeEditor = (schema: any, data: any, updateField: any) => {
     setTabName(['', '', '', tabName.codeEdit])
     setCodeState(schema.label, pref[field], (val: string) => {
       updateField(schema.field, val)
-    })
+    }, schema['code-language'])
   }
   return <el-button type="text" onClick={setCurrentCode}>编辑代码片段</el-button>
 }

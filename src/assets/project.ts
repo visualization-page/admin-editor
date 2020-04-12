@@ -45,6 +45,7 @@ export type Project = {
     time: number
     whitelist: string
   }
+  css: string
 }
 
 const defaultProject: Project = {
@@ -95,7 +96,8 @@ const defaultProject: Project = {
     remark: '',
     time: 0,
     whitelist: ''
-  }
+  },
+  css: ''
 }
 
 export const project: Project = reactive(deepClone(defaultProject))

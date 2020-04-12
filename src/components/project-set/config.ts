@@ -117,5 +117,14 @@ export const local = [
     label: '项目白名单',
     field: 'info.whitelist',
     type: 'textarea'
+  },
+  {
+    label: '全局css',
+    field: 'css',
+    block: false,
+    'code-language': 'css',
+    type: 'code',
+    'info-icon': 'el-icon-warning-outline',
+    info: '全局css，会被直接插入到 html 头部中'
   }
 ]

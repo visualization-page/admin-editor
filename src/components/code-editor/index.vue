@@ -16,7 +16,7 @@
         :style="{ height: areaHeight - 30 + 'px' }"
         :amdRequire="amdRequire"
         :value="code"
-        language="javascript"
+        :language="currentCode.language"
         theme="vs-dark"
         @change="handleCodeChange"
       />
@@ -31,7 +31,7 @@
 import { createComponent, onMounted, ref, watch } from '@vue/composition-api'
 import { setTabName, tabCurrent, tabName } from '@/assets/tab'
 import { setState, isEdit, currentCode } from '@/assets/code-edit'
-import { getDocHeight, parseCodeValid } from '@/assets/util'
+import { getDocHeight } from '@/assets/util'
 import { Message, MessageBox } from 'element-ui'
 
 export default createComponent({

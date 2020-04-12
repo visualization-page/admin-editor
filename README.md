@@ -101,3 +101,14 @@ $$global.config = project.config = {
 - 节点大小变化时，编辑框也需要跟着变化
 - 列表容器的 subNodeType 
 - 组件列表用 grid 布局
+
+> 20/04/11
+
+- code 代码在发布正式版本时通过 babel 转译，然后再嵌入到 html 中
+
+> 20/04/12
+
+- 提供自定义组件模版
+- 全局style 代码块，来支持覆写第三方 class
+- 代码块转译
+- babel-polyfill 在 render 时全量 CDN 引入
