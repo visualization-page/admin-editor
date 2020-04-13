@@ -4,16 +4,18 @@
       <el-button type="text" icon="el-icon-refresh" @click="handleRefresh">刷新列表</el-button>
     </div>
     <van-grid
+      class="van-hairline--left"
       :column-num="4"
       clickable
     >
       <van-grid-item
-        v-for="item in list"
+        v-for="(item, i) in list"
         :key="item.id"
         class="cp"
         @click="handleClick(item)"
       >
-        <div class="w40 h40 bg-f2">
+        <div class="w40 h40 f32 tc" style="color:#409eff">
+          <i :class="icon[i]" />
         </div>
         <span class="c-666">{{ item.name }}</span>
       </van-grid-item>
@@ -52,6 +54,7 @@ export default {
     }
     return {
       list,
+      icon: ['el-icon-folder-opened', 'el-icon-picture-outline', 'el-icon-s-fold', 'el-icon-edit-outline'],
       handleClick,
       handleRefresh
     }

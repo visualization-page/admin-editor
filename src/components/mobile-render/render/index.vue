@@ -1,5 +1,8 @@
 <template>
-  <div v-if="currentPage" :class="['render-page', currentPage.className]">
+  <div
+    v-if="currentPage"
+    :class="['render-page', currentPage.className]"
+  >
     <render-item
       :nodes="currentPage.nodes"
       :page-config="pageConfig"
@@ -10,7 +13,7 @@
 
 <script lang="ts">
 import { createComponent, watch, ref, onMounted } from '@vue/composition-api'
-import { parseCodeValid, sleepUntil } from '@/assets/util'
+import { deepClone, parseCodeValid, sleepUntil } from '@/assets/util'
 import RenderItem from './render-item.vue'
 import { initGlobalConfig, getEventHandler } from './utils'
 import { FormEvent } from '@/assets/event'
@@ -29,6 +32,7 @@ export default createComponent({
     }
   },
   setup (props) {
+    // const pageNodes = ref([])
     // @ts-ignore
     const globalConfig = ref(initGlobalConfig(props.currentPage))
     const pageConfig = ref({ state: {} })
@@ -96,10 +100,19 @@ export default createComponent({
         pageConfig.value.state = value!
       }
     }, { deep: true })
+    // watch(() => props.currentPage && props.currentPage.nodes, nodes => {
+    //   if (nodes) {
+    //     setTimeout(() => {
+    //       pageNodes.value = nodes
+    //       // console.log(deepClone(nodes))
+    //     })
+    //   }
+    // }, { deep: true })
     onMounted(() => {
       mounted.value = true
     })
     return {
+      // pageNodes,
       pageConfig,
       globalConfig
     }

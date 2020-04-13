@@ -21,6 +21,7 @@
       </el-upload>
     </div>
     <van-grid
+      class="van-hairline--left"
       :column-num="4"
       clickable
     >

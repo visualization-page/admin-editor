@@ -112,3 +112,10 @@ $$global.config = project.config = {
 - 全局style 代码块，来支持覆写第三方 class
 - 代码块转译
 - babel-polyfill 在 render 时全量 CDN 引入
+
+> 20/04/13
+
+- 项目工程分支的问题，要区分至少 develop 和 master
+- 页面复制功能
+- 添加操作 【撤销/不撤销】
+- vantForm 打通

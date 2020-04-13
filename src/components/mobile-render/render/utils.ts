@@ -3,7 +3,7 @@ import { Page } from '@/assets/page'
 import { NodeItem, NodeItemBasic } from '@/assets/node'
 import { getParentRef, parseCodeValid } from '@/assets/util'
 import { FormEvent } from '@/assets/event'
-import { Toast, Loading, Dialog, Dot, Http } from 'esc-ui'
+import { Loading, Dialog, Dot, Http } from 'esc-ui'
 // @ts-ignore
 import Native from '@xm/native'
 
@@ -127,7 +127,8 @@ export const initGlobalConfig = (page: Page | null) => {
         }
       }
     },
-    toast: Toast,
+    // @ts-ignore
+    toast: window.vant.Toast,
     loading: Loading.instance,
     dialog: Dialog,
     cookie: {

@@ -11,13 +11,31 @@
     <div class="flex">
       <template v-for="(item, i) in opts || localOpts">
         <div :key="item.label" class="plr15">
-          <el-button type="text" @click="item.action()">
-          <span class="flex-center flex-column">
-            <div style="height:20px">
-              <i :class="item.icon" />
-            </div>
-            {{ item.label }}
-          </span>
+          <el-upload
+            v-if="item.isUpload"
+            :action="item.action"
+            :multiple="false"
+            :show-file-list="false"
+            :before-upload="item.handleBeforeUpload"
+            :on-success="res => handleResponse(res, item)"
+            :on-error="handleResponse"
+            class="height-100 flex-center"
+            style="color: #409eff"
+          >
+            <span slot="trigger" class="flex-center flex-column">
+              <div style="height:20px">
+                <i :class="item.icon" />
+              </div>
+              {{ item.label }}
+            </span>
+          </el-upload>
+          <el-button v-else type="text" @click="item.action()">
+            <span class="flex-center flex-column">
+              <div style="height:20px">
+                <i :class="item.icon" />
+              </div>
+              {{ item.label }}
+            </span>
           </el-button>
         </div>
         <div :key="i" class="h30 bg-666 mt10" style="width:2px" />
@@ -169,7 +187,15 @@ export default defineComponent({
     return {
       localOpts,
       avatar,
-      name: native.name
+      name: native.name,
+      handleResponse (res: any, item: any) {
+        if (res.success) {
+          Message.success('上传成功')
+          item.successCallback && item.successCallback()
+        } else {
+          Message.error(res.msg)
+        }
+      }
     }
   }
 })

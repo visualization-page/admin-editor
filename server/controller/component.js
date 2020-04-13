@@ -176,9 +176,8 @@ const handle = {
     const globalProject = await fs.readJson(dataPath)
     // 切换为正式环境
     globalProject.project.env = 'pro'
+    // 编译 code
     await utils.babel(globalProject.project)
-    // const releaseDataFileName = `data.${dayjs().format('MM-DD-HH-mm')}.js`
-    // await fs.outputFile(path.join(releasePath, releaseDataFileName), `var globalProject = ${JSON.stringify(globalProject)}`)
     // 改写 render.html 中的 publicPath
     const releaseRenderPath = path.join(releasePath, 'render.html')
     const publicPath = globalProject.project.config.pro.publicPath || ''
@@ -189,7 +188,6 @@ const handle = {
         const arr = group.split('=')
         return arr[0] + '=' + publicPath + '/' + arr[1]
       })
-      // 编译 code
       // 插入 data 引入 window.globalProject
       .replace(
         '</head>',
@@ -218,6 +216,19 @@ const handle = {
     if (fs.pathExistsSync(zipPath)) {
       utils.rm(zipPath)
     }
+  },
+  async uploadProject (file, tmpPath) {
+    const projectList = await handle.list('project')
+    const data = await fs.readJson(file)
+    if (projectList.some(x => x.dir === data.project.dir)) {
+      return '项目已存在'
+    }
+    await fs.move(
+      file,
+      path.join(getPath('project', false), data.project.dir, 'data.json')
+    )
+    await handle.updateProjectList()
+    utils.rm(tmpPath)
   }
 }
 

@@ -2,6 +2,7 @@ import Vue from 'vue'
 import { ref } from '@vue/composition-api'
 import { project } from './project'
 import { rootNode, setCurrentNode, NodeItem } from './node'
+import { deepClone } from '@/assets/util'
 
 export type Page = {
   title: string
@@ -39,6 +40,16 @@ export const addPage = () => {
   if (index === 0) {
     setCurrentNode(rootNode)
   }
+}
+
+export const copyPage = (page: Page) => {
+  const index = project.pages.length
+  Vue.set(project.pages, index, Object.assign(deepClone(page), {
+    id: `page-${Date.now()}`,
+    title: page.title ? `${page.title}_copy` : '',
+    url: ''
+  }))
+  setCurrentPage(project.pages[index])
 }
 
 export const delPage = (target: { pageIndex?: number, pageId?: string }) => {

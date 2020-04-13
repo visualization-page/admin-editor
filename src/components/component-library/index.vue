@@ -13,6 +13,7 @@
     />
     <p class="c-666 mtb10">2. 点击已勾选的组件添加到页面中</p>
     <van-grid
+      class="van-hairline--left"
       :column-num="4"
       clickable
     >

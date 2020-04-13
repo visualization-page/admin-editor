@@ -5,10 +5,10 @@ import { getProject } from './utils'
 export default {
   async created () {
     const { dir } = this.$route.params
-    await getProject(dir)
+    const project = await getProject(dir)
     if (currentPage.value) {
       this.$router.replace({
-        path: `/page/${dir}/${currentPage.value.id}`,
+        path: `/page/${project.dir}/${currentPage.value.id}`,
         query: this.$route.query
       })
     } else {

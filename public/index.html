@@ -18,8 +18,10 @@
     <script src="https://unpkg.com/element-ui/lib/index.js"></script>
     <script src="https://unpkg.com/@vue/composition-api/dist/vue-composition-api.umd.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/vant@2.5/lib/vant.min.js"></script>
+    <script src="./vant-form/vantForm.umd.min.js"></script>
     <script>
       Vue.use(vueCompositionApi.default)
+      Vue.component('vantForm', vantForm.default)
     </script>
     <script src="https://unpkg.com/vue-monaco@1.1.0/dist/vue-monaco.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/js-beautify/1.10.2/beautifier.min.js"></script>

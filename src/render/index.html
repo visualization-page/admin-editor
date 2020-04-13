@@ -14,8 +14,10 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.10/vue.min.js"></script>
 <script src="https://unpkg.com/@vue/composition-api/dist/vue-composition-api.umd.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/vant@2.5/lib/vant.min.js"></script>
+<script src="./vant-form/vantForm.umd.min.js"></script>
 <script>
   Vue.use(vueCompositionApi.default)
+  Vue.component('vantForm', vantForm.default)
 </script>
 <div id="app"></div>
 <!-- built files will be auto injected -->

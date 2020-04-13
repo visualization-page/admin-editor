@@ -50,22 +50,29 @@ module.exports = {
       })
     }
   },
+  '/project/upload': {
+    post: async (req, res) => {
+      const ok = req.files.file
+      if (ok) {
+        const file = path.join(tmpPath, ok.name)
+        ok.mv(file, async (err) => {
+          if (err) {
+            throw err
+          }
+          const msg = await component.uploadProject(file, tmpPath)
+          res.json({ success: !msg, msg })
+        })
+      } else {
+        res.json({ success: !!ok, msg: '' })
+      }
+    }
+  },
   '/project/:dir': {
     get: async (req, res) => {
       const data = await component.getProject(req.params.dir)
       res.json({ success: true, data })
     },
     post: async (req, res) => {
-      // const exist = fs.pathExistsSync(path.join(pubPath, 'project', req.params.dir))
-      // if (!req.body.force && exist) {
-      //   // 检查是否已存在
-      //   res.json({ success: false, msg: '项目英文名称已存在', code: 6001 })
-      // } else {
-      //   // 初次创建保存创建人
-      //   if (!exist) {
-      //     req.body.project.createUser = req.body.project.info.userName
-      //   }
-      // 保存项目
       const result = await component.saveProject(req.params.dir, req.body)
       res.json(result || { success: true, msg: '' })
       // }

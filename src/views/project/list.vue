@@ -91,16 +91,17 @@ export default {
         {
           label: '导入项目',
           icon: 'el-icon-upload f16',
-          action: async () => {
-            Message.info('敬请期待')
-            // const { value }: any = await MessageBox.prompt('请输入项目英文名称')
-            // if (!value) {
-            //   return Message.error('名称不能为空')
-            // }
-            // const item = await http.get('project/get', { dir: value })
-            // // @ts-ignore
-            // await initProject(item.data.project)
-            // Message.success('导入成功')
+          isUpload: true,
+          action: process.env.VUE_APP_FILE_SERVER + '/butterfly/project/upload',
+          handleBeforeUpload (file) {
+            const ok = file.type !== 'application/zip'
+            if (!ok) {
+              Message.error('请上传项目 data.json')
+            }
+            return ok
+          },
+          successCallback: () => {
+            this.getList()
           }
         },
         {

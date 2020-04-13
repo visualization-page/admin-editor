@@ -3,13 +3,16 @@
     <div
       v-for="(item) in project.pages"
       :key="item.id"
-      class="page-list__item flex items-center c-999 relative pl15 cp"
+      class="page-list__item flex-center-between c-999 relative pl15 cp"
       :class="{
         active: selected && selected.id === item.id
       }"
       @click="setSelect(item)"
     >
       <span>{{ item.title || item.id }}</span>
+      <div class="pr15">
+        <i class="el-icon-document-copy" @click.stop="handleCopyPage(item)" />
+      </div>
     </div>
     <div class="page-list__item flex-center c-999 cp" @click="addPage">
       <i class="el-icon-plus f14" />
@@ -20,7 +23,7 @@
 
 <script>
 import { createComponent } from '@vue/composition-api'
-import { addPage, currentPage, setCurrentPage } from '@/assets/page'
+import { addPage, currentPage, setCurrentPage, copyPage } from '@/assets/page'
 import { project } from '@/assets/project'
 import { setTabName, tabName } from '@/assets/tab'
 import { setState as setCodeEditState } from '@/assets/code-edit'
@@ -43,6 +46,9 @@ export default createComponent({
       addPage (item) {
         addPage(item)
         setTabName(['', '', tabName.pageSet])
+      },
+      handleCopyPage (item) {
+        copyPage(item)
       }
     }
   }

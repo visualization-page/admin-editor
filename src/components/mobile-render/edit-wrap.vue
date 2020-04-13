@@ -1,6 +1,6 @@
 <template>
   <div
-    v-if="currentNode"
+    v-if="currentNode && position"
     class="edit-wrap"
     :style="position"
     @contextmenu="handleContext"
@@ -34,16 +34,6 @@ export default {
         setEditWrapState(null, { left, top, width, height })
       }
     }
-    // watch(() => currentNode.value, node => {
-    //   if (node) {
-    //     setTabName(['', '', tabName.nodeProperty])
-    //     if (!nodeElCache[node.id]) {
-    //       nodeElCache[node.id] = ctx.parent.$refs.scrollContainer.querySelector(`div[data-id="${node.id}"]`)
-    //     }
-    //     const el = nodeElCache[node.id]
-    //     setEditBounding(el)
-    //   }
-    // }, { lazy: true })
     // 样式变化，重置编辑框大小
     watch([
       () => currentNode.value,
@@ -51,7 +41,7 @@ export default {
       () => currentNode.value && currentNode.value.className
     ], ([node, style, className]) => {
       if (node) {
-        console.log(node.id, style, className)
+        // console.log(node.id, style, className)
         setTabName(['', '', tabName.nodeProperty])
         if (!nodeElCache[node.id]) {
           nodeElCache[node.id] = ctx.parent.$refs.scrollContainer.querySelector(`div[data-id="${node.id}"]`)
@@ -63,22 +53,22 @@ export default {
     watch(() => editNode.value, el => {
       setEditBounding(el)
     }, { lazy: true })
-    watch(() => editWrapState, edit => {
-      const { left, top, width, height } = edit.style
-      const containerScrollTop = ctx.parent.$refs.scrollContainer.scrollTop
-      const mobileHeaderHeight = 54.61
-      // console.log(top, state.parentPosition.top, mobileHeaderHeight, containerScrollTop)
-      state.position = {
-        left: left - state.parentPosition.left + 'px',
-        top: top - state.parentPosition.top - mobileHeaderHeight + containerScrollTop + 'px',
-        width: width + 'px',
-        height: height + 'px'
-      }
-    }, { lazy: true, deep: true })
     onMounted(() => {
       setTimeout(() => {
         state.parentPosition = ctx.parent.$el.getBoundingClientRect()
-      }, 300)
+        watch(() => editWrapState, edit => {
+          const { left, top, width, height } = edit.style
+          const containerScrollTop = ctx.parent.$refs.scrollContainer.scrollTop
+          const mobileHeaderHeight = 54.61
+          // console.log(top, state.parentPosition.top, mobileHeaderHeight, containerScrollTop)
+          state.position = {
+            left: left - state.parentPosition.left + 'px',
+            top: top - state.parentPosition.top - mobileHeaderHeight + containerScrollTop + 'px',
+            width: width + 'px',
+            height: height + 'px'
+          }
+        }, { lazy: true, deep: true })
+      }, 100)
     })
 
     const handleContext = (e) => {

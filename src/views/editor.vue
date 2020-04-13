@@ -5,9 +5,9 @@
     </div>
     <div class="app-header__bar flex-center-between plr20">
       <el-button icon="el-icon-back" type="text" @click="$router.push('/project/list')">返回项目列表</el-button>
+      <span class="b f12 c-666">{{ project.dir ? `编辑 - ${project.dir}` : '新建项目' }}</span>
       <el-button type="text" @click="handleMode">{{ isEdit() ? '预览' : '编辑' }}模式</el-button>
       <node-style-tools v-if="false" />
-      <span />
     </div>
     <div class="app-content flex">
       <div class="app__side-bar">
@@ -115,7 +115,7 @@ import ComponentCompose from '@/components/component-compose/index.vue'
 import ComponentUpload from '@/components/component-upload/index.vue'
 import { tabCurrent, setTabName, tabName } from '@/assets/tab'
 import { http } from '@/api'
-import { initProject } from '@/assets/project'
+import { initProject, project } from '@/assets/project'
 import { Message } from 'element-ui'
 import { isEdit, setRenderEdit, setRenderPreview } from '@/assets/render'
 
@@ -160,6 +160,7 @@ export default defineComponent({
     return {
       tabCurrent,
       tabName,
+      project,
       handleMode,
       isEdit,
       handleClick (obj: any) {
@@ -171,4 +172,12 @@ export default defineComponent({
 </script>
 
 <style lang="less">
+@import '../hack-vant-form.less';
+@import '~esc-ui/lib/button/index.css';
+@import '~esc-ui/lib/page-button/index.css';
+.editor {
+  [class*=van-hairline]::after {
+    border-color: #ccc;
+  }
+}
 </style>

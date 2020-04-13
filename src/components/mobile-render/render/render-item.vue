@@ -4,7 +4,7 @@ import { NodeItem, currentNode, findNode, setCurrentNode } from '@/assets/node'
 import { isEdit, setEditWrapNode } from '@/assets/render'
 import { FormEvent } from '@/assets/event'
 import { parseCodeValid } from '@/assets/util'
-import EditWrap from '../edit-wrap.vue'
+// import EditWrap from '../edit-wrap.vue'
 import { dealFx, getEventHandler } from './utils'
 
 const mergeDirectionSize = (target: any, obj: any, type: 'position' | 'margin' | 'padding' | 'border') => {
@@ -35,6 +35,13 @@ export default defineComponent<{
     pageConfig: Object,
     globalConfig: Object
   },
+  // errorCaptured (err, vm, info) {
+  //   console.log(err, vm, info)
+  //   return false
+  // },
+  // renderError (h, err) {
+  //   return h('pre', { style: { color: 'red' } }, err.stack)
+  // },
   setup (superProps) {
     const renderItem = (
       items: NodeItem[],
@@ -55,7 +62,7 @@ export default defineComponent<{
         return x.show && vIf
       }).map((item, index) => {
         const isLibrary = item.nodeType === 1 << 2
-        const active = currentNode.value && currentNode.value.id === item.id
+        // const active = currentNode.value && currentNode.value.id === item.id
         // 处理事件
         const on: any = {}
         const nativeOn: any = {}
@@ -108,7 +115,7 @@ export default defineComponent<{
             item.className
             // `node-${item.id}`
           ],
-          key: item.id,
+          key: item.id + index,
           on,
           nativeOn,
           props: dealFx(item.props, codeExecuteContext),
@@ -162,24 +169,6 @@ export default defineComponent<{
           }
         }
         const _renderItemSelf = () => {
-          // if (isEditState) {
-          //   if (isLibrary) {
-          //     const { ok, value } = parseCodeValid(item.renderString, codeExecuteContext)
-          //     if (ok && value) {
-          //       return createElement(item.name, {
-          //         // @ts-ignore
-          //         ...(value.option || {}),
-          //         class: ['height-100', item.className]
-          //         // @ts-ignore
-          //       }, value.children.concat(children))
-          //     }
-          //   }
-          //   // return createElement(item.componentName, {
-          //   //   // 编辑时，组件本身关心 props 就好
-          //   //   props: props.props,
-          //   //   class: ['width-100 height-100']
-          //   // }, children)
-          // }
           if (isLibrary) {
             const { ok, value } = parseCodeValid(item.renderString, codeExecuteContext)
             if (ok && value) {
@@ -193,21 +182,6 @@ export default defineComponent<{
           }
           return createElement(item.componentName, props, children)
         }
-
-        // if (isEditState) {
-        //   return createElement('div', {
-        //     class: ['edit-wrap-parent', { active }],
-        //     key: props.key
-        //   }, [
-        //     createElement(EditWrap, {
-        //       props: { item, active },
-        //       class: props.class,
-        //       style: props.style
-        //     }, [ _renderItemSelf() ])
-        //   ])
-        //   // return createElement(EditWrap, {
-        //   //   props: { item, active } }, [ _renderItemSelf() ])
-        // }
         return _renderItemSelf()
       })
     }

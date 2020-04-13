@@ -10,6 +10,12 @@ const treeData = [
   //   ]
   // },
   {
+    label: 'form',
+    children: [
+      'vantForm'
+    ]
+  },
+  {
     label: 'vant',
     children: [
       'VanButton',

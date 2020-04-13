@@ -28,6 +28,9 @@ declare global {
 }
 
 Vue.config.productionTip = false
+Vue.config.errorHandler = function (err, vm, info) {
+  console.log(err, vm, info)
+}
 const native = Vue.prototype.$native = new Native()
 native.name = native.cookie('userName')
 

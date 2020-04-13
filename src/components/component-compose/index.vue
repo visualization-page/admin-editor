@@ -4,6 +4,7 @@
       <el-button type="text" icon="el-icon-refresh" @click="handleRefresh">刷新列表</el-button>
     </div>
     <van-grid
+      class="van-hairline--left"
       :column-num="4"
       clickable
     >
@@ -13,7 +14,7 @@
         class="cp"
         @click="handleClick(item)"
       >
-        <div class="w40 h40 bg-f2">
+        <div v-if="false" class="w40 h40 bg-f2">
           <img :src="item.cover" width="100%" alt="">
         </div>
         <span class="c-666">{{ item.name }}</span>
