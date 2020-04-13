@@ -4,10 +4,13 @@ import { loadItem } from '@/components/mobile-render/render/utils'
 import { Page, setCurrentPage } from './page'
 import { NodeItemBasic, setCurrentNode } from './node'
 import { deepClone } from '@/assets/util'
+import { http } from '@/api'
+import { Message } from 'element-ui'
 
 export type Project = {
   depLoaded: boolean
   env: 'dev' | 'pro'
+  lockedBy: string
   desc: string
   dir: string
   thumbCover: string
@@ -52,6 +55,7 @@ const defaultProject: Project = {
   depLoaded: true,
   // 环境 默认 dev，可切换 pro，目前只关联了 config 字段
   env: 'dev',
+  lockedBy: '',
   desc: '',
   dir: '',
   thumbCover: '',
@@ -119,6 +123,33 @@ export const exportProjectLocal = (item?: Project) => {
   localStorage.setItem('local', JSON.stringify(item || project))
 }
 
+export const saveProject = (
+  force?: boolean,
+  remark?: string,
+  notify?: boolean
+) => http.post('project/save', {
+  dir: project.dir,
+  force,
+  project: {
+    ...project,
+    info: {
+      ...project.info,
+      remark,
+      userName: Vue.prototype.$native.name,
+      time: Date.now()
+    }
+  }
+}, {
+  codeCallback: {
+    6001: async () => {
+      // await MessageBox.confirm('项目已存在，不允许覆盖！')
+      // await handleSave(true)
+      Message.error('项目已存在')
+    }
+  },
+  notify: notify !== false
+})
+
 export const importProject = async (parseItem: Project) => {
   if (parseItem) {
     parseItem.depLoaded = false
@@ -151,9 +182,9 @@ export const diffDownloadDeps = async (items: NodeItemBasic[], init = false) => 
 }
 
 export const initProject = async (item?: Project) => {
-  watch(() => project, val => {
-    console.dir(val)
-  }, { lazy: true, deep: true })
+  // watch(() => project, val => {
+  //   console.dir(val)
+  // }, { lazy: true, deep: true })
 
   if (item) {
     await importProject(item)

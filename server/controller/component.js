@@ -143,7 +143,8 @@ const handle = {
         dir: project.dir,
         desc: project.desc,
         info: project.info,
-        createUser: project.createUser
+        createUser: project.createUser,
+        lockedBy: project.lockedBy
       }
     })
   },

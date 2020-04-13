@@ -41,6 +41,16 @@
           label="发布备注">
         </el-table-column>
         <el-table-column
+          prop="info.userName"
+          label="状态"
+          width="100"
+        >
+          <template slot-scope="scope">
+            <span v-if="!scope.row.lockedBy" style="color:green">正常</span>
+            <span style="color: red" v-else>{{ scope.row.lockedBy }}编辑中</span>
+          </template>
+        </el-table-column>
+        <el-table-column
           fixed="right"
           label="操作"
           width="160">
@@ -133,9 +143,11 @@ export default {
       })
     },
     hasPriv (item) {
-      return item.createUser === this.$native.name ||
+      return !item.lockedBy && (
+        item.createUser === this.$native.name ||
         (item.info.whitelist || '').indexOf(this.$native.name) > -1 ||
         this.$native.name === '杨明'
+      )
     },
     handlePreview (item) {
       window.open(process.env.VUE_APP_MOBILE + `#/project/${item.dir}`)

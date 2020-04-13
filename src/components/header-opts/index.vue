@@ -54,7 +54,7 @@
 <script lang="ts">
 import Vue from 'vue'
 import { defineComponent, ref } from '@vue/composition-api'
-import { project, exportProjectLocal, resetProject } from '@/assets/project'
+import { project, saveProject } from '@/assets/project'
 // import { currentPage } from '@/assets/page'
 import { Message, MessageBox } from 'element-ui'
 import { http } from '@/api'
@@ -66,28 +66,28 @@ export default defineComponent({
   setup (props, ctx) {
     const native = Vue.prototype.$native
     const avatar = ref(process.env.VUE_APP_AVATAR + native.uid)
-    const handleSave = (force?: boolean, remark?: string, notify?: boolean) => http.post('project/save', {
-      dir: project.dir,
-      force,
-      project: {
-        ...project,
-        info: {
-          ...project.info,
-          remark,
-          userName: Vue.prototype.$native.name,
-          time: Date.now()
-        }
-      }
-    }, {
-      codeCallback: {
-        6001: async () => {
-          // await MessageBox.confirm('项目已存在，不允许覆盖！')
-          // await handleSave(true)
-          Message.error('项目已存在')
-        }
-      },
-      notify: notify !== false
-    })
+    // const handleSave = (force?: boolean, remark?: string, notify?: boolean) => http.post('project/save', {
+    //   dir: project.dir,
+    //   force,
+    //   project: {
+    //     ...project,
+    //     info: {
+    //       ...project.info,
+    //       remark,
+    //       userName: Vue.prototype.$native.name,
+    //       time: Date.now()
+    //     }
+    //   }
+    // }, {
+    //   codeCallback: {
+    //     6001: async () => {
+    //       // await MessageBox.confirm('项目已存在，不允许覆盖！')
+    //       // await handleSave(true)
+    //       Message.error('项目已存在')
+    //     }
+    //   },
+    //   notify: notify !== false
+    // })
     const localOpts = [
       // {
       //   label: '同步组件到cdn',
@@ -150,7 +150,7 @@ export default defineComponent({
           }
           const params = ctx.root.$route.params
           // const _save =
-          await handleSave(!!params.dir)
+          await saveProject(!!params.dir)
           Message.success('保存成功')
           if (!params.dir) {
             ctx.root.$router.replace(`/editor/${project.dir}`)

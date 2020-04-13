@@ -98,7 +98,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from '@vue/composition-api'
+import { defineComponent, onUnmounted } from '@vue/composition-api'
 import ProjectSet from '@/components/project-set/index.vue'
 import PageList from '@/components/page-list/index.vue'
 import PageSet from '@/components/page-set/index.vue'
@@ -118,6 +118,7 @@ import { http } from '@/api'
 import { initProject, project, resetProject } from '@/assets/project'
 import { Message } from 'element-ui'
 import { isEdit, setRenderEdit, setRenderPreview } from '@/assets/render'
+import { lock, unlock } from '@/assets/lock'
 
 export default defineComponent({
   components: {
@@ -152,14 +153,22 @@ export default defineComponent({
       }).then(item => {
         // @ts-ignore
         initProject(item.data.project)
-      })
-    } else {
-      initProject().then(isLocalExist => {
-        if (isLocalExist) {
-          Message.success('已从本地导入草稿')
-        }
+        lock()
       })
     }
+    onUnmounted(() => {
+      // 如果存在加锁，则去解锁，否则什么也不做
+      if (project.lockedBy) {
+        unlock()
+      }
+    })
+    // else {
+    //   initProject().then(isLocalExist => {
+    //     if (isLocalExist) {
+    //       Message.success('已从本地导入草稿')
+    //     }
+    //   })
+    // }
     const handleMode = () => {
       if (isEdit()) {
         setRenderPreview()
