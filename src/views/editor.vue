@@ -115,7 +115,7 @@ import ComponentCompose from '@/components/component-compose/index.vue'
 import ComponentUpload from '@/components/component-upload/index.vue'
 import { tabCurrent, setTabName, tabName } from '@/assets/tab'
 import { http } from '@/api'
-import { initProject, project } from '@/assets/project'
+import { initProject, project, resetProject } from '@/assets/project'
 import { Message } from 'element-ui'
 import { isEdit, setRenderEdit, setRenderPreview } from '@/assets/render'
 
@@ -139,7 +139,17 @@ export default defineComponent({
   setup (props, ctx) {
     const dir = ctx.root.$route.params.dir
     if (dir) {
-      http.get('project/get', { dir }).then(item => {
+      http.get('project/get', { dir }, {
+        codeCallback: {
+          6001: (res: any) => {
+            Message.error(res.msg)
+            resetProject()
+            setTimeout(() => {
+              history.back()
+            }, 1000)
+          }
+        }
+      }).then(item => {
         // @ts-ignore
         initProject(item.data.project)
       })

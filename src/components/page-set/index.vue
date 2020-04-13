@@ -37,7 +37,8 @@ export default createComponent({
   setup () {
     const showSchema = computed(() => !!currentPage.value)
     watch(() => currentPage.value, page => {
-      if (page && !page.url) {
+      // if (page && !page.url) {
+      if (page) {
         page.url = process.env.VUE_APP_MOBILE + `#/page/${project.dir}/${currentPage.value.id}`
       }
     })

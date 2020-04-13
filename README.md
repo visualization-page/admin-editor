@@ -119,3 +119,4 @@ $$global.config = project.config = {
 - 页面复制功能
 - 添加操作 【撤销/不撤销】
 - vantForm 打通
+- 项目编辑加锁

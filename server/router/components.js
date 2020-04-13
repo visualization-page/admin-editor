@@ -70,7 +70,15 @@ module.exports = {
   '/project/:dir': {
     get: async (req, res) => {
       const data = await component.getProject(req.params.dir)
-      res.json({ success: true, data })
+      // 校验权限
+      const hasPriv = req.cookies.userName === data.project.createUser ||
+        (data.project.info.whitelist || '').indexOf(req.cookies.userName) > -1 ||
+        req.cookies.userName === '杨明'
+      if (hasPriv) {
+        res.json({ success: true, data })
+      } else {
+        res.json({ success: false, msg: '无权限！', code: 6001 })
+      }
     },
     post: async (req, res) => {
       const result = await component.saveProject(req.params.dir, req.body)

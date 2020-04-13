@@ -4,6 +4,7 @@ const app = express()
 const router = require('./router')
 const fileUpload = require('express-fileupload')
 const path = require('path')
+const cookieParser = require('cookie-parser')
 
 app.use(fileUpload({
   limits: { fileSize: 5 * 1024 * 1024 },
@@ -14,6 +15,7 @@ app.use(fileUpload({
   // preserveExtension: true
 }))
 app.use(bodyParser.urlencoded({ extended: true }))
+app.use(cookieParser())
 app.use(bodyParser.json())
 app.use('/butterfly/static', express.static(__dirname + '/public'))
 app.use('/butterfly', router)
