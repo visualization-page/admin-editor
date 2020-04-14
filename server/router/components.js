@@ -74,9 +74,9 @@ module.exports = {
         // 检查 是 render.html
         res.json({ success: true, data })
         return
-      } else if (data.project.lockedBy) {
+      } else if (component.getLock(data.project.dir)) {
         // 检查锁
-        res.json({ success: false, msg: `项目被${data.project.lockedBy}锁定编辑，请稍后再试`, code: 6001 })
+        res.json({ success: false, msg: `项目被${component.getLock(data.project.dir)}锁定编辑，请稍后再试`, code: 6001 })
         return
       }
 
@@ -131,6 +131,15 @@ module.exports = {
       } else {
         res.json({ success: false, msg: `${dir} 项目未发布正式版` })
       }
+    }
+  },
+  '/project/lock/:dir': {
+    // get (req, res) {
+    //   res.json({ success: false, msg: `666` })
+    // },
+    async post (req, res) {
+      await component.lockProject(req.params.dir, req.cookies.userName, req.body.type)
+      res.json({ success: true, msg: req.body.type ? '加锁成功' : '解锁成功' })
     }
   },
   '/delete/:type/:dir': {

@@ -1,6 +1,7 @@
 const fs = require('fs-extra')
 const path = require('path')
 const utils = require('./utils')
+const lock = require('./lock')
 const dayjs = require('dayjs')
 const pubPath = path.resolve(__dirname, '../public')
 
@@ -15,6 +16,13 @@ const handle = {
    */
   list: async (type) => {
     const exist = await fs.pathExists(getPath(type))
+    if (type === 'project') {
+      const data = await fs.readJSON(getPath(type))
+      return data.map(x => ({
+        ...x,
+        lockedBy: lock.lockMap[x.dir]
+      }))
+    }
     return exist ? fs.readJSON(getPath(type)) : handle.update(type)
   },
 
@@ -143,8 +151,7 @@ const handle = {
         dir: project.dir,
         desc: project.desc,
         info: project.info,
-        createUser: project.createUser,
-        lockedBy: project.lockedBy
+        createUser: project.createUser
       }
     })
   },
@@ -161,7 +168,19 @@ const handle = {
       delete data.force
       await fs.outputFile(path.join(pubPath, 'project', dir, 'data.json'), JSON.stringify(data))
       await handle.updateProjectList()
+      await lock.lock(dir, data.project.info.userName)
     }
+  },
+  lockProject: async (dir, userName, isLock) => {
+    if (isLock) {
+      await lock.lock(dir, userName)
+    } else {
+      await lock.unlock(dir)
+    }
+    // await handle.updateProjectList()
+  },
+  getLock (dir) {
+    return lock.lockMap[dir]
   },
   getProject: (dir) => {
     return fs.readJson(path.join(pubPath, 'project', dir, 'data.json'))

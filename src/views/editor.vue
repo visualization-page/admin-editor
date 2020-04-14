@@ -140,7 +140,8 @@ export default defineComponent({
   beforeRouteLeave (to: any, from: any, next: any) {
     // 如果存在加锁，则去解锁，否则什么也不做
     if (project.lockedBy) {
-      unlock(true).then(() => {
+      // @ts-ignore
+      unlock(this.$route.params.dir).then(() => {
         next()
       })
     } else {
@@ -163,7 +164,12 @@ export default defineComponent({
       }).then(item => {
         // @ts-ignore
         initProject(item.data.project)
-        lock()
+        lock(dir)
+        // window.onbeforeunload = function () {
+        //   console.log(1)
+        //   unlock(true)
+        //   return '确定要关闭页面吗？'
+        // }
       })
     }
     // else {
