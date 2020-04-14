@@ -6,7 +6,7 @@ import { Message } from 'element-ui'
 let stopWatchHandler: () => void
 let timerHandler: number
 const setTimer = () => {
-  timerHandler = setTimeout(unlock, 0.5 * 60 * 1000)
+  timerHandler = setTimeout(unlock, 5 * 60 * 1000)
 }
 export const lock = async () => {
   console.log('add lock and start time !')
@@ -23,7 +23,7 @@ export const lock = async () => {
   }, { deep: true, lazy: true })
 }
 
-export const unlock = async () => {
+export const unlock = async (active?: boolean) => {
   if (stopWatchHandler) {
     stopWatchHandler()
     // @ts-ignore
@@ -34,10 +34,12 @@ export const unlock = async () => {
       console.log('save project and unlock project')
       updateProject({ lockedBy: '' })
       await saveProject(true)
-      Message.info('项目 5min 未编辑，已自动解锁')
-      setTimeout(() => {
-        history.back()
-      }, 2000)
+      if (!active) {
+        Message.info('项目 5min 未编辑，已自动解锁')
+        setTimeout(() => {
+          history.back()
+        }, 2000)
+      }
     }
   }
 }

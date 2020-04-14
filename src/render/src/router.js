@@ -6,20 +6,20 @@ Vue.use(VueRouter)
 const routes = [
   {
     path: '/',
-    component: () => import('./index.vue')
+    component: () => import(/* webpackChunkName: "render-page" */ './index.vue')
   },
   {
     path: '/project/:dir',
-    component: () => import('./index.vue')
+    component: () => import(/* webpackChunkName: "render-page" */ './index.vue')
   },
   {
     path: '/page/:dir/:id',
     name: 'page',
-    component: () => import(/* webpackChunkName: "page" */ './page.vue')
+    component: () => import(/* webpackChunkName: "render-page" */ './page.vue')
   },
   {
     path: '*',
-    component: () => import('./404.vue')
+    component: () => import(/* webpackChunkName: "render-page" */ './404.vue')
   }
 ]
 

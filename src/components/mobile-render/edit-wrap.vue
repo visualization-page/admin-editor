@@ -34,25 +34,30 @@ export default {
         setEditWrapState(null, { left, top, width, height })
       }
     }
-    // 样式变化，重置编辑框大小
-    watch([
-      () => currentNode.value,
-      () => currentNode.value && currentNode.value.style,
-      () => currentNode.value && currentNode.value.className
-    ], ([node, style, className]) => {
+    const resetEditWrapByStyle = (node) => {
       if (node) {
-        // console.log(node.id, style, className)
-        setTabName(['', '', tabName.nodeProperty])
+        // console.log('节点变化，重置 edit wrap', node.id, style, className)
+        // setTabName(['', '', tabName.nodeProperty])
         if (!nodeElCache[node.id]) {
           nodeElCache[node.id] = ctx.parent.$refs.scrollContainer.querySelector(`div[data-id="${node.id}"]`)
         }
         const el = nodeElCache[node.id]
         setEditBounding(el)
       }
-    }, { lazy: true })
-    watch(() => editNode.value, el => {
-      setEditBounding(el)
-    }, { lazy: true })
+    }
+    // 样式变化，重置编辑框大小
+    watch(() => editNode.value, el => setEditBounding(el), { lazy: true })
+    watch(() => currentNode.value, node => resetEditWrapByStyle(node), { lazy: true })
+    watch(
+      () => currentNode.value && currentNode.value.className,
+      () => resetEditWrapByStyle(currentNode.value),
+      { lazy: true }
+    )
+    watch(
+      () => currentNode.value && currentNode.value.style,
+      () => resetEditWrapByStyle(currentNode.value),
+      { lazy: true, deep: true }
+    )
     onMounted(() => {
       setTimeout(() => {
         state.parentPosition = ctx.parent.$el.getBoundingClientRect()

@@ -170,7 +170,18 @@ const handle = {
     const releasePath = path.resolve(__dirname, '../../release', dir)
     const distPath = path.resolve(__dirname, '../../dist-system')
     // copy dist-system/ => release/项目 目录下
-    await fs.copy(distPath, releasePath)
+    await fs.copy(path.join(distPath, 'render.html'), path.join(releasePath, 'index.html'))
+    await fs.copy(path.join(distPath, 'vant-form'), path.join(releasePath, 'vant-form'))
+    fs.readdirSync(path.join(distPath, 'js')).forEach(name => {
+      if (/render|chunk-vendors/.test(name)) {
+        fs.copySync(path.join(distPath, 'js', name), path.join(releasePath, 'js', name))
+      }
+    })
+    fs.readdirSync(path.join(distPath, 'css')).forEach(name => {
+      if (/render|chunk-vendors/.test(name)) {
+        fs.copySync(path.join(distPath, 'css', name), path.join(releasePath, 'css', name))
+      }
+    })
     // 改写 data.json
     const dataPath = path.join(pubPath, 'project', dir, 'data.json')
     await fs.copy(dataPath, path.join(releasePath, 'data.json'))
@@ -179,10 +190,10 @@ const handle = {
     globalProject.project.env = 'pro'
     // 编译 code
     await utils.babel(globalProject.project)
-    // 改写 render.html 中的 publicPath
-    const releaseRenderPath = path.join(releasePath, 'render.html')
+    // 改写 index.html 中的 publicPath
+    const releaseHtmlPath = path.join(releasePath, 'index.html')
     const publicPath = globalProject.project.config.pro.publicPath || ''
-    let renderContent = await fs.readFile(releaseRenderPath, 'utf8')
+    let renderContent = await fs.readFile(releaseHtmlPath, 'utf8')
     // href=css href=js src=js
     renderContent = renderContent
       .replace(/(href=css|href=js|src=js)/g, (match, group) => {
@@ -198,7 +209,7 @@ const handle = {
     renderContent = renderContent.split('%%%%')
     renderContent = renderContent[0] + JSON.stringify(globalProject) + renderContent[1]
     await fs.outputFile(path.join(releasePath, 'index.html'), renderContent)
-    utils.rm(path.join(releasePath, 'render.html'))
+    // utils.rm(path.join(releasePath, 'render.html'))
     // 同步提交 git
     // 不提交 git，忽略 release 目录
     // await utils.spawn('git', ['add', '.'])

@@ -123,3 +123,7 @@ $$global.config = project.config = {
     - 点击编辑，自动加锁，5min 倒计时 project 无变化则自动保存后解锁，否则清除倒计时重新计时
     - 退出编辑页面，解锁
     - 加锁状态，无权限操作（编辑/删除）
+
+> 20/04/14
+
+- 优化正式版代码内容，通过 render build 时 webpackName 标注 来剔除无关文件

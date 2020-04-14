@@ -70,6 +70,16 @@ module.exports = {
   '/project/:dir': {
     get: async (req, res) => {
       const data = await component.getProject(req.params.dir)
+      if (new RegExp('render.html').test(req.headers.referer)) {
+        // 检查 是 render.html
+        res.json({ success: true, data })
+        return
+      } else if (data.project.lockedBy) {
+        // 检查锁
+        res.json({ success: false, msg: `项目被${data.project.lockedBy}锁定编辑，请稍后再试`, code: 6001 })
+        return
+      }
+
       // 校验权限
       const hasPriv = req.cookies.userName === data.project.createUser ||
         (data.project.info.whitelist || '').indexOf(req.cookies.userName) > -1 ||

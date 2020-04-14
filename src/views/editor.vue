@@ -137,6 +137,16 @@ export default defineComponent({
     ComponentCompose,
     ComponentUpload
   },
+  beforeRouteLeave (to: any, from: any, next: any) {
+    // 如果存在加锁，则去解锁，否则什么也不做
+    if (project.lockedBy) {
+      unlock(true).then(() => {
+        next()
+      })
+    } else {
+      next()
+    }
+  },
   setup (props, ctx) {
     const dir = ctx.root.$route.params.dir
     if (dir) {
@@ -156,12 +166,6 @@ export default defineComponent({
         lock()
       })
     }
-    onUnmounted(() => {
-      // 如果存在加锁，则去解锁，否则什么也不做
-      if (project.lockedBy) {
-        unlock()
-      }
-    })
     // else {
     //   initProject().then(isLocalExist => {
     //     if (isLocalExist) {
