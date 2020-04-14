@@ -188,16 +188,27 @@ const handle = {
   releaseProject: async (dir) => {
     const releasePath = path.resolve(__dirname, '../../release', dir)
     const distPath = path.resolve(__dirname, '../../dist-system')
+    // 先清空目标文件夹
+    utils.rm(releasePath)
     // copy dist-system/ => release/项目 目录下
+    const manifest = await fs.readJson(path.join(distPath, 'manifest.json'))
     await fs.copy(path.join(distPath, 'render.html'), path.join(releasePath, 'index.html'))
     await fs.copy(path.join(distPath, 'vant-form'), path.join(releasePath, 'vant-form'))
+    await fs.copy(path.join(distPath, 'vant2.5'), path.join(releasePath, 'vant2.5'))
+    await fs.copy(path.join(distPath, 'vue2.6'), path.join(releasePath, 'vue2.6'))
     fs.readdirSync(path.join(distPath, 'js')).forEach(name => {
-      if (/render|chunk-vendors/.test(name)) {
+      if (
+        /render|chunk-vendors/.test(name) &&
+        manifest.js.some(x => x === name)
+      ) {
         fs.copySync(path.join(distPath, 'js', name), path.join(releasePath, 'js', name))
       }
     })
     fs.readdirSync(path.join(distPath, 'css')).forEach(name => {
-      if (/render|chunk-vendors/.test(name)) {
+      if (
+        /render|chunk-vendors/.test(name) &&
+        manifest.css.some(x => x === name)
+      ) {
         fs.copySync(path.join(distPath, 'css', name), path.join(releasePath, 'css', name))
       }
     })
@@ -205,6 +216,15 @@ const handle = {
     const dataPath = path.join(pubPath, 'project', dir, 'data.json')
     await fs.copy(dataPath, path.join(releasePath, 'data.json'))
     const globalProject = await fs.readJson(dataPath)
+    // 将组件 js 合并生成文件
+    let jsContent = ''
+    for (let i = 0; i < globalProject.project.componentDownload.length; i++) {
+      const item = globalProject.project.componentDownload[i]
+      const c = await fs.readFile(path.join(pubPath, item.jsUrl.replace('/butterfly/static', '')))
+      jsContent += `${c}\n`
+    }
+    const componentMergeFileName = `component.${dayjs().format('MMDDHHmmss')}.js`
+    await fs.outputFile(path.join(releasePath, componentMergeFileName), jsContent, 'utf8')
     // 切换为正式环境
     globalProject.project.env = 'pro'
     // 编译 code
@@ -223,6 +243,10 @@ const handle = {
       .replace(
         '</head>',
         `<script>/* ${dayjs().format('YYYY/MM/DD HH:mm')} */ var globalProject = %%%%</script></head>`
+      )
+      .replace(
+        '</body>',
+        `<script src="${publicPath + componentMergeFileName}"></script></body>`
       )
     // 正则匹配中 $$ 是关键词，必须绕开
     renderContent = renderContent.split('%%%%')

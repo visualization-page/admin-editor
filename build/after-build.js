@@ -4,7 +4,23 @@ const { execSync } = require('child_process')
 
 console.log('====> 打包完成，拷贝到 butterfly 工程提交')
 
+// js / css 清单文件，因为发布系统里文件是增量的，不会删除
+const manifest = {
+  js: [],
+  css: []
+}
+const distJsDir = path.join(__dirname, '../dist-system', 'js')
+const distCssDir = path.join(__dirname, '../dist-system', 'css')
+fs.readdirSync(distJsDir).forEach(name => {
+  manifest.js.push(name)
+})
+fs.readdirSync(distCssDir).forEach(name => {
+  manifest.css.push(name)
+})
+fs.outputFileSync(path.join(__dirname, '../dist-system', 'manifest.json'), JSON.stringify(manifest))
+
 const target = path.resolve(__dirname, '../../../shinemo-gitlab/butterfly')
+execSync(`rm -rf ${path.join(target, 'dist-system')}`)
 fs.copySync(path.resolve(__dirname, `../dist-system`), path.join(target, 'dist-system'))
 // 不能直接覆盖 server/public
 const copyDirs = [

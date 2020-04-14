@@ -155,7 +155,7 @@ export const importProject = async (parseItem: Project) => {
     parseItem.depLoaded = false
     updateProject(parseItem)
     // 下载资源
-    if (parseItem.componentDownload) {
+    if (project.env === 'dev' && parseItem.componentDownload) {
       // parseItem.componentDownload = [...new Set(parseItem.componentDownload)]
       const arr: any[] = []
       parseItem.componentDownload.forEach(x => {

@@ -143,11 +143,11 @@ export default {
       })
     },
     hasPriv (item) {
-      return !item.lockedBy && (
+      return item.lockedBy === this.$native.name || (!item.lockedBy && (
         item.createUser === this.$native.name ||
         (item.info.whitelist || '').indexOf(this.$native.name) > -1 ||
         this.$native.name === '杨明'
-      )
+      ))
     },
     handlePreview (item) {
       window.open(process.env.VUE_APP_MOBILE + `#/project/${item.dir}`)
