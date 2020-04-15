@@ -25,7 +25,7 @@
               :currentPage="currentPage"
             />
             <template v-if="isEdit()">
-              <edit-wrap />
+              <edit-wrap :get-scrolltop="handleGetContainerScrollTop" />
               <context-menu />
             </template>
           </div>
@@ -36,7 +36,7 @@
 </template>
 
 <script lang="ts">
-import { createComponent } from '@vue/composition-api'
+import { defineComponent, ref, onMounted } from '@vue/composition-api'
 import { currentPage } from '@/assets/page'
 import { project } from '@/assets/project'
 import { currentNode } from '@/assets/node'
@@ -46,14 +46,19 @@ import { Message } from 'element-ui'
 import EditWrap from './edit-wrap.vue'
 import ContextMenu from './context-menu/index.vue'
 
-export default createComponent({
+export default defineComponent({
   components: {
     Render,
     EditWrap,
     ContextMenu
   },
 
-  setup () {
+  setup (p, ctx) {
+    const containerEl = ref(null)
+    onMounted(() => {
+      // @ts-ignore
+      containerEl.value = ctx.refs.scrollContainer
+    })
     const handleMode = () => {
       if (isEdit()) {
         setRenderPreview()
@@ -74,7 +79,15 @@ export default createComponent({
       currentNode,
       isEdit,
       handleMode,
-      handlePreviewPage
+      handlePreviewPage,
+      handleGetContainerScrollTop () {
+        if (containerEl.value) {
+          // @ts-ignore
+          return containerEl.value.scrollTop
+        }
+        console.log('handleGetContainerScrollTop 0')
+        return 0
+      }
     }
   }
 })

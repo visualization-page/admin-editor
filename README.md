@@ -127,3 +127,8 @@ $$global.config = project.config = {
 > 20/04/14
 
 - 优化正式版代码内容，通过 render build 时 webpackName 标注 来剔除无关文件
+
+> 20/04/15
+
+- 增加 页面模型与节点绑定的清单，便于快速定位到哪个节点用了哪个state
+- 第三方组件手写 vNode 改成写 template，用 vue 的运行时 compiler 去解析。

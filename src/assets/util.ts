@@ -125,3 +125,18 @@ export const sleepUntil = (assets: () => boolean) => {
     }
   })
 }
+
+export const deepMerge = (origin: any, obj?: any): any => {
+  if (obj) {
+    Object.keys(obj).forEach(k => {
+      if (
+        origin[k] === undefined ||
+        typeof obj[k] === 'string'
+      ) {
+        origin[k] = obj[k]
+      } else if (typeof obj[k] === 'object') {
+        deepMerge(origin[k], obj[k])
+      }
+    })
+  }
+}

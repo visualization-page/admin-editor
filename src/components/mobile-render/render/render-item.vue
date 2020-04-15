@@ -1,11 +1,16 @@
 <script lang="tsx">
+import Vue from 'vue'
 import { defineComponent, createElement } from '@vue/composition-api'
-import { NodeItem, currentNode, findNode, setCurrentNode } from '@/assets/node'
+import { NodeItem, findNode, setCurrentNode } from '@/assets/node'
 import { isEdit, setEditWrapNode } from '@/assets/render'
 import { FormEvent } from '@/assets/event'
-import { parseCodeValid } from '@/assets/util'
+import { parseCodeValid, deepMerge } from '@/assets/util'
 // import EditWrap from '../edit-wrap.vue'
 import { dealFx, getEventHandler } from './utils'
+
+Vue.directive('insert-id', function (el, binding) {
+  el.setAttribute('data-id', binding.value)
+})
 
 const mergeDirectionSize = (target: any, obj: any, type: 'position' | 'margin' | 'padding' | 'border') => {
   if (typeof obj !== 'object') {
@@ -50,8 +55,6 @@ export default defineComponent<{
       $$listBind?: { [k: string]: any }
     ) => {
       const codeExecuteContext = { $$global, $$page, $$listBind }
-      // const isEditState = isEdit()
-      // const isEditState = false
       return items.filter(x => {
         // 判断 v-if
         let vIf = true
@@ -80,19 +83,16 @@ export default defineComponent<{
             const el = document.elementFromPoint(e.x, e.y)
             if (el) {
               let reallyEl = el
-              let num = 0
               if (el.classList.contains('resize')) {
-                console.log('render-item.vue line 78 find node => .resize element')
+                // console.log('render-item.vue line 78 find node => .resize element')
                 return
               }
-              while (!reallyEl.getAttribute('data-id') && num < 5) {
-                num++
+              while (!reallyEl.getAttribute('data-id') && reallyEl.tagName !== 'BODY') {
                 // @ts-ignore
                 reallyEl = reallyEl.parentNode
               }
               const id = reallyEl.getAttribute('data-id')
               if (id) {
-                // console.log(reallyEl)
                 setEditWrapNode(reallyEl)
                 const node = findNode(id)
                 if (node) {
@@ -108,32 +108,27 @@ export default defineComponent<{
             ...item.style,
             // 处理圆角
             borderRadius: item.style.borderRadius === '0px' ? undefined : item.style.borderRadius
-            // border: item.style.border ? 'none' : undefined
           },
           class: [
             'render-item__item',
             item.className
-            // `node-${item.id}`
           ],
           key: item.id + index,
           on,
           nativeOn,
           props: dealFx(item.props, codeExecuteContext),
           attrs: {
-            // id: `${item.id}`
             'data-id': item.id
-          }
+          },
+          directives: []
         }
         mergeDirectionSize(props.style, item.style.margin, 'margin')
         mergeDirectionSize(props.style, item.style.padding, 'padding')
         mergeDirectionSize(props.style, item.style.border, 'border')
+        // 合并位置
         if (item.outDocFlow && item.style.position) {
-          // 合并位置
           mergeDirectionSize(props.style, item.style.position, 'position')
         }
-        // if (props.style.borderColor) {
-        //   console.log(JSON.stringify(props.style))
-        // }
         props.style.position = item.outDocFlow ? item.style.positionType : undefined
         if (props.style.position === undefined) {
           props.style.zIndex = undefined
@@ -141,13 +136,7 @@ export default defineComponent<{
         // 处理 style.code
         const styleCodeRes = parseCodeValid(props.style.code, codeExecuteContext)
         if (styleCodeRes.ok) {
-          // delete props.style.code
-          props.style = {
-            code: undefined,
-            ...props.style,
-            // @ts-ignore
-            ...styleCodeRes.value
-          }
+          deepMerge(props.style, styleCodeRes.value)
         } else {
           throw styleCodeRes.msg
         }
@@ -172,12 +161,23 @@ export default defineComponent<{
           if (isLibrary) {
             const { ok, value } = parseCodeValid(item.renderString, codeExecuteContext)
             if (ok && value) {
-              return createElement(item.name, {
-                ...props,
-                // @ts-ignore
-                ...(value.option || {})
-                // @ts-ignore
-              }, value.children.concat(children))
+              const libraryOpt = value! as {
+                template?: string
+                methods?: any,
+                option?: any,
+                children?: any[]
+              }
+              deepMerge(props, libraryOpt.option)
+              if (libraryOpt.template) {
+                const Sub = Vue.extend(libraryOpt)
+                const vm = new Sub().$mount(document.createElement('div'))
+                return createElement('basic-div', props, [vm._vnode].concat(children))
+              }
+              // 第三方组件无法通过 attrs 绑定 data-id
+              // 通过指令实现
+              // @ts-ignore
+              props.directives.push({ name: 'insert-id', value: item.id })
+              return createElement(item.name, props, (libraryOpt.children || []).concat(children))
             }
           }
           return createElement(item.componentName, props, children)
@@ -198,11 +198,6 @@ export default defineComponent<{
 <style lang="less">
 .render-item {
   &__item {
-    /*position: relative;*/
-    /*border: 1px transparent dashed;*/
-    /*&.active {*/
-    /*  border-color: #409eff;*/
-    /*}*/
   }
   .center-v {
     top: 50%;

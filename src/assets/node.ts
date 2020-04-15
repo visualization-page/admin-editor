@@ -129,7 +129,8 @@ export const addNode = async (item: NodeItemBasic | NodeItemLibrary) => {
     newNode = getNewNode({
       ...data.default,
       name: item.name,
-      nodeType: item.nodeType
+      nodeType: item.nodeType,
+      renderString: ''
     })
   } else if (item.nodeType === 1 << 2) {
     const it = item as NodeItemLibrary
@@ -142,7 +143,8 @@ export const addNode = async (item: NodeItemBasic | NodeItemLibrary) => {
       },
       ...item,
       title: `${it.library}/${it.name}`,
-      nodeType: item.nodeType
+      nodeType: item.nodeType,
+      renderString: common.renderString.replace('div', it.name)
     })
   }
   // @ts-ignore

@@ -165,20 +165,11 @@ export default defineComponent({
         // @ts-ignore
         initProject(item.data.project)
         lock(dir)
-        // window.onbeforeunload = function () {
-        //   console.log(1)
-        //   unlock(true)
-        //   return '确定要关闭页面吗？'
-        // }
       })
     }
-    // else {
-    //   initProject().then(isLocalExist => {
-    //     if (isLocalExist) {
-    //       Message.success('已从本地导入草稿')
-    //     }
-    //   })
-    // }
+    onUnmounted(() => {
+      resetProject()
+    })
     const handleMode = () => {
       if (isEdit()) {
         setRenderPreview()

@@ -22,6 +22,10 @@ export default {
     Resizer
   },
 
+  props: {
+    getScrolltop: Function
+  },
+
   setup (p, ctx) {
     const state = reactive({
       position: null,
@@ -63,7 +67,8 @@ export default {
         state.parentPosition = ctx.parent.$el.getBoundingClientRect()
         watch(() => editWrapState, edit => {
           const { left, top, width, height } = edit.style
-          const containerScrollTop = ctx.parent.$refs.scrollContainer.scrollTop
+          // const containerScrollTop = ctx.parent.$refs.scrollContainer.scrollTop
+          const containerScrollTop = p.getScrolltop()
           const mobileHeaderHeight = 54.61
           // console.log(top, state.parentPosition.top, mobileHeaderHeight, containerScrollTop)
           state.position = {

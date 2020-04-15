@@ -119,7 +119,7 @@ export default {
           icon: 'el-icon-plus f16',
           action: () => {
             // project 置空
-            resetProject()
+            // resetProject()
             this.$router.push('/editor')
           }
         }
