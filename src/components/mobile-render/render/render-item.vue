@@ -7,6 +7,7 @@ import { FormEvent } from '@/assets/event'
 import { parseCodeValid, deepMerge } from '@/assets/util'
 // import EditWrap from '../edit-wrap.vue'
 import { dealFx, getEventHandler } from './utils'
+import { setTabName, tabName } from '@/assets/tab'
 
 Vue.directive('insert-id', function (el, binding) {
   el.setAttribute('data-id', binding.value)
@@ -94,6 +95,7 @@ export default defineComponent<{
               const id = reallyEl.getAttribute('data-id')
               if (id) {
                 setEditWrapNode(reallyEl)
+                setTabName([tabName.nodeTree, '', tabName.nodeProperty])
                 const node = findNode(id)
                 if (node) {
                   setCurrentNode(node.data)

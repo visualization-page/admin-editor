@@ -134,8 +134,22 @@ export const initGlobalConfig = (page: Page | null) => {
     cookie: {
       get: native.cookieGet
     },
-    toPage (pageId: string) {
-      location.href = `#/page/${pageId}`
+    toPage (pageId: string, query?: { [k: string]: string }) {
+      let queryStr = ''
+      // @ts-ignore
+      const dir = window.globalProject ? window.globalProject.project.dir : project.dir
+      if (query) {
+        Object.keys(query).forEach(k => {
+          queryStr += `${k}=${query[k]}`
+        })
+      }
+      location.href = `#/page/${dir}/${pageId}${queryStr ? `?${queryStr}` : ''}`
+    },
+    route () {
+      return window.globalApp.$route
+    },
+    router () {
+      return window.globalApp.$router
     },
     findNodeById (nodeId: string) {
       if (this.page) {

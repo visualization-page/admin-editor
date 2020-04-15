@@ -18,6 +18,7 @@ declare module '@vue/composition-api/dist/component/component' {
 declare global {
   interface Window {
     require: () => void
+    globalApp: any
     // $$global: {
     //   constant: any
     //   state: any
@@ -78,7 +79,7 @@ if (!native.name) {
   }).$mount('#app')
 } else {
   document.addEventListener('DOMContentLoaded', () => {
-    new Vue({
+    window.globalApp = new Vue({
       router,
       store,
       render: h => h(App)

@@ -34,7 +34,7 @@
         <el-table-column
           prop="info.time"
           label="修改时间"
-          width="130">
+          width="125">
         </el-table-column>
         <el-table-column
           prop="info.remark"
@@ -53,10 +53,11 @@
         <el-table-column
           fixed="right"
           label="操作"
-          width="160">
+          width="200">
           <template slot-scope="scope">
             <el-button @click="handlePreview(scope.row)" type="text" size="small">查看</el-button>
             <el-button @click="handleCopy(scope.row)" type="text" size="small">复制</el-button>
+            <el-button @click="handleDown(scope.row)" type="text" size="small">下载</el-button>
             <template v-if="hasPriv(scope.row)">
               <el-button @click="handleDel(scope.row)" type="text" size="small">删除</el-button>
               <el-button @click="$router.push(`/editor/${scope.row.dir}`)" type="text" size="small">编辑</el-button>
@@ -74,6 +75,7 @@ import { http } from '@/api'
 import { MessageBox, Message } from 'element-ui'
 import dayjs from 'dayjs'
 import { resetProject } from '@/assets/project'
+import { project } from '../../assets/project'
 // import { initProject, project } from '../../assets/project'
 
 export default {
@@ -166,6 +168,9 @@ export default {
       http.post('delete', { type: 'project', dir: item.dir }, { successMessage: '删除成功' }).then(() => {
         this.tableData.splice(i, 1)
       })
+    },
+    handleDown (item) {
+      location.href = process.env.VUE_APP_FILE_SERVER + `/butterfly/project/download/${item.dir}`
     }
   }
 }

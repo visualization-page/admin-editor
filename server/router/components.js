@@ -99,7 +99,7 @@ module.exports = {
   },
   '/project/release/:dir': {
     post: async (req, res) => {
-      await component.releaseProject(req.params.dir)
+      await component.releaseProject(req.params.dir, req.body)
       res.json({ success: true, msg: '' })
     }
   },

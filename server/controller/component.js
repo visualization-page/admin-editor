@@ -185,7 +185,7 @@ const handle = {
   getProject: (dir) => {
     return fs.readJson(path.join(pubPath, 'project', dir, 'data.json'))
   },
-  releaseProject: async (dir) => {
+  releaseProject: async (dir, body) => {
     const releasePath = path.resolve(__dirname, '../../release', dir)
     const distPath = path.resolve(__dirname, '../../dist-system')
     // 先清空目标文件夹
@@ -216,6 +216,9 @@ const handle = {
     const dataPath = path.join(pubPath, 'project', dir, 'data.json')
     await fs.copy(dataPath, path.join(releasePath, 'data.json'))
     const globalProject = await fs.readJson(dataPath)
+    globalProject.project.info = body.info
+    await fs.writeJson(dataPath, globalProject)
+    await handle.updateProjectList()
     // 将组件 js 合并生成文件
     let jsContent = ''
     for (let i = 0; i < globalProject.project.componentDownload.length; i++) {

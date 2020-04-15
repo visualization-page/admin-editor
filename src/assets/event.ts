@@ -27,7 +27,15 @@ export const fxList = [
   },
   {
     name: '内部跳转',
-    code: '$$global.toPage(\'/pageId\')'
+    code: '$$global.toPage(\'/pageId\', {})'
+  },
+  {
+    name: '当前路由对象',
+    code: '$$global.route()'
+  },
+  {
+    name: '当前路由实例',
+    code: '$$global.router()'
   },
   {
     name: '外部跳转',
