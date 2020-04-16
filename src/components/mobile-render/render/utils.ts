@@ -4,18 +4,16 @@ import { NodeItem, NodeItemBasic } from '@/assets/node'
 import { getParentRef, parseCodeValid } from '@/assets/util'
 import { FormEvent } from '@/assets/event'
 import { Loading, Dialog, Dot, Http } from 'esc-ui'
-// @ts-ignore
 import Native from '@xm/native'
 
 const native = new Native()
 export const loadItem = (item: NodeItemBasic): Promise<{ default: any }> => {
   return new Promise((resolve, reject) => {
     if (document.querySelector(`script.${item.name}`)) {
-      // @ts-ignore
       return resolve(window[item.name])
     }
     const script = document.createElement('script')
-    script.src = `${project.config[project.env].componentAbsoluteUrl}${item.jsUrl}`
+    script.src = `${project.config.dev.componentAbsoluteUrl}${item.jsUrl}`
     script.setAttribute('class', item.name!)
     // if (item.existCss) {
     //   const link = document.createElement('link')
@@ -25,7 +23,6 @@ export const loadItem = (item: NodeItemBasic): Promise<{ default: any }> => {
     // }
     document.body.appendChild(script)
     script.onload = () => {
-      // @ts-ignore
       resolve(window[item.name])
     }
     script.onerror = () => {
@@ -128,16 +125,14 @@ export const initGlobalConfig = (page: Page | null) => {
         }
       }
     },
-    // @ts-ignore
     toast: window.vant.Toast,
     loading: Loading.instance,
     dialog: Dialog,
     cookie: {
-      get: native.cookieGet
+      get: native.cookie
     },
     toPage (pageId: string, query?: { [k: string]: string }) {
       let queryStr = ''
-      // @ts-ignore
       const dir = window.globalProject ? window.globalProject.project.dir : project.dir
       if (query) {
         Object.keys(query).forEach(k => {

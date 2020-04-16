@@ -138,10 +138,10 @@ export default defineComponent({
     ComponentUpload
   },
   beforeRouteLeave (to: any, from: any, next: any) {
-    // 如果存在加锁，则去解锁，否则什么也不做
-    if (project.lockedBy) {
-      // @ts-ignore
-      unlock(this.$route.params.dir).then(() => {
+    // @ts-ignore
+    const { dir } = this.$route.params
+    if (dir) {
+      unlock(dir).then(() => {
         next()
       })
     } else {
@@ -162,7 +162,6 @@ export default defineComponent({
           }
         }
       }).then(item => {
-        // @ts-ignore
         initProject(item.data.project)
         setTabName([tabName.pageList, tabName.basicComponent, tabName.pageSet])
         lock(dir)

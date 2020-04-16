@@ -132,6 +132,7 @@ export const addNode = async (item: NodeItemBasic | NodeItemLibrary) => {
       nodeType: item.nodeType,
       renderString: ''
     })
+    getNewNodeParent().push(newNode)
   } else if (item.nodeType === 1 << 2) {
     const it = item as NodeItemLibrary
     newNode = getNewNode({
@@ -146,9 +147,8 @@ export const addNode = async (item: NodeItemBasic | NodeItemLibrary) => {
       nodeType: item.nodeType,
       renderString: common.renderString.replace('div', it.name)
     })
+    getNewNodeParent().push(newNode)
   }
-  // @ts-ignore
-  getNewNodeParent().push(newNode)
   // el-tree 中的更新逻辑在下一个 task 后
   setTimeout(() => {
     setCurrentNode(newNode)

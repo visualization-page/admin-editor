@@ -69,7 +69,6 @@ export const updatePages = (target: { pageId?: string, pageIndex?: number }, obj
     pageIndex = project.pages.findIndex((x: Page) => x.id === pageId)
   }
   if (pageIndex !== undefined && pageIndex > -1) {
-    // @ts-ignore
     Vue.set(project.pages, pageIndex, { ...project.pages[pageIndex], ...obj })
   }
 }

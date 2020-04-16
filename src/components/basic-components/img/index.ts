@@ -10,8 +10,8 @@ export default {
   ...common,
   style: {
     ...common.style,
-    width: '60px',
-    height: '60px'
+    width: '100%',
+    height: undefined
   },
   props: {
     src: ''

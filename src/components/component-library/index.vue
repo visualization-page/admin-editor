@@ -66,7 +66,6 @@ export default defineComponent({
         const i = checkData.value[data.library].findIndex(x => x === data.label)
         checkData.value[data.library].splice(i, 1)
       }
-      // @ts-ignore
       updateProject({ componentLibrary: checkData.value })
     }
     const handleDisabled = (

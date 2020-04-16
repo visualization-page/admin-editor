@@ -21,7 +21,9 @@ export const tabName = {
   eventEdit: 'event-edit'
 }
 
-export const tabCurrent = reactive({
+export const tabCurrent = reactive<{
+  [k: string]: string
+}>({
   tab1: tabName.projectSet,
   tab2: tabName.basicComponent,
   tab3: tabName.pageSet,
@@ -30,7 +32,6 @@ export const tabCurrent = reactive({
 export const setTabName = (arr: any) => {
   arr.forEach((name: string, i: number) => {
     if (name) {
-      // @ts-ignore
       tabCurrent[`tab${i + 1}`] = name
     }
   })

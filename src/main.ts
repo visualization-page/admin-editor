@@ -2,12 +2,12 @@ import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
 import store from './store'
-// @ts-ignore
 import Native from '@xm/native'
 import './plugins/element'
 import 'tcon'
 import { MessageBox, Message } from 'element-ui'
 import { http } from '@/api'
+import { Toast } from 'vant/types/index'
 
 declare module '@vue/composition-api/dist/component/component' {
   interface SetupContext {
@@ -19,6 +19,10 @@ declare global {
   interface Window {
     require: () => void
     globalApp: any
+    vant: {
+      Toast: Toast
+    }
+    [k: string]: any
     // $$global: {
     //   constant: any
     //   state: any

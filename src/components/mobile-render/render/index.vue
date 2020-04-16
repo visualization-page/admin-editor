@@ -13,15 +13,19 @@
 </template>
 
 <script lang="ts">
-import { createComponent, watch, ref, onMounted } from '@vue/composition-api'
+import { defineComponent, watch, ref, onMounted } from '@vue/composition-api'
 import { parseCodeValid, sleepUntil } from '@/assets/util'
 import RenderItem from './render-item.vue'
 import { initGlobalConfig, getEventHandler } from './utils'
 import { FormEvent } from '@/assets/event'
 import { isEdit } from '@/assets/render'
 import { Page } from '@/assets/page'
+import { Project } from '@/assets/project'
 
-export default createComponent({
+export default defineComponent<{
+  currentPage: Page | null
+  project: Project | null
+}>({
   components: {
     RenderItem
   },
@@ -34,13 +38,12 @@ export default createComponent({
     }
   },
   setup (props) {
-    // @ts-ignore
     const globalConfig = ref(initGlobalConfig(props.currentPage))
     const pageConfig = ref({ state: {} })
     const mounted = ref(false)
     const pageInit = ref(false)
     const getCtx = () => ({ $$page: pageConfig.value, $$global: globalConfig.value })
-    const setConstant = (cons: string) => {
+    const setConstant = (cons: string | null) => {
       if (cons) {
         const { ok, value } = parseCodeValid(cons)
         if (ok) {
@@ -48,7 +51,7 @@ export default createComponent({
         }
       }
     }
-    const setPageState = (state: string) => {
+    const setPageState = (state: string | null) => {
       const { ok, value } = parseCodeValid(state)
       if (ok) {
         // @ts-ignore
@@ -57,7 +60,7 @@ export default createComponent({
       }
     }
     let styleEl: any
-    const setCss = (css: string) => {
+    const setCss = (css: string | null) => {
       if (css) {
         if (!styleEl) {
           styleEl = document.getElementById('butterfly-css')
@@ -118,14 +121,13 @@ export default createComponent({
       watch([() => props.currentPage, () => props.project], ([page, project], oldVal) => {
         const oldPage = oldVal && oldVal[0]
         if (project && page) {
-          setCss(project.css)
-          setConstant(project.constant)
+          setCss((project as Project).css)
+          setConstant((project as Project).constant)
           // @ts-ignore
-          globalConfig.value = initGlobalConfig(page)
+          globalConfig.value = initGlobalConfig(page as Page)
           setPageState(page.state)
-          globalConfig.value.initHttp(project.httpOptions, getCtx())
-          // @ts-ignore
-          pageEvents(page, oldPage)
+          globalConfig.value.initHttp((project as Project).httpOptions, getCtx())
+          pageEvents(page as Page, oldPage as Page)
         }
       })
     }

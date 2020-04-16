@@ -37,7 +37,6 @@ export type Project = {
     }
     pro: {
       baseUrl: string
-      componentAbsoluteUrl: string
       publicPath: string
     }
   }
@@ -49,6 +48,7 @@ export type Project = {
     whitelist: string
   }
   css: string
+  [k: string]: any
 }
 
 const defaultProject: Project = {
@@ -89,8 +89,7 @@ const defaultProject: Project = {
     },
     pro: {
       baseUrl: '/',
-      componentAbsoluteUrl: 'https://statics.e.uban360.com/',
-      publicPath: 'https://statics.jituancaiyun.com/'
+      publicPath: './'
     }
   },
   // 后台第一次创建时赋值
@@ -108,12 +107,9 @@ export const project: Project = reactive(deepClone(defaultProject))
 
 export const updateProject = (obj: Partial<Project>) => {
   Object.keys(obj).forEach(key => {
-    // @ts-ignore
     if (project[key] !== undefined && project[key] !== obj[key]) {
-      // @ts-ignore
       project[key] = obj[key]
     } else {
-      // @ts-ignore
       Vue.set(project, key, obj[key])
     }
   })
@@ -166,7 +162,6 @@ export const importProject = async (parseItem: Project) => {
       project.componentDownload = arr
       await diffDownloadDeps(arr, true)
     }
-    // @ts-ignore
     updateProject({ depLoaded: true })
     if (parseItem.pages.length) {
       setCurrentPage(parseItem.pages[0])

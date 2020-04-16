@@ -1,6 +1,6 @@
 <template>
   <div
-    v-if="currentNode && position"
+    v-if="currentNode && currentNode.id !== '-1' && position"
     class="edit-wrap"
     :style="position"
     @contextmenu="handleContext"
@@ -43,7 +43,7 @@ export default {
         // console.log('节点变化，重置 edit wrap', node.id, style, className)
         // setTabName(['', '', tabName.nodeProperty])
         if (!nodeElCache[node.id]) {
-          nodeElCache[node.id] = ctx.parent.$refs.scrollContainer.querySelector(`div[data-id="${node.id}"]`)
+          nodeElCache[node.id] = ctx.parent.$refs.scrollContainer.querySelector(`[data-id="${node.id}"]`)
         }
         const el = nodeElCache[node.id]
         setEditBounding(el)

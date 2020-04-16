@@ -55,7 +55,7 @@
 </template>
 
 <script lang="ts">
-import { createComponent, watch } from '@vue/composition-api'
+import { defineComponent, watch } from '@vue/composition-api'
 import { currentPage } from '@/assets/page'
 import { project } from '@/assets/project'
 import { rootNode, currentNode, setCurrentNode, deepCopyNode, NodeItem, NodeItemBasic, delNode } from '@/assets/node'
@@ -63,11 +63,13 @@ import { MessageBox } from 'element-ui'
 import { http } from '@/api'
 import { setTabName, tabName } from '@/assets/tab'
 
-export default createComponent({
+export default defineComponent({
   setup (props, ctx) {
     watch(() => currentNode.value && currentNode.value.id, val => {
-      // @ts-ignore
-      ctx.refs.tree.setCurrentKey(val === '-1' ? null : val)
+      if (val) {
+        // @ts-ignore
+        ctx.refs.tree.setCurrentKey(val === '-1' ? null : val)
+      }
     }, { lazy: true })
     const handleNodeClick = (data: any) => {
       setCurrentNode(data)

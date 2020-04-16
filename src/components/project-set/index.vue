@@ -21,8 +21,7 @@ export default defineComponent({
   },
 
   setup (props, ctx) {
-    // @ts-ignore
-    local[1].elAttrs.disabled = !!ctx.root.$route.params.dir
+    local[1].elAttrs!.disabled = !!ctx.root.$route.params.dir
     return {
       local,
       detail: project,

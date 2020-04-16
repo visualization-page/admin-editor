@@ -82,10 +82,9 @@ export default defineComponent({
       handlePreviewPage,
       handleGetContainerScrollTop () {
         if (containerEl.value) {
-          // @ts-ignore
-          return containerEl.value.scrollTop
+          return (containerEl.value! as Element).scrollTop
         }
-        console.log('handleGetContainerScrollTop 0')
+        // console.log('handleGetContainerScrollTop 0')
         return 0
       }
     }

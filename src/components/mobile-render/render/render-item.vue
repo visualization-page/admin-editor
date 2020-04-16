@@ -83,14 +83,13 @@ export default defineComponent<{
           nativeOn.click = (e: any) => {
             const el = document.elementFromPoint(e.x, e.y)
             if (el) {
-              let reallyEl = el
+              let reallyEl: Element = el
               if (el.classList.contains('resize')) {
-                // console.log('render-item.vue line 78 find node => .resize element')
                 return
               }
               while (!reallyEl.getAttribute('data-id') && reallyEl.tagName !== 'BODY') {
                 // @ts-ignore
-                reallyEl = reallyEl.parentNode
+                reallyEl = reallyEl.parentNode!
               }
               const id = reallyEl.getAttribute('data-id')
               if (id) {
