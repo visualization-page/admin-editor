@@ -91,7 +91,7 @@ export const parseCodeValid = (code: string | null, ctx?: any) => {
   }
   try {
     if (ctx) {
-      res.value = new Function(`var _this = arguments[0];return ${code.replace(/(\$\$)/g, '_this.$1')}`)(ctx) // eslint-disable-line no-new-func
+      res.value = new Function(`var ym = arguments[0];return ${code.replace(/(\$\$)/g, 'ym.$1')}`)(ctx) // eslint-disable-line no-new-func
     } else {
       res.value = new Function(`return ${code}`)() // eslint-disable-line no-new-func
     }

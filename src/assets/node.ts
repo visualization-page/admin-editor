@@ -163,8 +163,9 @@ export const delNode = async (target: { nodeId: string }) => {
     if (res && res.i > -1) {
       if (res.data.nodeType === 1 << 0) {
         // 删除依赖
-        const i = project.componentDownload.findIndex(x => x.name === res.data.name)
-        project.componentDownload.splice(i, 1)
+        // todo 删除时得查找依赖，不必要，考虑将内置组件直接打包到 vendors
+        // const i = project.componentDownload.findIndex(x => x.name === res.data.name)
+        // project.componentDownload.splice(i, 1)
       }
       res.handle.splice(res.i, 1)
     }

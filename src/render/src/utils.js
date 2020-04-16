@@ -1,5 +1,5 @@
-import { setRenderPreview } from '../../assets/render'
-import { initGlobalConfig } from '../../components/mobile-render/render/utils'
+import { setRenderPreview } from '@/assets/render'
+import { initGlobalConfig } from '@/components/mobile-render/render/utils'
 import { initProject } from '@/assets/project'
 
 const loadVConsole = () => {

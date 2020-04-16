@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <div id="app" :style="{ overflow: isPc && 'auto' }">
     <RouterView />
     <div v-if="isPc" class="pc-box__notice">
       <vue-qrcode :value="codeUrl" tag="img" :options="{ width: 150 }"/>
@@ -51,9 +51,9 @@ html, body, #app {
   transform: translateZ(0);
   &__notice {
     position: absolute;
-    top: 50%;
+    top: 100px;
     right: calc(50% - 400px);
-    transform: translate(0, -50%);
+    // transform: translateX(0, -50%);
     border: 1px #eee solid;
   }
 }

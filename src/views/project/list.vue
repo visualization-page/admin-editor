@@ -14,8 +14,7 @@
         <el-table-column
           prop="dir"
           label="项目"
-          fixed
-          width="120">
+          fixed>
         </el-table-column>
         <el-table-column
           prop="desc"

@@ -89,12 +89,14 @@ export default defineComponent({
     //   notify: notify !== false
     // })
     const localOpts = [
-      // {
-      //   label: '同步组件到cdn',
-      //   icon: 'el-icon-refresh-right f16',
-      //   action: () => {
-      //   }
-      // },
+      {
+        label: '生成源码',
+        icon: 'el-icon-magic-stick f16',
+        action: async () => {
+          const res = await http.post('project/gen', { dir: project.dir })
+          location.href = res.data.url
+        }
+      },
       {
         label: '下载项目',
         icon: 'el-icon-download f16',

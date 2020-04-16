@@ -1,7 +1,5 @@
 <template>
-  <div class="basic-img">
-    <img :src="src" width="100%" height="100%">
-  </div>
+  <img class="basic-img" :src="src">
 </template>
 
 <script lang="ts">

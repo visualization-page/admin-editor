@@ -61,6 +61,7 @@ import { project } from '@/assets/project'
 import { rootNode, currentNode, setCurrentNode, deepCopyNode, NodeItem, NodeItemBasic, delNode } from '@/assets/node'
 import { MessageBox } from 'element-ui'
 import { http } from '@/api'
+import { setTabName, tabName } from '@/assets/tab'
 
 export default createComponent({
   setup (props, ctx) {
@@ -70,6 +71,7 @@ export default createComponent({
     }, { lazy: true })
     const handleNodeClick = (data: any) => {
       setCurrentNode(data)
+      setTabName(['', '', tabName.nodeProperty])
     }
     const handleCopy = (data: any, parent: any) => {
       const index = parent.data.children.findIndex((x: any) => x.id === data.id)

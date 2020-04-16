@@ -18,7 +18,7 @@
       </div>
       <div class="app__mobile-webview">
         <div ref="scrollContainer" class="app__mobile-webview-mock">
-          <div class="edit-wrap-parent relative">
+          <div class="edit-wrap-parent relative height-100">
             <render
               v-if="project.depLoaded"
               :project="project"

@@ -48,12 +48,12 @@ export default defineComponent<{
   // renderError (h, err) {
   //   return h('pre', { style: { color: 'red' } }, err.stack)
   // },
-  setup (superProps) {
+  setup (superProps, ctx) {
     const renderItem = (
       items: NodeItem[],
       $$page: { [k: string]: any },
       $$global: { [k: string]: any },
-      $$listBind?: { [k: string]: any }
+      $$listBind: { [k: string]: any } = { item: {}, index: -1 }
     ) => {
       const codeExecuteContext = { $$global, $$page, $$listBind }
       return items.filter(x => {
@@ -140,6 +140,7 @@ export default defineComponent<{
         if (styleCodeRes.ok) {
           deepMerge(props.style, styleCodeRes.value)
         } else {
+          console.log(props.style.code, styleCodeRes.msg)
           throw styleCodeRes.msg
         }
         let children: any[] = []
@@ -168,13 +169,23 @@ export default defineComponent<{
                 methods?: any,
                 option?: any,
                 children?: any[]
+                data?: any
               }
-              deepMerge(props, libraryOpt.option)
+              // 方式1：模版写法解析
               if (libraryOpt.template) {
-                const Sub = Vue.extend(libraryOpt)
-                const vm = new Sub().$mount(document.createElement('div'))
-                return createElement('basic-div', props, [vm._vnode].concat(children))
+                const res = Vue.compile(libraryOpt.template)
+                const v = Object.assign(
+                  ctx.parent,
+                  libraryOpt.data ? libraryOpt.data() : {},
+                  libraryOpt.methods ? libraryOpt.methods : {}
+                )
+                v.ym = codeExecuteContext
+                // console.log(v)
+                const vn = res.render.call(v, createElement)
+                return createElement('basic-div', props, [vn].concat(children))
               }
+              // 方式2：手写vNode，合并选项
+              deepMerge(props, libraryOpt.option)
               // 第三方组件无法通过 attrs 绑定 data-id
               // 通过指令实现
               // @ts-ignore
@@ -191,7 +202,11 @@ export default defineComponent<{
     return () => createElement(
       'div',
       { class: 'render-item', attrs: {} },
-      renderItem(superProps.nodes, superProps.pageConfig, superProps.globalConfig)
+      renderItem(
+        superProps.nodes,
+        superProps.pageConfig,
+        superProps.globalConfig
+      )
     )
   }
 })

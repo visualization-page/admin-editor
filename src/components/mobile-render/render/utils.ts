@@ -72,6 +72,7 @@ export const findNode = (nodes: NodeItem[], id: string): NodeItem | undefined =>
 
 export const initGlobalConfig = (page: Page | null) => {
   return {
+    // win: window,
     page,
     dotInstance: null,
     config: project.config[project.env],

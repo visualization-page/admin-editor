@@ -164,6 +164,7 @@ export default defineComponent({
       }).then(item => {
         // @ts-ignore
         initProject(item.data.project)
+        setTabName([tabName.pageList, tabName.basicComponent, tabName.pageSet])
         lock(dir)
       })
     }

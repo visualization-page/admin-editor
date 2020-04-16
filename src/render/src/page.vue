@@ -1,10 +1,8 @@
 <template>
-  <div class="page-render height-100">
-    <render
-      :project="project"
-      :currentPage="currentPage"
-    />
-  </div>
+  <render
+    :project="project"
+    :currentPage="currentPage"
+  />
 </template>
 
 <script>

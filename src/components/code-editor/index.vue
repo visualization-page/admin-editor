@@ -70,7 +70,7 @@ export default createComponent({
           await MessageBox.confirm('代码存在语法错误，不会保存错误的代码，是否继续？')
         }
         currentCode.update(code.value)
-        Message.success(`保存成功`)
+        Message.success(`保存${currentCode.title}成功`)
         handleCancel()
       },
       handleCodeChange (val: string) {
