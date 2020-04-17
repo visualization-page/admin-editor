@@ -1,6 +1,4 @@
-import Vue from 'vue'
-import Composition, { reactive } from '@vue/composition-api'
-Vue.use(Composition)
+import { reactive, ref } from '@vue/composition-api'
 
 export const tabName = {
   projectSet: 'project-set',
@@ -30,9 +28,19 @@ export const tabCurrent = reactive<{
   tab4: tabName.previewArea
 })
 export const setTabName = (arr: any) => {
+  if (arr[0]) {
+    hideComponent(true)
+  } else if (arr[1]) {
+    hideComponent(false)
+  }
   arr.forEach((name: string, i: number) => {
     if (name) {
       tabCurrent[`tab${i + 1}`] = name
     }
   })
+}
+
+export const isHideComponent = ref(false)
+export const hideComponent = (type: boolean = false) => {
+  isHideComponent.value = type
 }

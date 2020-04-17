@@ -1,5 +1,4 @@
 export const common = {
-  id: 2,
   version: '0.0.1',
   cover: '',
   className: '',

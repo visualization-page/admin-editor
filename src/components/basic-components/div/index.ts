@@ -1,14 +1,14 @@
-import Vue from 'vue'
+// import Vue from 'vue'
 import Component from './index.vue'
 import { common } from '../common'
-Vue.component(Component.name, Component)
+// Vue.component(Component.name, Component)
 
 export default {
+  ...common,
   componentName: Component.name,
   title: '万能容器',
-  cover: '',
+  cover: 'el-icon-folder-opened',
   type: 'div',
-  ...common,
   style: {
     ...common.style,
     height: undefined

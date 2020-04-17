@@ -6,6 +6,7 @@ node_modules
 /server/public/project
 /server/public/upload
 /server/public/compose
+/server/public/basic
 
 # local env files
 .env.local

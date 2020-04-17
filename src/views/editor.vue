@@ -1,5 +1,5 @@
 <template>
-  <div class="editor height-100">
+  <div class="editor height-100" overflow-h>
     <div class="app-header">
       <header-opt />
     </div>
@@ -10,8 +10,8 @@
       <node-style-tools v-if="false" />
     </div>
     <div class="app-content flex">
-      <div class="app__side-bar">
-        <div class="app__block height-50">
+      <div class="app__side-bar relative">
+        <div class="app__block height-100">
           <el-tabs
             :value="tabCurrent.tab1"
             class="height-100"
@@ -32,29 +32,36 @@
             </el-tab-pane>
           </el-tabs>
         </div>
-        <div class="app__block height-50">
-          <el-tabs
-            :value="tabCurrent.tab2"
-            class="height-100"
-            type="border-card"
-            @input="val => handleClick(['', val])"
-          >
-            <el-tab-pane label="内置组件" :name="tabName.basicComponent">
-              <basic-component />
-            </el-tab-pane>
-            <el-tab-pane label="封装组件" :name="tabName.highComponent">
-              <component-compose />
-            </el-tab-pane>
-            <el-tab-pane label="上传组件" :name="tabName.uploadComponent">
-              <component-upload />
-            </el-tab-pane>
-            <el-tab-pane label="组件库" :name="tabName.libraryComponent">
-              <component-library />
-            </el-tab-pane>
-            <el-tab-pane label="工具函数" :name="tabName.fx">
-              <p>敬请期待</p>
-            </el-tab-pane>
-          </el-tabs>
+        <div
+          class="app__block--container"
+          :style="{
+            top: isHideComponent ? 'calc(100% - 24px)' : '24px'
+          }"
+        >
+          <div class="app__block height-100">
+            <el-tabs
+              :value="tabCurrent.tab2"
+              class="height-100"
+              type="border-card"
+              @input="val => handleClick(['', val])"
+            >
+              <el-tab-pane label="内置组件" :name="tabName.basicComponent">
+                <basic-component />
+              </el-tab-pane>
+              <el-tab-pane label="封装组件" :name="tabName.highComponent">
+                <component-compose />
+              </el-tab-pane>
+              <el-tab-pane label="上传组件" :name="tabName.uploadComponent">
+                <component-upload />
+              </el-tab-pane>
+              <el-tab-pane label="组件库" :name="tabName.libraryComponent">
+                <component-library />
+              </el-tab-pane>
+              <el-tab-pane label="工具函数" :name="tabName.fx">
+                <p>敬请期待</p>
+              </el-tab-pane>
+            </el-tabs>
+          </div>
         </div>
       </div>
       <div class="app__box relative">
@@ -98,6 +105,7 @@
 </template>
 
 <script lang="ts">
+import Vue from 'vue'
 import { defineComponent, onUnmounted } from '@vue/composition-api'
 import ProjectSet from '@/components/project-set/index.vue'
 import PageList from '@/components/page-list/index.vue'
@@ -113,7 +121,7 @@ import HeaderOpt from '@/components/header-opts/index.vue'
 import ComponentLibrary from '@/components/component-library/index.vue'
 import ComponentCompose from '@/components/component-compose/index.vue'
 import ComponentUpload from '@/components/component-upload/index.vue'
-import { tabCurrent, setTabName, tabName } from '@/assets/tab'
+import { tabCurrent, setTabName, tabName, isHideComponent, hideComponent } from '@/assets/tab'
 import { http } from '@/api'
 import { initProject, project, resetProject } from '@/assets/project'
 import { Message } from 'element-ui'
@@ -151,7 +159,7 @@ export default defineComponent({
   setup (props, ctx) {
     const dir = ctx.root.$route.params.dir
     if (dir) {
-      http.get('project/get', { dir }, {
+      http.get('project/get', { dir, name: Vue.prototype.$native.name }, {
         codeCallback: {
           6001: (res: any) => {
             Message.error(res.msg)
@@ -165,6 +173,9 @@ export default defineComponent({
         initProject(item.data.project)
         setTabName([tabName.pageList, tabName.basicComponent, tabName.pageSet])
         lock(dir)
+        requestAnimationFrame(() => {
+          hideComponent(true)
+        })
       })
     }
     onUnmounted(() => {
@@ -181,6 +192,7 @@ export default defineComponent({
       tabCurrent,
       tabName,
       project,
+      isHideComponent,
       handleMode,
       isEdit,
       handleClick (obj: any) {
@@ -192,12 +204,19 @@ export default defineComponent({
 </script>
 
 <style lang="less">
-@import '../hack-vant-form.less';
+@import '../style/hack-vant-form.less';
 @import '~esc-ui/lib/button/index.css';
 @import '~esc-ui/lib/page-button/index.css';
 .editor {
   [class*=van-hairline]::after {
     border-color: #ccc;
   }
+}
+.app__block--container {
+  position: absolute;
+  width: 100%;
+  height: e('calc(100% - 24px)');
+  background-color: #fff;
+  transition: top .5s ease-out;
 }
 </style>

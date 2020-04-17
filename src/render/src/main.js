@@ -3,6 +3,9 @@ import App from './App.vue'
 import router from './router'
 import Native from '@xm/native'
 import 'tcon'
+import { useBasicComponents } from '@/components/basic-components'
+
+useBasicComponents()
 
 window.ELEMENT = {
   Message () {},

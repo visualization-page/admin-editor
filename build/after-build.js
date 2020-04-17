@@ -26,13 +26,19 @@ fs.copySync(path.resolve(__dirname, `../dist-system`), path.join(target, 'dist-s
 const copyDirs = [
   'server/controller',
   'server/router',
-  'server/public/basic',
+  'server/public/upload',
   'server/public/upload-entry-template.tpl',
   'server/index.js'
   // '.gitignore'
 ]
+const delDirs = [
+  'server/public/upload/index.json',
+]
 copyDirs.forEach(item => {
   fs.copySync(path.resolve(__dirname, `../`, item), path.join(target, item))
+})
+delDirs.forEach(item => {
+  execSync(`rm -rf ${path.join(target, item)}`)
 })
 const json = fs.readJsonSync(path.resolve(__dirname, `../package.json`))
 delete json.dependencies['@xm/native']

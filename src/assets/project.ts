@@ -30,6 +30,8 @@ export type Project = {
   }
   componentDownload: NodeItemBasic[]
   config: {
+    appType: Number
+    path: string
     dev: {
       baseUrl: string
       componentAbsoluteUrl: string
@@ -82,6 +84,8 @@ const defaultProject: Project = {
     // }
   ],
   config: {
+    appType: 1,
+    path: '',
     dev: {
       baseUrl: process.env.VUE_APP_FILE_SERVER,
       componentAbsoluteUrl: process.env.VUE_APP_FILE_SERVER,

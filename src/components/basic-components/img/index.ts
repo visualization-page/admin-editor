@@ -1,13 +1,14 @@
-import Vue from 'vue'
+// import Vue from 'vue'
 import Component from './index.vue'
 import { common } from '../common'
-Vue.component(Component.name, Component)
+// Vue.component(Component.name, Component)
 
 export default {
+  ...common,
   componentName: Component.name,
   title: '图片',
   type: 'img',
-  ...common,
+  cover: 'el-icon-picture-outline',
   style: {
     ...common.style,
     width: '100%',

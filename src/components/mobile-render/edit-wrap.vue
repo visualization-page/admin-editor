@@ -14,7 +14,7 @@ import { watch, onMounted, reactive, toRefs } from '@vue/composition-api'
 import Resizer from './resize/index.vue'
 import { currentNode } from '@/assets/node'
 import { setPosition } from './context-menu/position'
-import { tabName, setTabName } from '@/assets/tab'
+// import { tabName, setTabName } from '@/assets/tab'
 import { editWrapState, setEditWrapState, editNode } from '@/assets/render'
 
 export default {
@@ -45,23 +45,24 @@ export default {
         if (!nodeElCache[node.id]) {
           nodeElCache[node.id] = ctx.parent.$refs.scrollContainer.querySelector(`[data-id="${node.id}"]`)
         }
+        // console.log(node.style.positionType)
         const el = nodeElCache[node.id]
         setEditBounding(el)
       }
     }
     // 样式变化，重置编辑框大小
     watch(() => editNode.value, el => setEditBounding(el), { lazy: true })
-    watch(() => currentNode.value, node => resetEditWrapByStyle(node), { lazy: true })
-    watch(
-      () => currentNode.value && currentNode.value.className,
-      () => resetEditWrapByStyle(currentNode.value),
-      { lazy: true }
-    )
-    watch(
-      () => currentNode.value && currentNode.value.style,
-      () => resetEditWrapByStyle(currentNode.value),
-      { lazy: true, deep: true }
-    )
+    watch(() => currentNode.value, node => resetEditWrapByStyle(node), { lazy: true, deep: true })
+    // watch(
+    //   () => currentNode.value && currentNode.value.className,
+    //   () => resetEditWrapByStyle(currentNode.value),
+    //   { lazy: true }
+    // )
+    // watch(
+    //   () => currentNode.value && currentNode.value.style,
+    //   () => resetEditWrapByStyle(currentNode.value),
+    //   { lazy: true, deep: true }
+    // )
     onMounted(() => {
       setTimeout(() => {
         state.parentPosition = ctx.parent.$el.getBoundingClientRect()
@@ -101,5 +102,6 @@ export default {
   position: absolute;
   border: 1px #409eff dashed;
   background-color: rgba(#409eff, .4);
+  pointer-events: none;
 }
 </style>

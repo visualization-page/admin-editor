@@ -27,6 +27,7 @@ import { currentNode, delNode, setCurrentNode } from '@/assets/node'
 import { updateByField } from '@/assets/util'
 import { isEdit } from '@/assets/render'
 import { currentPage } from '@/assets/page'
+import { basicSchemaMap } from '../basic-components'
 
 export default {
   components: {
@@ -43,7 +44,7 @@ export default {
       if (node && node.id !== '-1') {
         let schema = []
         if (node.nodeType === 1 << 0) {
-          schema = window[node.name].schema.map(x => ({
+          schema = basicSchemaMap[node.subType || node.type].map(x => ({
             ...x,
             model: x.type === 'input' ? 'blur' : 'input'
           }))

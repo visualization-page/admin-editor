@@ -40,13 +40,15 @@
         </div>
         <div :key="i" class="h30 bg-666 mt10" style="width:2px" />
       </template>
-      <div class="avatar flex-center c-aaa ml20">
-        <div class="avatar-img relative c-fff flex-center" overflow-h >
-          {{ name.substr(-2) }}
-          <div v-if="false" class="absolute t0 l0 b0 r0" :style="{ background: `url(${avatar}) center / cover no-repeat` }" />
+      <slot>
+        <div class="avatar flex-center c-aaa ml20">
+          <div class="avatar-img relative c-fff flex-center" overflow-h >
+            {{ name.substr(-2) }}
+            <div class="absolute t0 l0 b0 r0" :style="{ background: `url(${avatar}) center / cover no-repeat` }" />
+          </div>
+          <p v-if="false" class="ml10">{{ name }}</p>
         </div>
-        <p class="ml10" v-if="false">{{ name }}</p>
-      </div>
+      </slot>
     </div>
   </div>
 </template>
@@ -89,37 +91,41 @@ export default defineComponent({
     //   notify: notify !== false
     // })
     const localOpts = [
-      {
-        label: '生成源码',
-        icon: 'el-icon-magic-stick f16',
-        action: async () => {
-          const res = await http.post('project/gen', { dir: project.dir })
-          location.href = res.data.url
-        }
-      },
-      {
-        label: '下载项目',
-        icon: 'el-icon-download f16',
-        action: () => {
-          if (!project.dir) {
-            return Message.error('项目名称必填！')
-          }
-          location.href = process.env.VUE_APP_FILE_SERVER + `/butterfly/project/download/${project.dir}`
-        }
-      },
+      // {
+      //   label: '生成源码',
+      //   icon: 'el-icon-magic-stick f16',
+      //   action: async () => {
+      //     const res = await http.post('project/gen', { dir: project.dir })
+      //     location.href = res.data.url
+      //   }
+      // },
+      // {
+      //   label: '下载项目',
+      //   icon: 'el-icon-download f16',
+      //   action: () => {
+      //     if (!project.dir) {
+      //       return Message.error('项目名称必填！')
+      //     }
+      //     location.href = process.env.VUE_APP_FILE_SERVER + `/butterfly/project/download/${project.dir}`
+      //   }
+      // },
       {
         label: '发布项目',
         icon: 'el-icon-position f16',
         action: async () => {
           if (!project.dir) {
             return Message.error('项目名称必填！')
+          } else if (project.config.appType === undefined) {
+            return Message.error('请选择项目所属省份')
+          } else if (!project.config.path) {
+            return Message.error('请输入项目部署目标机器目录')
           }
-          const { value }: any = await MessageBox.prompt('请输入改动描述')
-          if (!value || value.length < 5) {
-            return Message.error('描述至少5个字')
+          // await MessageBox.confirm('发布不会保存项目，请确认已保存?')
+          const { value }: any = await MessageBox.prompt('请输入发布备注', { inputPlaceholder: '至少3个字' })
+          if (!value || value.length < 3) {
+            return Message.error('至少3个字')
           }
-          // await handleSave(true, value, false)
-          await MessageBox.confirm('发布不会自动保存项目，请确认已保存?')
+          await saveProject(true, value, false)
           await http.post(
             'project/release',
             {
@@ -153,7 +159,7 @@ export default defineComponent({
           const params = ctx.root.$route.params
           // const _save =
           await saveProject(!!params.dir)
-          Message.success('保存成功')
+          Message.success('保存项目成功')
           if (!params.dir) {
             ctx.root.$router.replace(`/editor/${project.dir}`)
           }
@@ -189,7 +195,7 @@ export default defineComponent({
     return {
       localOpts,
       avatar,
-      name: native.name,
+      name: native.name || '',
       handleResponse (res: any, item: any) {
         if (res.success) {
           Message.success('上传成功')

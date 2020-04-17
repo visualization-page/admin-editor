@@ -52,11 +52,12 @@
         <el-table-column
           fixed="right"
           label="操作"
-          width="200">
+          width="230">
           <template slot-scope="scope">
             <el-button @click="handlePreview(scope.row)" type="text" size="small">查看</el-button>
             <el-button @click="handleCopy(scope.row)" type="text" size="small">复制</el-button>
             <el-button @click="handleDown(scope.row)" type="text" size="small">下载</el-button>
+            <el-button @click="handleExport(scope.row)" type="text" size="small">导出</el-button>
             <template v-if="hasPriv(scope.row)">
               <el-button @click="handleDel(scope.row)" type="text" size="small">删除</el-button>
               <el-button @click="$router.push(`/editor/${scope.row.dir}`)" type="text" size="small">编辑</el-button>
@@ -89,14 +90,15 @@ export default {
           icon: 'el-icon-s-flag f16',
           action: () => {
             // this.$router.push('/')
-            window.open('http://api.jituancaiyun.net/butterfly-fe/dist-system/render.html#/project/butterfly-about')
+            window.open('./render.html#/project/butterfly-about')
           }
         },
         {
           label: '教程',
           icon: 'el-icon-question f16',
           action: () => {
-            this.$router.push('/tourism')
+            // this.$router.push('/tourism')
+            window.open('./render.html#/project/tourism')
           }
         },
         {
@@ -161,6 +163,9 @@ export default {
         this.getList()
       })
     },
+    handleExport (item) {
+      location.href = process.env.VUE_APP_FILE_SERVER + `/butterfly/project/export/${item.dir}`
+    },
     async handleDel (item) {
       await MessageBox.confirm('确认删除吗？')
       const i = this.tableData.findIndex(x => x.dir === item.dir)
@@ -177,7 +182,7 @@ export default {
 
 <style lang="less">
 .project-list {
-  width: 1000px;
+  width: 1100px;
   margin: 20px auto;
   height: e('calc(100% - 102px)');
   overflow: auto;

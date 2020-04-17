@@ -69,22 +69,23 @@ module.exports = {
   },
   '/project/:dir': {
     get: async (req, res) => {
+      const userName = req.query.name
       const data = await component.getProject(req.params.dir)
       const lockedBy = component.getLock(data.project.dir)
       if (new RegExp('render.html').test(req.headers.referer)) {
         // 检查 是 render.html
         res.json({ success: true, data })
         return
-      } else if (lockedBy && lockedBy !== req.cookies.userName) {
+      } else if (lockedBy && lockedBy !== userName) {
         // 检查锁
         res.json({ success: false, msg: `项目被${lockedBy}锁定编辑，请稍后再试`, code: 6001 })
         return
       }
 
       // 校验权限
-      const hasPriv = req.cookies.userName === data.project.createUser ||
-        (data.project.info.whitelist || '').indexOf(req.cookies.userName) > -1 ||
-        req.cookies.userName === '杨明'
+      const hasPriv = userName === data.project.createUser ||
+        (data.project.info.whitelist || '').indexOf(userName) > -1 ||
+        userName === '杨明'
       if (hasPriv) {
         res.json({ success: true, data })
       } else {
@@ -115,6 +116,16 @@ module.exports = {
       res.json(result || { success: true, msg: '' })
     }
   },
+  '/project/export/:dir': {
+    get: async (req, res) => {
+      const dataPath = path.join(pubPath, 'project', req.params.dir, 'data.json')
+      res.download(dataPath, err => {
+        if (err) {
+          throw err
+        }
+      })
+    }
+  },
   '/project/download/:dir': {
     get: async (req, res) => {
       const dir = req.params.dir
@@ -130,7 +141,7 @@ module.exports = {
           }
         })
       } else {
-        res.json({ success: false, msg: `${dir} 项目未发布正式版` })
+        res.json({ success: false, msg: `${dir} 项目压缩包不存在，请先发布` })
       }
     }
   },
@@ -139,7 +150,7 @@ module.exports = {
     //   res.json({ success: false, msg: `666` })
     // },
     async post (req, res) {
-      await component.lockProject(req.params.dir, req.cookies.userName, req.body.type)
+      await component.lockProject(req.params.dir, req.body.name, req.body.type)
       res.json({ success: true, msg: req.body.type ? '加锁成功' : '解锁成功' })
     }
   },

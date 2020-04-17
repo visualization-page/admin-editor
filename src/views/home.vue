@@ -36,5 +36,5 @@ export default {
 </script>
 
 <style lang="less">
-@import '../button';
+@import '../style/button';
 </style>

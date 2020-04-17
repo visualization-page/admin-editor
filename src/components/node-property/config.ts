@@ -1,5 +1,3 @@
-import { currentNode } from '@/assets/node'
-
 export default [
   {
     label: 'ID',
@@ -45,20 +43,6 @@ export default [
       placeholder: '请输入'
     },
     model: 'blur'
-  },
-  {
-    label: '绑定状态',
-    field: 'bindState',
-    type: 'input',
-    elAttrs: {
-      placeholder: '请输入'
-    },
-    model: 'blur',
-    relationCallback: (schema: any) => {
-      return schema.label === '绑定状态' && currentNode.value && currentNode.value.subType === 'list'
-    },
-    'info-icon': 'el-icon-warning-outline',
-    info: '列表容器可以绑定视图模型，$$page.state.test，绑定后在列表容器的子节点中可以使用 $$listBind.item 获取遍历元素， $$listBind.index 获取遍历索引'
   },
   {
     label: '脱离文档流',

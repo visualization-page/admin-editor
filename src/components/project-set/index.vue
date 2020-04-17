@@ -9,7 +9,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from '@vue/composition-api'
+import { defineComponent, watch } from '@vue/composition-api'
 import SchemaForm from '../schema/index.vue'
 import { local } from './config'
 import { project } from '@/assets/project'
@@ -21,7 +21,9 @@ export default defineComponent({
   },
 
   setup (props, ctx) {
-    local[1].elAttrs!.disabled = !!ctx.root.$route.params.dir
+    watch(() => ctx.root.$route.params.dir, dir => {
+      local[1].elAttrs!.disabled = !!dir
+    })
     return {
       local,
       detail: project,

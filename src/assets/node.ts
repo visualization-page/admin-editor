@@ -125,11 +125,12 @@ export const deepCopyNode = (data: NodeItem, copyTitle: boolean = true) => {
 export const addNode = async (item: NodeItemBasic | NodeItemLibrary) => {
   let newNode: NodeItem
   if (item.nodeType === 1 << 0) {
-    const data = await loadItem(item as NodeItemBasic)
+    // const data = await loadItem(item as NodeItemBasic)
     newNode = getNewNode({
-      ...data.default,
-      name: item.name,
-      nodeType: item.nodeType,
+      // ...data.default,
+      ...item,
+      // name: item.name,
+      // nodeType: item.nodeType,
       renderString: ''
     })
     getNewNodeParent().push(newNode)

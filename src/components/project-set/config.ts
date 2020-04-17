@@ -126,5 +126,61 @@ export const local = [
     type: 'code',
     'info-icon': 'el-icon-warning-outline',
     info: '全局css，会被直接插入到 html 头部中'
+  },
+  {
+    label: '省份',
+    field: 'config.appType',
+    type: 'select',
+    options: [
+      {
+        label: '浙江',
+        value: 1
+      },
+      {
+        label: '上海',
+        value: 5
+      },
+      {
+        label: '湖南',
+        value: 6
+      },
+      {
+        label: '江西',
+        value: 9
+      },
+      {
+        label: '河南快马',
+        value: 8
+      },
+      {
+        label: '北京',
+        value: 34
+      },
+      {
+        label: '河北',
+        value: 20
+      },
+      {
+        label: '吉林',
+        value: 21
+      },
+      {
+        label: '山东',
+        value: 26
+      },
+      {
+        label: '广西八桂',
+        value: 18
+      },
+      {
+        label: '测试环境',
+        value: -1
+      }
+    ]
+  },
+  {
+    label: '目标目录',
+    field: 'config.path',
+    type: 'textarea'
   }
 ]
