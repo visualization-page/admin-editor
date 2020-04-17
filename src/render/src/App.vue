@@ -1,10 +1,15 @@
 <template>
-  <div id="app" :style="{ overflow: isPc && 'auto', position: isPc && 'relative' }">
-    <RouterView />
-    <div v-if="isPc" class="pc-box__notice">
+  <div v-if="isPc" class="pc-box height-100">
+    <div class="height-100 relative" overflow-a>
+      <router-view />
+    </div>
+    <div class="pc-box__notice">
       <vue-qrcode :value="codeUrl" tag="img" :options="{ width: 150 }"/>
       <p class="f12 c-999 tc pb10">用手机扫一扫</p>
     </div>
+  </div>
+  <div v-else id="app">
+    <router-view />
   </div>
 </template>
 
@@ -20,14 +25,6 @@ export default {
       isPc: this.checkPc(true),
       codeUrl: location.href
     }
-  },
-  created () {
-    if (this.isPc) {
-      document.body.classList.add('pc-box')
-    }
-    // window.addEventListener('resize', () => {
-    //   this.checkPc()
-    // })
   },
   methods: {
     checkPc (noSign) {
