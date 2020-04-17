@@ -1,6 +1,6 @@
 <template>
   <div class="app__box-center absolute z2">
-    <div class="app__mobile">
+    <div class="app__mobile height-100">
       <div class="app__mobile-header relative bb bd-eee">
         <img src="http://file.iming.work/85bcf0d2af175231da45.png" width="100%" alt="">
         <span class="absolute l0 b0 width-100 pb10 tc f16">
@@ -97,14 +97,14 @@ export default defineComponent({
   user-select: none;
 }
 .app__box-center {
-  width: 320px;
+  // width: 320px;
+  width: 375px;
   left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  @media (max-height: 630px) {
-    .app__mobile-webview {
-      height: 450px !important;
-    }
+  transform: translateX(-50%);
+  top: 20px;
+  bottom: 20px;
+  .app__mobile-webview {
+    height: e('calc(100% - 65px)');
   }
   .app__mobile {
     width: 100%;
@@ -112,7 +112,7 @@ export default defineComponent({
     &-header {
     }
     &-webview {
-      height: 480px;
+      // height: 480px;
       background-color: #eee;
       // margin: 0 -10px;
       // padding: 0 10px;

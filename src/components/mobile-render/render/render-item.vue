@@ -134,8 +134,28 @@ export default defineComponent<{
         if (props.style.position === undefined) {
           props.style.zIndex = undefined
         }
+        const isPc = !/android|iphone/i.test(navigator.userAgent)
+        // 处理 vw 单位
+        Object.keys(props.style).forEach(k => {
+          if (k !== 'code' && typeof props.style[k] === 'string') {
+            if (isPc) {
+              props.style[k] = props.style[k].replace(/vw/, 'px')
+            } else if (/vw/.test(props.style[k])) {
+              const val = Number(props.style[k].replace('vw', ''))
+              props.style[k] = (val / 3.75).toFixed(2) + 'vw'
+            }
+          }
+        })
         // 处理 style.code
-        const styleCodeRes = parseCodeValid(props.style.code, codeExecuteContext)
+        // 包含 vw 单位在 pc 上的显示
+        let styleCode = props.style.code
+        if (isPc) {
+          // styleCode = styleCode.replace(/3\.75/g, '3.75 * 375 / document.body.clientWidth')
+          styleCode = styleCode.replace(/vw/g, 'px')
+        } else {
+          styleCode = styleCode.replace(/vw/g, '/3.75+"vw"')
+        }
+        const styleCodeRes = parseCodeValid(styleCode, codeExecuteContext)
         if (styleCodeRes.ok) {
           deepMerge(props.style, styleCodeRes.value)
         } else {

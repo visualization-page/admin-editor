@@ -76,17 +76,27 @@ export default defineComponent({
       setTabName(['', '', tabName.nodeProperty])
     }
     const handleCopy = (data: any, parent: any) => {
-      const index = parent.data.children.findIndex((x: any) => x.id === data.id)
-      let target = parent.data.children
-      if (parent.data.id === '-1') {
-        target = currentPage.value!.nodes
+      if (parent.parent === null) {
+        const index = parent.data.findIndex((x: any) => x.id === data.id)
+        const target = parent.data
+        target.splice(
+          index + 1,
+          0,
+          deepCopyNode(data)
+        )
+      } else {
+        const index = parent.data.children.findIndex((x: any) => x.id === data.id)
+        const target = parent.data.children
+        // if (parent.data.id === '-1') {
+        //   target = currentPage.value!.nodes
+        // }
+        // 复制时，需要递归所有节点，生成新的 id
+        target.splice(
+          index + 1,
+          0,
+          deepCopyNode(data)
+        )
       }
-      // 复制时，需要递归所有节点，生成新的 id
-      target.splice(
-        index + 1,
-        0,
-        deepCopyNode(data)
-      )
     }
     const handleDel = (item: any) => {
       delNode({ nodeId: item.id })

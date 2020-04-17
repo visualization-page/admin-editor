@@ -5,7 +5,7 @@
     :style="position"
     @contextmenu="handleContext"
   >
-    <resizer />
+    <resizer v-if="false" />
   </div>
 </template>
 
@@ -69,7 +69,7 @@ export default {
           const { left, top, width, height } = edit.style
           // const containerScrollTop = ctx.parent.$refs.scrollContainer.scrollTop
           const containerScrollTop = p.getScrolltop()
-          const mobileHeaderHeight = 54.61
+          const mobileHeaderHeight = 65
           // console.log(top, state.parentPosition.top, mobileHeaderHeight, containerScrollTop)
           state.position = {
             left: left - state.parentPosition.left + 'px',
@@ -100,5 +100,6 @@ export default {
 .edit-wrap {
   position: absolute;
   border: 1px #409eff dashed;
+  background-color: rgba(#409eff, .4);
 }
 </style>

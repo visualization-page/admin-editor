@@ -7,7 +7,6 @@ import './plugins/element'
 import 'tcon'
 import { MessageBox, Message } from 'element-ui'
 import { http } from '@/api'
-import { Toast } from 'vant/types/index'
 
 declare module '@vue/composition-api/dist/component/component' {
   interface SetupContext {
@@ -20,7 +19,7 @@ declare global {
     require: () => void
     globalApp: any
     vant: {
-      Toast: Toast
+      Toast: (msg: string) => void
     }
     [k: string]: any
     // $$global: {
