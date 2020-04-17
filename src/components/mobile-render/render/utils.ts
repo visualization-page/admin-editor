@@ -5,10 +5,16 @@ import { getParentRef, parseCodeValid } from '@/assets/util'
 import { FormEvent } from '@/assets/event'
 import { Loading, Dialog, Dot, Http } from 'esc-ui'
 import Native from '@xm/native'
+import { basicSchemaMap } from '@/components/basic-components'
 
 const native = new Native()
 export const loadItem = (item: NodeItemBasic): Promise<{ default: any }> => {
+  const basicNames = Object.keys(basicSchemaMap).map(x => `bf-${x}`)
   return new Promise((resolve, reject) => {
+    // @ts-ignore
+    if (basicNames.includes(item.name || `bf-${item.type}`)) {
+      return resolve()
+    }
     if (document.querySelector(`script.${item.name}`)) {
       return resolve(window[item.name])
     }

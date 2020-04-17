@@ -44,10 +44,17 @@ export default {
       if (node && node.id !== '-1') {
         let schema = []
         if (node.nodeType === 1 << 0) {
-          schema = basicSchemaMap[node.subType || node.type].map(x => ({
-            ...x,
-            model: x.type === 'input' ? 'blur' : 'input'
-          }))
+          const winSchema = node.name && window[node.name] && window[node.name].schema
+          schema = winSchema || basicSchemaMap[node.subType || node.type]
+          if (!schema) {
+            // eslint-disable-next-line no-new
+            new Error('schema is not found from node-property')
+          } else {
+            schema = schema.map(x => ({
+              ...x,
+              model: x.type === 'input' ? 'blur' : 'input'
+            }))
+          }
         } else if (node.nodeType === 1 << 2) {
           schema = [
             {

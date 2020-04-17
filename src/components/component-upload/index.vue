@@ -22,8 +22,9 @@
     </div>
     <van-grid
       class="van-hairline--left"
-      :column-num="4"
+      :column-num="2"
       clickable
+      square
     >
       <van-grid-item
         v-for="item in list"
@@ -31,10 +32,18 @@
         class="cp relative"
         @click="handleClick(item)"
       >
-        <div class="w40 h40 bg-f2">
-          <img :src="item.cover" width="100%" alt="">
+        <div
+          class="width-100 flex-center"
+          :class="{
+            'bg-f2': !item.cover
+          }"
+          :style="{
+            height: '150px'
+          }"
+        >
+          <img v-if="item.cover" :src="item.cover" width="100%" alt="">
         </div>
-        <span class="c-666">{{ item.name }}</span>
+        <span class="c-666 mt10">{{ item.title || item.name }}</span>
         <div @click.stop="downloadItem(item)" class="cp absolute r10 t0"><i class="el-icon-download"></i></div>
       </van-grid-item>
     </van-grid>

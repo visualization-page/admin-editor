@@ -173,9 +173,9 @@ export default defineComponent({
         initProject(item.data.project)
         setTabName([tabName.pageList, tabName.basicComponent, tabName.pageSet])
         lock(dir)
-        requestAnimationFrame(() => {
-          hideComponent(true)
-        })
+        // requestAnimationFrame(() => {
+        //   hideComponent(true)
+        // })
       })
     }
     onUnmounted(() => {

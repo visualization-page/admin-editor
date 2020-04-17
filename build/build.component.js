@@ -13,7 +13,7 @@ entry = entry || path.resolve(__dirname, '../', `src/components/basic-components
 
 console.log('打包中...')
 const handle = spawn(
-  cli ? './node_modules/.bin/vue-cli-service' : './node_modules/.bin/webpack',
+  cli ? './node_modules/.bin/vue-cli-service' : './node_modules/.bin/webpack-cli',
   cli
     ? ['build', '--target', 'lib', '--name', `bf-${dir}`, entry]
     : ['--config', path.resolve(__dirname, './webpack.config.js'), '--mode', 'production'],
@@ -60,21 +60,22 @@ handle.on('close', code => {
     existCss
   })
 
-  console.log('更新组件列表')
-  const req = request({
-    hostname: 'localhost',
-    port: 9420,
-    path: `/butterfly/component/${type}`,
-    method: 'POST'
-  }, (res) => {
-    res.setEncoding('utf8')
-    res.on('data', (chunk) => {
-      console.log(`${chunk}`)
-    })
-    res.on('end', () => {
-      console.log('处理完成')
-    })
-  })
+  // console.log('更新组件列表')
+  // const req = request({
+  //   hostname: 'localhost',
+  //   port: 9420,
+  //   path: `/butterfly/component/${type}`,
+  //   method: 'POST'
+  // }, (res) => {
+  //   res.setEncoding('utf8')
+  //   res.on('data', (chunk) => {
+  //     console.log(`${chunk}`)
+  //   })
+  //   res.on('end', () => {
+  //     console.log('处理完成')
+  //   })
+  // })
   // execSync('curl -X POST http://localhost:3000/butterfly/component/basic')
-  req.end()
+  // req.end()
+  console.log('处理完成')
 })

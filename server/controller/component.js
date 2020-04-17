@@ -115,6 +115,7 @@ const handle = {
         const arr = await fs.readJSON(upPath)
         exist = arr.some(x => x.name === `bf-${name}`)
       }
+      // todo 上传组件的更新校验 !exist
       if (fs.pathExistsSync(basicPath)) {
         const arr = await fs.readJSON(basicPath)
         exist = arr.some(x => x.name === `bf-${name}`)
@@ -134,7 +135,14 @@ const handle = {
         await utils.webpack(name, entryPath)
         console.log('---- webpack done')
         // 将 zip 包 copy 到目标目录
-        await fs.copy(file, path.join(pubPath, 'upload', name, `${name}.zip`))
+        await fs.copy(file, path.join(pubPath, 'upload', name, `${name}.zip`), { overwrite: true })
+        const dataPath = path.join(pubPath, 'upload', name, 'data.json')
+        const dataJson = await fs.readJSON(dataPath)
+        dataJson.title = pkgContent.title
+        dataJson.cover = pkgContent.cover
+        dataJson.version = pkgContent.version
+        await fs.writeJson(dataPath, dataJson)
+        await handle.update('upload')
       } else {
         msg = 'schema.js 不存在'
       }

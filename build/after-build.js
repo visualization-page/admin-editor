@@ -24,6 +24,7 @@ execSync(`rm -rf ${path.join(target, 'dist-system')}`)
 fs.copySync(path.resolve(__dirname, `../dist-system`), path.join(target, 'dist-system'))
 // 不能直接覆盖 server/public
 const copyDirs = [
+  'build',
   'server/controller',
   'server/router',
   'server/public/upload',
