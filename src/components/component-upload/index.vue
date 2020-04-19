@@ -10,7 +10,7 @@
       </el-button>
       <el-upload
         class="upload-demo"
-        :action="server + '/butterfly/upload'"
+        :action="server + '/butterfly/component/upload/upload'"
         :multiple="false"
         :show-file-list="false"
         :before-upload="handleBeforeUpload"
@@ -47,20 +47,6 @@
         <div @click.stop="downloadItem(item)" class="cp absolute r10 t0"><i class="el-icon-download"></i></div>
       </van-grid-item>
     </van-grid>
-    <div v-if="false" class="basic-component__list flex flex-wrap">
-      <div
-        v-for="item in list"
-        :key="item.id"
-        class="basic-component__item relative"
-        @click="handleClick(item)"
-      >
-        <div v-if="false" class="basic-component__cover">
-          <img :src="item.cover" width="100%" alt="">
-        </div>
-        <div @click.stop="downloadItem(item)" class="cp absolute r10 t0"><i class="el-icon-download"></i></div>
-        <p class="mt5">{{ item.name }}</p>
-      </div>
-    </div>
   </div>
 </template>
 
@@ -111,8 +97,6 @@ export default defineComponent({
     }
     const downloadItem = async (item) => {
       await MessageBox.confirm('确定要下载组件 zip 包吗')
-      // console.log(item)
-      // await http.post('component/download', { name: item.name, type: 'upload' })
       location.href = `${http.options.baseUrl}/butterfly/component/download/upload?name=${item.name}`
     }
     const handleTemplate = () => {

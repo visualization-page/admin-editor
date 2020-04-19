@@ -74,8 +74,7 @@ const handle = {
     const force = data.force
     data.force = undefined
     const _do = async () => {
-      // data.node.createUser.name = data.userName
-      data.title = data.node.title
+      data.title = data.title || data.node.title
       await fs.outputJSON(path.join(getPath(type, false), data.name, 'data.json'), data)
       await handle.update(type)
     }
@@ -102,7 +101,7 @@ const handle = {
    * @param tmpPath
    * @returns {Promise<string>}
    */
-  upload: async (file, tmpPath) => {
+  uploadComponent: async (file, tmpPath) => {
     let msg = ''
     // 解压到 tmp/data 目录下
     console.log('----', file)
@@ -156,6 +155,14 @@ const handle = {
     } else {
       msg = 'package.json 不存在'
     }
+    utils.rm(tmpPath)
+    return msg
+  },
+  uploadComposeComponent: async (file, tmpPath) => {
+    let msg = ''
+    const c = await fs.readFileSync(file, 'utf8')
+    const data = JSON.parse(c)
+    await handle.export('compose', { ...data, force: true })
     utils.rm(tmpPath)
     return msg
   },

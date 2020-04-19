@@ -7,7 +7,7 @@ const tmpPath = path.resolve(__dirname, '../tmp')
 const pubPath = path.resolve(__dirname, '../public')
 
 module.exports = {
-  '/upload': {
+  '/component/upload/:type': {
     post: async (req, res) => {
       const ok = req.files.file
       if (ok) {
@@ -16,7 +16,13 @@ module.exports = {
           if (err) {
             throw err
           }
-          const msg = await component.upload(file, tmpPath)
+          const isUpload = req.params.type === 'upload'
+          let msg
+          if (isUpload) {
+            msg = await component.uploadComponent(file, tmpPath)
+          } else {
+            msg = await component.uploadComposeComponent(file, tmpPath)
+          }
           res.json({ success: !msg, msg })
         })
       } else {
@@ -42,8 +48,17 @@ module.exports = {
   },
   '/component/download/:type': {
     get: async (req, res) => {
-      const dir = req.query.name.split('-')[1]
-      res.download(path.join(pubPath, req.params.type, dir, `${dir}.zip`), err => {
+      const isUpload = req.params.type === 'upload'
+      let dir
+      let file
+      if (isUpload) {
+        dir = req.query.name.split('-')[1]
+        file = path.join(pubPath, req.params.type, dir, `${dir}.zip`)
+      } else {
+        dir = req.query.name
+        file = path.join(pubPath, req.params.type, dir, `data.json`)
+      }
+      res.download(file, err => {
         if (err) {
           throw err
         }
