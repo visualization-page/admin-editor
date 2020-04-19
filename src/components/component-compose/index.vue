@@ -17,7 +17,8 @@
         <div v-if="false" class="w40 h40 bg-f2">
           <img :src="item.cover" width="100%" alt="">
         </div>
-        <span class="c-666">{{ item.name }}</span>
+        <p class="c-666">{{ item.title }}</p>
+        <span class="c-999 f10">by {{ item.userName }}</span>
       </van-grid-item>
     </van-grid>
   </div>

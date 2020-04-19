@@ -71,22 +71,29 @@ const handle = {
    * @returns {Promise<boolean>}
    */
   export: async (type, data) => {
-    // 检查名称是否存在
-    const exist = await fs.pathExists(getPath(type))
-    if (exist) {
-      const arr = fs.readJSON(getPath(type))
-      if (arr.findIndex(x => x.name === data.name) > -1) {
-        return false
-      }
+    const force = data.force
+    data.force = undefined
+    const _do = async () => {
+      // data.node.createUser.name = data.userName
+      data.title = data.node.title
+      await fs.outputJSON(path.join(getPath(type, false), data.name, 'data.json'), data)
+      await handle.update(type)
     }
-    // const result = {
-    //   componentDeps
-    //   name
-    //   node
-    // }
-    await fs.outputJSON(path.join(getPath(type, false), data.name, 'data.json'), data)
-    await handle.update(type)
-    return true
+
+    // 检查名称是否存在
+    const arr = await fs.readJSON(getPath(type))
+    const item = arr.find(x => x.name === data.name)
+    if (item) {
+      const isAuthor = data.userName === item.userName
+      if (isAuthor) {
+        if (force) {
+          return _do()
+        }
+        return { code: 60001, msg: '组件已存在，是否覆盖？' }
+      }
+      return { msg: '组件名称已被占用，换个试试吧' }
+    }
+    return _do()
   },
 
   /**

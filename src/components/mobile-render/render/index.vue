@@ -16,11 +16,11 @@
 import { defineComponent, watch, ref, onMounted } from '@vue/composition-api'
 import { parseCodeValid, sleepUntil } from '@/assets/util'
 import RenderItem from './render-item.vue'
-import { initGlobalConfig, getEventHandler } from './utils'
 import { FormEvent } from '@/assets/event'
 import { isEdit } from '@/assets/render'
 import { Page } from '@/assets/page'
 import { Project } from '@/assets/project'
+import { initGlobalConfig, getEventHandler, setGlobalUtils, setGlobalConstant } from './utils'
 
 export default defineComponent<{
   currentPage: Page | null
@@ -43,14 +43,14 @@ export default defineComponent<{
     const mounted = ref(false)
     const pageInit = ref(false)
     const getCtx = () => ({ $$page: pageConfig.value, $$global: globalConfig.value })
-    const setConstant = (cons: string | null) => {
-      if (cons) {
-        const { ok, value } = parseCodeValid(cons)
-        if (ok) {
-          globalConfig.value.constant = value!
-        }
-      }
-    }
+    // const setConstant = (cons: string | null) => {
+    //   if (cons) {
+    //     const { ok, value } = parseCodeValid(cons)
+    //     if (ok) {
+    //       globalConfig.value.constant = value!
+    //     }
+    //   }
+    // }
     const setPageState = (state: string | null) => {
       const { ok, value } = parseCodeValid(state)
       if (ok) {
@@ -107,7 +107,7 @@ export default defineComponent<{
       }, { deep: true })
       // 更新全局 constant
       watch(() => props.project && props.project.constant, cons => {
-        setConstant(cons)
+        setGlobalConstant(globalConfig.value, cons)
       }, { deep: true })
       // 全局 css
       watch(() => props.project && props.project.css, css => {
@@ -117,16 +117,22 @@ export default defineComponent<{
       watch(() => props.currentPage, (page) => {
         page && globalConfig.value.updatePage(page)
       })
+      // 更新 utils
+      watch(() => props.project && props.project.utils, utils => {
+        setGlobalUtils(globalConfig.value, utils)
+      })
     } else {
       watch([() => props.currentPage, () => props.project], ([page, project], oldVal) => {
         const oldPage = oldVal && oldVal[0]
         if (project && page) {
-          setCss((project as Project).css)
-          setConstant((project as Project).constant)
+          const pro = project as Project
+          setCss(pro.css)
           // @ts-ignore
           globalConfig.value = initGlobalConfig(page as Page)
+          setGlobalConstant(globalConfig.value, pro.constant)
+          setGlobalUtils(globalConfig.value, pro.utils)
           setPageState(page.state)
-          globalConfig.value.initHttp((project as Project).httpOptions, getCtx())
+          globalConfig.value.initHttp(pro.httpOptions, getCtx())
           pageEvents(page as Page, oldPage as Page)
         }
       })

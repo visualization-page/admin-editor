@@ -22,6 +22,7 @@
 </template>
 
 <script>
+import Vue from 'vue'
 import HeaderOpt from '@/components/header-opts'
 
 export default {
@@ -29,6 +30,14 @@ export default {
     HeaderOpt
   },
   setup () {
+    document.addEventListener('visibilitychange', () => {
+      if (
+        document.visibilityState === 'visible' &&
+        Vue.prototype.$native.cookie('userName')
+      ) {
+        location.reload()
+      }
+    })
     return {
       url: location.protocol === 'https:' ? 'https://web.jituancaiyun.com' : 'http://web.jituancaiyun.net',
       reload () {

@@ -73,10 +73,26 @@ export const findNode = (nodes: NodeItem[], id: string): NodeItem | undefined =>
   }
 }
 
+export const setCodeField = (field: string, obj: any, str: string | null) => {
+  if (str) {
+    const { ok, value } = parseCodeValid(str)
+    if (ok) {
+      obj[field] = value
+    }
+  }
+}
+export const setGlobalUtils = (obj: any, utils: string | null) => {
+  setCodeField('utils', obj, utils)
+}
+export const setGlobalConstant = (obj: any, cons: string | null) => {
+  setCodeField('constant', obj, cons)
+}
+
 export const initGlobalConfig = (page: Page | null) => {
   return {
-    // win: window,
+    win: window,
     page,
+    utils: {},
     dotInstance: null,
     config: project.config[project.env],
     http: null,

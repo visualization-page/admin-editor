@@ -55,11 +55,12 @@
 </template>
 
 <script lang="ts">
+import Vue from 'vue'
 import { defineComponent, watch } from '@vue/composition-api'
 import { currentPage } from '@/assets/page'
 import { project } from '@/assets/project'
 import { rootNode, currentNode, setCurrentNode, deepCopyNode, NodeItem, NodeItemBasic, delNode } from '@/assets/node'
-import { MessageBox } from 'element-ui'
+import { MessageBox, Message } from 'element-ui'
 import { http } from '@/api'
 import { setTabName, tabName } from '@/assets/tab'
 
@@ -104,6 +105,10 @@ export default defineComponent({
     const handleExport = (data: any, parent: any) => {
       // 遍历组件收集类型依赖，并检测名字唯一
       MessageBox.prompt('请输入封装的组件名、字母数字组成').then(({ value }: any) => {
+        if (!/^[a-bA-B]+[a-bA-B0-9-]*$/.test(value)) {
+          Message.error('组件名称不合法')
+          return
+        }
         const componentDeps: NodeItemBasic[] = []
         const _dep = (node: NodeItem) => {
           if (node.nodeType === 1 << 0) {
@@ -119,12 +124,25 @@ export default defineComponent({
           }
         }
         _dep(data)
-        http.post('component/export', {
-          type: 'compose',
-          componentDeps,
-          name: value,
-          node: data
-        }, { successMessage: '封装成功！' })
+        const _post = (force?: boolean) => {
+          http.post('component/export', {
+            type: 'compose',
+            componentDeps,
+            name: value,
+            node: data,
+            userName: Vue.prototype.$native.name,
+            force
+          }, {
+            successMessage: '封装组件成功，快去刷新列表吧',
+            codeCallback: {
+              60001: async (err: any) => {
+                await MessageBox.confirm(err.msg)
+                _post(true)
+              }
+            }
+          })
+        }
+        _post()
       })
     }
     return {

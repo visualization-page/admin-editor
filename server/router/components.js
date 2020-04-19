@@ -36,8 +36,8 @@ module.exports = {
   },
   '/component/export/:type': {
     post: async (req, res) => {
-      const ok = await component.export(req.params.type, req.body)
-      res.json({ success: ok, msg: ok ? '' : '组件名称已存在' })
+      const obj = await component.export(req.params.type, req.body)
+      res.json({ success: !obj, ...(obj || {}) })
     }
   },
   '/component/download/:type': {

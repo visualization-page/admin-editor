@@ -69,6 +69,11 @@ const handle = {
         project.constant = cons
       })
     ]
+    if (project.httpOptions.utils) {
+      transArr.push(_transform(project.utils).then(utils => {
+        project.utils = utils
+      }))
+    }
     project.pages.forEach((page, i) => {
       // page.state
       transArr.push(_transform(page.state).then(state => {

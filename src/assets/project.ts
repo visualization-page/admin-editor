@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import { reactive, watch } from '@vue/composition-api'
+import { reactive } from '@vue/composition-api'
 import { loadItem } from '@/components/mobile-render/render/utils'
 import { Page, setCurrentPage } from './page'
 import { NodeItemBasic, setCurrentNode } from './node'
@@ -50,6 +50,7 @@ export type Project = {
     whitelist: string
   }
   css: string
+  utils: string
   [k: string]: any
 }
 
@@ -104,7 +105,8 @@ const defaultProject: Project = {
     time: 0,
     whitelist: ''
   },
-  css: ''
+  css: '',
+  utils: '(function () {\n  return {\n    deepClone: (obj) => JSON.parse(JSON.stringify(obj))\n  }\n})()'
 }
 
 export const project: Project = reactive(deepClone(defaultProject))

@@ -151,3 +151,7 @@ $$global.config = project.config = {
     - 省份
     - 目标机器目录
 - 内置组件直接打包到 vendors 内
+
+> 20/04/19
+
+- 全局工具函数

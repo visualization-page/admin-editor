@@ -136,7 +136,7 @@ export default {
   methods: {
     getList () {
       http.get('component/list', { type: 'project' }).then(res => {
-        this.tableData = res.data.map(x => ({
+        this.tableData = res.data.sort((a, b) => b.info.time - a.info.time).map(x => ({
           ...x,
           info: {
             ...(x.info || {}),

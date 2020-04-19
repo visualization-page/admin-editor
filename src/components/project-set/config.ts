@@ -102,7 +102,7 @@ export const local = [
     field: 'httpOptions.options',
     block: false,
     type: 'code',
-    'info-icon': 'el-icon-warning-outline',
+    'info-icon': 'el-icon-data-analysis',
     info: '上面的字段如果不够用，可以在这里补充其它选项。'
   },
   {
@@ -110,13 +110,8 @@ export const local = [
     field: 'constant',
     block: false,
     type: 'code',
-    'info-icon': 'el-icon-warning-outline',
+    'info-icon': 'el-icon-mouse',
     info: '使用方法：在项目全局中任何地方，例如：$$global.constant.[fieldName]'
-  },
-  {
-    label: '项目白名单',
-    field: 'info.whitelist',
-    type: 'textarea'
   },
   {
     label: '全局css',
@@ -124,8 +119,22 @@ export const local = [
     block: false,
     'code-language': 'css',
     type: 'code',
-    'info-icon': 'el-icon-warning-outline',
+    'info-icon': 'el-icon-brush',
     info: '全局css，会被直接插入到 html 头部中'
+  },
+  {
+    label: '全局函数',
+    field: 'utils',
+    block: false,
+    'code-language': 'js',
+    type: 'code',
+    'info-icon': 'el-icon-star-off',
+    info: '全局utils，例如：$$global.utils.deepClone'
+  },
+  {
+    label: '项目白名单',
+    field: 'info.whitelist',
+    type: 'textarea'
   },
   {
     label: '省份',
