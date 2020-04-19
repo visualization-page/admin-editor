@@ -101,62 +101,70 @@ const handle = {
    * @param tmpPath
    * @returns {Promise<string>}
    */
-  uploadComponent: async (file, tmpPath) => {
-    let msg = ''
+  uploadComponent: async (file, tmpPath, body) => {
+    // const force = body.force
     // 解压到 tmp/data 目录下
-    console.log('----', file)
+    // console.log('----', file)
     utils.unzip(file, tmpPath)
     // 读取 package.json name 校验唯一性
     const pkg = path.join(tmpPath, 'package.json')
     const schemaPath = path.join(tmpPath, 'schema.js')
-    if (fs.pathExistsSync(pkg)) {
-      const pkgContent = await fs.readJSON(pkg)
-      const { name, main } = pkgContent
-      // name = `bf-${name}`
-      console.log('----', name, main)
-      const upPath = getPath('upload')
-      const basicPath = getPath('basic')
-      let exist = false
-      if (fs.pathExistsSync(upPath)) {
-        const arr = await fs.readJSON(upPath)
-        exist = arr.some(x => x.name === `bf-${name}`)
-      }
-      // todo 上传组件的更新校验 !exist
-      if (fs.pathExistsSync(basicPath)) {
-        const arr = await fs.readJSON(basicPath)
-        exist = arr.some(x => x.name === `bf-${name}`)
-      }
-      if (exist) {
-        msg = '组件名称已存在'
-      } else if (fs.pathExistsSync(schemaPath)) {
-        const schema = require(schemaPath)
-        // 创建入口文件格式
-        const entryContent = fs.readFileSync(path.join(pubPath, 'upload-entry-template.tpl'), 'utf8')
-          .replace('{{entryVue}}', main)
-          .replace('{{props}}', JSON.stringify(pkgContent))
-          .replace('{{schema}}', JSON.stringify(schema))
-        const entryPath = path.join(tmpPath, 'entry.js')
-        await fs.outputFile(entryPath, entryContent)
-        console.log('---- entryPath', entryPath, entryContent)
-        await utils.webpack(name, entryPath)
-        console.log('---- webpack done')
-        // 将 zip 包 copy 到目标目录
-        await fs.copy(file, path.join(pubPath, 'upload', name, `${name}.zip`), { overwrite: true })
-        const dataPath = path.join(pubPath, 'upload', name, 'data.json')
-        const dataJson = await fs.readJSON(dataPath)
-        dataJson.title = pkgContent.title
-        dataJson.cover = pkgContent.cover
-        dataJson.version = pkgContent.version
-        await fs.writeJson(dataPath, dataJson)
-        await handle.update('upload')
-      } else {
-        msg = 'schema.js 不存在'
-      }
-    } else {
-      msg = 'package.json 不存在'
+    if (!fs.pathExistsSync(pkg)) {
+      utils.rm(tmpPath)
+      return 'package.json 不存在'
     }
+    const pkgContent = await fs.readJSON(pkg)
+    const { name, main } = pkgContent
+    // name = `bf-${name}`
+    // console.log('----', name, main)
+    const upPath = getPath('upload')
+    const basicPath = getPath('basic')
+    let existItem = false
+    if (fs.pathExistsSync(upPath)) {
+      const arr = await fs.readJSON(upPath)
+      existItem = arr.find(x => x.name === `bf-${name}`)
+    }
+    if (!existItem && fs.pathExistsSync(basicPath)) {
+      const arr = await fs.readJSON(basicPath)
+      existItem = arr.find(x => x.name === `bf-${name}`)
+    }
+    if (existItem) {
+      const isAuthor = existItem.userName === body.userName
+      if (!isAuthor) {
+        utils.rm(tmpPath)
+        return '组件名称已存在，换个试试吧'
+      }
+      // if (!force) {
+      //   utils.rm(tmpPath)
+      //   return 60001
+      // }
+    }
+    if (!fs.pathExistsSync(schemaPath)) {
+      utils.rm(tmpPath)
+      return 'schema.js 不存在'
+    }
+    const schema = require(schemaPath)
+    // 创建入口文件格式
+    const entryContent = fs.readFileSync(path.join(pubPath, 'upload-entry-template.tpl'), 'utf8')
+      .replace('{{entryVue}}', main)
+      .replace('{{props}}', JSON.stringify(pkgContent))
+      .replace('{{schema}}', JSON.stringify(schema))
+    const entryPath = path.join(tmpPath, 'entry.js')
+    await fs.outputFile(entryPath, entryContent)
+    // console.log('---- entryPath', entryPath, entryContent)
+    await utils.webpack(name, entryPath)
+    // console.log('---- webpack done')
+    // 将 zip 包 copy 到目标目录
+    await fs.copy(file, path.join(pubPath, 'upload', name, `${name}.zip`), { overwrite: true })
+    const dataPath = path.join(pubPath, 'upload', name, 'data.json')
+    const dataJson = await fs.readJSON(dataPath)
+    dataJson.title = pkgContent.title
+    dataJson.cover = pkgContent.cover
+    dataJson.version = pkgContent.version
+    dataJson.userName = body.userName
+    await fs.writeJson(dataPath, dataJson)
+    await handle.update('upload')
     utils.rm(tmpPath)
-    return msg
   },
   uploadComposeComponent: async (file, tmpPath) => {
     let msg = ''

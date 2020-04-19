@@ -28,7 +28,8 @@ export const http = new Http({
       list: '/butterfly/component/:type',
       update: '/butterfly/component/:type',
       export: '/butterfly/component/export/:type',
-      download: '/butterfly/component/download/:type'
+      download: '/butterfly/component/download/:type',
+      delete: '/butterfly/component/delete/:type'
     },
     project: {
       save: '/butterfly/project/:dir',

@@ -19,10 +19,12 @@ module.exports = {
           const isUpload = req.params.type === 'upload'
           let msg
           if (isUpload) {
-            msg = await component.uploadComponent(file, tmpPath)
+            msg = await component.uploadComponent(file, tmpPath, req.body)
           } else {
             msg = await component.uploadComposeComponent(file, tmpPath)
           }
+          // const isForce = msg === 60001
+          // res.json({ success: !msg, msg: isForce ? '组件已存在，是否覆盖？' : msg, code: isForce && msg })
           res.json({ success: !msg, msg })
         })
       } else {
@@ -44,6 +46,14 @@ module.exports = {
     post: async (req, res) => {
       const obj = await component.export(req.params.type, req.body)
       res.json({ success: !obj, ...(obj || {}) })
+    }
+  },
+  '/component/delete/:type': {
+    post: async (req, res) => {
+      const p = path.join(pubPath, req.params.type, req.body.dir)
+      await utils.rm(p)
+      await component.update(req.params.type)
+      res.json({ success: true })
     }
   },
   '/component/download/:type': {

@@ -29,7 +29,14 @@
         </div>
         <p class="c-666">{{ item.title }}</p>
         <span class="c-999 f10">by {{ item.userName }}</span>
-        <div @click.stop="downloadItem(item)" class="cp absolute r10 t0"><i class="el-icon-download"></i></div>
+        <div class="cp absolute r0 t0 flex">
+          <div
+            v-if="item.userName === $native.name"
+            class="mr5"
+            @click.stop="deleteItem(item)"><i class="el-icon-delete c-main"></i>
+          </div>
+          <div @click.stop="downloadItem(item)"><i class="el-icon-download c-blue"></i></div>
+        </div>
       </van-grid-item>
     </van-grid>
   </div>
@@ -92,6 +99,11 @@ export default {
         Message.error(response.msg)
       }
     }
+    const deleteItem = async (item) => {
+      await MessageBox.confirm('确定要删除组件吗')
+      await http.post('component/delete', { type: 'compose', dir: item.name }, { successMessage: '删除成功' })
+      getList()
+    }
     getList()
     return {
       server: process.env.VUE_APP_FILE_SERVER,
@@ -100,7 +112,8 @@ export default {
       handleSuccess,
       handleClick,
       handleRefresh,
-      downloadItem
+      downloadItem,
+      deleteItem
     }
   }
 }

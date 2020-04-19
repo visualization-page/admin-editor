@@ -12,6 +12,7 @@
         class="upload-demo"
         :action="server + '/butterfly/component/upload/upload'"
         :multiple="false"
+        :data="{ userName: $native.name }"
         :show-file-list="false"
         :before-upload="handleBeforeUpload"
         :on-success="handleSuccess"
@@ -44,7 +45,14 @@
           <img v-if="item.cover" :src="item.cover" width="100%" alt="">
         </div>
         <span class="c-666 mt10">{{ item.title || item.name }}</span>
-        <div @click.stop="downloadItem(item)" class="cp absolute r10 t0"><i class="el-icon-download"></i></div>
+        <div class="cp absolute r0 t0 flex">
+          <div
+            v-if="item.userName === $native.name"
+            class="mr5"
+            @click.stop="deleteItem(item)"><i class="el-icon-delete c-main"></i>
+          </div>
+          <div @click.stop="downloadItem(item)"><i class="el-icon-download c-blue"></i></div>
+        </div>
       </van-grid-item>
     </van-grid>
   </div>
@@ -102,6 +110,11 @@ export default defineComponent({
     const handleTemplate = () => {
       window.open('https://github.com/visualization-page/custom-component-template.git')
     }
+    const deleteItem = async (item) => {
+      await MessageBox.confirm('确定要删除组件吗')
+      await http.post('component/delete', { type: 'upload', dir: item.name.replace('bf-', '') }, { successMessage: '删除成功' })
+      getList()
+    }
     return {
       list,
       server: process.env.VUE_APP_FILE_SERVER,
@@ -109,7 +122,8 @@ export default defineComponent({
       handleSuccess,
       handleClick,
       downloadItem,
-      handleTemplate
+      handleTemplate,
+      deleteItem
     }
   }
 })
