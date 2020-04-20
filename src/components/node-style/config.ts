@@ -48,7 +48,10 @@ export default [
   {
     label: '背景颜色',
     field: 'style.backgroundColor',
-    type: 'color'
+    type: 'color',
+    props: {
+      'show-alpha': true
+    }
   },
   {
     label: '背景图片',

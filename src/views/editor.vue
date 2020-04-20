@@ -121,10 +121,10 @@ import HeaderOpt from '@/components/header-opts/index.vue'
 import ComponentLibrary from '@/components/component-library/index.vue'
 import ComponentCompose from '@/components/component-compose/index.vue'
 import ComponentUpload from '@/components/component-upload/index.vue'
-import { tabCurrent, setTabName, tabName, isHideComponent, hideComponent } from '@/assets/tab'
+import { tabCurrent, setTabName, tabName, isHideComponent } from '@/assets/tab'
 import { http } from '@/api'
 import { initProject, project, resetProject } from '@/assets/project'
-import { Message } from 'element-ui'
+import { Message, MessageBox } from 'element-ui'
 import { isEdit, setRenderEdit, setRenderPreview } from '@/assets/render'
 import { lock, unlock } from '@/assets/lock'
 
@@ -146,15 +146,19 @@ export default defineComponent({
     ComponentUpload
   },
   beforeRouteLeave (to: any, from: any, next: any) {
-    // @ts-ignore
-    const { dir } = this.$route.params
-    if (dir) {
-      unlock(dir).then(() => {
+    MessageBox.confirm('确定要离开吗？').then(() => {
+      // @ts-ignore
+      const { dir } = this.$route.params
+      if (dir) {
+        unlock(dir).then(() => {
+          next()
+        })
+      } else {
         next()
-      })
-    } else {
-      next()
-    }
+      }
+    }).catch(() => {
+      next(false)
+    })
   },
   setup (props, ctx) {
     const dir = ctx.root.$route.params.dir

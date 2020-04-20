@@ -39,9 +39,10 @@ Vue.config.errorHandler = function (err, vm, info) {
 const native = Vue.prototype.$native = new Native()
 
 if (!native.cookie('sso_u')) {
-  new Vue({
-    render: h => h(Login)
-  }).$mount('#app')
+  // new Vue({
+  //   render: h => h(Login)
+  // }).$mount('#app')
+  location.href = `${process.env.VUE_APP_SSO}${location.href}`
 } else {
   http.get('login/user').then(res => {
     native.name = res.data.name_

@@ -15,11 +15,6 @@ const loadVConsole = () => {
 let http = null
 export const getProject = async (dir) => {
   setRenderPreview()
-  // 预览走本地
-  // if (isPreview) {
-  //   const local = await initProject()
-  //   return local ? JSON.parse(local) : null
-  // }
   // 正式环境
   if (window.globalProject) {
     await initProject(window.globalProject.project)

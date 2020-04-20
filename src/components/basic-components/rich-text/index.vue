@@ -1,7 +1,7 @@
 <template>
   <div
     class="basic-rich"
-    v-html="bindState || content"
+    v-html="isDef(bindState) ? bindState : content"
     :style="{
       fontSize: bindState && fontSize && `${fontSize}px`,
       color: bindState && color
@@ -18,6 +18,26 @@ export default {
     bindState: [String, Object, Array, Number],
     fontSize: String,
     color: String
+  },
+
+  methods: {
+    isDef (val: any) {
+      return val !== undefined && val !== null
+    }
   }
 }
 </script>
+
+<style lang="less">
+.basic-rich {
+  ol {
+    list-style: decimal;
+  }
+  ul {
+    list-style: initial;
+  }
+  ol, ul, dl {
+    font-size: inherit;
+  }
+}
+</style>

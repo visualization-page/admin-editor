@@ -225,14 +225,23 @@ const handle = {
   releaseProject: async (dir, body) => {
     const releasePath = path.resolve(__dirname, '../../release', dir)
     const distPath = path.resolve(__dirname, '../../dist-system')
+    const dataPath = path.join(pubPath, 'project', dir, 'data.json')
+    const globalProject = await fs.readJson(dataPath)
+
+    // 改写 data.json
+    globalProject.project.info = body.info
+    await fs.writeJson(dataPath, globalProject)
+    await handle.updateProjectList()
+
     // 先清空目标文件夹
     utils.rm(releasePath)
     // copy dist-system/ => release/项目 目录下
     const manifest = await fs.readJson(path.join(distPath, 'manifest.json'))
+    await fs.copy(dataPath, path.join(releasePath, 'data.json'))
     await fs.copy(path.join(distPath, 'render.html'), path.join(releasePath, 'index.html'))
-    await fs.copy(path.join(distPath, 'vant-form'), path.join(releasePath, 'vant-form'))
-    await fs.copy(path.join(distPath, 'vant2.5'), path.join(releasePath, 'vant2.5'))
     await fs.copy(path.join(distPath, 'vue2.6'), path.join(releasePath, 'vue2.6'))
+    // toast 等依赖 vant
+    await fs.copy(path.join(distPath, 'vant2.5'), path.join(releasePath, 'vant2.5'))
     fs.readdirSync(path.join(distPath, 'js')).forEach(name => {
       if (
         /render|chunk-vendors/.test(name) &&
@@ -249,13 +258,6 @@ const handle = {
         fs.copySync(path.join(distPath, 'css', name), path.join(releasePath, 'css', name))
       }
     })
-    // 改写 data.json
-    const dataPath = path.join(pubPath, 'project', dir, 'data.json')
-    await fs.copy(dataPath, path.join(releasePath, 'data.json'))
-    const globalProject = await fs.readJson(dataPath)
-    globalProject.project.info = body.info
-    await fs.writeJson(dataPath, globalProject)
-    await handle.updateProjectList()
     // 将组件 js 合并生成文件
     let jsContent = ''
     for (let i = 0; i < globalProject.project.componentDownload.length; i++) {
@@ -291,10 +293,26 @@ const handle = {
         '</body>',
         `<script src="${publicPath + componentMergeFileName}"></script></body>`
       )
+
     // 正则匹配中 $$ 是关键词，必须绕开
     renderContent = renderContent.split('%%%%')
     renderContent = renderContent[0] + JSON.stringify(globalProject) + renderContent[1]
+
+    const { form } = globalProject.project.componentLibrary
+    const hasLibraryForm = form && form.length
+    if (hasLibraryForm) {
+      await fs.copy(path.join(distPath, 'vant-form'), path.join(releasePath, 'vant-form'))
+    } else {
+      // 清除引用
+      renderContent = renderContent.replace(
+        `<script>Vue.component('vantForm', vantForm.default)</script>`, ''
+      ).replace(
+        `<script src=./vant-form/vantForm.umd.min.js></script>`, ''
+      )
+    }
+
     await fs.outputFile(path.join(releasePath, 'index.html'), renderContent)
+
     // 检查 zip 是否存在，因为 download 生成 zip 时如果存在会报错
     const zipPath = path.join(releasePath, `${dir}.zip`)
     if (fs.pathExistsSync(zipPath)) {

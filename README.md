@@ -159,3 +159,5 @@ $$global.config = project.config = {
 
 > 20/04/19
 - 更改发布逻辑
+- 登录改为证书登录
+- library 在打包时按需引入

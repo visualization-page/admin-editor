@@ -5,7 +5,9 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no, viewport-fit=cover">
   <title></title>
+  <!--vant start-->
   <link rel="stylesheet" href="./vant2.5/index.css">
+  <!--vant end-->
 </head>
 <body>
 <noscript>
@@ -13,11 +15,15 @@
 </noscript>
 <script src="./vue2.6/index.min.js"></script>
 <script src="./vue2.6/composition-api.0.5.js"></script>
+<!--vant start-->
 <script src="./vant2.5/index.min.js"></script>
+<!--vant end-->
+<!--form start-->
 <script src="./vant-form/vantForm.umd.min.js"></script>
+<script>Vue.component('vantForm', vantForm.default)</script>
+<!--form end-->
 <script>
   Vue.use(vueCompositionApi.default)
-  Vue.component('vantForm', vantForm.default)
 </script>
 <div id="app"></div>
 <!-- built files will be auto injected -->
