@@ -45,6 +45,7 @@ if (!native.cookie('sso_u')) {
 } else {
   http.get('login/user').then(res => {
     native.name = res.data.name_
+    native.uid = res.data.uid_
     window.globalApp = new Vue({
       router,
       store,

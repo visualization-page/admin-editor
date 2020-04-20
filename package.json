@@ -4,10 +4,12 @@
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve --mode dev",
-    "build": "vue-cli-service build --mode pro && node build/after-build.js",
+    "build:test": "vue-cli-service build --mode test && node build/after-build.js",
+    "build:pro": "vue-cli-service build --mode pro && node build/after-build.js",
     "test:unit": "vue-cli-service test:unit",
     "lint": "vue-cli-service lint",
-    "server": "pm2 start pm2.json"
+    "start": "pm2 start pm2.json",
+    "restart": "pm2 restart pm2.json"
   },
   "dependencies": {
     "@chenfengyuan/vue-qrcode": "^1.0.2",

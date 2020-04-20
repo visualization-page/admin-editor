@@ -1,18 +1,79 @@
 export const local = [
-  // {
-  //   label: '访问地址',
-  //   field: 'url',
-  //   type: 'input',
-  //   elProps: {
-  //   },
-  //   elAttrs: {
-  //     readonly: true
-  //   }
-  // },
+  {
+    label: '项目访问正式地址',
+    field: 'url',
+    type: 'textarea',
+    elProps: {
+    },
+    elAttrs: {
+      // readonly: true
+      placeholder: '根据你填写的目标机器目录绑定的域名来定'
+    }
+  },
+  {
+    label: '所属省份',
+    field: 'config.appType',
+    type: 'select',
+    options: [
+      {
+        label: '测试环境',
+        value: 0
+      },
+      {
+        label: '浙江',
+        value: 1
+      },
+      {
+        label: '上海',
+        value: 5
+      },
+      {
+        label: '湖南',
+        value: 6
+      },
+      {
+        label: '江西',
+        value: 9
+      },
+      {
+        label: '河南快马',
+        value: 8
+      },
+      {
+        label: '北京',
+        value: 34
+      },
+      {
+        label: '河北',
+        value: 20
+      },
+      {
+        label: '吉林',
+        value: 21
+      },
+      {
+        label: '山东',
+        value: 26
+      },
+      {
+        label: '广西八桂',
+        value: 18
+      }
+    ]
+  },
+  {
+    label: '发布目标机器目录',
+    field: 'config.path',
+    type: 'textarea',
+    elAttrs: {
+      // readonly: true
+      placeholder: '/data/webapps/ 不用填写，只用填后面的部分'
+    }
+  },
   {
     label: '项目描述',
     field: 'desc',
-    type: 'input',
+    type: 'textarea',
     elProps: {
     },
     elAttrs: {
@@ -134,62 +195,9 @@ export const local = [
   {
     label: '项目白名单',
     field: 'info.whitelist',
-    type: 'textarea'
-  },
-  {
-    label: '省份',
-    field: 'config.appType',
-    type: 'select',
-    options: [
-      {
-        label: '测试环境',
-        value: 0
-      },
-      {
-        label: '浙江',
-        value: 1
-      },
-      {
-        label: '上海',
-        value: 5
-      },
-      {
-        label: '湖南',
-        value: 6
-      },
-      {
-        label: '江西',
-        value: 9
-      },
-      {
-        label: '河南快马',
-        value: 8
-      },
-      {
-        label: '北京',
-        value: 34
-      },
-      {
-        label: '河北',
-        value: 20
-      },
-      {
-        label: '吉林',
-        value: 21
-      },
-      {
-        label: '山东',
-        value: 26
-      },
-      {
-        label: '广西八桂',
-        value: 18
-      }
-    ]
-  },
-  {
-    label: '目标目录',
-    field: 'config.path',
-    type: 'textarea'
+    type: 'textarea',
+    elAttrs: {
+      placeholder: '请输入姓名，例如：诸炜/杨明'
+    }
   }
 ]

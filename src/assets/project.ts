@@ -11,6 +11,7 @@ export type Project = {
   depLoaded: boolean
   env: 'dev' | 'pro'
   lockedBy: string
+  url: string
   desc: string
   dir: string
   thumbCover: string
@@ -55,6 +56,7 @@ export type Project = {
 }
 
 const defaultProject: Project = {
+  url: '',
   depLoaded: true,
   // 环境 默认 dev，可切换 pro，目前只关联了 config 字段
   env: 'dev',

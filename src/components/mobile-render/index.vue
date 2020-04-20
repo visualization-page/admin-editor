@@ -13,7 +13,7 @@
           @click="handlePreviewPage"
         >
           <i class="el-icon-document-remove" />
-          <span>查看页面</span>
+          <span>预览页面</span>
         </el-button>
       </div>
       <div class="app__mobile-webview">

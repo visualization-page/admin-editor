@@ -54,7 +54,7 @@
           label="操作"
           width="230">
           <template slot-scope="scope">
-            <el-button @click="handlePreview(scope.row)" type="text" size="small">查看</el-button>
+            <el-button v-if="scope.row.url" @click="handlePreview(scope.row)" type="text" size="small">查看</el-button>
             <el-button @click="handleCopy(scope.row)" type="text" size="small">复制</el-button>
             <el-button @click="handleDown(scope.row)" type="text" size="small">下载</el-button>
             <el-button @click="handleExport(scope.row)" type="text" size="small">导出</el-button>
@@ -153,7 +153,12 @@ export default {
       ))
     },
     handlePreview (item) {
-      window.open(process.env.VUE_APP_MOBILE + `#/project/${item.dir}`)
+      if (item.url) {
+        window.open(item.url)
+        // window.open(process.env.VUE_APP_MOBILE + `#/project/${item.dir}`)
+      } else {
+        Message.info('项目还未提供正式访问的地址，请点击编辑进入预览项目')
+      }
     },
     handleCopy (item) {
       http.post('project/copy', {

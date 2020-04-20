@@ -182,7 +182,8 @@ const handle = {
         dir: project.dir,
         desc: project.desc,
         info: project.info,
-        createUser: project.createUser
+        createUser: project.createUser,
+        url: project.url
       }
     })
   },
@@ -192,12 +193,17 @@ const handle = {
       // 检查是否已存在
       return { success: false, msg: `项目 ${dir} 名称已存在`, code: 6001 }
     } else {
-      // 初次创建保存创建人
-      if (!exist) {
+      const dataPath = path.join(pubPath, 'project', dir, 'data.json')
+      if (exist) {
+        const oldData = await fs.readJSON(dataPath)
+        // info.remark
+        data.project.info.remark = oldData.project.info.remark
+        delete data.force
+      } else {
+        // 初次创建保存创建人
         data.project.createUser = data.project.info.userName
       }
-      delete data.force
-      await fs.outputFile(path.join(pubPath, 'project', dir, 'data.json'), JSON.stringify(data))
+      await fs.outputFile(dataPath, JSON.stringify(data))
       await handle.updateProjectList()
       await lock.lock(dir, data.project.info.userName)
     }
