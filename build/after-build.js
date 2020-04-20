@@ -29,7 +29,9 @@ const copyDirs = [
   'server/router',
   'server/public/upload',
   'server/public/upload-entry-template.tpl',
-  'server/index.js'
+  'server/index.js',
+  'server/config.js',
+  'pm2.json'
   // '.gitignore'
 ]
 const delDirs = [

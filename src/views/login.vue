@@ -11,8 +11,8 @@
       <div>
         <p class="f18 c-666 mb10">抱歉，您未登录</p>
         <p class="c-999 flex-center">
-          请先登录
-          <a class="ml10" :href="url" target="_blank">{{ url }}</a>
+          请使用证书登录
+<!--          <a class="ml10" :href="url" target="_blank">{{ url }}</a>-->
           <span class="mlr10">|</span>
           <el-button type="text" @click="reload">刷新</el-button>
         </p>

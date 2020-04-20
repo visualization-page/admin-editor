@@ -44,7 +44,10 @@
         >
           <img v-if="item.cover" :src="item.cover" width="100%" alt="">
         </div>
-        <span class="c-666 mt10">{{ item.title || item.name }}</span>
+        <p class="mt10">
+          <span class="c-666">{{ item.title || item.name }}</span>
+          <span class="c-999 ml10">by {{ item.userName }}</span>
+        </p>
         <div class="cp absolute r0 t0 flex">
           <div
             v-if="item.userName === $native.name"

@@ -1,7 +1,36 @@
 const request = require('request').defaults({ jar: true })
 const MD5 = require('blueimp-md5')
+const path = require('path')
+const config = require('../config')
 
 module.exports = {
+  syncFile (project) {
+    return new Promise((resolve, reject) => {
+      const releasePath = path.resolve(__dirname, '../../release', project.dir)
+      const data = {
+        siteId: project.config.appType,
+        sourcePath: releasePath,
+        fromPath: project.dir,
+        targetPath: project.config.path
+      }
+      let url = config.opsServer[process.env.APP_ENV] + '/ops/butterfly'
+      Object.keys(data).forEach((k, i) => {
+        url += `${i === 0 ? '?' : '&'}${k}=${data[k]}`
+      })
+      request.get(
+        url,
+        // { formData: data },
+        // eslint-disable-next-line handle-callback-err
+        (err, httpResponse, body) => {
+          if (err) {
+            reject(err)
+          } else {
+            resolve(JSON.parse(body))
+          }
+        }
+      )
+    })
+  },
   login: async (mobile, password) => {
     const param = {
       winSysName: 'Mac OS_chrome_80.0.3987',

@@ -62,7 +62,7 @@ module.exports = {
       let dir
       let file
       if (isUpload) {
-        dir = req.query.name.split('-')[1]
+        dir = req.query.name.split('-').slice(1).join('-')
         file = path.join(pubPath, req.params.type, dir, `${dir}.zip`)
       } else {
         dir = req.query.name
@@ -125,8 +125,8 @@ module.exports = {
   },
   '/project/release/:dir': {
     post: async (req, res) => {
-      await component.releaseProject(req.params.dir, req.body)
-      res.json({ success: true, msg: '' })
+      const result = await component.releaseProject(req.params.dir, req.body)
+      res.json(result || { success: true, msg: '' })
     }
   },
   '/project/copy/:dir': {
@@ -185,11 +185,31 @@ module.exports = {
       res.json({ success: true, msg: '' })
     }
   },
+
+  /**
+   * deprecated
+   * 模拟的彩云 web 帮登录
+   */
   '/login': {
     post: async (req, res) => {
       const { mobile, password } = req.body
       const data = await service.login(mobile, password)
       res.json({ success: true, data })
+    }
+  },
+
+  /**
+   * 手动 parse user
+   */
+  '/user': {
+    get: async (req, res) => {
+      const sso = req.cookies.sso_u
+      if (sso) {
+        const user = new Buffer(sso, 'base64').toString()
+        res.json({ success: !!user, data: JSON.parse(user) })
+      } else {
+        res.json({ success: false, msg: 'cookie sso is not exist!' })
+      }
     }
   }
 }

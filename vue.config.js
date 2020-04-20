@@ -49,6 +49,6 @@ module.exports = {
   },
   devServer: {
     disableHostCheck: true,
-    host: 'local.jituancaiyun.net'
+    host: 'local.uban360.net'
   }
 }

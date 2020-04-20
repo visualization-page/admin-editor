@@ -142,6 +142,10 @@ export const local = [
     type: 'select',
     options: [
       {
+        label: '测试环境',
+        value: 0
+      },
+      {
         label: '浙江',
         value: 1
       },
@@ -180,10 +184,6 @@ export const local = [
       {
         label: '广西八桂',
         value: 18
-      },
-      {
-        label: '测试环境',
-        value: -1
       }
     ]
   },

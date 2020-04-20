@@ -121,10 +121,14 @@ export default defineComponent({
             return Message.error('请输入项目部署目标机器目录')
           }
           // await MessageBox.confirm('发布不会保存项目，请确认已保存?')
-          const { value }: any = await MessageBox.prompt('请输入发布备注', { inputPlaceholder: '至少3个字' })
+          const { value }: any = await MessageBox.prompt('请输入发布备注', {
+            inputPlaceholder: '至少3个字',
+            inputValue: sessionStorage.getItem('publish-remark') || ''
+          })
           if (!value || value.length < 3) {
             return Message.error('至少3个字')
           }
+          sessionStorage.setItem('publish-remark', value)
           await saveProject(true, value, false)
           await http.post(
             'project/release',

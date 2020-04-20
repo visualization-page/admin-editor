@@ -74,7 +74,7 @@ export default {
           // console.log(top, state.parentPosition.top, mobileHeaderHeight, containerScrollTop)
           state.position = {
             left: left - state.parentPosition.left + 'px',
-            top: top - state.parentPosition.top - mobileHeaderHeight + containerScrollTop + 'px',
+            top: top - state.parentPosition.top - mobileHeaderHeight + containerScrollTop + 2 + 'px',
             width: width + 'px',
             height: height + 'px'
           }

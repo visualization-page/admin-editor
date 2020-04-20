@@ -41,7 +41,8 @@ export const http = new Http({
     },
     delete: '/butterfly/delete/:type/:dir',
     login: {
-      login: '/butterfly/login'
+      login: '/butterfly/login',
+      user: '/butterfly/user'
     }
   },
   notify: {

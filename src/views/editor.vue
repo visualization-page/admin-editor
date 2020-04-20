@@ -57,7 +57,7 @@
               <el-tab-pane label="组件库" :name="tabName.libraryComponent">
                 <component-library />
               </el-tab-pane>
-              <el-tab-pane label="工具函数" :name="tabName.fx">
+              <el-tab-pane v-if="false" label="工具函数" :name="tabName.fx">
                 <p>敬请期待</p>
               </el-tab-pane>
             </el-tabs>

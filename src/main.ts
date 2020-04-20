@@ -7,6 +7,7 @@ import './plugins/element'
 import 'tcon'
 import './style/app.less'
 import Login from './views/login.vue'
+import { http } from './api'
 
 declare module '@vue/composition-api/dist/component/component' {
   interface SetupContext {
@@ -36,18 +37,20 @@ Vue.config.errorHandler = function (err, vm, info) {
   console.log(err, vm, info)
 }
 const native = Vue.prototype.$native = new Native()
-native.name = native.cookie('userName')
 
-if (!native.name) {
+if (!native.cookie('sso_u')) {
   new Vue({
     render: h => h(Login)
   }).$mount('#app')
 } else {
-  document.addEventListener('DOMContentLoaded', () => {
+  http.get('login/user').then(res => {
+    native.name = res.data.name_
     window.globalApp = new Vue({
       router,
       store,
       render: h => h(App)
     }).$mount('#app')
   })
+  // document.addEventListener('DOMContentLoaded', () => {
+  // })
 }

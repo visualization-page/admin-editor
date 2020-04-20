@@ -4,6 +4,7 @@ const utils = require('./utils')
 const lock = require('./lock')
 const dayjs = require('dayjs')
 const pubPath = path.resolve(__dirname, '../public')
+const service = require('./service')
 
 function getPath (type, isIndex = true) {
   return path.join(pubPath, type, isIndex ? 'index.json' : '')
@@ -256,7 +257,10 @@ const handle = {
       const c = await fs.readFile(path.join(pubPath, item.jsUrl.replace('/butterfly/static', '')))
       jsContent += `${c}\n`
     }
-    const componentMergeFileName = `component.${dayjs().format('MMDDHHmmss')}.js`
+    const isDev = process.env.APP_ENV === 'dev'
+    const componentMergeFileName = isDev
+      ? 'component.js'
+      : `component.${dayjs().format('MMDDHHmmss')}.js`
     await fs.outputFile(path.join(releasePath, componentMergeFileName), jsContent, 'utf8')
     // 切换为正式环境
     globalProject.project.env = 'pro'
@@ -285,25 +289,13 @@ const handle = {
     renderContent = renderContent.split('%%%%')
     renderContent = renderContent[0] + JSON.stringify(globalProject) + renderContent[1]
     await fs.outputFile(path.join(releasePath, 'index.html'), renderContent)
-    // utils.rm(path.join(releasePath, 'render.html'))
-    // 同步提交 git
-    // 不提交 git，忽略 release 目录
-    // await utils.spawn('git', ['add', '.'])
-    // return utils.spawn('git', ['commit', '-m', `build: release ${releaseDataFileName}`])
-    //   .then(() => {
-    //     // 已经是目标机器，不需要 push
-    //     // return utils.spawn('git', ['push'])
-    //   })
-    //   .catch(err => {
-    //     if (typeof err === 'string') {
-    //       return
-    //     }
-    //     return Promise.reject(err)
-    //   })
+    // 检查 zip 是否存在，因为 download 生成 zip 时如果存在会报错
     const zipPath = path.join(releasePath, `${dir}.zip`)
     if (fs.pathExistsSync(zipPath)) {
       utils.rm(zipPath)
     }
+    // 同步机器文件
+    return service.syncFile(globalProject.project)
   },
   async uploadProject (file, tmpPath) {
     const projectList = await handle.list('project')

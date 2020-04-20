@@ -7,7 +7,7 @@
     "build": "vue-cli-service build --mode pro && node build/after-build.js",
     "test:unit": "vue-cli-service test:unit",
     "lint": "vue-cli-service lint",
-    "server": "node server/index.js"
+    "server": "pm2 start pm2.json"
   },
   "dependencies": {
     "@chenfengyuan/vue-qrcode": "^1.0.2",
