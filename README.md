@@ -164,5 +164,6 @@ $$global.config = project.config = {
 
 > 20/04/20
 
-- 搜索
-- 当拖拽节点后/edit-wrap缓存的节点变化了，导致无法选中
+- 列表项目搜索
+- fix: 当拖拽节点后/edit-wrap缓存的节点变化了，导致无法选中
+- feat: native share

@@ -22,6 +22,9 @@ import { Page } from '@/assets/page'
 import { Project } from '@/assets/project'
 import { initGlobalConfig, getEventHandler, setGlobalUtils, setGlobalConstant } from './utils'
 
+// @ts-ignore
+const mobilePageShare: () => Promise<{ default: (obj: Page['share']) => void }> = () => import('../share')
+
 export default defineComponent<{
   currentPage: Page | null
   project: Project | null
@@ -91,6 +94,22 @@ export default defineComponent<{
         page.events.filter((x: FormEvent) => x.eventType === 'onMounted').forEach((ev: FormEvent) => {
           getEventHandler(ev, ctx)
         })
+        // 当前页面分享
+        if (page.hasShare) {
+          ctx.$$global.native.menuCallJs('分享', () => {
+            mobilePageShare().then(callShare => {
+              callShare.default({
+                title: page.share.title,
+                desc: page.share.desc,
+                pic: page.share.pic,
+                link: page.share.link,
+                linkMain: page.share.linkMain
+              })
+            })
+          })
+        } else {
+          ctx.$$global.native.noMenu()
+        }
       }
     }
 

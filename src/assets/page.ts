@@ -11,6 +11,14 @@ export type Page = {
   nodes: NodeItem[]
   state: string
   events: any[]
+  hasShare: boolean
+  share: {
+    title: string
+    desc: string
+    pic: string
+    link: string
+    linkMain: string
+  }
 }
 
 export const currentPage = ref<Page | null>(null)
@@ -31,7 +39,8 @@ export const addPage = () => {
       title: '',
       desc: '',
       pic: '',
-      link: ''
+      link: '',
+      linkMain: ''
     },
     events: [],
     state: '(function () {\n  return {\n    test: true\n  }\n})()'

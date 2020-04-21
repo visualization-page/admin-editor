@@ -69,9 +69,20 @@ export default [
     ]
   },
   {
-    label: '分享地址',
+    label: 'app外分享地址',
     field: 'share.link',
-    type: 'input',
+    type: 'textarea',
+    relation: [
+      { field: 'hasShare', value: true }
+    ]
+  },
+  {
+    label: 'app内分享地址',
+    field: 'share.linkMain',
+    type: 'textarea',
+    elAttrs: {
+      placeholder: '不填默认当前页面链接'
+    },
     relation: [
       { field: 'hasShare', value: true }
     ]

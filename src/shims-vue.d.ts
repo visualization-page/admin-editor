@@ -8,5 +8,7 @@ declare module '@xm/native' {
     name: string | null
     uid: string | null
     cookie: (name: string) => string | null
+    menuCallJs: (name: string, cb: () => void) => void
+    noMenu: () => void
   }
 }
