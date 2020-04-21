@@ -167,3 +167,5 @@ $$global.config = project.config = {
 - 列表项目搜索
 - fix: 当拖拽节点后/edit-wrap缓存的节点变化了，导致无法选中
 - feat: native share
+- 支持模版字符串
+- 对于脱离文档流的元素，提供快捷方法：垂直居中/水平居中/居中

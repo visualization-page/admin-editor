@@ -2,6 +2,7 @@ export const common = {
   version: '0.0.1',
   cover: '',
   className: '',
+  quickToolsAddClass: [],
   createdUser: {
     id: 0,
     name: 'jmingzi'

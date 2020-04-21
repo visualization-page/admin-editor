@@ -11,7 +11,8 @@ export default {
   cover: 'el-icon-edit-outline',
   style: {
     ...common.style,
-    height: undefined
+    height: undefined,
+    width: undefined
   },
   props: {
     content: '',
@@ -21,7 +22,7 @@ export default {
 
 export const schema = [
   {
-    type: 'input',
+    type: 'textarea',
     label: '文本绑定',
     field: 'props.bindState'
   },
@@ -33,7 +34,10 @@ export const schema = [
   {
     type: 'color',
     label: '文本颜色',
-    field: 'props.color'
+    field: 'props.color',
+    props: {
+      'show-alpha': true
+    }
   },
   {
     type: 'rich-text',

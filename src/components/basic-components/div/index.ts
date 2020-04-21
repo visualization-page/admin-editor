@@ -11,7 +11,8 @@ export default {
   type: 'div',
   style: {
     ...common.style,
-    height: undefined
+    height: undefined,
+    width: undefined
   }
 }
 

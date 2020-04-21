@@ -18,8 +18,21 @@ export default [
     elAttrs: {
       placeholder: '支持 tcon.css，空格分隔'
     },
+    'info-icon': 'el-icon-sugar',
+    info: 'tcon 文档地址：https://tcon.netlify.app/guide/',
     model: 'blur'
   },
+  // {
+  //   label: '快捷样式',
+  //   field: 'quickToolsAddClass',
+  //   type: 'textarea',
+  //   elProps: {
+  //   },
+  //   elAttrs: {
+  //     disabled: true,
+  //     placeholder: '通过快捷方式设置的样式'
+  //   }
+  // },
   {
     label: '节点名称',
     field: 'title',
@@ -38,7 +51,7 @@ export default [
   {
     label: 'v-if',
     field: 'vIf',
-    type: 'input',
+    type: 'textarea',
     elAttrs: {
       placeholder: '请输入'
     },

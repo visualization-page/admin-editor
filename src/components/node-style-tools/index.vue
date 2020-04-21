@@ -1,16 +1,22 @@
 <template>
-  <div class="node-style-tools">
-    <div class="flex-center p30" v-if="!isEdit()">
-    </div>
-    <ul v-else-if="false" class="flex">
+  <div v-if="isEdit() && currentNode && currentNode.id !== '-1'" class="node-style-tools">
+    <ul>
+      <li v-if="false" class="node-style-tools__item flex-center" @click="handleReset()">
+        <el-tooltip effect="dark" content="重置设置" placement="right">
+          <i class="el-icon-refresh f16" />
+        </el-tooltip>
+      </li>
       <li
         v-for="item in list"
         :key="item.title"
-        class="mlr5 node-style-tools__item"
+        class="node-style-tools__item flex-center"
+        :class="{
+          active: hasSelect(item.class)
+        }"
         @click="handleClick(item)"
       >
-        <el-tooltip effect="dark" :content="item.title" placement="bottom">
-          <i class="iconfont" :class="item.icon" />
+        <el-tooltip effect="dark" :content="item.title" placement="right">
+          <i :class="[{ iconfont: !item.elementUi }, item.icon]" />
         </el-tooltip>
       </li>
     </ul>
@@ -19,143 +25,45 @@
 
 <script lang="ts">
 import { computed } from '@vue/composition-api'
-import items, { Item, handleCenter } from './config'
+import getItems, { Item } from './config'
 import { currentNode } from '@/assets/node'
-import { updateByField } from '@/assets/util'
+// import { updateByField } from '@/assets/util'
 import { isEdit } from '@/assets/render'
 
 export default {
   setup () {
     const list = computed(() => {
       if (currentNode.value) {
-        return currentNode.value.outDocFlow ? items : items.slice(4)
+        return getItems(currentNode.value.outDocFlow)
       }
       return []
     })
+    const handleReset = () => {
+      currentNode.value!.quickToolsAddClass = []
+    }
     const handleClick = (item: Item) => {
-      switch (item.id) {
-        case 1:
-          // 上对齐
-          if (currentNode.value) {
-            updateByField(
-              currentNode.value,
-              'style.position',
-              {
-                ...(currentNode.value.style.position || {}),
-                top: 0,
-                bottom: undefined
-              }
-            )
-          }
-          break
-        case 2:
-          // 右对齐
-          if (currentNode.value) {
-            updateByField(
-              currentNode.value,
-              'style.position',
-              {
-                ...(currentNode.value.style.position || {}),
-                right: 0,
-                left: undefined
-              }
-            )
-          }
-          break
-        case 3:
-          // 下对齐
-          if (currentNode.value) {
-            updateByField(
-              currentNode.value,
-              'style.position',
-              {
-                ...(currentNode.value.style.position || {}),
-                bottom: 0,
-                top: undefined
-              }
-            )
-          }
-          break
-        case 4:
-          // 左对齐
-          if (currentNode.value) {
-            const val = currentNode.value.outDocFlow ? {
-              ...(currentNode.value.style.position || {}),
-              left: 0,
-              right: undefined
-            } : {
-              ...(currentNode.value.style.margin || {}),
-              left: '',
-              right: ''
-            }
-            updateByField(
-              currentNode.value,
-              currentNode.value.outDocFlow ? 'style.position' : 'style.margin',
-              val
-            )
-          }
-          break
-        case 5:
-          if (currentNode.value) {
-            updateByField(
-              currentNode.value,
-              'style.position',
-              {}
-            )
-            updateByField(
-              currentNode.value,
-              'className',
-              handleCenter(currentNode.value.className, 'center-v')
-            )
-          }
-          break
-        case 6:
-          // 水平居中
-          if (currentNode.value) {
-            if (currentNode.value.outDocFlow) {
-              // 更改 class
-              updateByField(
-                currentNode.value,
-                'style.position',
-                {}
-              )
-              updateByField(
-                currentNode.value,
-                'className',
-                handleCenter(currentNode.value.className, 'center-h')
-              )
-            } else {
-              updateByField(
-                currentNode.value,
-                'style.margin',
-                {
-                  ...(currentNode.value.style.margin || {}),
-                  left: 'auto',
-                  right: 'auto'
-                }
-              )
-            }
-          }
-          break
-        case 7:
-          updateByField(currentNode.value, 'style.width', '100%')
-          break
-        case 8:
-          updateByField(currentNode.value, 'style.width', '50%')
-          break
-        case 9:
-          updateByField(currentNode.value, 'style.height', '100%')
-          break
-        case 10:
-          updateByField(currentNode.value, 'style.height', '50%')
-          break
+      if (currentNode.value) {
+        const index = currentNode.value.quickToolsAddClass.findIndex((x: string) => x === item.class)
+        if (index > -1) {
+          currentNode.value.quickToolsAddClass.splice(index, 1)
+        } else {
+          currentNode.value.quickToolsAddClass.push(item.class)
+        }
+      }
+    }
+    const hasSelect = (cls: string) => {
+      if (currentNode.value && currentNode.value.quickToolsAddClass) {
+        return currentNode.value.quickToolsAddClass.includes(cls)
       }
     }
 
     return {
+      currentNode,
       list,
       isEdit,
-      handleClick
+      handleClick,
+      handleReset,
+      hasSelect
     }
   }
 }
@@ -163,9 +71,19 @@ export default {
 
 <style lang="less">
 .node-style-tools {
+  position: absolute;
+  top: 50%;
+  right: calc(50% - 187px - 40px);
+  transform: translateY(-50%);
   &__item {
     cursor: pointer;
     color: #666;
+    margin-bottom: 10px;
+    border: 1px transparent solid;
+    &.active {
+      background-color: #ddd;
+      border-color: #ccc;
+    }
     &:hover {
       color: #409eff;
     }

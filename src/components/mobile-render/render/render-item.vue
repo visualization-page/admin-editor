@@ -113,7 +113,7 @@ export default defineComponent<{
           class: [
             'render-item__item',
             item.className
-          ],
+          ].concat(item.quickToolsAddClass || []),
           key: item.id + index,
           on,
           nativeOn,

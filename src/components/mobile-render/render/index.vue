@@ -167,3 +167,14 @@ export default defineComponent<{
   }
 })
 </script>
+
+<style lang="less">
+.absolute-center-h {
+  left: 50%;
+  transform: translateX(-50%);
+}
+.absolute-center-v {
+  top: 50%;
+  transform: translateY(-50%);
+}
+</style>

@@ -37,6 +37,8 @@ export default [
     elAttrs: {
       placeholder: '支持 tcon.css，空格分隔'
     },
+    'info-icon': 'el-icon-sugar',
+    info: 'tcon 文档地址：https://tcon.netlify.app/guide/',
     model: 'blur'
   },
   {

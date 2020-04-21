@@ -6,8 +6,8 @@
     <div class="app-header__bar flex-center-between plr20">
       <el-button icon="el-icon-back" type="text" @click="$router.push('/project/list')">返回项目列表</el-button>
       <span class="b f12 c-666">{{ project.dir ? `编辑 - ${project.dir}` : '新建项目' }}</span>
-      <el-button type="text" @click="handleMode">{{ isEdit() ? '预览' : '编辑' }}模式</el-button>
-      <node-style-tools v-if="false" />
+      <span />
+      <el-button v-if="false" type="text" @click="handleMode">{{ isEdit() ? '预览' : '编辑' }}模式</el-button>
     </div>
     <div class="app-content flex">
       <div class="app__side-bar relative">
@@ -73,6 +73,7 @@
         >
           <el-tab-pane label="场景预览" :name="tabName.previewArea">
             <mobile-render />
+            <node-style-tools />
           </el-tab-pane>
           <el-tab-pane label="代码编辑" :name="tabName.codeEdit">
             <code-editor />
@@ -215,6 +216,9 @@ export default defineComponent({
 .editor {
   [class*=van-hairline]::after {
     border-color: #ccc;
+  }
+  .el-textarea__inner {
+    word-break: break-all;
   }
 }
 .app__block--container {
