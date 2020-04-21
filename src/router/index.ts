@@ -29,6 +29,11 @@ const routes = [
     path: '/project/list',
     name: 'project-list',
     component: () => import(/* webpackChunkName: "project" */ '../views/project/list.vue')
+  },
+  {
+    path: '/suggest',
+    name: 'suggest',
+    component: () => import(/* webpackChunkName: "project" */ '../views/suggest.vue')
   }
 ]
 

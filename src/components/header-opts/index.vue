@@ -110,6 +110,13 @@ export default defineComponent({
       //   }
       // },
       {
+        label: '反馈建议',
+        icon: 'el-icon-chat-line-round f16',
+        action: () => {
+          ctx.root.$router.push('/suggest')
+        }
+      },
+      {
         label: '发布项目',
         icon: 'el-icon-position f16',
         action: async () => {

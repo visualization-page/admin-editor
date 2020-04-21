@@ -22,7 +22,7 @@ export default {
 
   methods: {
     isDef (val: any) {
-      return val !== undefined && val !== null
+      return val !== undefined && val !== null && val !== ''
     }
   }
 }

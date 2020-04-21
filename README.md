@@ -161,3 +161,8 @@ $$global.config = project.config = {
 - 更改发布逻辑
 - 登录改为证书登录
 - library 在打包时按需引入
+
+> 20/04/20
+
+- 搜索
+- 当拖拽节点后/edit-wrap缓存的节点变化了，导致无法选中

@@ -37,3 +37,12 @@ export const updateEditWrapStyle = (field: string, val: number) => {
     editWrapState.style[field] = val
   }
 }
+
+export const editWrapCacheNode: {
+  [k: string]: any
+} = {} // id => element
+export const clearEditWrapCacheNode = () => {
+  Object.keys(editWrapCacheNode).forEach(k => {
+    editWrapCacheNode[k] = undefined
+  })
+}

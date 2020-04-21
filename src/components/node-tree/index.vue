@@ -15,7 +15,7 @@
         :allow-drag="allowDrag"
         :expand-on-click-node="false"
         node-key="id"
-        default-expand-all
+        :default-expand-all="false"
         highlight-current
         draggable
         ref="tree"
@@ -63,6 +63,7 @@ import { rootNode, currentNode, setCurrentNode, deepCopyNode, NodeItem, NodeItem
 import { MessageBox, Message } from 'element-ui'
 import { http } from '@/api'
 import { setTabName, tabName } from '@/assets/tab'
+import { editWrapCacheNode } from '@/assets/render'
 
 export default defineComponent({
   setup (props, ctx) {
@@ -158,8 +159,10 @@ export default defineComponent({
         label: 'title'
       },
       handleDrop (draggingNode: any, dropNode: any, dropType: any, ev: any) {
-        console.log('tree drop: ', dropNode, dropType)
+        console.log('tree drag', draggingNode.data.id, 'tree drop: ', dropNode.data.id, dropType)
         // dragNode(draggingNode.data, dropNode.data, dropType)
+        editWrapCacheNode[dropNode.data.id] = null
+        editWrapCacheNode[draggingNode.data.id] = null
       },
       allowDrop (draggingNode: any, dropNode: any, dropType: any) {
         const { id, type } = dropNode.data

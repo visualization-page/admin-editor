@@ -5,9 +5,32 @@
         :opts="opts"
       />
     </div>
+    <div class="project-list__title flex justify-between">
+      <span class="f16">项目列表</span>
+      <el-form inline>
+        <el-form-item label="搜索类型">
+          <el-select placeholder="请选择" v-model="searchModel.field">
+            <el-option
+              v-for="item in searchField"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value">
+            </el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="">
+          <el-input
+            type="input"
+            placeholder="请输入关键词"
+            :value="searchModel.keywords"
+            @input="handleSearch"
+          />
+        </el-form-item>
+      </el-form>
+    </div>
     <div class="project-list">
       <el-table
-        :data="tableData"
+        :data="searchModel.searchList || tableData"
         border
         stripe
         style="width: 100%">
@@ -15,15 +38,24 @@
           prop="dir"
           label="项目"
           fixed>
+          <template slot-scope="scope">
+            <div v-html="scope.row.dir" />
+          </template>
         </el-table-column>
         <el-table-column
           prop="desc"
           label="描述">
+          <template slot-scope="scope">
+            <div v-html="scope.row.desc" />
+          </template>
         </el-table-column>
         <el-table-column
           prop="createUser"
           label="创建人"
           width="60">
+          <template slot-scope="scope">
+            <div v-html="scope.row.createUser" />
+          </template>
         </el-table-column>
         <el-table-column
           prop="info.userName"
@@ -84,6 +116,16 @@ export default {
   },
   data () {
     return {
+      searchField: [
+        { label: '项目名称', value: 'dir' },
+        { label: '项目描述', value: 'desc' },
+        { label: '创建人', value: 'createUser' }
+      ],
+      searchModel: {
+        field: 'dir',
+        keywords: '',
+        searchList: null
+      },
       opts: [
         {
           label: '关于',
@@ -99,6 +141,13 @@ export default {
           action: () => {
             // this.$router.push('/tourism')
             window.open('./render.html#/project/tourism')
+          }
+        },
+        {
+          label: '反馈建议',
+          icon: 'el-icon-chat-line-round f16',
+          action: () => {
+            this.$router.push('/suggest')
           }
         },
         {
@@ -145,6 +194,21 @@ export default {
         }))
       })
     },
+    handleSearch (val) {
+      this.searchModel.keywords = val
+      if (!val) {
+        this.searchModel.searchList = null
+      } else {
+        this.searchModel.searchList = this.tableData.map(x => {
+          if (new RegExp(val).test(x[this.searchModel.field])) {
+            return {
+              ...x,
+              [this.searchModel.field]: x[this.searchModel.field].replace(val, `<span class="c-main">${val}</span>`)
+            }
+          }
+        }).filter(Boolean)
+      }
+    },
     hasPriv (item) {
       return item.lockedBy === this.$native.name || (!item.lockedBy && (
         item.createUser === this.$native.name ||
@@ -188,9 +252,13 @@ export default {
 <style lang="less">
 .project-list {
   width: 1100px;
-  margin: 20px auto;
+  margin: 0 auto 20px auto;
   height: e('calc(100% - 102px)');
   overflow: auto;
+  &__title {
+    width: 1100px;
+    margin: 20px auto 0 auto;
+  }
   &__wrap {
     height: 100vh;
   }

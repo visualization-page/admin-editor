@@ -125,7 +125,7 @@ import { tabCurrent, setTabName, tabName, isHideComponent } from '@/assets/tab'
 import { http } from '@/api'
 import { initProject, project, resetProject } from '@/assets/project'
 import { Message, MessageBox } from 'element-ui'
-import { isEdit, setRenderEdit, setRenderPreview } from '@/assets/render'
+import { isEdit, setRenderEdit, setRenderPreview, clearEditWrapCacheNode } from '@/assets/render'
 import { lock, unlock } from '@/assets/lock'
 
 export default defineComponent({
@@ -183,6 +183,7 @@ export default defineComponent({
       })
     }
     onUnmounted(() => {
+      clearEditWrapCacheNode()
       resetProject()
     })
     const handleMode = () => {

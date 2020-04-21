@@ -15,7 +15,7 @@ import Resizer from './resize/index.vue'
 import { currentNode } from '@/assets/node'
 import { setPosition } from './context-menu/position'
 // import { tabName, setTabName } from '@/assets/tab'
-import { editWrapState, setEditWrapState, editNode } from '@/assets/render'
+import { editWrapState, setEditWrapState, editNode, editWrapCacheNode } from '@/assets/render'
 
 export default {
   components: {
@@ -31,7 +31,7 @@ export default {
       position: null,
       parentPosition: null
     })
-    const nodeElCache = {}
+    // const nodeElCache = {}
     const setEditBounding = (el) => {
       if (el) {
         const { left, top, width, height } = el.getBoundingClientRect()
@@ -42,11 +42,11 @@ export default {
       if (node) {
         // console.log('节点变化，重置 edit wrap', node.id, style, className)
         // setTabName(['', '', tabName.nodeProperty])
-        if (!nodeElCache[node.id]) {
-          nodeElCache[node.id] = ctx.parent.$refs.scrollContainer.querySelector(`[data-id="${node.id}"]`)
+        if (!editWrapCacheNode[node.id]) {
+          editWrapCacheNode[node.id] = ctx.parent.$refs.scrollContainer.querySelector(`[data-id="${node.id}"]`)
         }
         // console.log(node.style.positionType)
-        const el = nodeElCache[node.id]
+        const el = editWrapCacheNode[node.id]
         setEditBounding(el)
       }
     }
