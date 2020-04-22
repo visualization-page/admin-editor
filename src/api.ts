@@ -43,6 +43,10 @@ export const http = new Http({
     login: {
       login: '/butterfly/login',
       user: '/butterfly/user'
+    },
+    suggest: {
+      save: '/butterfly/suggest/save',
+      get: '/butterfly/suggest/get'
     }
   },
   notify: {

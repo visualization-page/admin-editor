@@ -226,23 +226,3 @@ export default defineComponent<{
   }
 })
 </script>
-
-<style lang="less">
-.render-item {
-  &__item {
-  }
-  .center-v {
-    top: 50%;
-    transform: translateY(-50%)
-  }
-  .center-h {
-    left: 50%;
-    transform: translateX(-50%)
-  }
-  .center {
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%)
-  }
-}
-</style>

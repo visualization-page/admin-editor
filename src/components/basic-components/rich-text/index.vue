@@ -38,6 +38,7 @@ export default {
   }
   ol, ul, dl {
     font-size: inherit;
+    padding-left: 2em;
   }
 }
 </style>

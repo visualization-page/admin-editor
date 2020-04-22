@@ -25,8 +25,6 @@
   cursor: pointer;
 }
 
-@side-width: 400px;
-@side-width-right: 300px;
 .app-header {
   height: 50px;
   background-color: #4a4c55;
@@ -41,8 +39,11 @@
   height: e('calc(100vh - 50px - 30px)');
 }
 .app__side-bar {
-  width: @side-width;
+  width: 400px;
   height: 100%;
+  @media screen and (min-width: 1440px) {
+    width: 500px;
+  }
 }
 .app__box {
   flex-grow: 1;
@@ -55,6 +56,12 @@
   }
 }
 .app__config {
-  width: @side-width-right;
+  width: 300px;
   height: 100%;
+  @media screen and (min-width: 1300px) {
+    width: 400px;
+  }
+  @media screen and (min-width: 1440px) {
+    width: 500px;
+  }
 }

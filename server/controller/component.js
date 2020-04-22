@@ -333,6 +333,35 @@ const handle = {
     )
     await handle.updateProjectList()
     utils.rm(tmpPath)
+  },
+
+  async saveSuggest (data) {
+    const p = getPath('suggest')
+    const exist = fs.pathExistsSync(p)
+    const list = exist ? await fs.readJson(p) : []
+    if (!exist) {
+      fs.ensureFileSync(p)
+    }
+    const isEdit = data.id
+    if (isEdit !== undefined) {
+      const i = list.findIndex(x => x.id === isEdit)
+      if (i > -1) {
+        list.splice(i, 1, data)
+        return fs.writeJson(p, list)
+      }
+    }
+    list.push({
+      ...data,
+      id: list.length + 1,
+      time: Date.now()
+    })
+    return fs.writeJson(p, list)
+  },
+
+  async getSuggest () {
+    const p = getPath('suggest')
+    const exist = fs.pathExistsSync(p)
+    return exist ? fs.readJson(p) : []
   }
 }
 

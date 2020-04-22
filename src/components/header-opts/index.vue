@@ -41,13 +41,7 @@
         <div :key="i" class="h30 bg-666 mt10" style="width:2px" />
       </template>
       <slot>
-        <div class="avatar flex-center c-aaa ml20">
-          <div class="avatar-img relative c-fff flex-center" overflow-h >
-            {{ name.substr(-2) }}
-            <div class="absolute t0 l0 b0 r0" :style="{ background: `url(${avatar}) center / cover no-repeat` }" />
-          </div>
-          <p v-if="false" class="ml10">{{ name }}</p>
-        </div>
+        <avatar />
       </slot>
     </div>
   </div>
@@ -55,19 +49,21 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { defineComponent, ref } from '@vue/composition-api'
+import { defineComponent } from '@vue/composition-api'
 import { project, saveProject } from '@/assets/project'
 // import { currentPage } from '@/assets/page'
 import { Message, MessageBox } from 'element-ui'
 import { http } from '@/api'
+import Avatar from '@/components/avatar/index.vue'
 
 export default defineComponent({
   props: {
     opts: Array
   },
+  components: {
+    Avatar
+  },
   setup (props, ctx) {
-    const native = Vue.prototype.$native
-    const avatar = ref(process.env.VUE_APP_AVATAR + native.uid)
     // const handleSave = (force?: boolean, remark?: string, notify?: boolean) => http.post('project/save', {
     //   dir: project.dir,
     //   force,
@@ -205,8 +201,6 @@ export default defineComponent({
     ]
     return {
       localOpts,
-      avatar,
-      name: native.name || '',
       handleResponse (res: any, item: any) {
         if (res.success) {
           Message.success('上传成功')
@@ -219,12 +213,3 @@ export default defineComponent({
   }
 })
 </script>
-
-<style lang="less">
-.avatar-img {
-  width: 30px;
-  height: 30px;
-  border-radius: 4px;
-  background-color: #488ff9;
-}
-</style>

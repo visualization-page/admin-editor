@@ -211,5 +211,19 @@ module.exports = {
         res.json({ success: false, msg: 'cookie sso is not exist!' })
       }
     }
+  },
+
+  '/suggest/save': {
+    post: async (req, res) => {
+      await component.saveSuggest(req.body)
+      res.json({ success: true })
+    }
+  },
+
+  '/suggest/get': {
+    get: async (req, res) => {
+      const data = await component.getSuggest()
+      res.json({ success: true, data })
+    }
   }
 }
