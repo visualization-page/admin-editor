@@ -33,6 +33,7 @@ export type Project = {
   config: {
     appType: Number
     path: string
+    openConsole: boolean
     dev: {
       baseUrl: string
       componentAbsoluteUrl: string
@@ -89,6 +90,7 @@ const defaultProject: Project = {
   config: {
     appType: 1,
     path: '',
+    openConsole: true,
     dev: {
       baseUrl: process.env.VUE_APP_FILE_SERVER,
       componentAbsoluteUrl: process.env.VUE_APP_FILE_SERVER,

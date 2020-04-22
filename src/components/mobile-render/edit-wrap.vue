@@ -103,5 +103,6 @@ export default {
   border: 1px #409eff dashed;
   background-color: rgba(#409eff, .4);
   pointer-events: none;
+  z-index: 99999;
 }
 </style>

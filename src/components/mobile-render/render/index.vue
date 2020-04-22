@@ -23,7 +23,7 @@ import { Project } from '@/assets/project'
 import { initGlobalConfig, getEventHandler, setGlobalUtils, setGlobalConstant } from './utils'
 
 // @ts-ignore
-const mobilePageShare: () => Promise<{ default: (obj: Page['share']) => void }> = () => import('../share')
+const mobilePageShare: () => Promise<{ default: (obj: Page['share']) => void }> = () => import(/* webpackChunkName: "render-page" */ '../share')
 
 export default defineComponent<{
   currentPage: Page | null

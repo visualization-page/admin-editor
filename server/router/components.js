@@ -225,5 +225,15 @@ module.exports = {
       const data = await component.getSuggest()
       res.json({ success: true, data })
     }
+  },
+
+  '/babel': {
+    get: async (req, res) => {
+      const dir = req.query.dir
+      const data = await fs.readJson(path.join(pubPath, 'project', dir, 'data.json'))
+      // const r = await utils.babelTransform(data.project.utils)
+      const r = await utils.babel(data.project)
+      res.json({ success: true, data: r })
+    }
   }
 }

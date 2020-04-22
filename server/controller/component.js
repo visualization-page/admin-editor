@@ -273,7 +273,7 @@ const handle = {
     // 切换为正式环境
     globalProject.project.env = 'pro'
     // 编译 code
-    await utils.babel(globalProject.project)
+    globalProject.project = await utils.babel(globalProject.project)
     // 改写 index.html 中的 publicPath
     const releaseHtmlPath = path.join(releasePath, 'index.html')
     const publicPath = globalProject.project.config.pro.publicPath || ''

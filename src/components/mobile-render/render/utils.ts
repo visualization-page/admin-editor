@@ -111,15 +111,20 @@ export const initGlobalConfig = (page: Page | null) => {
       this.http = new Http({
         baseUrl,
         urlMap: httpOptions.urlMap,
+        loadingMethods: Loading.instance,
+        notify: window.vant.Toast,
         contentType: httpOptions.contentType,
         ...other
       })
     },
-    dot: function (base: string) {
+    dot: function () {
+      const release = process.env.VUE_APP_RELEASE
       if (!this.dotInstance) {
         // @ts-ignore
         this.dotInstance = new Dot({
-          base
+          orgId: native.orgId,
+          userId: native.uid || undefined,
+          base: `${release ? window._APP_CONFIG.adminHost : 'http://admin.jituancaiyun.net'}/dot-log/logExt.json`
         })
       }
       return this.dotInstance

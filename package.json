@@ -27,7 +27,7 @@
     "express-fileupload": "^1.1.6",
     "fs-extra": "^9.0.0",
     "request": "^2.88.2",
-    "tcon": "^1.0.8",
+    "tcon": "^1.0.10",
     "vant": "^2.5.9",
     "vant-form": "^0.1.1",
     "vue": "^2.6.11",

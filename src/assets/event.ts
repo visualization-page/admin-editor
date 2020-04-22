@@ -23,7 +23,7 @@ export const fxList = [
   },
   {
     name: '打点',
-    code: '$$global.dot(/* base */).hit(\'gid.0.mid.eid\')'
+    code: '$$global.dot().hit(\'gid.0.mid.eid\')'
   },
   {
     name: '内部跳转',

@@ -120,6 +120,11 @@ export const local = [
     type: 'input'
   },
   {
+    label: '调试控制台',
+    field: 'config.openConsole',
+    type: 'checkbox'
+  },
+  {
     label: '开发环境',
     field: 'config.dev',
     type: 'input-group',
@@ -187,7 +192,7 @@ export const local = [
     label: '全局函数',
     field: 'utils',
     block: false,
-    'code-language': 'js',
+    'code-language': 'javascript',
     type: 'code',
     'info-icon': 'el-icon-star-off',
     info: '全局utils，例如：$$global.utils.deepClone'

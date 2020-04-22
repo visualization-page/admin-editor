@@ -8,7 +8,7 @@
         class="flex-center-between">
         <span class="c-666">{{ item.desc }}</span>
         <span>
-          <i class="el-icon-edit c-blue cp" @click="handleEdit(item, i)" />
+          <i class="el-icon-edit c-blue cp mr10" @click="handleEdit(item, i)" />
           <i class="el-icon-delete c-main cp" @click="handleDel(i)"/>
         </span>
       </li>
@@ -17,9 +17,13 @@
     <el-dialog
       :visible.sync="showModal"
       title="事件管理"
-      width="900px"
       class="events-manage-dialog"
       top="0"
+      fullscreen
+      lock-scroll
+      :close-on-click-modal="false"
+      :close-on-press-escape="false"
+      :show-close="false"
     >
       <el-form
         :model="form"
@@ -27,7 +31,8 @@
         label-position="left"
         label-width="60px"
         ref="form"
-        style="height: 500px;overflow: auto"
+        class="height-100"
+        overflow-a
       >
         <el-form-item label="描述" prop="desc">
           <el-input v-model="form.desc" placeholder="请输入" />
@@ -73,7 +78,7 @@
           <monaco-editor
             v-model="form.fxCode"
             :amdRequire="amdRequire"
-            style="height: 300px"
+            style="height: 500px"
             language="javascript"
             theme="vs-dark"
             ref="editor"
@@ -132,7 +137,7 @@ export default createComponent({
     watch(() => props.schemaData, val => {
       if (val) {
         const { pref, field } = getParentRef(props.schema!.field, val)
-        eventList.value = deepClone(pref[field])
+        eventList.value = deepClone(pref[field]).filter(Boolean)
       }
     }, { deep: true })
 
@@ -253,6 +258,7 @@ export default createComponent({
       &__body {
         padding: 20px;
         background-color: #222;
+        height: e('calc(100% - 86px)');
       }
       &__footer {
         padding: 10px;

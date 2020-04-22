@@ -45,8 +45,8 @@ const handle = {
       'upload'
     ])
   },
-  babel: async (project) => {
-    const _transform = (code) => babel.transformAsync(code, {
+  babelTransform (code) {
+    return babel.transformAsync(code, {
       root: __dirname,
       envName: 'production',
       presets: [
@@ -60,7 +60,28 @@ const handle = {
       ]
       // eslint-disable-next-line no-useless-escape
     }).then(res => res.code.replace('\"use strict\";\n\n', ''))
-
+  },
+  babel: async (project) => {
+    const _transform = handle.babelTransform
+    const dealNode = (node) => {
+      // node.style.code
+      transArr.push(_transform(node.style.code).then(co => {
+        node.style.code = co
+      }))
+      // node.renderString
+      transArr.push(_transform(node.renderString).then(co => {
+        node.renderString = co
+      }))
+      // node.events
+      node.events.forEach((nodeEv, l) => {
+        transArr.push(_transform(nodeEv.fxCode).then(fx => {
+          nodeEv.fxCode = fx
+        }))
+      })
+      node.children.forEach(childNode => {
+        dealNode(childNode)
+      })
+    }
     const transArr = [
       _transform(project.httpOptions.options).then(opt => {
         project.httpOptions.options = opt
@@ -69,7 +90,7 @@ const handle = {
         project.constant = cons
       })
     ]
-    if (project.httpOptions.utils) {
+    if (project.utils) {
       transArr.push(_transform(project.utils).then(utils => {
         project.utils = utils
       }))
@@ -77,33 +98,20 @@ const handle = {
     project.pages.forEach((page, i) => {
       // page.state
       transArr.push(_transform(page.state).then(state => {
-        project.pages[i].state = state
+        page.state = state
       }))
       // page.events
-      page.events.forEach((ev, j) => {
+      page.events.forEach((ev) => {
         transArr.push(_transform(ev.fxCode).then(fx => {
-          project.pages[i].events[j].fxCode = fx
+          ev.fxCode = fx
         }))
       })
-      page.nodes.forEach((node, k) => {
-        // node.style.code
-        transArr.push(_transform(node.style.code).then(co => {
-          project.pages[i].nodes[k].style.code = co
-        }))
-        // node.renderString
-        transArr.push(_transform(node.renderString).then(co => {
-          project.pages[i].nodes[k].renderString = co
-        }))
-        // node.events
-        node.events.forEach((ev, l) => {
-          transArr.push(_transform(ev.fxCode).then(fx => {
-            project.pages[i].nodes[k].events[l].fxCode = fx
-          }))
-        })
+      page.nodes.forEach((node) => {
+        dealNode(node)
       })
     })
 
-    return Promise.all(transArr)
+    return Promise.all(transArr).then(() => project)
   }
 }
 

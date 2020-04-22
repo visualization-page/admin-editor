@@ -18,6 +18,9 @@ export const getProject = async (dir) => {
   // 正式环境
   if (window.globalProject) {
     await initProject(window.globalProject.project)
+    if (window.globalProject.project.config.openConsole) {
+      loadVConsole()
+    }
     return window.globalProject.project
   }
   // 非正式环境
@@ -34,7 +37,7 @@ export const getProject = async (dir) => {
     http = global.http
   }
   const { data: { project } } = await http.get('get', { dir })
-  if (project.env === 'dev') {
+  if (project.config.openConsole) {
     loadVConsole()
   }
   await initProject(project)

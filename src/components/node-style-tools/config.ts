@@ -57,101 +57,51 @@ const items = [
     class: 'height-50'
   }
 ]
-const itemsFixed = [
+const itemsFixed = items.concat([
   {
-    id: 12,
-    title: '内容居中',
-    icon: 'el-icon-rank f16',
-    class: 'flex-center',
-    elementUi: true
-  },
-  {
-    id: 13,
-    title: '内容两头水平居中',
-    icon: 'el-icon-c-scale-to-original f16',
-    class: 'flex-center-between',
-    elementUi: true
-  },
-  {
-    id: 14,
-    title: '内容垂直居中',
-    icon: 'icon-align-center',
-    class: 'flex-center-align'
-  },
-  {
-    id: 15,
-    title: '内容水平居中',
-    icon: 'icon-align-middle',
-    class: 'flex-center-justify'
-  },
-  {
-    id: 11,
+    id: 101,
     title: '居中',
     icon: 'el-icon-rank f16',
     class: 'absolute-center',
     elementUi: true
   },
   {
-    id: 5,
+    id: 50,
     title: '垂直居中',
     icon: 'icon-align-center',
     class: 'absolute-center-v'
   },
   {
-    id: 6,
+    id: 60,
     title: '水平居中',
     icon: 'icon-align-middle',
     class: 'absolute-center-h'
   },
   {
-    id: 1,
+    id: 10,
     title: '上对齐',
     icon: 'icon-align-top',
     class: 't0'
   },
   {
-    id: 2,
+    id: 20,
     title: '右对齐',
     icon: 'icon-align-right',
     class: 'r0'
   },
   {
-    id: 3,
+    id: 30,
     title: '下对齐',
     icon: 'icon-align-bottom',
     class: 'b0'
   },
   {
-    id: 4,
+    id: 40,
     title: '左对齐',
     icon: 'icon-align-left',
     class: 'l0'
-  },
-  {
-    id: 7,
-    title: '横向填充',
-    icon: 'icon-full-width',
-    class: 'width-100'
-  },
-  {
-    id: 8,
-    title: '横向1/2填充',
-    icon: 'icon-half-width',
-    class: 'width-50'
-  },
-  {
-    id: 9,
-    title: '纵向填充',
-    icon: 'icon-full-height',
-    class: 'height-100'
-  },
-  {
-    id: 10,
-    title: '纵向1/2填充',
-    icon: 'icon-half-height',
-    class: 'height-50'
   }
-]
+])
 export default (fixed: boolean = true) => fixed ? itemsFixed : items
 
 export const handleCenter = (cls: string, targetCls: string) => {
