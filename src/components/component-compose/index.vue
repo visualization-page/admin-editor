@@ -25,7 +25,7 @@
         @click="handleClick(item)"
       >
         <div
-          class="width-100 flex-center"
+          class="width-100 flex-center oh"
           :class="{
             'bg-f2': !item.cover
           }"

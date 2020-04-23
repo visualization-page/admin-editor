@@ -37,6 +37,7 @@ Vue.config.errorHandler = function (err, vm, info) {
   console.log(err, vm, info)
 }
 const native = Vue.prototype.$native = new Native()
+Vue.prototype.$version = process.env.VUE_APP_VERSION
 
 if (!native.cookie('sso_u')) {
   // new Vue({

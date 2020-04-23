@@ -3,7 +3,7 @@
     class="basic-rich"
     v-html="isDef(bindState) ? bindState : content"
     :style="{
-      fontSize: bindState && fontSize && `${fontSize}px`,
+      fontSize: bindState && fontSize && (/vw|px|%/.test(fontSize) ? fontSize : `${fontSize}px`),
       color: bindState && color
     }"
   />

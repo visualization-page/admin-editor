@@ -26,19 +26,19 @@ export const schema = [
     label: '文本绑定',
     field: 'props.bindState'
   },
-  {
-    type: 'input',
-    label: '文本大小',
-    field: 'props.fontSize'
-  },
-  {
-    type: 'color',
-    label: '文本颜色',
-    field: 'props.color',
-    props: {
-      'show-alpha': true
-    }
-  },
+  // {
+  //   type: 'unit-size',
+  //   label: '文本大小',
+  //   field: 'props.fontSize'
+  // },
+  // {
+  //   type: 'color',
+  //   label: '文本颜色',
+  //   field: 'props.color',
+  //   props: {
+  //     'show-alpha': true
+  //   }
+  // },
   {
     type: 'rich-text',
     label: '文本内容',

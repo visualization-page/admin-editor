@@ -65,7 +65,7 @@
         <el-table-column
           prop="info.time"
           label="修改时间"
-          width="125">
+          width="130">
         </el-table-column>
         <el-table-column
           prop="info.remark"

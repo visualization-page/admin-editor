@@ -11,6 +11,25 @@ function getPath (type, isIndex = true) {
 }
 
 const handle = {
+  async init () {
+    const project = getPath('project')
+    const compose = getPath('compose')
+    const upload = getPath('upload')
+    const suggest = getPath('suggest')
+    if (!fs.pathExistsSync(project)) {
+      await fs.outputFile(project, '[]')
+    }
+    if (!fs.pathExistsSync(upload)) {
+      await fs.outputFile(upload, '[]')
+    }
+    if (!fs.pathExistsSync(compose)) {
+      await fs.outputFile(compose, '[]')
+    }
+    if (!fs.pathExistsSync(suggest)) {
+      await fs.outputFile(suggest, '[]')
+    }
+  },
+
   /**
    * 获取组件列表
    * @param type

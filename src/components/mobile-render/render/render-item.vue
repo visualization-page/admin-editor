@@ -134,6 +134,7 @@ export default defineComponent<{
         if (props.style.position === undefined) {
           props.style.zIndex = undefined
         }
+        // 处理 vw 单位
         const isPc = !/android|iphone/i.test(navigator.userAgent)
         const _dealVw = (obj: any) => {
           Object.keys(obj).forEach(k => {
@@ -147,7 +148,6 @@ export default defineComponent<{
             }
           })
         }
-        // 处理 vw 单位
         _dealVw(props.style)
         const styleCodeRes = parseCodeValid(props.style.code, codeExecuteContext)
         if (styleCodeRes.ok) {

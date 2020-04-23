@@ -203,7 +203,7 @@ export const initProject = async (item?: Project) => {
 }
 
 export const resetProject = () => {
-  updateProject(defaultProject)
+  updateProject(deepClone(defaultProject))
   setCurrentPage(null)
   setCurrentNode(null)
 }

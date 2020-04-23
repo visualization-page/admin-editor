@@ -46,6 +46,19 @@ export default [
     type: 'direction-size'
   },
   {
+    label: '文本大小',
+    field: 'style.fontSize',
+    type: 'unit-size'
+  },
+  {
+    label: '文本颜色',
+    field: 'style.color',
+    type: 'color',
+    props: {
+      'show-alpha': true
+    }
+  },
+  {
     label: '背景颜色',
     field: 'style.backgroundColor',
     type: 'color',

@@ -7,6 +7,16 @@ const tmpPath = path.resolve(__dirname, '../tmp')
 const pubPath = path.resolve(__dirname, '../public')
 
 module.exports = {
+  /**
+   * 项目文件结构初始化
+   */
+  '/init': {
+    get: async (req, res) => {
+      await component.init()
+      res.json({ success: true })
+    }
+  },
+
   '/component/upload/:type': {
     post: async (req, res) => {
       const ok = req.files.file
