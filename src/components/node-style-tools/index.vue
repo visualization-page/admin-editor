@@ -24,6 +24,7 @@
 </template>
 
 <script lang="ts">
+import Vue from 'vue'
 import { computed } from '@vue/composition-api'
 import getItems, { Item } from './config'
 import { currentNode } from '@/assets/node'
@@ -43,6 +44,9 @@ export default {
     }
     const handleClick = (item: Item) => {
       if (currentNode.value) {
+        if (!currentNode.value.quickToolsAddClass) {
+          Vue.set(currentNode.value, 'quickToolsAddClass', [])
+        }
         const index = currentNode.value.quickToolsAddClass.findIndex((x: string) => x === item.class)
         if (index > -1) {
           currentNode.value.quickToolsAddClass.splice(index, 1)
