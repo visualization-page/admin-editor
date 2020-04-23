@@ -21,7 +21,7 @@ export default {
 
 export const schema = [
   {
-    type: 'input',
+    type: 'image',
     label: '图片地址',
     field: 'props.src',
     rules: [

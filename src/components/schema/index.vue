@@ -8,6 +8,7 @@ import RenderEvents from './render-events.vue'
 import RenderUnitSize from './render-unit-size.vue'
 import RenderDirectionSize from './render-direction-size.vue'
 import RenderRichText from './render-rich-text.vue'
+import RenderImage from './render-image.vue'
 
 export default defineComponent({
   props: {
@@ -103,6 +104,8 @@ export default defineComponent({
           return renderCompositeComponent(RenderEvents, schema)
         case 'code':
           return renderCodeEditor(schema, props.schemaData, updateField)
+        case 'image':
+          return renderCompositeComponent(RenderImage, schema)
         default:
           return <p />
       }

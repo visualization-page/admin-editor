@@ -14,7 +14,7 @@ app.use(fileUpload({
   // safeFileNames: true,
   // preserveExtension: true
 }))
-app.use(bodyParser.urlencoded({ extended: true }))
+app.use(bodyParser.urlencoded({ limit: '10mb', extended: true }))
 app.use(cookieParser())
 app.use(bodyParser.json())
 app.use('/butterfly/static', express.static(__dirname + '/public'))

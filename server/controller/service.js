@@ -80,5 +80,30 @@ module.exports = {
         })
       })
     })
+  },
+
+  async caiyunUpload (fileBuffer) {
+    return new Promise((resolve, reject) => {
+      request.post(
+        {
+          url: 'https://filesystem.api.jituancaiyun.com/sfs/webUpload/srvfile?fileType=2&src=cdn',
+          formData: {
+            upfile: fileBuffer
+          },
+          headers: {
+            Origin: 'https://internal.jituancaiyun.com',
+            Referer: 'https://internal.jituancaiyun.com/fe/upload/index.html'
+            // Cookie: `mToken=${mToken}`
+          }
+        },
+        (err, httpResponse, body) => {
+          if (err) {
+            reject(err)
+          } else {
+            resolve(JSON.parse(body))
+          }
+        }
+      )
+    })
   }
 }

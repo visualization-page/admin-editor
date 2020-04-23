@@ -51,22 +51,38 @@
     <div v-else class="flex-center p30">
       <p class="c-999">请选中一个页面</p>
     </div>
+    <compose-dialog
+      :show.sync="composeState.show"
+      :name="composeState.name"
+      :cover="composeState.cover"
+      :callback="composeState.callback"
+    />
   </div>
 </template>
 
 <script lang="ts">
 import Vue from 'vue'
-import { defineComponent, watch } from '@vue/composition-api'
+import { defineComponent, reactive, watch } from '@vue/composition-api'
 import { currentPage } from '@/assets/page'
 import { project } from '@/assets/project'
 import { rootNode, currentNode, setCurrentNode, deepCopyNode, NodeItem, NodeItemBasic, delNode } from '@/assets/node'
-import { MessageBox, Message } from 'element-ui'
+import { MessageBox } from 'element-ui'
 import { http } from '@/api'
 import { setTabName, tabName } from '@/assets/tab'
 import { editWrapCacheNode } from '@/assets/render'
+import ComposeDialog from '@/components/component-compose/compose-dialog.vue'
 
 export default defineComponent({
+  components: {
+    ComposeDialog
+  },
   setup (props, ctx) {
+    const composeState = reactive({
+      show: false,
+      name: '',
+      cover: '',
+      callback: (name: string, cover: string) => {}
+    })
     watch(() => currentNode.value && currentNode.value.id, val => {
       if (val) {
         // @ts-ignore
@@ -105,15 +121,9 @@ export default defineComponent({
     }
     const handleExport = (data: any, parent: any) => {
       // 遍历组件收集类型依赖，并检测名字唯一
-      MessageBox.prompt(
-        '请输入封装的组件名、字母数字组成',
-        { inputValue: sessionStorage.getItem('compose-name')! }
-      ).then(({ value }: any) => {
-        if (!/^[a-zA-Z][a-zA-Z0-9-]{0,50}$/.test(value)) {
-          Message.error('组件名称不合法')
-          return
-        }
-        sessionStorage.setItem('compose-name', value)
+      composeState.show = true
+      composeState.callback = (name: string, cover: string) => {
+        // console.log(name, cover)
         const componentDeps: NodeItemBasic[] = []
         const _dep = (node: NodeItem) => {
           if (node.nodeType === 1 << 0) {
@@ -133,7 +143,8 @@ export default defineComponent({
           http.post('component/export', {
             type: 'compose',
             componentDeps,
-            name: value,
+            name,
+            cover,
             node: data,
             userName: Vue.prototype.$native.name,
             force
@@ -148,12 +159,13 @@ export default defineComponent({
           })
         }
         _post()
-      })
+      }
     }
     return {
       currentPage,
       currentNode,
       rootNode,
+      composeState,
       defaultProps: {
         children: 'children',
         label: 'title'

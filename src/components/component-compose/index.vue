@@ -15,7 +15,7 @@
     </div>
     <van-grid
       class="van-hairline--left"
-      :column-num="4"
+      :column-num="2"
       clickable
     >
       <van-grid-item
@@ -24,11 +24,21 @@
         class="cp relative"
         @click="handleClick(item)"
       >
-        <div v-if="false" class="w40 h40 bg-f2">
-          <img :src="item.cover" width="100%" alt="">
+        <div
+          class="width-100 flex-center"
+          :class="{
+            'bg-f2': !item.cover
+          }"
+          :style="{
+            height: '150px'
+          }"
+        >
+          <img v-if="item.cover" :src="item.cover" width="100%" alt="">
         </div>
-        <p class="c-666">{{ item.title }}</p>
-        <span class="c-999 f10">by {{ item.userName }}</span>
+        <p class="mt10">
+          <span class="c-666">{{ item.title || item.name }}</span>
+          <span class="c-999 ml10">by {{ item.userName }}</span>
+        </p>
         <div class="cp absolute r0 t0 flex">
           <div
             v-if="item.userName === $native.name"

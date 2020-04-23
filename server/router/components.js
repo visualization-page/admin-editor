@@ -235,5 +235,29 @@ module.exports = {
       const r = await utils.babel(data.project)
       res.json({ success: true, data: r })
     }
+  },
+
+  '/caiyun-file/upload': {
+    post: async (req, res) => {
+      const ok = req.files && req.files.file
+      if (ok) {
+        const file = path.join(tmpPath, ok.name)
+        ok.mv(file, async (err) => {
+          if (err) {
+            throw err
+          }
+          const fileBuffer = fs.createReadStream(file)
+          const data = await service.caiyunUpload(fileBuffer)
+          utils.rm(tmpPath)
+          res.json({ success: true, data })
+        })
+      } else if (req.body.base64) {
+        const dataBuffer = Buffer.alloc(req.body.size, req.body.base64, 'base64')
+        const data = await service.caiyunUpload(dataBuffer)
+        res.json({ success: true, data })
+      } else {
+        res.json({ success: !!ok, msg: '' })
+      }
+    }
   }
 }

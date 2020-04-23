@@ -42,7 +42,8 @@ export const http = new Http({
     delete: '/butterfly/delete/:type/:dir',
     login: {
       login: '/butterfly/login',
-      user: '/butterfly/user'
+      user: '/butterfly/user',
+      upload: '/butterfly/caiyun-file/upload'
     },
     suggest: {
       save: '/butterfly/suggest/save',
