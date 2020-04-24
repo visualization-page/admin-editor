@@ -24,6 +24,8 @@ export type NodeItemBasic = {
   cssUrl: string
   existCss: boolean
   nodeType: number
+  pageId: string
+  refNum: number
 }
 export type NodeItemLibrary = {
   library: string
@@ -161,10 +163,28 @@ export const delNode = async (target: { nodeId: string }) => {
     const { nodes } = currentPage.value
     const res = findNode(target.nodeId, nodes)
     if (res && res.i > -1) {
+      // 删除组合组件的依赖
       if (res.data.nodeType === 1 << 0) {
-        // 删除依赖
-        const i = project.componentDownload.findIndex(x => x.name === res.data.name)
-        project.componentDownload.splice(i, 1)
+        const delDeps = (node: any) => {
+          if (node.children) {
+            node.children.forEach(delDeps)
+          }
+          const i = project.componentDownload.findIndex(
+            x => x.name === node.name &&
+              x.pageId === currentPage.value!.id
+          )
+          if (i === -1) {
+            // console.log('noe found: nodeName, pageId', node.name, currentPage.value!.id)
+            return
+          }
+          const dep = project.componentDownload[i]
+          if (!dep.refNum || dep.refNum <= 1) {
+            project.componentDownload.splice(i, 1)
+          } else {
+            dep.refNum -= 1
+          }
+        }
+        delDeps(res.data)
       }
       res.handle.splice(res.i, 1)
     }

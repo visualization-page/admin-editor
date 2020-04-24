@@ -53,10 +53,10 @@
 </template>
 
 <script>
-import { ref } from '@vue/composition-api'
+import { ref, watch } from '@vue/composition-api'
 import { addComposeNode, addBeforeValidate } from '@/assets/node'
 import { diffDownloadDeps } from '@/assets/project'
-// import { setTabName, tabName } from '@/assets/tab'
+import { tabCurrent, tabName } from '@/assets/tab'
 import { http } from '@/api'
 import { Loading, Message, MessageBox } from 'element-ui'
 
@@ -70,6 +70,14 @@ export default {
         list.value = res.data
       })
     }
+
+    const stop = watch(() => tabCurrent.tab2, cur => {
+      if (cur === tabName.highComponent) {
+        getList()
+        stop()
+      }
+    })
+
     const handleRefresh = () => {
       http.post('component/update', { type: 'compose' }).then(res => {
         list.value = res.data
@@ -114,7 +122,6 @@ export default {
       await http.post('component/delete', { type: 'compose', dir: item.name }, { successMessage: '删除成功' })
       getList()
     }
-    getList()
     return {
       server: process.env.VUE_APP_FILE_SERVER,
       list,

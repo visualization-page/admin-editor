@@ -11,7 +11,12 @@
     >
       <span>{{ item.title || item.id }}</span>
       <div class="pr15">
-        <i class="el-icon-document-copy" @click.stop="handleCopyPage(item)" />
+        <el-tooltip v-if="false" effect="dark" content="导出页面为模版" placement="top">
+          <i class="el-icon-brush mr15" @click.stop="handleExportPage(item)" />
+        </el-tooltip>
+        <el-tooltip effect="dark" content="复制页面" placement="top">
+          <i class="el-icon-document-copy" @click.stop="handleCopyPage(item)" />
+        </el-tooltip>
       </div>
     </div>
     <div class="page-list__item flex-center c-999 cp" @click="addPage">
@@ -49,6 +54,8 @@ export default createComponent({
       },
       handleCopyPage (item) {
         copyPage(item)
+      },
+      handleExportPage (item) {
       }
     }
   }

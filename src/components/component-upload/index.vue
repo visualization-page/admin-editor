@@ -62,12 +62,13 @@
 </template>
 
 <script>
-import { defineComponent, ref } from '@vue/composition-api'
+import { defineComponent, ref, watch } from '@vue/composition-api'
 import { http } from '@/api'
 import { Message, Loading, MessageBox } from 'element-ui'
 import { addBeforeValidate, addNode } from '@/assets/node'
-import { setTabName, tabName } from '@/assets/tab'
+import { setTabName, tabCurrent, tabName } from '@/assets/tab'
 import { project } from '@/assets/project'
+import { currentPage } from '@/assets/page'
 
 export default defineComponent({
   name: 'index',
@@ -78,7 +79,14 @@ export default defineComponent({
         list.value = res.data
       })
     }
-    getList()
+
+    const stop = watch(() => tabCurrent.tab2, cur => {
+      if (cur === tabName.uploadComponent) {
+        getList()
+        stop()
+      }
+    })
+
     let loading
     const handleBeforeUpload = (file) => {
       const ok = file.type === 'application/zip'
@@ -103,7 +111,20 @@ export default defineComponent({
       if (addBeforeValidate()) {
         addNode({ ...item, nodeType: 1 << 0 })
         setTabName([tabName.nodeTree, '', tabName.nodeProperty])
-        project.componentDownload.push(item)
+        const currentPageDeps = project.componentDownload.filter(x => x.pageId === currentPage.value.id)
+        const dep = currentPageDeps.find(x => x.name === item.name)
+        if (dep) {
+          if (!dep.refNum) {
+            dep.refNum = 0
+          }
+          dep.refNum += 1
+        } else {
+          project.componentDownload.push({
+            ...item,
+            pageId: currentPage.value.id,
+            refNum: item.refNum || 1
+          })
+        }
       }
     }
     const downloadItem = async (item) => {

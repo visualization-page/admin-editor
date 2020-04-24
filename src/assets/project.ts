@@ -1,7 +1,7 @@
 import Vue from 'vue'
-import { reactive } from '@vue/composition-api'
+import { reactive, watch } from '@vue/composition-api'
 import { loadItem } from '@/components/mobile-render/render/utils'
-import { Page, setCurrentPage } from './page'
+import { Page, setCurrentPage, currentPage } from './page'
 import { NodeItemBasic, setCurrentNode } from './node'
 import { deepClone } from '@/assets/util'
 import { http } from '@/api'
@@ -180,16 +180,36 @@ export const importProject = async (parseItem: Project) => {
 }
 
 export const diffDownloadDeps = async (items: NodeItemBasic[], init = false) => {
-  const res = init ? project.componentDownload : items.filter(x => project.componentDownload.every(y => y.name !== x.name))
-  if (res.length) {
-    await Promise.all(res.map(loadItem))
+  if (init) {
+    return Promise.all(project.componentDownload.map(loadItem))
   }
+
+  const res: any = []
+  // 将依赖存进当前页面
+  items.forEach(it => {
+    // debugger
+    const currentPageDeps = project.componentDownload.filter(x => x.pageId === currentPage.value!.id)
+    const dep = currentPageDeps.find(x => x.name === it.name)
+    if (dep) {
+      // console.log('old num ++')
+      dep.refNum += 1
+    } else {
+      res.push(it)
+      // console.log('new compose')
+      project.componentDownload.push({
+        ...it,
+        pageId: currentPage.value!.id,
+        refNum: 1
+      })
+    }
+  })
+  await Promise.all(res.map(loadItem))
 }
 
 export const initProject = async (item?: Project) => {
-  // watch(() => project, val => {
-  //   console.dir(val)
-  // }, { lazy: true, deep: true })
+  watch(() => project, val => {
+    console.dir(val)
+  }, { lazy: true, deep: true })
 
   if (item) {
     await importProject(item)

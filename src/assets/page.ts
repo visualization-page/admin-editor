@@ -53,12 +53,20 @@ export const addPage = () => {
 
 export const copyPage = (page: Page) => {
   const index = project.pages.length
+  const newId = `page-${Date.now()}`
   Vue.set(project.pages, index, Object.assign(deepClone(page), {
-    id: `page-${Date.now()}`,
+    id: newId,
     title: page.title ? `${page.title}_copy` : '',
     url: ''
   }))
   setCurrentPage(project.pages[index])
+  // project.componentDownload 也要复制到相应的页面一份
+  project.componentDownload.filter(x => x.pageId === page.id).forEach(it => {
+    project.componentDownload.push({
+      ...it,
+      pageId: newId
+    })
+  })
 }
 
 export const delPage = (target: { pageIndex?: number, pageId?: string }) => {
@@ -66,7 +74,15 @@ export const delPage = (target: { pageIndex?: number, pageId?: string }) => {
     target.pageIndex = project.pages.findIndex((x: Page) => x.id === target.pageId)
   }
   if (target.pageIndex !== undefined && target.pageIndex > -1) {
+    const page = project.pages[target.pageIndex]
+    const get = () => project.componentDownload.findIndex(x => x.pageId === page.id)
     project.pages.splice(target.pageIndex, 1)
+    let index = get()
+    while (index > -1) {
+      console.log('del page deps')
+      project.componentDownload.splice(index, 1)
+      index = get()
+    }
   }
   setCurrentPage(null)
   setCurrentNode(null)

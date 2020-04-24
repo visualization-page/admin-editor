@@ -127,7 +127,10 @@ export default defineComponent({
         const componentDeps: NodeItemBasic[] = []
         const _dep = (node: NodeItem) => {
           if (node.nodeType === 1 << 0) {
-            const it = project.componentDownload.find(x => x.name === node.name)
+            const it = project.componentDownload.find(x =>
+              x.name === node.name &&
+              x.pageId === currentPage.value!.id
+            )
             if (it) {
               componentDeps.push(it)
             }

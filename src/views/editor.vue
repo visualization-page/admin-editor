@@ -33,7 +33,7 @@
           </el-tabs>
         </div>
         <div
-          class="app__block--container"
+          class="app__block--container z1"
           :style="{
             top: isHideComponent ? 'calc(100% - 24px)' : '24px'
           }"
@@ -176,7 +176,7 @@ export default defineComponent({
         }
       }).then(item => {
         initProject(item.data.project)
-        setTabName([tabName.pageList, tabName.basicComponent, tabName.pageSet])
+        // setTabName([tabName.pageList, tabName.basicComponent, tabName.pageSet])
         lock(dir)
         // requestAnimationFrame(() => {
         //   hideComponent(true)
@@ -184,6 +184,7 @@ export default defineComponent({
       })
     }
     onUnmounted(() => {
+      setTabName([tabName.projectSet, tabName.basicComponent, tabName.pageSet])
       clearEditWrapCacheNode()
       resetProject()
     })
