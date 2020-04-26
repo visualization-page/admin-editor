@@ -16,6 +16,7 @@ const handle = {
     const compose = getPath('compose')
     const upload = getPath('upload')
     const suggest = getPath('suggest')
+    const umd = getPath('umd')
     if (!fs.pathExistsSync(project)) {
       await fs.outputFile(project, '[]')
     }
@@ -27,6 +28,9 @@ const handle = {
     }
     if (!fs.pathExistsSync(suggest)) {
       await fs.outputFile(suggest, '[]')
+    }
+    if (!fs.pathExistsSync(umd)) {
+      await fs.outputFile(umd, '[]')
     }
   },
 
@@ -246,6 +250,7 @@ const handle = {
     const distPath = path.resolve(__dirname, '../../dist-system')
     const dataPath = path.join(pubPath, 'project', dir, 'data.json')
     const globalProject = await fs.readJson(dataPath)
+    const isDev = process.env.APP_ENV === 'dev'
 
     // 改写 data.json
     globalProject.project.info = body.info
@@ -277,18 +282,7 @@ const handle = {
         fs.copySync(path.join(distPath, 'css', name), path.join(releasePath, 'css', name))
       }
     })
-    // 将组件 js 合并生成文件
-    let jsContent = ''
-    for (let i = 0; i < globalProject.project.componentDownload.length; i++) {
-      const item = globalProject.project.componentDownload[i]
-      const c = await fs.readFile(path.join(pubPath, item.jsUrl.replace('/butterfly/static', '')))
-      jsContent += `${c}\n`
-    }
-    const isDev = process.env.APP_ENV === 'dev'
-    const componentMergeFileName = isDev
-      ? 'component.js'
-      : `component.${dayjs().format('MMDDHHmmss')}.js`
-    await fs.outputFile(path.join(releasePath, componentMergeFileName), jsContent, 'utf8')
+
     // 切换为正式环境
     globalProject.project.env = 'pro'
     // 编译 code
@@ -308,10 +302,61 @@ const handle = {
         '</head>',
         `<script>/* ${dayjs().format('YYYY/MM/DD HH:mm')} */ var globalProject = %%%%</script></head>`
       )
-      .replace(
+
+    // 将组件 js 合并生成文件
+    let jsContent = ''
+    // 去重
+    const componentDeps = []
+    globalProject.project.componentDownload.forEach(it => {
+      if (componentDeps.every(x => x.name !== it.name)) {
+        componentDeps.push(it)
+      }
+    })
+    for (let i = 0; i < componentDeps.length; i++) {
+      const item = componentDeps[i]
+      const c = await fs.readFile(path.join(pubPath, item.jsUrl.replace('/butterfly/static', '')))
+      jsContent += `${c}\n`
+    }
+    if (jsContent) {
+      const componentMergeFileName = isDev
+        ? 'component.js'
+        : `component.${dayjs().format('MMDDHHmmss')}.js`
+      await fs.outputFile(path.join(releasePath, componentMergeFileName), jsContent, 'utf8')
+      renderContent = renderContent.replace(
         '</body>',
         `<script src="${publicPath + componentMergeFileName}"></script></body>`
       )
+    }
+    // 处理 umd 组件
+    if (globalProject.project.componentUmd) {
+      const needDownload = []
+      const cdn = []
+      globalProject.project.componentUmd.forEach(it => {
+        if (it.isReleaseDownload) {
+          needDownload.push(it)
+        } else {
+          cdn.push(it)
+        }
+      })
+      let cdnScript = ''
+      cdn.forEach(it => {
+        cdnScript += `<script src="${it.url}"></script>`
+      })
+      if (cdnScript) {
+        renderContent = renderContent.replace('</body>', cdnScript + '</body>')
+      }
+      if (needDownload.length) {
+        const umdFileName = isDev
+          ? 'umd.js'
+          : `umd.${dayjs().format('MMDDHHmmss')}.js`
+        const arr = await Promise.all(needDownload.map(it => service.getRemoteFileContent(it.url)))
+        await fs.outputFile(path.join(releasePath, umdFileName), arr.join('\n'), 'utf8')
+        renderContent = renderContent.replace(
+          '</body>',
+          `<script src="${publicPath + umdFileName}"></script></body>`
+        )
+      }
+    }
 
     // 正则匹配中 $$ 是关键词，必须绕开
     renderContent = renderContent.split('%%%%')
@@ -381,6 +426,27 @@ const handle = {
     const p = getPath('suggest')
     const exist = fs.pathExistsSync(p)
     return exist ? fs.readJson(p) : []
+  },
+
+  async saveUmd (data) {
+    const index = getPath('umd')
+    const list = await fs.readJson(index)
+    if (data.id) {
+      // 编辑
+      const i = list.find(x => x.id === data.id)
+      if (data.delete) {
+        list.splice(i, 1)
+      } else {
+        list.splice(i, 1, data)
+      }
+    } else {
+      // 新增
+      list.push({
+        ...data,
+        id: Date.now()
+      })
+    }
+    await fs.writeJson(index, list)
   }
 }
 

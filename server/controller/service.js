@@ -105,5 +105,19 @@ module.exports = {
         }
       )
     })
+  },
+
+  async getRemoteFileContent (url) {
+    return new Promise((resolve, reject) => {
+      request.get({
+        url
+      }, (err, httpResponse, body) => {
+        if (err) {
+          reject(err)
+        } else {
+          resolve(body)
+        }
+      })
+    })
   }
 }

@@ -31,7 +31,8 @@ const copyDirs = [
   'server/public/upload-entry-template.tpl',
   'server/index.js',
   'server/config.js',
-  'pm2.json'
+  'pm2.json',
+  'pm2-pro.json'
   // '.gitignore'
 ]
 const delDirs = [

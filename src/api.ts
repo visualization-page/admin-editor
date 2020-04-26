@@ -29,7 +29,8 @@ export const http = new Http({
       update: '/butterfly/component/:type',
       export: '/butterfly/component/export/:type',
       download: '/butterfly/component/download/:type',
-      delete: '/butterfly/component/delete/:type'
+      delete: '/butterfly/component/delete/:type',
+      umdSave: '/butterfly/umd-component'
     },
     project: {
       save: '/butterfly/project/:dir',

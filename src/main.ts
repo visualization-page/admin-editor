@@ -54,6 +54,4 @@ if (!native.cookie('sso_u')) {
       render: h => h(App)
     }).$mount('#app')
   })
-  // document.addEventListener('DOMContentLoaded', () => {
-  // })
 }

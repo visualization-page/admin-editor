@@ -10,6 +10,7 @@ export const tabName = {
   uploadComponent: 'upload-component',
   libraryComponent: 'library-component',
   fx: 'fx',
+  umdComponent: 'umd-component',
   pageSet: 'page-set',
   nodeProperty: 'node-property',
   nodeStyle: 'node-style',

@@ -1,6 +1,6 @@
 import { project, Project } from '@/assets/project'
 import { Page } from '@/assets/page'
-import { NodeItem, NodeItemBasic } from '@/assets/node'
+import { NodeItem, NodeItemBasic, NodeUmd } from '@/assets/node'
 import { getParentRef, parseCodeValid } from '@/assets/util'
 import { FormEvent } from '@/assets/event'
 import { Loading, Dialog, Dot, Http } from 'esc-ui'
@@ -33,6 +33,36 @@ export const loadItem = (item: NodeItemBasic): Promise<{ default: any }> => {
     }
     script.onerror = () => {
       reject(new Error(`${item.jsUrl} download fail`))
+    }
+  })
+}
+
+export const loadItemUmd = (item: NodeUmd, load: boolean = true): Promise<{ default: any }> => {
+  const elem = document.querySelector(`script.${item.label}`)
+  const defineBak = window.define
+  return new Promise((resolve, reject) => {
+    if (!load) {
+      if (elem) {
+        elem.remove()
+        delete window[item.umdName]
+      }
+      return resolve()
+    }
+    if (elem) {
+      return resolve(window[item.umdName])
+    }
+    window.define = null
+    const script = document.createElement('script')
+    script.src = item.url
+    script.setAttribute('class', item.label)
+    document.body.appendChild(script)
+    script.onload = () => {
+      window.define = defineBak
+      resolve(window[item.umdName])
+    }
+    script.onerror = () => {
+      window.define = defineBak
+      reject(new Error(`item.label ${item.url} download fail`))
     }
   })
 }

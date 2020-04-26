@@ -215,7 +215,9 @@ module.exports = {
     get: async (req, res) => {
       const sso = req.cookies.sso_u
       if (sso) {
-        const user = new Buffer(sso, 'base64').toString()
+        // ascii 默认是 8 位
+        // base64 是 6 位
+        const user = Buffer.alloc(sso.length * 6 / 8, sso, 'base64').toString()
         res.json({ success: !!user, data: JSON.parse(user) })
       } else {
         res.json({ success: false, msg: 'cookie sso is not exist!' })
@@ -262,12 +264,20 @@ module.exports = {
           res.json({ success: true, data })
         })
       } else if (req.body.base64) {
-        const dataBuffer = Buffer.alloc(req.body.size, req.body.base64, 'base64')
+        const dataBuffer = Buffer.alloc(req.body.size / 6 * 8, req.body.base64, 'base64')
         const data = await service.caiyunUpload(dataBuffer)
         res.json({ success: true, data })
       } else {
         res.json({ success: !!ok, msg: '' })
       }
+    }
+  },
+
+  '/umd-component': {
+    post: async (req, res) => {
+      const data = req.body
+      await component.saveUmd(data)
+      res.json({ success: true })
     }
   }
 }

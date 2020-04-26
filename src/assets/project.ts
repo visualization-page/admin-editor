@@ -1,8 +1,8 @@
 import Vue from 'vue'
 import { reactive, watch } from '@vue/composition-api'
-import { loadItem } from '@/components/mobile-render/render/utils'
+import { loadItem, loadItemUmd } from '@/components/mobile-render/render/utils'
 import { Page, setCurrentPage, currentPage } from './page'
-import { NodeItemBasic, setCurrentNode } from './node'
+import { NodeItemBasic, NodeUmd, setCurrentNode } from './node'
 import { deepClone } from '@/assets/util'
 import { http } from '@/api'
 import { Message } from 'element-ui'
@@ -30,6 +30,7 @@ export type Project = {
     [k: string]: string[]
   }
   componentDownload: NodeItemBasic[]
+  componentUmd: NodeUmd[]
   config: {
     appType: Number
     path: string
@@ -86,6 +87,8 @@ const defaultProject: Project = {
     //   cssUrl: '',
     //   jsUrl: ''
     // }
+  ],
+  componentUmd: [
   ],
   config: {
     appType: 1,
@@ -163,14 +166,17 @@ export const importProject = async (parseItem: Project) => {
     // 下载资源
     if (project.env === 'dev' && parseItem.componentDownload) {
       // parseItem.componentDownload = [...new Set(parseItem.componentDownload)]
-      const arr: any[] = []
-      parseItem.componentDownload.forEach(x => {
-        if (arr.every(y => y.name !== x.name)) {
-          arr.push(x)
-        }
-      })
-      project.componentDownload = arr
-      await diffDownloadDeps(arr, true)
+      // const arr: any[] = []
+      // parseItem.componentDownload.forEach(x => {
+      //   if (arr.every(y => y.name !== x.name)) {
+      //     arr.push(x)
+      //   }
+      // })
+      // project.componentDownload = arr
+      await diffDownloadDeps([], true)
+    }
+    if (parseItem.componentUmd) {
+      await Promise.all(parseItem.componentUmd.map(item => loadItemUmd(item)))
     }
     updateProject({ depLoaded: true })
     if (parseItem.pages.length) {

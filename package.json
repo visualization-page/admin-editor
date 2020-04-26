@@ -8,8 +8,10 @@
     "build:pro": "vue-cli-service build --mode pro && node build/after-build.js",
     "test:unit": "vue-cli-service test:unit",
     "lint": "vue-cli-service lint",
-    "start": "pm2 start pm2.json",
-    "restart": "pm2 restart pm2.json"
+    "start:test": "pm2 start pm2.json",
+    "restart:test": "pm2 restart pm2.json",
+    "start:pro": "pm2 start pm2-pro.json",
+    "restart:pro": "pm2 restart pm2-pro.json"
   },
   "dependencies": {
     "@chenfengyuan/vue-qrcode": "^1.0.2",

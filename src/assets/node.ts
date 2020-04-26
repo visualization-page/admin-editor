@@ -33,6 +33,13 @@ export type NodeItemLibrary = {
   name: string
   type: 'div'
 }
+export type NodeUmd = {
+  label: string
+  umdName: string
+  url: string
+  isReleaseDownload: boolean
+  userName?: string
+}
 
 export const rootNode: NodeItem = {
   id: '-1',

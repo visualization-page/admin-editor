@@ -54,11 +54,11 @@
               <el-tab-pane label="上传组件" :name="tabName.uploadComponent">
                 <component-upload />
               </el-tab-pane>
-              <el-tab-pane label="组件库" :name="tabName.libraryComponent">
+              <el-tab-pane label="内置组件库" :name="tabName.libraryComponent">
                 <component-library />
               </el-tab-pane>
-              <el-tab-pane v-if="false" label="工具函数" :name="tabName.fx">
-                <p>敬请期待</p>
+              <el-tab-pane label="umd组件库" :name="tabName.umdComponent">
+                <component-umd />
               </el-tab-pane>
             </el-tabs>
           </div>
@@ -122,6 +122,7 @@ import HeaderOpt from '@/components/header-opts/index.vue'
 import ComponentLibrary from '@/components/component-library/index.vue'
 import ComponentCompose from '@/components/component-compose/index.vue'
 import ComponentUpload from '@/components/component-upload/index.vue'
+import ComponentUmd from '@/components/component-umd/index.vue'
 import { tabCurrent, setTabName, tabName, isHideComponent } from '@/assets/tab'
 import { http } from '@/api'
 import { initProject, project, resetProject } from '@/assets/project'
@@ -144,7 +145,8 @@ export default defineComponent({
     HeaderOpt,
     ComponentLibrary,
     ComponentCompose,
-    ComponentUpload
+    ComponentUpload,
+    ComponentUmd
   },
   beforeRouteLeave (to: any, from: any, next: any) {
     MessageBox.confirm('确定要离开吗？').then(() => {

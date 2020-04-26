@@ -56,7 +56,7 @@
 import { ref, watch } from '@vue/composition-api'
 import { addComposeNode, addBeforeValidate } from '@/assets/node'
 import { diffDownloadDeps } from '@/assets/project'
-import { tabCurrent, tabName } from '@/assets/tab'
+import { setTabName, tabCurrent, tabName } from '@/assets/tab'
 import { http } from '@/api'
 import { Loading, Message, MessageBox } from 'element-ui'
 
@@ -89,6 +89,7 @@ export default {
         // 合并节点数据
         await diffDownloadDeps(item.componentDeps)
         addComposeNode(item.node)
+        setTabName([tabName.nodeTree, '', tabName.nodeProperty])
       }
     }
     const downloadItem = async (item) => {

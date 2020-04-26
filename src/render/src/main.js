@@ -14,7 +14,9 @@ window.ELEMENT = {
 
 Vue.config.productionTip = false
 Vue.prototype.$native = new Native()
-window.globalApp = new Vue({
-  router,
-  render: h => h(App)
-}).$mount('#app')
+document.addEventListener('DOMContentLoaded', () => {
+  window.globalApp = new Vue({
+    router,
+    render: h => h(App)
+  }).$mount('#app')
+})
