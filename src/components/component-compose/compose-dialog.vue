@@ -80,10 +80,11 @@ export default {
         const rdr = new FileReader()
         rdr.onloadend = () => {
           http.post('login/upload', {
-            base64: rdr.result.split(',')[1],
-            size: blob.size
+            base64: rdr.result.split(',')[1]
+            // size: blob.size
           }).then(res => {
-            this.localCover = res.data.fileUrl.replace('statics.jituancaiyun', 'global.uban360') + '&fileType=2'
+            const data = JSON.parse(res.data)
+            this.localCover = data.fileUrl.replace('statics.jituancaiyun', 'global.uban360') + '&fileType=2'
           })
         }
         rdr.readAsDataURL(blob)

@@ -221,7 +221,6 @@ module.exports = {
         // 还要将多余的 = 号去除
         sso = sso.replace(/=/g, '')
         const user = Buffer.alloc(sso.length * 6 / 8, sso, 'base64').toString()
-        console.log(user)
         res.json({ success: !!user, data: JSON.parse(user) })
       } else {
         res.json({ success: false, msg: 'cookie sso is not exist!' })
@@ -262,13 +261,14 @@ module.exports = {
           if (err) {
             throw err
           }
-          const fileBuffer = fs.createReadStream(file)
+          const fileBuffer = await fs.readFile(file)
           const data = await service.caiyunUpload(fileBuffer)
           utils.rm(tmpPath)
           res.json({ success: true, data })
         })
       } else if (req.body.base64) {
-        const dataBuffer = Buffer.alloc(req.body.size / 6 * 8, req.body.base64, 'base64')
+        // const base64 = req.body.base64.replace(/=/g, '')
+        const dataBuffer = Buffer.alloc(req.body.base64.length, req.body.base64, 'base64')
         const data = await service.caiyunUpload(dataBuffer)
         res.json({ success: true, data })
       } else {

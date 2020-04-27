@@ -92,6 +92,10 @@ export const local = [
       {
         label: '广西八桂',
         value: 18
+      },
+      {
+        label: '广西和安',
+        value: 51
       }
     ]
   },

@@ -68,7 +68,8 @@ export default {
       this.loading && this.loading.close()
       if (res.success) {
         Message.success('上传成功')
-        this.$emit('change', res.data.fileUrl.replace('statics.jituancaiyun', 'global.uban360') + '&fileType=2')
+        const data = JSON.parse(res.data)
+        this.$emit('change', data.fileUrl.replace('statics.jituancaiyun', 'global.uban360') + '&fileType=2')
       } else {
         Message.error(res.msg)
       }

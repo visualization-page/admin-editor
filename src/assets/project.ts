@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import { reactive, watch } from '@vue/composition-api'
+import { reactive } from '@vue/composition-api'
 import { loadItem, loadItemUmd } from '@/components/mobile-render/render/utils'
 import { Page, setCurrentPage, currentPage } from './page'
 import { NodeItemBasic, NodeUmd, setCurrentNode } from './node'
@@ -215,9 +215,9 @@ export const diffDownloadDeps = async (items: NodeItemBasic[], init = false) => 
 }
 
 export const initProject = async (item?: Project) => {
-  watch(() => project, val => {
-    console.dir(val)
-  }, { lazy: true, deep: true })
+  // watch(() => project, val => {
+  //   console.dir(val)
+  // }, { lazy: true, deep: true })
 
   if (item) {
     await importProject(item)

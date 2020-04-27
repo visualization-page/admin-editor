@@ -13,7 +13,7 @@ module.exports = {
         fromPath: project.dir,
         targetPath: project.config.path
       }
-      let url = config.opsServer[process.env.APP_ENV] + '/ops/butterfly'
+      let url = config[process.env.APP_ENV].opsServer + '/ops/butterfly'
       Object.keys(data).forEach((k, i) => {
         url += `${i === 0 ? '?' : '&'}${k}=${data[k]}`
       })
@@ -86,7 +86,7 @@ module.exports = {
     return new Promise((resolve, reject) => {
       request.post(
         {
-          url: 'https://filesystem.api.jituancaiyun.com/sfs/webUpload/srvfile?fileType=2&src=cdn',
+          url: config[process.env.APP_ENV].fileServer,
           formData: {
             upfile: fileBuffer
           },
@@ -100,7 +100,7 @@ module.exports = {
           if (err) {
             reject(err)
           } else {
-            resolve(JSON.parse(body))
+            resolve(body)
           }
         }
       )
