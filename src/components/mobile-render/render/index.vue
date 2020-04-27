@@ -46,14 +46,16 @@ export default defineComponent<{
     const mounted = ref(false)
     const pageInit = ref(false)
     const getCtx = () => ({ $$page: pageConfig.value, $$global: globalConfig.value })
-    // const setConstant = (cons: string | null) => {
-    //   if (cons) {
-    //     const { ok, value } = parseCodeValid(cons)
-    //     if (ok) {
-    //       globalConfig.value.constant = value!
-    //     }
-    //   }
-    // }
+    let hasInit = false
+    const execInitScriptsOnce = (project: Project) => {
+      if (project.initScripts && !hasInit) {
+        const { ok, msg } = parseCodeValid(project.initScripts, getCtx())
+        if (!ok) {
+          throw msg
+        }
+        hasInit = true
+      }
+    }
     const setPageState = (state: string | null) => {
       const { ok, value } = parseCodeValid(state)
       if (ok) {
@@ -150,8 +152,11 @@ export default defineComponent<{
           globalConfig.value = initGlobalConfig(page as Page)
           setGlobalConstant(globalConfig.value, pro.constant)
           setGlobalUtils(globalConfig.value, pro.utils)
-          setPageState(page.state)
           globalConfig.value.initHttp(pro.httpOptions, getCtx())
+          // 执行项目初始化脚本
+          execInitScriptsOnce(project as Project)
+          // 页面
+          setPageState(page.state)
           pageEvents(page as Page, oldPage as Page)
         }
       })

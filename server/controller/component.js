@@ -291,17 +291,15 @@ const handle = {
     const releaseHtmlPath = path.join(releasePath, 'index.html')
     const publicPath = globalProject.project.config.pro.publicPath || ''
     let renderContent = await fs.readFile(releaseHtmlPath, 'utf8')
-    // href=css href=js src=js
     renderContent = renderContent
-      .replace(/(href=css|href=js|src=js)/g, (match, group) => {
-        const arr = group.split('=')
-        return arr[0] + '=' + publicPath + '/' + arr[1]
-      })
       // 插入 data 引入 window.globalProject
       .replace(
         '</head>',
         `<script>/* ${dayjs().format('YYYY/MM/DD HH:mm')} */ var globalProject = %%%%</script></head>`
       )
+    // 正则匹配中 $$ 是关键词，必须绕开
+    renderContent = renderContent.split('%%%%')
+    renderContent = renderContent[0] + JSON.stringify(globalProject) + renderContent[1]
 
     // 将组件 js 合并生成文件
     let jsContent = ''
@@ -358,10 +356,6 @@ const handle = {
       }
     }
 
-    // 正则匹配中 $$ 是关键词，必须绕开
-    renderContent = renderContent.split('%%%%')
-    renderContent = renderContent[0] + JSON.stringify(globalProject) + renderContent[1]
-
     const { form } = globalProject.project.componentLibrary
     const hasLibraryForm = form && form.length
     if (hasLibraryForm) {
@@ -371,10 +365,17 @@ const handle = {
       renderContent = renderContent.replace(
         `<script>Vue.component('vantForm', vantForm.default)</script>`, ''
       ).replace(
-        `<script src=./vant-form/vantForm.umd.min.js></script>`, ''
+        `<script src=vant-form/vantForm.umd.min.js></script>`, ''
       )
     }
 
+    // href=css href=js src=js
+    // 替换 publicPath
+    renderContent = renderContent.replace('_PUBLIC_PATH=\'./\'', `_PUBLIC_PATH='${publicPath}'`)
+    renderContent = renderContent.replace(/(href=css|href=js|href=v|src=js|src=v)/g, (match, group) => {
+      const arr = group.split('=')
+      return arr[0] + '=' + publicPath + arr[1]
+    })
     await fs.outputFile(path.join(releasePath, 'index.html'), renderContent)
 
     // 检查 zip 是否存在，因为 download 生成 zip 时如果存在会报错

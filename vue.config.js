@@ -1,3 +1,5 @@
+const RuntimePublicPathPlugin = require('webpack-runtime-public-path-plugin')
+
 // fuck! build application usage is not same with build lib
 const externals = process.env.VUE_APP_FILE_SERVER ? {
   vue: 'Vue',
@@ -44,8 +46,13 @@ module.exports = {
       chunks: ['chunk-vendors', 'chunk-common', 'render']
     }
   },
-  configureWebpack: config => {
-    config.externals = externals
+  configureWebpack: {
+    externals,
+    plugins: [
+      new RuntimePublicPathPlugin({
+        runtimePublicPath: 'window._PUBLIC_PATH'
+      })
+    ]
   },
   devServer: {
     disableHostCheck: true,

@@ -213,11 +213,15 @@ module.exports = {
    */
   '/user': {
     get: async (req, res) => {
-      const sso = req.cookies.sso_u
+      let sso = req.cookies.sso_u
+      // let sso = 'eyJ1aWRfIjoxMDEwMTAwMTE5NjY2OTg2NCwibmFtZV8iOiLnq6Dpm6jlpYciLCJtb2JpbGVfIjoiMTM3Nzc0NzAzNTciLCJ0YWdzXyI6MH0='
       if (sso) {
         // ascii 默认是 8 位
         // base64 是 6 位
+        // 还要将多余的 = 号去除
+        sso = sso.replace(/=/g, '')
         const user = Buffer.alloc(sso.length * 6 / 8, sso, 'base64').toString()
+        console.log(user)
         res.json({ success: !!user, data: JSON.parse(user) })
       } else {
         res.json({ success: false, msg: 'cookie sso is not exist!' })
@@ -277,6 +281,12 @@ module.exports = {
     post: async (req, res) => {
       const data = req.body
       await component.saveUmd(data)
+      res.json({ success: true })
+    }
+  },
+
+  '/checkstatus': {
+    get: async (req, res) => {
       res.json({ success: true })
     }
   }

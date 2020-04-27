@@ -54,6 +54,7 @@ export type Project = {
   }
   css: string
   utils: string
+  initScripts: string
   [k: string]: any
 }
 
@@ -113,7 +114,8 @@ const defaultProject: Project = {
     whitelist: ''
   },
   css: '',
-  utils: '(function () {\n  return {\n    deepClone: (obj) => JSON.parse(JSON.stringify(obj))\n  }\n})()'
+  utils: '(function () {\n  return {\n    deepClone: (obj) => JSON.parse(JSON.stringify(obj))\n  }\n})()',
+  initScripts: ''
 }
 
 export const project: Project = reactive(deepClone(defaultProject))

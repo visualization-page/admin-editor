@@ -1,5 +1,39 @@
 export const local = [
   {
+    label: '英文名称',
+    field: 'dir',
+    type: 'input',
+    rulers: [
+      { required: true, message: '请输入项目目录名称', trigger: 'blur' }
+    ],
+    elAttrs: {
+      disabled: false
+    }
+  },
+  {
+    label: '项目描述',
+    field: 'desc',
+    type: 'textarea',
+    elProps: {
+    },
+    elAttrs: {
+      rows: 2
+    },
+    rulers: [
+      { required: true, message: '请输入项目名称', trigger: 'blur' },
+      { min: 3, max: 500, message: '长度在 3 到 500 个字符', trigger: 'blur' }
+    ],
+    model: 'blur'
+  },
+  {
+    label: '项目白名单',
+    field: 'info.whitelist',
+    type: 'textarea',
+    elAttrs: {
+      placeholder: '请输入姓名，例如：诸炜/杨明；白名单内，项目可编辑操作；'
+    }
+  },
+  {
     label: '项目访问正式地址',
     field: 'url',
     type: 'textarea',
@@ -68,32 +102,6 @@ export const local = [
     elAttrs: {
       // readonly: true
       placeholder: '/data/webapps/ 不用填写，只用填后面的部分'
-    }
-  },
-  {
-    label: '项目描述',
-    field: 'desc',
-    type: 'textarea',
-    elProps: {
-    },
-    elAttrs: {
-      rows: 2
-    },
-    rulers: [
-      { required: true, message: '请输入项目名称', trigger: 'blur' },
-      { min: 3, max: 500, message: '长度在 3 到 500 个字符', trigger: 'blur' }
-    ],
-    model: 'blur'
-  },
-  {
-    label: '英文名称',
-    field: 'dir',
-    type: 'input',
-    rulers: [
-      { required: true, message: '请输入项目目录名称', trigger: 'blur' }
-    ],
-    elAttrs: {
-      disabled: false
     }
   },
   {
@@ -198,11 +206,12 @@ export const local = [
     info: '全局utils，例如：$$global.utils.deepClone'
   },
   {
-    label: '项目白名单',
-    field: 'info.whitelist',
-    type: 'textarea',
-    elAttrs: {
-      placeholder: '请输入姓名，例如：诸炜/杨明'
-    }
+    label: '初始脚本',
+    field: 'initScripts',
+    block: false,
+    'code-language': 'javascript',
+    type: 'code',
+    'info-icon': 'el-icon-video-camera',
+    info: '本段代码会在项目初始化的时候运行'
   }
 ]

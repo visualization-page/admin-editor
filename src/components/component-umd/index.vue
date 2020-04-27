@@ -1,7 +1,7 @@
 <template>
   <div class="component-umd">
     <div>
-      <el-button icon="el-icon-plus" type="text" @click="handleAddUmd()">添加umd组件</el-button>
+      <el-button icon="el-icon-plus" type="text" @click="handleAddUmd()">添加umd库</el-button>
     </div>
     <van-grid
       class="van-hairline--left"
@@ -118,7 +118,7 @@ export default defineComponent({
       }
     })
     const handleAdd = async (item: NodeUmd) => {
-      const loading = Loading.service({ text: '加载 umd 组件' })
+      const loading = Loading.service({ text: '加载 umd' })
       const i = selected.value.findIndex(x => x === item.label)
       await loadItemUmd(item, i === -1).catch(err => {
         Message.error(err)

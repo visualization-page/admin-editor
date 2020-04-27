@@ -60,6 +60,7 @@
     "typescript": "^3.8.3",
     "vue-cli-plugin-element": "^1.0.1",
     "vue-template-compiler": "^2.6.10",
-    "webpack-cli": "^3.3.11"
+    "webpack-cli": "^3.3.11",
+    "webpack-runtime-public-path-plugin": "^1.1.2"
   }
 }

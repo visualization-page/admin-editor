@@ -57,7 +57,7 @@
               <el-tab-pane label="内置组件库" :name="tabName.libraryComponent">
                 <component-library />
               </el-tab-pane>
-              <el-tab-pane label="umd组件库" :name="tabName.umdComponent">
+              <el-tab-pane label="umd库" :name="tabName.umdComponent">
                 <component-umd />
               </el-tab-pane>
             </el-tabs>

@@ -21,6 +21,7 @@ export const getProject = async (dir) => {
     if (window.globalProject.project.config.openConsole) {
       loadVConsole()
     }
+    // window._PUBLIC_PATH = window.globalProject.project.config.pro.publicPath
     return window.globalProject.project
   }
   // 非正式环境
@@ -41,5 +42,6 @@ export const getProject = async (dir) => {
     loadVConsole()
   }
   await initProject(project)
+  window._PUBLIC_PATH = project.config.dev.publicPath
   return project
 }

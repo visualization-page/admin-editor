@@ -86,15 +86,21 @@ const handle = {
       _transform(project.httpOptions.options).then(opt => {
         project.httpOptions.options = opt
       }),
-      _transform(project.constant).then(cons => {
+      project.constant ? _transform(project.constant).then(cons => {
         project.constant = cons
-      })
-    ]
-    if (project.utils) {
-      transArr.push(_transform(project.utils).then(utils => {
+      }) : null,
+      project.initScripts ? _transform(project.initScripts).then(scrpts => {
+        project.initScripts = scrpts
+      }) : null,
+      project.utils ? _transform(project.utils).then(utils => {
         project.utils = utils
-      }))
-    }
+      }) : null
+    ].filter(Boolean)
+    // if (project.utils) {
+    //   transArr.push(_transform(project.utils).then(utils => {
+    //     project.utils = utils
+    //   }))
+    // }
     project.pages.forEach((page, i) => {
       // page.state
       transArr.push(_transform(page.state).then(state => {
