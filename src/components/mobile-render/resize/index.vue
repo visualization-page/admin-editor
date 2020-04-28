@@ -1,10 +1,12 @@
 <template>
-  <div
-    class="resize"
-    @mousedown="e => handleResizeDown(e, 'move')"
-    @contextmenu.prevent="e => $emit('context', e)"
-    :style="outDocFlow && { cursor: 'move' }"
-  >
+  <div class="resize">
+    <div
+      class="resize__move"
+      @mousedown="e => handleResizeDown(e, 'move')"
+      @contextmenu.prevent="e => $emit('context', e)"
+    >
+      <i class="el-icon-full-screen f16 c-blue"/>
+    </div>
     <div
       v-if="outDocFlow"
       class="resize__dot resize__dot-lt"
@@ -47,38 +49,32 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, computed } from '@vue/composition-api'
-import { currentNode } from '@/assets/node'
-// import { getUnitValue } from '@/assets/util'
-import { state, percent2px } from './state'
-import { editWrapState } from '@/assets/render'
+import { defineComponent } from '@vue/composition-api'
+// import { currentNode } from '@/assets/node'
+import { getUnitValue } from '@/assets/util'
+import { state } from './state'
+// import { editWrapState } from '@/assets/render'
 
 export default defineComponent({
-  setup () {
+  setup (p, ctx) {
     const handleResizeDown = (e: MouseEvent, dir: string) => {
       // const node = currentNode.value!
       state.startX = e.x
       state.startY = e.y
       state.dragging = true
       state.dir = dir
-      if (editWrapState.style) {
-        state.width = percent2px(String(editWrapState.style.width), 'horizontal')
-        state.height = percent2px(String(editWrapState.style.height), 'vertical')
-        state.left = percent2px(String(editWrapState.style.left), 'horizontal')
-        state.top = percent2px(String(editWrapState.style.top), 'vertical')
-      }
+      // @ts-ignore
+      const position = ctx.parent.position
+      state.width = getUnitValue(position.width)
+      state.height = getUnitValue(position.height)
+      state.left = getUnitValue(position.left)
+      state.top = getUnitValue(position.top)
     }
-    // const showContextMenu = (e: MouseEvent) => {
-    //   handleClick()
-    // }
-    // const handleClick = () => {
-    //   setCurrentNode(props.item)
-    // }
     return {
       handleResizeDown,
       // showContextMenu,
       // handleClick,
-      outDocFlow: computed(() => currentNode.value && currentNode.value.outDocFlow)
+      outDocFlow: true
     }
   }
 })
@@ -92,6 +88,17 @@ export default defineComponent({
   left: 0;
   top: 0;
   // z-index: 1;
+  &__move {
+    position: absolute;
+    // width: 15px;
+    // height: 15px;
+    // background-color: #fff;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    cursor: move;
+    pointer-events: all;
+  }
   &__dot {
     position: absolute;
     width: 12px;
@@ -100,6 +107,7 @@ export default defineComponent({
     background-color: #ffffff;
     border-radius: 50%;
     z-index: 9998;
+    pointer-events: all;
     &:hover {
       background-color: #f2f2f2;
     }

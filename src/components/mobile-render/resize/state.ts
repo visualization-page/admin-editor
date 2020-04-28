@@ -1,18 +1,7 @@
-// import Vue from 'vue'
 import { reactive } from '@vue/composition-api'
 import { currentNode, updateNodePosition, updateNodeStyle } from '@/assets/node'
-// import { throttle } from 'lodash'
-import { updateEditWrapStyle } from '@/assets/render'
 import { getUnitValue } from '@/assets/util'
 
-export function percent2px (val: string, dir: 'vertical' | 'horizontal'): UnitValue {
-  const obj = getUnitValue(val)
-  if (obj.unit === '%') {
-    obj.unit = 'px'
-    obj.value = String((dir === 'horizontal' ? 320 : 480) * Number(obj.value || 0) / 100)
-  }
-  return obj
-}
 export type UnitValue = { unit?: string, value?: string }
 export const state = reactive<{
   startX: number
@@ -34,41 +23,32 @@ export const state = reactive<{
   dir: ''
 })
 
-// watch(() => editWrapState.style, (style: WrapState['style']) => {
-//   if (style) {
-//     state.width = percent2px(String(style.width), 'horizontal')
-//     state.height = percent2px(String(style.height), 'vertical')
-//     state.left = percent2px(String(style.left), 'horizontal')
-//     state.top = percent2px(String(style.top), 'vertical')
-//   }
-// }, { lazy: true, deep: true })
-
 const handleMove = (e: MouseEvent) => {
   if (state.dragging) {
     const node = currentNode.value!
     const _changeHeight = (symbol: 1 | -1) => {
-      const h = Number(state.height.value) + (e.x - state.startY) * symbol
-      if (h >= 0 && h <= 480) {
-        updateNodeStyle({ height: `${h}px` })
-        updateEditWrapStyle('height', h)
+      const h = Number(state.height.value) + (e.y - state.startY) * symbol
+      if (h >= 0) {
+        const { unit } = getUnitValue(node.style.height)
+        updateNodeStyle({ height: `${h.toFixed(2)}${unit}` })
       }
     }
     const _changeWidth = (symbol: 1 | -1) => {
       const w = Number(state.width.value) + (e.x - state.startX) * symbol
-      if (w >= 0 && w <= 320) {
-        updateNodeStyle({ width: `${w}px` })
-        updateEditWrapStyle('width', w)
+      if (w >= 0 && w <= 375) {
+        const { unit } = getUnitValue(node.style.width)
+        updateNodeStyle({ width: `${w.toFixed(2)}${unit === 'vw' ? 'vw' : 'px'}` })
       }
     }
     const _changeLeft = () => {
       const l = Number(state.left.value || 0) + e.x - state.startX
-      updateNodePosition('left', `${l}px`)
-      updateEditWrapStyle('left', l)
+      const { unit } = getUnitValue(node.style.position.left)
+      updateNodePosition('left', `${l.toFixed(2)}${unit}`)
     }
     const _changeTop = () => {
       const t = Number(state.top.value || 0) + e.y - state.startY
-      updateNodePosition('top', `${t}px`)
-      updateEditWrapStyle('top', t)
+      const { unit } = getUnitValue(node.style.position.top)
+      updateNodePosition('top', `${t.toFixed(2)}${unit}`)
     }
     // const
     if (state.dir === 'bottom') {

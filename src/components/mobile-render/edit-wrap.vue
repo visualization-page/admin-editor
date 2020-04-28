@@ -3,9 +3,11 @@
     v-if="currentNode && currentNode.id !== '-1' && position"
     class="edit-wrap"
     :style="position"
-    @contextmenu="handleContext"
   >
-    <resizer v-if="false" />
+    <resizer
+      v-if="currentNode.outDocFlow"
+      @context="handleContext"
+    />
   </div>
 </template>
 
@@ -53,16 +55,7 @@ export default {
     // 样式变化，重置编辑框大小
     watch(() => editNode.value, el => setEditBounding(el), { lazy: true })
     watch(() => currentNode.value, node => resetEditWrapByStyle(node), { lazy: true, deep: true })
-    // watch(
-    //   () => currentNode.value && currentNode.value.className,
-    //   () => resetEditWrapByStyle(currentNode.value),
-    //   { lazy: true }
-    // )
-    // watch(
-    //   () => currentNode.value && currentNode.value.style,
-    //   () => resetEditWrapByStyle(currentNode.value),
-    //   { lazy: true, deep: true }
-    // )
+
     onMounted(() => {
       setTimeout(() => {
         state.parentPosition = ctx.parent.$el.getBoundingClientRect()
@@ -103,6 +96,6 @@ export default {
   border: 1px #409eff dashed;
   background-color: rgba(#409eff, .4);
   pointer-events: none;
-  z-index: 99999;
+  z-index: 9998;
 }
 </style>

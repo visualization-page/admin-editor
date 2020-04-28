@@ -196,3 +196,7 @@ $$global.config = project.config = {
 > 20/04/27
 
 - [ ] 设置 vConsole 指定名单可见，或通过开关
+
+> 20/04/28
+
+- [x] 脱离文档流的节点开启 resizer

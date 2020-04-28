@@ -267,8 +267,9 @@ module.exports = {
           res.json({ success: true, data })
         })
       } else if (req.body.base64) {
-        // const base64 = req.body.base64.replace(/=/g, '')
-        const dataBuffer = Buffer.alloc(req.body.base64.length, req.body.base64, 'base64')
+        const base64 = req.body.base64.replace(/=/g, '')
+        // const dataBuffer = Buffer.alloc(req.body.base64.length, req.body.base64, 'base64')
+        const dataBuffer = Buffer.alloc(base64.length * 6 / 8, req.body.base64, 'base64')
         const data = await service.caiyunUpload(dataBuffer)
         res.json({ success: true, data })
       } else {

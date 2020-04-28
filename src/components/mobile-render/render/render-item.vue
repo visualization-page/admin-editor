@@ -13,13 +13,20 @@ Vue.directive('insert-id', function (el, binding) {
   el.setAttribute('data-id', binding.value)
 })
 
-const mergeDirectionSize = (target: any, obj: any, type: 'position' | 'margin' | 'padding' | 'border') => {
+const mergeDirectionSize = (
+  target: any,
+  obj: any,
+  type: 'position' | 'margin' | 'padding' | 'border'
+) => {
   if (typeof obj !== 'object') {
     return
   }
   const isBorder = type === 'border'
   if (type === 'position') {
     Object.assign(target, obj)
+    // Object.keys(obj).forEach(k => {
+    //   target[k] = obj[k]
+    // })
   } else {
     const newObj: any = {}
     Object.keys(obj).forEach(k => {
