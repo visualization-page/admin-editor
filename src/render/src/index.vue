@@ -1,6 +1,7 @@
 <script>
 import { currentPage } from '@/assets/page'
 import { getProject } from './utils'
+import { Toast } from 'esc-ui'
 
 export default {
   async created () {
@@ -12,7 +13,7 @@ export default {
         query: this.$route.query
       })
     } else {
-      window.vant.Toast('未获取到项目，请检查是否已经保存项目')
+      Toast('未获取到项目，请检查是否已经保存项目')
     }
   }
 }

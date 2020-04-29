@@ -264,8 +264,7 @@ const handle = {
     await fs.copy(dataPath, path.join(releasePath, 'data.json'))
     await fs.copy(path.join(distPath, 'render.html'), path.join(releasePath, 'index.html'))
     await fs.copy(path.join(distPath, 'vue2.6'), path.join(releasePath, 'vue2.6'))
-    // toast 等依赖 vant
-    await fs.copy(path.join(distPath, 'vant2.5'), path.join(releasePath, 'vant2.5'))
+    // await fs.copy(path.join(distPath, 'vant2.5'), path.join(releasePath, 'vant2.5'))
     fs.readdirSync(path.join(distPath, 'js')).forEach(name => {
       if (
         /render|chunk-vendors/.test(name) &&
@@ -356,17 +355,24 @@ const handle = {
       }
     }
 
-    const { form } = globalProject.project.componentLibrary
+    const { form, vant } = globalProject.project.componentLibrary
     const hasLibraryForm = form && form.length
+    const hasLibraryVant = vant && vant.length
     if (hasLibraryForm) {
       await fs.copy(path.join(distPath, 'vant-form'), path.join(releasePath, 'vant-form'))
     } else {
       // 清除引用
-      renderContent = renderContent.replace(
-        `<script>Vue.component('vantForm', vantForm.default)</script>`, ''
-      ).replace(
-        `<script src=vant-form/vantForm.umd.min.js></script>`, ''
-      )
+      renderContent = renderContent
+        .replace(`<script>Vue.component('vantForm', vantForm.default)</script>`, '')
+        .replace(`<script src=vant-form/vantForm.umd.min.js></script>`, '')
+    }
+    if (hasLibraryVant) {
+      await fs.copy(path.join(distPath, 'vant2.5'), path.join(releasePath, 'vant2.5'))
+    } else {
+      // 清除引用
+      renderContent = renderContent
+        .replace(`<link rel=stylesheet href=vant2.5/index.css>`, '')
+        .replace(`<script src=vant2.5/index.min.js></script>`, '')
     }
 
     // href=css href=js src=js

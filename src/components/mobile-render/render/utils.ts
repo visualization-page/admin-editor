@@ -3,7 +3,7 @@ import { Page } from '@/assets/page'
 import { NodeItem, NodeItemBasic, NodeUmd } from '@/assets/node'
 import { getParentRef, parseCodeValid } from '@/assets/util'
 import { FormEvent } from '@/assets/event'
-import { Loading, Dialog, Dot, Http } from 'esc-ui'
+import { Loading, Dialog, Dot, Http, Toast } from 'esc-ui'
 import Native from '@xm/native'
 import { basicSchemaMap } from '@/components/basic-components'
 
@@ -142,7 +142,7 @@ export const initGlobalConfig = (page: Page | null) => {
         baseUrl,
         urlMap: httpOptions.urlMap,
         loadingMethods: Loading.instance,
-        notify: window.vant.Toast,
+        notify: Toast,
         contentType: httpOptions.contentType,
         ...other
       })
@@ -182,7 +182,7 @@ export const initGlobalConfig = (page: Page | null) => {
         }
       }
     },
-    toast: window.vant.Toast,
+    toast: Toast,
     loading: Loading.instance,
     dialog: Dialog,
     cookie: {

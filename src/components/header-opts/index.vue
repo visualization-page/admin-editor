@@ -212,10 +212,10 @@ export default defineComponent({
       //   }
       // },
       {
-        label: '预览项目',
+        label: '查看项目',
         icon: 'el-icon-folder-opened f16',
         action: () => {
-          window.open(process.env.VUE_APP_MOBILE + `#/project/${project.dir}`)
+          window.open(project.url || (process.env.VUE_APP_MOBILE + `#/project/${project.dir}`))
         }
       }
     ]

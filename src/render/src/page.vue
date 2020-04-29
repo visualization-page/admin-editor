@@ -10,6 +10,7 @@ import Render from '@/components/mobile-render/render/index.vue'
 import { defineComponent } from '@vue/composition-api'
 import { project } from '@/assets/project'
 import { getProject } from './utils'
+import { Toast } from 'esc-ui'
 
 export default defineComponent({
   components: {
@@ -38,7 +39,7 @@ export default defineComponent({
   methods: {
     setPageById (id) {
       if (!this.project) {
-        return window.vant.Toast('未获取到项目，请检查是否已经保存项目')
+        return Toast('未获取到项目，请检查是否已经保存项目')
       }
       const page = this.project.pages.find(x => x.id === id)
       if (id && page) {
