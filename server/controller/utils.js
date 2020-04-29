@@ -2,6 +2,7 @@ const path = require('path')
 // const pubPath = path.resolve(__dirname, '../public')
 const { execSync, spawn } = require('child_process')
 const babel = require('@babel/core')
+const tinify = require('tinify')
 
 const handle = {
   unzip (file, dir) {
@@ -118,6 +119,30 @@ const handle = {
     })
 
     return Promise.all(transArr).then(() => project)
+  },
+  tinyfy (sourceData, key) {
+    tinify.key = key || 'WmVJzJgLsjcZ3mpyZMzghGtq2FLTWTXY'
+    return new Promise((resolve, reject) => {
+      tinify.fromBuffer(sourceData).toBuffer(function (err, resultData) {
+        if (err instanceof tinify.AccountError) {
+          // 更换 key 重试
+          const keys = [
+            'LsPrH1KLHkZhrcFXZprTqwh2XLdmxQbM',
+            'H9pHL9VpJmr69j6RW6wLnBCQGmXjC7qY',
+            'wKksxfRTcrSb6v4KzP95JP3kCltC0s7d',
+            'LnLzVzgbcg8RGCN8wwTvZ17XtLTV3Pjc',
+            'dk1NCB934Q5lMPVd6g4x8mPDtVHtnS9W'
+          ]
+          const index = Math.floor(Math.random() * keys.length)
+          console.log('==== tinyfy 更换 key 重试')
+          resolve(handle.tinyfy(sourceData, keys[index]))
+        } else if (err) {
+          reject(err)
+        } else {
+          resolve(resultData)
+        }
+      })
+    })
   }
 }
 

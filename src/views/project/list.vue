@@ -253,7 +253,7 @@ export default {
 .project-list {
   width: 1100px;
   margin: 0 auto 20px auto;
-  height: e('calc(100% - 102px)');
+  height: e('calc(100% - 140px)');
   overflow: auto;
   &__title {
     width: 1100px;

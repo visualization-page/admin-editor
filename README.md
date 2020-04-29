@@ -200,3 +200,7 @@ $$global.config = project.config = {
 > 20/04/28
 
 - [x] 脱离文档流的节点开启 resizer
+
+> 20/04/29
+
+- [ ] 图片上传新增 tinypng 压缩

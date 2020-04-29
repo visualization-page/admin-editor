@@ -1,6 +1,11 @@
 <template>
   <div class="render-image">
     <p>
+      <el-checkbox v-model="minify">
+        <span class="f12 c-999">开启 tinypng 压缩</span><br>
+      </el-checkbox>
+    </p>
+    <p>
       <el-upload
         :action="action"
         :multiple="false"
@@ -8,8 +13,10 @@
         :before-upload="handleBeforeUpload"
         :on-success="handleResponse"
         :on-error="handleResponse"
+        :data="{ minify: minify || '' }"
       >
         <el-button slot="trigger" type="text">上传图片</el-button>
+        <span class="f10 c-ccc ml10">(tips: 压缩比较耗时)</span>
       </el-upload>
     </p>
     <el-input
@@ -35,7 +42,8 @@ export default {
     return {
       src: '',
       action: process.env.VUE_APP_FILE_SERVER + '/butterfly/caiyun-file/upload',
-      loading: null
+      loading: null,
+      minify: false
     }
   },
 
@@ -54,15 +62,16 @@ export default {
 
   methods: {
     handleBeforeUpload (file) {
-      const ok = file.type !== 'application/jpg' ||
-        file.type !== 'application/png' ||
-        file.type !== 'application/jpeg'
-      if (!ok) {
+      if (!['jpg', 'png', 'jpeg'].includes(file.type.split('/')[1])) {
         Message.error('文件格式只支持 jpg,png,jpeg')
-      } else {
-        this.loading = Loading.service({ text: '上传中' })
+        return false
+      } else if (file.size >= 2 * 1024 * 1024) {
+        // 小于 2 M
+        Message.error('文件大小必须小于2M')
+        return false
       }
-      return ok
+      this.loading = Loading.service({ text: '上传中' })
+      return true
     },
     handleResponse (res) {
       this.loading && this.loading.close()

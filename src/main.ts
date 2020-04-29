@@ -3,10 +3,10 @@ import App from './App.vue'
 import router from './router'
 import store from './store'
 import Native from '@xm/native'
-import './plugins/element'
+// import './plugins/element'
 import 'tcon'
 import './style/app.less'
-import Login from './views/login.vue'
+// import Login from './views/login.vue'
 import { http } from './api'
 
 declare module '@vue/composition-api/dist/component/component' {

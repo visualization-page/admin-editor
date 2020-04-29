@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
-    <title>Butterfly - 快速搭建h5</title>
+    <title><%= htmlWebpackPlugin.options.env %>Butterfly - 快速搭建h5</title>
     <link rel=icon href=./favicon.ico>
     <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
     <link rel="stylesheet" href="https://at.alicdn.com/t/font_503463_ot9w6051le.css">
@@ -20,9 +20,7 @@
     <script src="https://unpkg.com/element-ui/lib/index.js"></script>
     <script src="./vant-form/vantForm.umd.min.js"></script>
     <script>
-      _PUBLIC_PATH = './'
-      Vue.use(vueCompositionApi.default)
-      Vue.component('vantForm', vantForm.default)
+      _PUBLIC_PATH = './';Vue.use(vueCompositionApi.default);Vue.component('vantForm', vantForm.default);Vue.prototype.$ELEMENT = { size: 'small', zIndex: 3000 };
     </script>
     <script src="https://unpkg.com/vue-monaco@1.1.0/dist/vue-monaco.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/js-beautify/1.10.2/beautifier.min.js"></script>

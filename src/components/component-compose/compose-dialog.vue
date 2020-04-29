@@ -8,10 +8,13 @@
       <el-form-item label="组件名称">
         <el-input type="input" placeholder="字母/数字/短杠" v-model="localName" />
       </el-form-item>
+      <el-form-item label="开启 tinypng 压缩">
+        <el-checkbox v-model="minify" />
+      </el-form-item>
       <el-form-item label="组件封面">
         <textarea
           class="el-input__inner"
-          placeholder="截图粘贴"
+          placeholder="截图粘贴或直接输入链接地址"
           style="height: 80px; line-height: 20px"
           v-model="localCover"
           @paste="paste"
@@ -37,7 +40,8 @@ export default {
     return {
       localShow: false,
       localName: this.name,
-      localCover: this.cover
+      localCover: this.cover,
+      minify: false
     }
   },
   watch: {
@@ -77,17 +81,23 @@ export default {
       if (pasteItem && /image/.test(pasteItem.type)) {
         e.preventDefault()
         const blob = pasteItem.getAsFile()
-        const rdr = new FileReader()
-        rdr.onloadend = () => {
-          http.post('login/upload', {
-            base64: rdr.result.split(',')[1]
-            // size: blob.size
-          }).then(res => {
-            const data = JSON.parse(res.data)
-            this.localCover = data.fileUrl.replace('statics.jituancaiyun', 'global.uban360') + '&fileType=2'
-          })
+        if (blob.size >= 2 * 1024 * 1024) {
+          // 小于 2 M
+          Message.error('截图大小必须小于2M')
+          return false
         }
-        rdr.readAsDataURL(blob)
+        http.post('login/upload', {
+          file: blob,
+          minify: this.minify || ''
+        }, { isUpload: true }).then(res => {
+          const data = JSON.parse(res.data)
+          this.localCover = data.fileUrl.replace('statics.jituancaiyun', 'global.uban360') + '&fileType=2'
+        })
+        // const rdr = new FileReader()
+        // rdr.onloadend = () => {
+        //    base64: rdr.result.split(',')[1]
+        // }
+        // rdr.readAsDataURL(blob)
       } else {
         pasteItem.getAsString(content => {
           // console.log(content)

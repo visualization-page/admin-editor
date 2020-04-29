@@ -255,6 +255,20 @@ module.exports = {
   '/caiyun-file/upload': {
     post: async (req, res) => {
       const ok = req.files && req.files.file
+      const doBuffer = async (buffer) => {
+        if (req.body.minify) {
+          console.log('=== 开启 tinypng 压缩')
+          buffer = await utils.tinyfy(buffer, req.body.key).catch(err => {
+            console.log(`=== tinypng 压缩 出错 ${err.message}`)
+            res.json({ success: false, msg: err.message })
+          })
+          console.log(`=== tinypng 压缩 完成`)
+        }
+        if (buffer) {
+          const data = await service.caiyunUpload(buffer)
+          res.json({ success: true, data })
+        }
+      }
       if (ok) {
         const file = path.join(tmpPath, ok.name)
         ok.mv(file, async (err) => {
@@ -262,16 +276,16 @@ module.exports = {
             throw err
           }
           const fileBuffer = await fs.readFile(file)
-          const data = await service.caiyunUpload(fileBuffer)
+          // const data = await service.caiyunUpload(fileBuffer)
           utils.rm(tmpPath)
-          res.json({ success: true, data })
+          // res.json({ success: true, data })
+          await doBuffer(fileBuffer)
         })
       } else if (req.body.base64) {
         const base64 = req.body.base64.replace(/=/g, '')
         // const dataBuffer = Buffer.alloc(req.body.base64.length, req.body.base64, 'base64')
         const dataBuffer = Buffer.alloc(base64.length * 6 / 8, req.body.base64, 'base64')
-        const data = await service.caiyunUpload(dataBuffer)
-        res.json({ success: true, data })
+        await doBuffer(dataBuffer)
       } else {
         res.json({ success: !!ok, msg: '' })
       }

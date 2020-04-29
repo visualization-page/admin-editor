@@ -34,7 +34,7 @@ const copyDirs = [
   'pm2.json',
   'pm2-pro.json',
   'publish.sh',
-  'publish-pro.sh'
+  'publish-pro.sh',
   // '.gitignore'
 ]
 const delDirs = [

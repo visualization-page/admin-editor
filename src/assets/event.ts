@@ -19,7 +19,7 @@ export const fxList = [
   },
   {
     name: '获取 cookie',
-    code: '$$global.cookie(\'userId\')'
+    code: '$$global.cookie.get(\'userId\')'
   },
   {
     name: '打点',

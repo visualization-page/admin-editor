@@ -37,7 +37,8 @@ module.exports = {
       entry: 'src/main.ts',
       // outputDir: 'dist-system/',
       template: 'public/index.html',
-      chunks: ['chunk-vendors', 'chunk-common', 'index']
+      chunks: ['chunk-vendors', 'chunk-common', 'index'],
+      env: process.env.VUE_APP_ENV_TTILE
     },
     render: {
       entry: 'src/render/src/main.js',
