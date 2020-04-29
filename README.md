@@ -203,4 +203,4 @@ $$global.config = project.config = {
 
 > 20/04/29
 
-- [ ] 图片上传新增 tinypng 压缩
+- [x] 图片上传新增 tinypng 压缩
