@@ -25,7 +25,7 @@ export const schema = [
   {
     label: '绑定状态',
     field: 'bindState',
-    type: 'input',
+    type: 'input-bind',
     elAttrs: {
       placeholder: '请输入'
     },

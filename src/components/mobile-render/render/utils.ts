@@ -4,6 +4,8 @@ import { NodeItem, NodeItemBasic, NodeUmd } from '@/assets/node'
 import { getParentRef, parseCodeValid } from '@/assets/util'
 import { FormEvent } from '@/assets/event'
 import { Loading, Dialog, Dot, Http, Toast } from 'esc-ui'
+// @ts-ignore
+import MpHttp from 'esc-ui/lib/http/miniprogram'
 import Native from '@xm/native'
 import { basicSchemaMap } from '@/components/basic-components'
 
@@ -126,6 +128,7 @@ export const initGlobalConfig = (page: Page | null) => {
     dotInstance: null,
     config: project.config[project.env],
     http: null,
+    // mpHttp: null,
     initHttp: function (httpOptions: Project['httpOptions'], ctx: any) {
       let other: any = {}
       const options = parseCodeValid(httpOptions.options!, ctx)
@@ -137,15 +140,70 @@ export const initGlobalConfig = (page: Page | null) => {
       if (baseUrlRes.ok) {
         baseUrl = baseUrlRes.value!
       }
-      // @ts-ignore
-      this.http = new Http({
+      const obj = {
         baseUrl,
         urlMap: httpOptions.urlMap,
         loadingMethods: Loading.instance,
         notify: Toast,
         contentType: httpOptions.contentType,
         ...other
-      })
+      }
+      const isMp = project.interactiveType === 'xmmp'
+      // @ts-ignore
+      this.http = isMp
+        ? new MpHttp({
+          ...obj,
+          miniprogramRequestHandle (method: string, url: string, data: any) {
+            return new Promise((resolve, reject) => {
+              const isPost = /post/i.test(method)
+              if (!isPost && data) {
+                const param: string[] = []
+                Object.keys(data).forEach(k => {
+                  param.push(`${k}=${encodeURIComponent(data[k])}`)
+                })
+                url += `?${param.join('&')}`
+              }
+              // setTimeout(() => {
+              //   // reject({ success: false, msg: url })
+              //   resolve({ data: {
+              //     success: true,
+              //     data: {
+              //       list: [
+              //         {
+              //           title: '111'
+              //         }
+              //       ],
+              //       count: 20
+              //     }
+              //   } })
+              // }, 2000)
+              // return
+              // eslint-disable-next-line
+              window.xm
+                .fetch(baseUrl + url, {
+                  method,
+                  headers: { 'content-type': obj.contentType },
+                  cache: 'no-cache',
+                  body: isPost && data ? JSON.stringify(data) : null,
+                  // credentials: 'same-origin'
+                  credentials: true
+                })
+                .then((res: any) => res.json())
+                .then((res: any) => {
+                  console.log('fetch 返回', res)
+                  if (res.success) {
+                    resolve({ success: true, data: res })
+                  } else {
+                    reject(res)
+                  }
+                })
+                .catch((err: any) => {
+                  console.log('fetch 报错', err)
+                  reject(err)
+                })
+            })
+          }
+        }) : new Http(obj)
     },
     dot: function () {
       const release = process.env.VUE_APP_RELEASE

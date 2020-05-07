@@ -3,6 +3,7 @@ import { getParentRef, getUnitValue } from '@/assets/util'
 import { setCodeState } from '@/assets/code-edit'
 import { setTabName, tabName } from '@/assets/tab'
 import Input from './input.vue'
+import RenderInputBind from './render-input-bind.vue'
 
 export const renderInput = (item: any, data: any, updateField: any) => {
   const { pref, field } = getParentRef(item.field, data)
@@ -27,6 +28,12 @@ export const renderInput = (item: any, data: any, updateField: any) => {
     // @ts-ignore
     ? <Input value={pref && pref[field]} item={item} onInput={val => updateField(item.field, val)} />
     : <el-input {...props} />
+}
+
+export const renderInputBind = (item: any, data: any, updateField: any) => {
+  const { pref, field } = getParentRef(item.field, data)
+  // @ts-ignore
+  return <RenderInputBind value={pref && pref[field]} item={item} onInput={val => updateField(item.field, val)} />
 }
 
 export const renderSelect = (item: any, data: any, updateField: any) => {

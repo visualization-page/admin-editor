@@ -28,7 +28,7 @@ const router = new VueRouter({
 })
 
 router.beforeEach((to, from, next) => {
-  Vue.prototype.$native.noMenu()
+  // Vue.prototype.$native.noMenu && Vue.prototype.$native.noMenu()
   next()
 })
 

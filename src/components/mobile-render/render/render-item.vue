@@ -195,16 +195,17 @@ export default defineComponent<{
               }
               // 方式1：模版写法解析
               if (libraryOpt.template) {
+                // todo 是否有必要手写 template 解析
                 const res = Vue.compile(libraryOpt.template)
                 const v = Object.assign(
                   ctx.parent,
                   libraryOpt.data ? libraryOpt.data() : {},
-                  libraryOpt.methods ? libraryOpt.methods : {}
+                  libraryOpt.methods ? libraryOpt.methods : {},
+                  { ym: codeExecuteContext }
                 )
-                v.ym = codeExecuteContext
-                // console.log(v)
-                const vn = res.render.call(v, createElement)
-                return createElement('basic-div', props, [vn].concat(children))
+                const vm = res.render.call(v, createElement)
+                // console.log(vm, v.ym.$$page.state.loading)
+                return createElement('basic-div', props, [vm].concat(children))
               }
               // 方式2：手写vNode，合并选项
               deepMerge(props, libraryOpt.option)

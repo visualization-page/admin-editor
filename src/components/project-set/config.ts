@@ -109,7 +109,7 @@ export const local = [
     }
   },
   {
-    label: '页面类型',
+    label: '项目类型',
     field: 'interactiveType',
     type: 'select',
     options: [
@@ -117,9 +117,13 @@ export const local = [
         label: '长页面',
         value: 'long-page'
       },
+      // {
+      //   label: '滑动海报',
+      //   value: 'poster'
+      // },
       {
-        label: '滑动海报',
-        value: 'poster'
+        label: '彩云小程序',
+        value: 'xmmp'
       }
     ],
     elAttrs: {

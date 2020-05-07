@@ -148,6 +148,12 @@ export default [
     type: 'slider'
   },
   {
+    label: '阴影',
+    field: 'style.boxShadow',
+    type: 'input',
+    model: 'blur'
+  },
+  {
     label: '样式补充',
     field: 'style.code',
     type: 'code'

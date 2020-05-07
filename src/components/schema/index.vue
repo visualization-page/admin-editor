@@ -2,7 +2,7 @@
 import Vue from 'vue'
 import { MessageBox } from 'element-ui'
 import { defineComponent, createElement, reactive, watch } from '@vue/composition-api'
-import { renderInput, renderSelect, renderCheckbox, renderUniversal, renderCodeEditor } from './render-item'
+import { renderInput, renderInputBind, renderSelect, renderCheckbox, renderUniversal, renderCodeEditor } from './render-item'
 import RenderInputGroup from './render-input-group.vue'
 import RenderEvents from './render-events.vue'
 import RenderUnitSize from './render-unit-size.vue'
@@ -84,6 +84,8 @@ export default defineComponent({
         case 'input':
         case 'textarea':
           return renderInput(schema, props.schemaData, updateField)
+        case 'input-bind':
+          return renderInputBind(schema, props.schemaData, updateField)
         case 'select':
           return renderSelect(schema, props.schemaData, updateField)
         case 'checkbox':

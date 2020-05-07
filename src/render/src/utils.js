@@ -4,7 +4,7 @@ import { initProject } from '@/assets/project'
 
 const loadVConsole = () => {
   const script = document.createElement('script')
-  script.src = '//unpkg.com/vconsole'
+  script.src = 'https://unpkg.com/vconsole'
   script.onload = () => {
     // eslint-disable-next-line no-new
     new VConsole()

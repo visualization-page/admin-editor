@@ -109,7 +109,8 @@ export default defineComponent<{
               })
             })
           })
-        } else {
+        } else if (props.project!.interactiveType === 'long-page') {
+          // 小程序 sdk 覆盖了 JSBridge
           ctx.$$global.native.noMenu()
         }
       }

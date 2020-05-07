@@ -86,7 +86,7 @@
           label="操作"
           width="230">
           <template slot-scope="scope">
-            <el-button v-if="scope.row.url" @click="handlePreview(scope.row)" type="text" size="small">查看</el-button>
+            <el-button @click="handlePreview(scope.row)" type="text" size="small">查看</el-button>
             <el-button @click="handleCopy(scope.row)" type="text" size="small">复制</el-button>
             <el-button @click="handleDown(scope.row)" type="text" size="small">下载</el-button>
             <el-button @click="handleExport(scope.row)" type="text" size="small">导出</el-button>
@@ -106,8 +106,8 @@ import HeaderOpt from '@/components/header-opts/index.vue'
 import { http } from '@/api'
 import { MessageBox, Message } from 'element-ui'
 import dayjs from 'dayjs'
-import { resetProject } from '@/assets/project'
-import { project } from '../../assets/project'
+// import { resetProject } from '@/assets/project'
+// import { project } from '../../assets/project'
 // import { initProject, project } from '../../assets/project'
 
 export default {
@@ -219,9 +219,11 @@ export default {
     handlePreview (item) {
       if (item.url) {
         window.open(item.url)
-        // window.open(process.env.VUE_APP_MOBILE + `#/project/${item.dir}`)
       } else {
-        Message.info('项目还未提供正式访问的地址，请点击编辑进入预览项目')
+        // Message.info('项目还未提供正式访问的地址，请点击编辑进入预览项目')
+        MessageBox.alert('项目未发布正式地址，即将查看预览').then(() => {
+          window.open(process.env.VUE_APP_MOBILE + `#/project/${item.dir}`)
+        })
       }
     },
     handleCopy (item) {

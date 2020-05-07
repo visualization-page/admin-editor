@@ -115,16 +115,16 @@ export default defineComponent({
       //     location.href = res.data.url
       //   }
       // },
-      // {
-      //   label: '下载项目',
-      //   icon: 'el-icon-download f16',
-      //   action: () => {
-      //     if (!project.dir) {
-      //       return Message.error('项目名称必填！')
-      //     }
-      //     location.href = process.env.VUE_APP_FILE_SERVER + `/butterfly/project/download/${project.dir}`
-      //   }
-      // },
+      {
+        label: '下载项目',
+        icon: 'el-icon-download f16',
+        action: () => {
+          if (!project.dir) {
+            return Message.error('项目名称必填！')
+          }
+          location.href = process.env.VUE_APP_FILE_SERVER + `/butterfly/project/download/${project.dir}`
+        }
+      },
       {
         label: '反馈建议',
         icon: 'el-icon-chat-line-round f16',
