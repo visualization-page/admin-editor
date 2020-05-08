@@ -60,17 +60,14 @@ export default defineComponent<{
       field: 'state' | 'methods',
       fieldValue: string | null
     ) => {
-      if (!fieldValue) {
-        return
-      }
       const ctx = getCtx()
       const { ok, value } = parseCodeValid(fieldValue, ctx)
       if (ok) {
         // @ts-ignore
         pageConfig.value[field] = value!
-        if (pageInit.value.length < 2) {
-          pageInit.value.push(field)
-        }
+      }
+      if (pageInit.value.length < 2) {
+        pageInit.value.push(field)
       }
     }
     let styleEl: any

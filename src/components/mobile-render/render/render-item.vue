@@ -137,6 +137,11 @@ export default defineComponent<{
         if (item.outDocFlow && item.style.position) {
           mergeDirectionSize(props.style, item.style.position, 'position')
         }
+        // 处理背景图片
+        if (item.style.backgroundImage) {
+          const { bg } = dealFx({ bg: item.style.backgroundImage }, codeExecuteContext)
+          props.style.backgroundImage = `url(${bg})`
+        }
         props.style.position = item.outDocFlow ? item.style.positionType : undefined
         if (props.style.position === undefined) {
           props.style.zIndex = undefined
