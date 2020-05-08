@@ -211,5 +211,9 @@ $$global.config = project.config = {
 - [x] 阴影选项
 - [ ] 编辑时默认打开的页面及链接参数设置
 - [ ] 设置首页
+
+> 20/05/08
+
 - [ ] 优化 template 写法
 - [ ] 支持 $refs.component
+- [x] 页面添加 methods

@@ -286,5 +286,5 @@ export const getEventHandler = (ev: FormEvent, ctx: any) => {
   if (ok) {
     return value
   }
-  console.log(`event [${ev.eventType}] error: ${msg}`)
+  console.warn(`event [${ev.eventType}] error: ${msg}`)
 }

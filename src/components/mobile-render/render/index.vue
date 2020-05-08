@@ -4,7 +4,7 @@
     :class="['render-page', currentPage.className]"
   >
     <render-item
-      v-if="pageInit"
+      v-if="pageInit.length === 2"
       :nodes="currentPage.nodes"
       :page-config="pageConfig"
       :global-config="globalConfig"
@@ -42,9 +42,9 @@ export default defineComponent<{
   },
   setup (props) {
     const globalConfig = ref(initGlobalConfig(props.currentPage))
-    const pageConfig = ref({ state: {} })
+    const pageConfig = ref({ state: {}, methods: {} })
     const mounted = ref(false)
-    const pageInit = ref(false)
+    const pageInit = ref<Array<'state' | 'methods'>>([])
     const getCtx = () => ({ $$page: pageConfig.value, $$global: globalConfig.value })
     let hasInit = false
     const execInitScriptsOnce = (project: Project) => {
@@ -56,12 +56,21 @@ export default defineComponent<{
         hasInit = true
       }
     }
-    const setPageState = (state: string | null) => {
-      const { ok, value } = parseCodeValid(state)
+    const setPageCode = (
+      field: 'state' | 'methods',
+      fieldValue: string | null
+    ) => {
+      if (!fieldValue) {
+        return
+      }
+      const ctx = getCtx()
+      const { ok, value } = parseCodeValid(fieldValue, ctx)
       if (ok) {
         // @ts-ignore
-        pageConfig.value.state = value!
-        pageInit.value = true
+        pageConfig.value[field] = value!
+        if (pageInit.value.length < 2) {
+          pageInit.value.push(field)
+        }
       }
     }
     let styleEl: any
@@ -83,6 +92,7 @@ export default defineComponent<{
     // 执行页面钩子
     const pageEvents = async (page?: Page, oldPage?: Page) => {
       if (page) {
+        await sleepUntil(() => mounted.value)
         const ctx = getCtx()
         // 上一个页面 unMounted 钩子
         if (oldPage) {
@@ -90,7 +100,6 @@ export default defineComponent<{
             getEventHandler(ev, ctx)
           })
         }
-        await sleepUntil(() => mounted.value)
         globalConfig.value.updatePage(page)
         // 当前页面的 mounted 钩子
         page.events.filter((x: FormEvent) => x.eventType === 'onMounted').forEach((ev: FormEvent) => {
@@ -119,8 +128,12 @@ export default defineComponent<{
     if (isEdit()) {
       // 更新 page.state
       watch(() => props.currentPage && props.currentPage.state, state => {
-        setPageState(state)
-      }, { deep: true })
+        setPageCode('state', state)
+      })
+      // 更新 page.methods
+      watch(() => props.currentPage && props.currentPage.methods, methods => {
+        setPageCode('methods', methods)
+      })
       // 更新 http
       watch(() => props.project && props.project.httpOptions, opt => {
         if (opt) {
@@ -157,13 +170,19 @@ export default defineComponent<{
           // 执行项目初始化脚本
           execInitScriptsOnce(project as Project)
           // 页面
-          setPageState(page.state)
+          setPageCode('state', page.state)
+          setPageCode('methods', page.methods)
           pageEvents(page as Page, oldPage as Page)
         }
       })
     }
     onMounted(() => {
-      mounted.value = true
+      const stop = watch(() => pageInit.value.length, len => {
+        mounted.value = len === 2
+        if (mounted.value) {
+          stop && stop()
+        }
+      })
     })
     return {
       pageInit,

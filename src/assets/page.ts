@@ -18,7 +18,8 @@ export type Page = {
     pic: string
     link: string
     linkMain: string
-  }
+  },
+  methods: string
 }
 
 export const currentPage = ref<Page | null>(null)
@@ -43,7 +44,8 @@ export const addPage = () => {
       linkMain: ''
     },
     events: [],
-    state: '(function () {\n  return {\n    test: true\n  }\n})()'
+    state: '(function () {\n  return {\n    test: true\n  }\n})()',
+    methods: '(function () {\n  return {\n    common: () => {}\n  }\n})()'
   })
   setCurrentPage(project.pages[index])
   if (index === 0) {

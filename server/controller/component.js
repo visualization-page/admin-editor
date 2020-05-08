@@ -389,8 +389,10 @@ const handle = {
     if (fs.pathExistsSync(zipPath)) {
       utils.rm(zipPath)
     }
-    // 同步机器文件
-    return service.syncFile(globalProject.project)
+    if (globalProject.project.interactiveType !== 'xmmp') {
+      // 非小程序 同步机器文件
+      return service.syncFile(globalProject.project)
+    }
   },
   async uploadProject (file, tmpPath) {
     const projectList = await handle.list('project')

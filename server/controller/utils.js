@@ -107,6 +107,10 @@ const handle = {
       transArr.push(_transform(page.state).then(state => {
         page.state = state
       }))
+      // page.methods
+      transArr.push(_transform(page.methods).then(methods => {
+        page.methods = methods
+      }))
       // page.events
       page.events.forEach((ev) => {
         transArr.push(_transform(ev.fxCode).then(fx => {
