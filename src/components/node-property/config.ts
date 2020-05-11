@@ -49,6 +49,15 @@ export default [
     type: 'checkbox'
   },
   {
+    label: 'v-show',
+    field: 'vShow',
+    type: 'textarea',
+    elAttrs: {
+      placeholder: '请输入'
+    },
+    model: 'blur'
+  },
+  {
     label: 'v-if',
     field: 'vIf',
     type: 'textarea',

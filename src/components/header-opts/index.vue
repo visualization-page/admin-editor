@@ -136,11 +136,12 @@ export default defineComponent({
         label: '发布项目',
         icon: 'el-icon-position f16',
         action: async () => {
+          const isXmmp = project.interactiveType === 'xmmp'
           if (!project.dir) {
             return Message.error('项目名称必填！')
-          } else if (project.config.appType === undefined) {
+          } else if (!isXmmp && project.config.appType === undefined) {
             return Message.error('请选择项目所属省份')
-          } else if (!project.config.path) {
+          } else if (!isXmmp && !project.config.path) {
             return Message.error('请输入项目部署目标机器目录')
           }
           // await MessageBox.confirm('发布不会保存项目，请确认已保存?')

@@ -71,7 +71,7 @@ export default defineComponent<{
           vIf = !!res.vIf
         }
         return x.show && vIf
-      }).map((item, index) => {
+      }).map((item) => {
         const isLibrary = item.nodeType === 1 << 2
         // const active = currentNode.value && currentNode.value.id === item.id
         // 处理事件
@@ -121,7 +121,7 @@ export default defineComponent<{
             'render-item__item',
             item.className
           ].concat(item.quickToolsAddClass || []),
-          key: item.id + index,
+          key: item.id,
           on,
           nativeOn,
           props: dealFx(item.props, codeExecuteContext),
@@ -169,6 +169,13 @@ export default defineComponent<{
         } else {
           console.log(props.style.code, styleCodeRes.msg)
           throw styleCodeRes.msg
+        }
+        // 处理 vShow
+        if (item.vShow) {
+          const res = dealFx({ vShow: item.vShow }, codeExecuteContext)
+          if (!res.vShow) {
+            props.style.display = 'none'
+          }
         }
         let children: any[] = []
         if (item.type === 'div') {

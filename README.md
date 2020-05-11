@@ -217,3 +217,8 @@ $$global.config = project.config = {
 - [ ] 优化 template 写法
 - [ ] 支持 $refs.component
 - [x] 页面添加 methods
+
+> 20/05/11
+
+- [ ] 添加工具函数库、一键添加工具函数、重复检测
+- [x] 新增 v-show

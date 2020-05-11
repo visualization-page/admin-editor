@@ -16,6 +16,7 @@
         :expand-on-click-node="false"
         node-key="id"
         :default-expand-all="false"
+        :default-expanded-keys="currentNode ? [currentNode.id] : []"
         highlight-current
         draggable
         ref="tree"
