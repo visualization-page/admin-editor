@@ -16,7 +16,7 @@
             :value="tabCurrent.tab1"
             class="height-100"
             type="border-card"
-            @input="val => handleClick([val])"
+            @tab-click="tab => handleClick([tab.name])"
           >
             <el-tab-pane label="项目设置" :name="tabName.projectSet">
               <project-set />
@@ -26,6 +26,9 @@
             </el-tab-pane>
             <el-tab-pane label="节点树" :name="tabName.nodeTree">
               <node-tree />
+            </el-tab-pane>
+            <el-tab-pane label="工具函数库" :name="tabName.globalUtils">
+              <global-utils />
             </el-tab-pane>
             <el-tab-pane label="页面模版" :name="tabName.pageTemplate">
               <span>敬请期待</span>
@@ -43,7 +46,7 @@
               :value="tabCurrent.tab2"
               class="height-100"
               type="border-card"
-              @input="val => handleClick(['', val])"
+              @tab-click="tab => handleClick(['', tab.name])"
             >
               <el-tab-pane label="内置组件" :name="tabName.basicComponent">
                 <basic-component />
@@ -69,7 +72,7 @@
           :value="tabCurrent.tab4"
           class="height-100"
           type="border-card"
-          @input="val => handleClick(['', '', '', val])"
+          @tab-click="tab => handleClick(['', '', '', tab.name])"
         >
           <el-tab-pane label="场景预览" :name="tabName.previewArea">
             <mobile-render />
@@ -86,7 +89,7 @@
             :value="tabCurrent.tab3"
             class="height-100"
             type="border-card"
-            @input="val => handleClick(['', '', val])"
+            @tab-click="tab => handleClick(['', '', tab.name])"
           >
             <el-tab-pane label="页面设置" :name="tabName.pageSet">
               <page-set />
@@ -123,6 +126,7 @@ import ComponentLibrary from '@/components/component-library/index.vue'
 import ComponentCompose from '@/components/component-compose/index.vue'
 import ComponentUpload from '@/components/component-upload/index.vue'
 import ComponentUmd from '@/components/component-umd/index.vue'
+import GlobalUtils from '@/components/global-utils/index.vue'
 import { tabCurrent, setTabName, tabName, isHideComponent } from '@/assets/tab'
 import { http } from '@/api'
 import { initProject, project, resetProject } from '@/assets/project'
@@ -146,7 +150,8 @@ export default defineComponent({
     ComponentLibrary,
     ComponentCompose,
     ComponentUpload,
-    ComponentUmd
+    ComponentUmd,
+    GlobalUtils
   },
   beforeRouteLeave (to: any, from: any, next: any) {
     MessageBox.confirm('确定要离开吗？').then(() => {
@@ -204,7 +209,7 @@ export default defineComponent({
       isHideComponent,
       handleMode,
       isEdit,
-      handleClick (obj: any) {
+      handleClick (obj: any[]) {
         setTabName(obj)
       }
     }

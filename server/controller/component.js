@@ -17,6 +17,7 @@ const handle = {
     const upload = getPath('upload')
     const suggest = getPath('suggest')
     const umd = getPath('umd')
+    const utils = getPath('utils')
     if (!fs.pathExistsSync(project)) {
       await fs.outputFile(project, '[]')
     }
@@ -31,6 +32,9 @@ const handle = {
     }
     if (!fs.pathExistsSync(umd)) {
       await fs.outputFile(umd, '[]')
+    }
+    if (!fs.pathExistsSync(utils)) {
+      await fs.outputFile(utils, '[]')
     }
   },
 
@@ -437,8 +441,29 @@ const handle = {
     return exist ? fs.readJson(p) : []
   },
 
-  async saveUmd (data) {
-    const index = getPath('umd')
+  // async saveUmd (data) {
+  //   const index = getPath('umd')
+  //   const list = await fs.readJson(index)
+  //   if (data.id) {
+  //     // 编辑
+  //     const i = list.find(x => x.id === data.id)
+  //     if (data.delete) {
+  //       list.splice(i, 1)
+  //     } else {
+  //       list.splice(i, 1, data)
+  //     }
+  //   } else {
+  //     // 新增
+  //     list.push({
+  //       ...data,
+  //       id: Date.now()
+  //     })
+  //   }
+  //   await fs.writeJson(index, list)
+  // },
+
+  async saveList (data, type) {
+    const index = getPath(type)
     const list = await fs.readJson(index)
     if (data.id) {
       // 编辑

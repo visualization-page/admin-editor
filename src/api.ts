@@ -30,7 +30,8 @@ export const http = new Http({
       export: '/butterfly/component/export/:type',
       download: '/butterfly/component/download/:type',
       delete: '/butterfly/component/delete/:type',
-      umdSave: '/butterfly/umd-component'
+      umdSave: '/butterfly/umd-component',
+      utilsSave: '/butterfly/utils-component'
     },
     project: {
       save: '/butterfly/project/:dir',

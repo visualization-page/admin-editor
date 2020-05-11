@@ -4,6 +4,7 @@ export const tabName = {
   projectSet: 'project-set',
   pageList: 'page-list',
   pageTemplate: 'page-template',
+  globalUtils: 'global-utils',
   nodeTree: 'node-tree',
   basicComponent: 'basic-component',
   highComponent: 'high-component',
@@ -28,11 +29,19 @@ export const tabCurrent = reactive<{
   tab3: tabName.pageSet,
   tab4: tabName.previewArea
 })
-export const setTabName = (arr: any) => {
-  if ((arr[0] && arr[1]) || arr[1]) {
+export const setTabName = (arr: any[]) => {
+  if (arr[0]) {
+    if (arr[0] === tabCurrent.tab1) {
+      hideComponent(!isHideComponent.value)
+    } else {
+      hideComponent(true)
+    }
+  } else if (arr[1]) {
+    // if (arr[1] === tabCurrent.tab2) {
+    //   hideComponent(!isHideComponent.value)
+    // } else {
     hideComponent(false)
-  } else if (arr[0]) {
-    hideComponent(true)
+    // }
   }
   arr.forEach((name: string, i: number) => {
     if (name) {

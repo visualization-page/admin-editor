@@ -295,7 +295,15 @@ module.exports = {
   '/umd-component': {
     post: async (req, res) => {
       const data = req.body
-      await component.saveUmd(data)
+      await component.saveList(data, 'umd')
+      res.json({ success: true })
+    }
+  },
+
+  '/utils-component': {
+    post: async (req, res) => {
+      const data = req.body
+      await component.saveList(data, 'utils')
       res.json({ success: true })
     }
   },
