@@ -89,7 +89,9 @@ export default defineComponent<{
     // 执行页面钩子
     const pageEvents = async (page?: Page, oldPage?: Page) => {
       if (page) {
+        console.log('render index pageEvents start', ((Date.now() - window._renderStartTime) / 1000), '秒')
         await sleepUntil(() => mounted.value)
+        console.log('render index mounted', ((Date.now() - window._renderStartTime) / 1000), '秒')
         const ctx = getCtx()
         // 上一个页面 unMounted 钩子
         if (oldPage) {
@@ -154,9 +156,11 @@ export default defineComponent<{
         setGlobalUtils(globalConfig.value, utils)
       })
     } else {
+      console.log('render index watch start', ((Date.now() - window._renderStartTime) / 1000), '秒')
       watch([() => props.currentPage, () => props.project], ([page, project], oldVal) => {
         const oldPage = oldVal && oldVal[0]
         if (project && page) {
+          console.log('render index watch doing', ((Date.now() - window._renderStartTime) / 1000), '秒')
           const pro = project as Project
           setCss(pro.css)
           // @ts-ignore

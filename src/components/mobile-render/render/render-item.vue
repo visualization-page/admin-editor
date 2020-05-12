@@ -230,6 +230,7 @@ export default defineComponent<{
           }
           return createElement(item.componentName, props, children)
         }
+        // console.log(ctx.parent!.$refs)
         return _renderItemSelf()
       })
     }

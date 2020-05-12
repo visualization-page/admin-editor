@@ -115,13 +115,13 @@ export const sleepUntil = (assets: () => boolean) => {
           clearInterval(handler)
           handler = null
           resolve()
-        } else if (count === 10) {
+        } else if (count >= 6000) {
           clearInterval(handler)
           handler = null
           // eslint-disable-next-line prefer-promise-reject-errors
           reject()
         }
-      }, 1000)
+      })
     }
   })
 }

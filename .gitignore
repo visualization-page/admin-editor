@@ -8,6 +8,7 @@ node_modules
 /server/public/compose
 /server/public/basic
 /server/public/umd
+/server/public/utils
 /server/tmp
 
 # local env files

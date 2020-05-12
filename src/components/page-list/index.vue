@@ -9,10 +9,13 @@
       }"
       @click="setSelect(item)"
     >
-      <span>{{ item.title || item.id }}</span>
+      <span><span v-if="item.isIndex">[首页]</span> {{ item.title || item.id }}</span>
       <div class="pr15">
         <el-tooltip v-if="false" effect="dark" content="导出页面为模版" placement="top">
-          <i class="el-icon-brush mr15" @click.stop="handleExportPage(item)" />
+          <i class="el-icon-brush mr10" @click.stop="handleExportPage(item)" />
+        </el-tooltip>
+        <el-tooltip v-if="!item.isIndex" effect="dark" content="设为首页" placement="top">
+          <i class="el-icon-star-off mr10" @click.stop="handleSetIndex(item)" />
         </el-tooltip>
         <el-tooltip effect="dark" content="复制页面" placement="top">
           <i class="el-icon-document-copy" @click.stop="handleCopyPage(item)" />
@@ -28,7 +31,7 @@
 
 <script>
 import { createComponent } from '@vue/composition-api'
-import { addPage, currentPage, setCurrentPage, copyPage } from '@/assets/page'
+import { addPage, currentPage, setCurrentPage, copyPage, updatePages } from '@/assets/page'
 import { project } from '@/assets/project'
 import { setTabName, tabName } from '@/assets/tab'
 import { setState as setCodeEditState } from '@/assets/code-edit'
@@ -56,6 +59,13 @@ export default createComponent({
         copyPage(item)
       },
       handleExportPage (item) {
+      },
+      handleSetIndex (item) {
+        const oldIndexPage = project.pages.find(x => x.isIndex)
+        if (oldIndexPage) {
+          updatePages({ pageId: oldIndexPage.id }, { isIndex: false })
+        }
+        updatePages({ pageId: item.id }, { isIndex: true })
       }
     }
   }

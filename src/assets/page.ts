@@ -19,7 +19,8 @@ export type Page = {
     link: string
     linkMain: string
   },
-  methods: string
+  methods: string,
+  isIndex?: boolean
 }
 
 export const currentPage = ref<Page | null>(null)
@@ -45,7 +46,8 @@ export const addPage = () => {
     },
     events: [],
     state: '(function () {\n  return {\n    test: true\n  }\n})()',
-    methods: '(function () {\n  return {\n    common: () => {}\n  }\n})()'
+    methods: '(function () {\n  return {\n    common: () => {}\n  }\n})()',
+    isIndex: index === 0
   })
   setCurrentPage(project.pages[index])
   if (index === 0) {

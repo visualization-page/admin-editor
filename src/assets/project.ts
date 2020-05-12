@@ -167,14 +167,6 @@ export const importProject = async (parseItem: Project) => {
     updateProject(parseItem)
     // 下载资源
     if (project.env === 'dev' && parseItem.componentDownload) {
-      // parseItem.componentDownload = [...new Set(parseItem.componentDownload)]
-      // const arr: any[] = []
-      // parseItem.componentDownload.forEach(x => {
-      //   if (arr.every(y => y.name !== x.name)) {
-      //     arr.push(x)
-      //   }
-      // })
-      // project.componentDownload = arr
       await diffDownloadDeps([], true)
     }
     if (parseItem.componentUmd) {
@@ -182,7 +174,8 @@ export const importProject = async (parseItem: Project) => {
     }
     updateProject({ depLoaded: true })
     if (parseItem.pages.length) {
-      setCurrentPage(parseItem.pages[0])
+      const indexPage = parseItem.pages.find(x => x.isIndex)
+      setCurrentPage(indexPage || parseItem.pages[0])
     }
   }
 }
