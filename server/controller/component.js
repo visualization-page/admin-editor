@@ -255,6 +255,7 @@ const handle = {
     const dataPath = path.join(pubPath, 'project', dir, 'data.json')
     const globalProject = await fs.readJson(dataPath)
     const isDev = process.env.APP_ENV === 'dev'
+    const isXmmp = globalProject.project.interactiveType === 'xmmp'
 
     // 改写 data.json
     globalProject.project.info = body.info
@@ -378,6 +379,11 @@ const handle = {
         .replace(`<link rel=stylesheet href=vant2.5/index.css>`, '')
         .replace(`<script src=vant2.5/index.min.js></script>`, '')
     }
+    if (isXmmp) {
+      // 去除 cdn 外网无法访问
+      renderContent = renderContent
+        .replace('<script src=https://statics-china.uban360.com/config/app.js></script>', '')
+    }
 
     // href=css href=js src=js
     // 替换 publicPath
@@ -393,7 +399,7 @@ const handle = {
     if (fs.pathExistsSync(zipPath)) {
       utils.rm(zipPath)
     }
-    if (globalProject.project.interactiveType !== 'xmmp') {
+    if (!isXmmp) {
       // 非小程序 同步机器文件
       return service.syncFile(globalProject.project)
     }

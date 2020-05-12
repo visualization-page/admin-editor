@@ -62,7 +62,7 @@ export default defineComponent<{
       $$global: { [k: string]: any },
       $$listBind: { [k: string]: any } = { item: {}, index: -1 }
     ) => {
-      const codeExecuteContext = { $$global, $$page, $$listBind }
+      const codeExecuteContext = { $$global, $$page, $$listBind, $$refs: ctx.parent!.$refs }
       return items.filter(x => {
         // 判断 v-if
         let vIf = true
@@ -230,7 +230,6 @@ export default defineComponent<{
           }
           return createElement(item.componentName, props, children)
         }
-        // console.log(ctx.parent!.$refs)
         return _renderItemSelf()
       })
     }

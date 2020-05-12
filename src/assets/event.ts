@@ -14,6 +14,14 @@ export const fxList = [
     code: '$$global.toast(\'提示语\')'
   },
   {
+    name: '打开 loading',
+    code: '$$global.loading.open()'
+  },
+  {
+    name: '关闭 loading',
+    code: '$$global.loading.close()'
+  },
+  {
     name: 'dialog 提示',
     code: '$$global.dialog(\'提示语\')'
   },
@@ -27,7 +35,7 @@ export const fxList = [
   },
   {
     name: '内部跳转',
-    code: '$$global.toPage(\'/pageId\', {})'
+    code: '$$global.toPage(\'pageId\', {})'
   },
   {
     name: '当前路由对象',
@@ -54,7 +62,7 @@ export const fxList = [
     code: '$$global.hideNode(\'nodeId\')'
   },
   {
-    name: '客户端native',
+    name: '客户端 native',
     code: '$$global.native'
   },
   {
