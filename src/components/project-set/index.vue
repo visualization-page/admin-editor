@@ -23,7 +23,9 @@ export default defineComponent({
   setup (props, ctx) {
     watch(() => ctx.root.$route.params.dir, dir => {
       // @ts-ignore
-      local.find(x => x.label === '英文名称').elAttrs!.disabled = !!dir
+      local.find(x => x.field === 'dir').elAttrs!.disabled = !!dir
+      // @ts-ignore
+      local.find(x => x.field === 'interactiveType').elAttrs!.disabled = !!dir
     })
     return {
       local,

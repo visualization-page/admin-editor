@@ -122,12 +122,12 @@ export const local = [
       //   value: 'poster'
       // },
       {
-        label: '彩云小程序',
+        label: '讯盟小程序',
         value: 'xmmp'
       }
     ],
     elAttrs: {
-      disabled: true
+      disabled: false
     }
   },
   {
