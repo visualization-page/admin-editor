@@ -95,14 +95,14 @@ export default {
   components: {
     Photo
   },
-  setup (props, ctx) {
+  setup (p, ctx) {
     const list = ref([])
     const loading = ref(false)
     const selected = ref(null)
     const currentImage = computed(() => {
       if (selected.value) {
         return selected.value
-      } else if (currentNode.value) {
+      } else if (currentNode.value && currentNode.value.type === 'img') {
         const { id, title, props } = currentNode.value
         return {
           id,
@@ -118,7 +118,7 @@ export default {
         }
       }
     })
-    watch(() => props.show, show => {
+    watch(() => p.show, show => {
       if (show) {
         loading.value = true
         // 便利收集所有的图片节点
