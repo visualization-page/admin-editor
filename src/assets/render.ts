@@ -2,6 +2,7 @@ import { ref, reactive } from '@vue/composition-api'
 import { NodeItem } from './node'
 
 export const renderStatus = ref(0) // 0 编辑中 1 预览
+export const showImageResource = ref(false)
 export const isEdit = () => renderStatus.value === 0
 export const setRenderEdit = () => {
   renderStatus.value = 0

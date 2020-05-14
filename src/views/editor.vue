@@ -6,8 +6,7 @@
     <div class="app-header__bar flex-center-between plr20">
       <el-button icon="el-icon-back" type="text" @click="$router.push('/project/list')">返回项目列表</el-button>
       <span class="b f12 c-666">{{ project.dir ? `编辑 - ${project.dir}` : '新建项目' }}</span>
-      <span />
-      <el-button v-if="false" type="text" @click="handleMode">{{ isEdit() ? '预览' : '编辑' }}模式</el-button>
+      <el-button icon="el-icon-picture-outline" type="text" @click="handleShowImage">查看图片资源</el-button>
     </div>
     <div class="app-content flex">
       <div class="app__side-bar relative">
@@ -105,6 +104,15 @@
         </div>
       </div>
     </div>
+
+    <image-resource :show.sync="showImageResource" />
+    <div
+      class="fixed b50 r0 ptb10 plr5 bg-fff bd bd-ccc tc br4 c-blue cp"
+      @click="$router.push('/suggest')"
+    >
+      <i class="el-icon-chat-square f20"></i>
+      <p class="f10">反馈<br/>建议</p>
+    </div>
   </div>
 </template>
 
@@ -127,11 +135,12 @@ import ComponentCompose from '@/components/component-compose/index.vue'
 import ComponentUpload from '@/components/component-upload/index.vue'
 import ComponentUmd from '@/components/component-umd/index.vue'
 import GlobalUtils from '@/components/global-utils/index.vue'
+import ImageResource from '@/components/image-resource/index.vue'
 import { tabCurrent, setTabName, tabName, isHideComponent } from '@/assets/tab'
 import { http } from '@/api'
 import { initProject, project, resetProject } from '@/assets/project'
 import { Message, MessageBox } from 'element-ui'
-import { isEdit, setRenderEdit, setRenderPreview, clearEditWrapCacheNode } from '@/assets/render'
+import { showImageResource, clearEditWrapCacheNode } from '@/assets/render'
 import { lock, unlock } from '@/assets/lock'
 
 export default defineComponent({
@@ -151,7 +160,8 @@ export default defineComponent({
     ComponentCompose,
     ComponentUpload,
     ComponentUmd,
-    GlobalUtils
+    GlobalUtils,
+    ImageResource
   },
   beforeRouteLeave (to: any, from: any, next: any) {
     MessageBox.confirm('确定要离开吗？').then(() => {
@@ -195,22 +205,26 @@ export default defineComponent({
       clearEditWrapCacheNode()
       resetProject()
     })
-    const handleMode = () => {
-      if (isEdit()) {
-        setRenderPreview()
-      } else {
-        setRenderEdit()
-      }
-    }
+    // const handleMode = () => {
+    //   if (isEdit()) {
+    //     setRenderPreview()
+    //   } else {
+    //     setRenderEdit()
+    //   }
+    // }
     return {
       tabCurrent,
       tabName,
       project,
       isHideComponent,
-      handleMode,
-      isEdit,
+      showImageResource,
+      // handleMode,
+      // isEdit,
       handleClick (obj: any[]) {
         setTabName(obj)
+      },
+      handleShowImage () {
+        showImageResource.value = true
       }
     }
   }

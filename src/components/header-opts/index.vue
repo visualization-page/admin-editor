@@ -125,13 +125,13 @@ export default defineComponent({
           location.href = process.env.VUE_APP_FILE_SERVER + `/butterfly/project/download/${project.dir}`
         }
       },
-      {
-        label: '反馈建议',
-        icon: 'el-icon-chat-line-round f16',
-        action: () => {
-          ctx.root.$router.push('/suggest')
-        }
-      },
+      // {
+      //   label: '反馈建议',
+      //   icon: 'el-icon-chat-line-round f16',
+      //   action: () => {
+      //     ctx.root.$router.push('/suggest')
+      //   }
+      // },
       {
         label: '发布项目',
         icon: 'el-icon-position f16',
