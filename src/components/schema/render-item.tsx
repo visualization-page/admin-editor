@@ -27,7 +27,21 @@ export const renderInput = (item: any, data: any, updateField: any) => {
   return isBlur
     // @ts-ignore
     ? <Input value={pref && pref[field]} item={item} onInput={val => updateField(item.field, val)} />
-    : <el-input {...props} />
+    : (
+      <div class="flex">
+        {
+          item.prepend && (
+            <div
+              class="prepend bg-f2 c-999 f10 flex-center plr10"
+              style="border:1px solid #dcdfe6;margin-right:-4px;border-radius:4px 0 0 4px"
+            >
+              { item.prepend }
+            </div>
+          )
+        }
+        <el-input {...props} />
+      </div>
+    )
 }
 
 export const renderInputBind = (item: any, data: any, updateField: any) => {

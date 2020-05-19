@@ -4,7 +4,8 @@
     @blur="$emit('input', local)"
     :placeholder="item.elAttrs && item.elAttrs.placeholder || '请输入'"
     :type="item.type"
-  />
+  >
+  </el-input>
 </template>
 
 <script lang="jsx">

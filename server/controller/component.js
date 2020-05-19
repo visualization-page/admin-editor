@@ -196,7 +196,7 @@ const handle = {
   },
   uploadComposeComponent: async (file, tmpPath) => {
     let msg = ''
-    const c = await fs.readFileSync(file, 'utf8')
+    const c = await fs.readFile(file, 'utf8')
     const data = JSON.parse(c)
     await handle.export('compose', { ...data, force: true })
     utils.rm(tmpPath)
