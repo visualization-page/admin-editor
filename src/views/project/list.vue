@@ -226,10 +226,17 @@ export default {
         })
       }
     },
-    handleCopy (item) {
+    async handleCopy (item) {
+      const { value } = await MessageBox.prompt('请输入复制后的项目名(文件夹名)', {
+        inputValue: `${item.dir}_copy`
+      })
+      if (!value) {
+        return Message.error('请输入项目名')
+      }
       http.post('project/copy', {
         dir: item.dir,
-        name: this.$native.name
+        name: this.$native.name,
+        newDir: value
       }, { successMessage: '复制成功' }).then(() => {
         this.getList()
       })

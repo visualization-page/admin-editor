@@ -226,7 +226,8 @@ const handle = {
         // info.remark
         data.project.info.remark = oldData.project.info.remark
         delete data.force
-      } else {
+      }
+      if (!data.project.createUser) {
         // 初次创建保存创建人
         data.project.createUser = data.project.info.userName
       }

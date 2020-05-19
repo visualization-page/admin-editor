@@ -136,7 +136,7 @@ import ComponentUpload from '@/components/component-upload/index.vue'
 import ComponentUmd from '@/components/component-umd/index.vue'
 import GlobalUtils from '@/components/global-utils/index.vue'
 import ImageResource from '@/components/image-resource/index.vue'
-import { tabCurrent, setTabName, tabName, isHideComponent } from '@/assets/tab'
+import { tabCurrent, setTabName, tabName, isHideComponent, hideComponent } from '@/assets/tab'
 import { http } from '@/api'
 import { initProject, project, resetProject } from '@/assets/project'
 import { Message, MessageBox } from 'element-ui'
@@ -220,8 +220,17 @@ export default defineComponent({
       showImageResource,
       // handleMode,
       // isEdit,
-      handleClick (obj: any[]) {
-        setTabName(obj)
+      handleClick (arr: any[]) {
+        if (arr[0]) {
+          if (arr[0] === tabCurrent.tab1) {
+            hideComponent(!isHideComponent.value)
+          } else {
+            hideComponent(true)
+          }
+        } else if (arr[1]) {
+          hideComponent(false)
+        }
+        setTabName(arr)
       },
       handleShowImage () {
         showImageResource.value = true

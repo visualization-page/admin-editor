@@ -142,12 +142,16 @@ module.exports = {
   '/project/copy/:dir': {
     post: async (req, res) => {
       const data = await component.getProject(req.params.dir)
-      data.project.dir += '_copy'
+      data.project.dir = req.body.newDir
       data.project.createUser = data.project.info.userName = req.body.name
       data.project.info.remark = '复制项目'
       data.project.info.time = Date.now()
+      // 将发布配置清空
+      data.project.config.path = ''
       delete data.force
       const result = await component.saveProject(data.project.dir, data)
+      // 解锁
+      await component.lockProject(data.project.dir)
       res.json(result || { success: true, msg: '' })
     }
   },

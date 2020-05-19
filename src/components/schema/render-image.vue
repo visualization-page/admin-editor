@@ -1,9 +1,10 @@
 <template>
   <div class="render-image">
-    <p>
+    <p class="flex-center-between">
       <el-checkbox v-model="minify">
         <span class="f12 c-999">开启 tinypng 压缩</span><br>
       </el-checkbox>
+      <el-button v-if="src" type="text" @click="handleShowImage">查看图片</el-button>
     </p>
     <p>
       <el-upload
@@ -31,6 +32,7 @@
 <script>
 import { getParentRef } from '@/assets/util'
 import { Message, Loading } from 'element-ui'
+import { showImageResource } from '@/assets/render'
 
 export default {
   props: {
@@ -82,6 +84,9 @@ export default {
       } else {
         Message.error(res.msg)
       }
+    },
+    handleShowImage () {
+      showImageResource.value = true
     }
   }
 }

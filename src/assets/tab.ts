@@ -30,19 +30,6 @@ export const tabCurrent = reactive<{
   tab4: tabName.previewArea
 })
 export const setTabName = (arr: any[]) => {
-  if (arr[0]) {
-    if (arr[0] === tabCurrent.tab1) {
-      hideComponent(!isHideComponent.value)
-    } else {
-      hideComponent(true)
-    }
-  } else if (arr[1]) {
-    // if (arr[1] === tabCurrent.tab2) {
-    //   hideComponent(!isHideComponent.value)
-    // } else {
-    hideComponent(false)
-    // }
-  }
   arr.forEach((name: string, i: number) => {
     if (name) {
       tabCurrent[`tab${i + 1}`] = name

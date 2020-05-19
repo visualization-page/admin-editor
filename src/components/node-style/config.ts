@@ -69,7 +69,7 @@ export default [
   {
     label: '背景图片',
     field: 'style.backgroundImage',
-    type: 'input',
+    type: 'image',
     placeholder: '请输入图片地址'
   },
   {

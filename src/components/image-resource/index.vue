@@ -72,6 +72,7 @@ import { setCurrentPage, currentPage } from '@/assets/page'
 import { currentNode, setCurrentNode } from '@/assets/node'
 import { Photo } from 'esc-ui'
 import { setTabName, tabName } from '@/assets/tab'
+import { findNode } from '@/components/mobile-render/render/utils'
 
 function findPageImageNodes (nodes, result) {
   nodes.forEach(node => {
@@ -161,7 +162,7 @@ export default {
           // 在原有的 node-property 中，切换页面会重置当前选中的节点
           // 在下一个 task 中执行
           setTimeout(() => {
-            const node = page.nodes.find(x => x.id === currentImage.value.id)
+            const node = findNode(page.nodes, currentImage.value.id)
             setCurrentNode(node)
             setTabName([tabName.nodeTree, '', tabName.nodeProperty])
           })

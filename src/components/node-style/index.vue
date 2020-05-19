@@ -3,12 +3,18 @@
     <div class="flex-center p30" v-if="false && !isEdit()">
       <p class="c-999">请切换为编辑模式</p>
     </div>
-    <schema-form
-      v-else-if="currentNode && currentNode.id !== '-1'"
-      :schema="schema"
-      :schema-data="currentNode"
-      @updateByField="updateNodeByField"
-    />
+    <template v-else-if="currentNode && currentNode.id !== '-1'">
+      <el-alert
+        class="mb10"
+        title="所有尺寸输入框，都可以通过方向上下键调整尺寸！"
+        type="success">
+      </el-alert>
+      <schema-form
+        :schema="schema"
+        :schema-data="currentNode"
+        @updateByField="updateNodeByField"
+      />
+    </template>
     <div v-else class="flex-center p30">
       <p class="c-999">请选中非根组件</p>
     </div>
