@@ -10,6 +10,7 @@ import Native from '@xm/native'
 import { basicSchemaMap } from '@/components/basic-components'
 
 const native = new Native()
+export const isPc = !/android|iphone/i.test(navigator.userAgent)
 export const loadItem = (item: NodeItemBasic): Promise<{ default: any }> => {
   const basicNames = Object.keys(basicSchemaMap).map(x => `bf-${x}`)
   return new Promise((resolve, reject) => {

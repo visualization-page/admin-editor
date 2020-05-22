@@ -20,7 +20,7 @@ import { FormEvent } from '@/assets/event'
 import { isEdit } from '@/assets/render'
 import { Page } from '@/assets/page'
 import { Project } from '@/assets/project'
-import { initGlobalConfig, getEventHandler, setGlobalUtils, setGlobalConstant } from './utils'
+import { initGlobalConfig, getEventHandler, setGlobalUtils, setGlobalConstant, isPc } from './utils'
 
 // @ts-ignore
 const mobilePageShare: () => Promise<{ default: (obj: Page['share']) => void }> = () => import(/* webpackChunkName: "render-page" */ '../share')
@@ -82,6 +82,14 @@ export default defineComponent<{
           el.setAttribute('type', 'text/css')
           document.head.appendChild(el)
           styleEl = el
+        }
+        if (isPc) {
+          css = css.replace(/vw/g, 'px')
+        } else if (/vw/.test(css)) {
+          // eslint-disable-next-line no-useless-escape
+          css = css.replace(/([\d\.]+)vw/g, (all: string, match: string) => {
+            return (Number(match) / 3.75).toFixed(2) + 'vw'
+          })
         }
         styleEl.innerHTML = css
       }

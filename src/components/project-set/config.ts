@@ -97,24 +97,6 @@ export const local = [
     info: '上面的字段如果不够用，可以在这里补充其它选项。'
   },
   {
-    label: '全局css',
-    field: 'css',
-    block: false,
-    'code-language': 'css',
-    type: 'code',
-    'info-icon': 'el-icon-brush',
-    info: '全局css，会被直接插入到 html 头部中'
-  },
-  {
-    label: '全局函数',
-    field: 'utils',
-    block: false,
-    'code-language': 'javascript',
-    type: 'code',
-    'info-icon': 'el-icon-star-off',
-    info: '全局utils，例如：$$global.utils.deepClone'
-  },
-  {
     label: '所属省份',
     field: 'config.appType',
     type: 'select',
@@ -205,6 +187,24 @@ export const local = [
     label: '封面图',
     field: 'thumbCover',
     type: 'image'
+  },
+  {
+    label: '全局css',
+    field: 'css',
+    block: false,
+    'code-language': 'css',
+    type: 'code',
+    'info-icon': 'el-icon-brush',
+    info: '全局css，会被直接插入到 html 头部中'
+  },
+  {
+    label: '全局函数',
+    field: 'utils',
+    block: false,
+    'code-language': 'javascript',
+    type: 'code',
+    'info-icon': 'el-icon-star-off',
+    info: '全局utils，例如：$$global.utils.deepClone'
   },
   {
     label: '初始脚本',

@@ -6,7 +6,7 @@ import { isEdit, setEditWrapNode } from '@/assets/render'
 import { FormEvent } from '@/assets/event'
 import { parseCodeValid, deepMerge } from '@/assets/util'
 // import EditWrap from '../edit-wrap.vue'
-import { dealFx, getEventHandler } from './utils'
+import { dealFx, getEventHandler, isPc } from './utils'
 import { setTabName, tabName } from '@/assets/tab'
 
 Vue.directive('insert-id', function (el, binding) {
@@ -147,7 +147,6 @@ export default defineComponent<{
           props.style.zIndex = undefined
         }
         // 处理 vw 单位
-        const isPc = !/android|iphone/i.test(navigator.userAgent)
         const _dealVw = (obj: any) => {
           Object.keys(obj).forEach(k => {
             if (k !== 'code' && typeof obj[k] === 'string') {
