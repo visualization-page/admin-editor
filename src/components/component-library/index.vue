@@ -39,7 +39,7 @@ import { getTreeData } from './config'
 import { TreeNode } from 'element-ui/types/tree'
 import { updateProject, project } from '@/assets/project'
 import { addBeforeValidate, addNode } from '@/assets/node'
-import { setTabName, tabName } from '@/assets/tab'
+import { setTabName, tabName, hideComponent } from '@/assets/tab'
 
 export default defineComponent({
   setup () {
@@ -78,6 +78,7 @@ export default defineComponent({
       if (addBeforeValidate()) {
         addNode({ library, name, nodeType: 1 << 2, type: 'div' })
         setTabName([tabName.nodeTree, '', tabName.nodeProperty])
+        hideComponent(true)
       }
     }
 

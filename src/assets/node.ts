@@ -49,6 +49,9 @@ export const rootNode: NodeItem = {
 }
 
 export const currentNode = ref<NodeItem | null>(null)
+// watch(() => currentNode.value, v => {
+//   console.log(v)
+// }, { lazy: true })
 
 export const setCurrentNode = (item: NodeItem | null) => {
   currentNode.value = item
@@ -120,7 +123,11 @@ export const addBeforeValidate = (): boolean => {
 export const addComposeNode = (node: NodeItem) => {
   const p = getNewNodeParent()
   // 重新生成id
-  p.push(deepCopyNode(node, false))
+  const newNode = deepCopyNode(node, false)
+  p.push(newNode)
+  setTimeout(() => {
+    setCurrentNode(newNode)
+  })
 }
 
 export const deepCopyNode = (data: NodeItem, copyTitle: boolean = true) => {

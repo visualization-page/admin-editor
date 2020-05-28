@@ -66,7 +66,7 @@ import { defineComponent, ref, watch } from '@vue/composition-api'
 import { http } from '@/api'
 import { Message, Loading, MessageBox } from 'element-ui'
 import { addBeforeValidate, addNode } from '@/assets/node'
-import { setTabName, tabCurrent, tabName } from '@/assets/tab'
+import { setTabName, tabCurrent, tabName, hideComponent } from '@/assets/tab'
 import { project } from '@/assets/project'
 import { currentPage } from '@/assets/page'
 
@@ -111,6 +111,7 @@ export default defineComponent({
       if (addBeforeValidate()) {
         addNode({ ...item, nodeType: 1 << 0 })
         setTabName([tabName.nodeTree, '', tabName.nodeProperty])
+        hideComponent(true)
         const currentPageDeps = project.componentDownload.filter(x => x.pageId === currentPage.value.id)
         const dep = currentPageDeps.find(x => x.name === item.name)
         if (dep) {

@@ -21,39 +21,23 @@
 </template>
 
 <script>
-import Vue from 'vue'
-// import { ref } from '@vue/composition-api'
 import { addNode, addBeforeValidate } from '@/assets/node'
-// import { project } from '@/assets/project'
-import { setTabName, tabName } from '@/assets/tab'
+import { setTabName, tabName, hideComponent } from '@/assets/tab'
 import { basic, useBasicComponents } from './'
 
 useBasicComponents()
 export default {
   setup () {
-    // const dataList = ref()
-    // http.get('component/list', { type: 'basic' }).then(res => {
-    //   list.value = res.data
-    // })
-    // const handleRefresh = () => {
-    //   http.post('component/update', { type: 'basic' }).then(res => {
-    //     list.value = res.data
-    //   })
-    // }
     const handleClick = (item) => {
       if (addBeforeValidate()) {
         addNode({ ...item, nodeType: 1 << 0 })
         setTabName([tabName.nodeTree, '', tabName.nodeProperty])
-        // if (project.componentDownload.every(x => x.name !== item.name)) {
-        //   project.componentDownload.push(item)
-        // }
+        hideComponent(true)
       }
     }
     return {
       basic,
-      // icon: ['el-icon-folder-opened', 'el-icon-picture-outline', 'el-icon-s-fold', 'el-icon-edit-outline'],
       handleClick
-      // handleRefresh
     }
   }
 }

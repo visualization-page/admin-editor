@@ -56,7 +56,7 @@
 import { ref, watch } from '@vue/composition-api'
 import { addComposeNode, addBeforeValidate } from '@/assets/node'
 import { diffDownloadDeps } from '@/assets/project'
-import { setTabName, tabCurrent, tabName } from '@/assets/tab'
+import { setTabName, tabCurrent, tabName, hideComponent } from '@/assets/tab'
 import { http } from '@/api'
 import { Loading, Message, MessageBox } from 'element-ui'
 
@@ -90,6 +90,7 @@ export default {
         await diffDownloadDeps(item.componentDeps)
         addComposeNode(item.node)
         setTabName([tabName.nodeTree, '', tabName.nodeProperty])
+        hideComponent(true)
       }
     }
     const downloadItem = async (item) => {
