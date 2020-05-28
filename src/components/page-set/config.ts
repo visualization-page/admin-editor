@@ -6,7 +6,8 @@ export default [
     elProps: {
     },
     elAttrs: {
-      disabled: false
+      disabled: false,
+      readonly: true
     }
   },
   {

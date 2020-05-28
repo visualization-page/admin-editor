@@ -6,7 +6,13 @@
       />
     </div>
     <div class="project-list__title flex justify-between">
-      <span class="f16">项目列表</span>
+      <div class="flex-center">
+        <span class="f18 b">项目列表</span>
+        <span class="ml20 f12 c-999">当前模式：</span>
+        <span v-if="mode === 'normal'" class="f12 mr10" style="color: #fe7d37">高级开发版</span>
+        <span v-else class="f12 mr10" style="color: #67C23A">简单版</span>
+        <el-button icon="el-icon-caret-bottom" type="text" @click="changeMode">切换</el-button>
+      </div>
       <el-form inline>
         <el-form-item label="搜索类型">
           <el-select placeholder="请选择" v-model="searchModel.field">
@@ -106,9 +112,6 @@ import HeaderOpt from '@/components/header-opts/index.vue'
 import { http } from '@/api'
 import { MessageBox, Message } from 'element-ui'
 import dayjs from 'dayjs'
-// import { resetProject } from '@/assets/project'
-// import { project } from '../../assets/project'
-// import { initProject, project } from '../../assets/project'
 
 export default {
   components: {
@@ -116,6 +119,7 @@ export default {
   },
   data () {
     return {
+      mode: localStorage.getItem('butterfly-mode'),
       searchField: [
         { label: '项目名称', value: 'dir' },
         { label: '项目描述', value: 'desc' },
@@ -183,6 +187,14 @@ export default {
     this.getList()
   },
   methods: {
+    changeMode () {
+      let mode = 'normal'
+      if (this.mode === 'normal') {
+        mode = 'sample'
+      }
+      this.mode = mode
+      localStorage.setItem('butterfly-mode', mode)
+    },
     getList () {
       http.get('component/list', { type: 'project' }).then(res => {
         this.tableData = res.data.sort((a, b) => b.info.time - a.info.time).map(x => ({
