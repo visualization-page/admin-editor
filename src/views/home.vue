@@ -1,12 +1,13 @@
 <template>
   <div class="flex-center bg-333" style="height: 100vh">
     <div>
-      <div class="flex">
+      <div class="flex relative">
         <div class="tc">
           <p class="f40 c-fff">Butterfly</p>
-          <p class="c-aaa f14 mt10">快速搭建h5 @讯盟FE</p>
+          <p class="c-ccc f14 mt10">产品运营也能用的 H5 在线开发平台</p>
+          <p class="c-666 f12 mt10">@讯盟FE - 前端运营商组</p>
         </div>
-        <svg class="ml10" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="67" height="20">
+        <svg class="ml10 absolute t0" style="right: -50px" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="67" height="20">
           <linearGradient id="b" x2="0" y2="100%">
             <stop offset="0" stop-color="#bbb" stop-opacity=".1"/>
             <stop offset="1" stop-opacity=".1"/>
@@ -28,9 +29,8 @@
             </text>
           </g>
         </svg>
-<!--        <img class="ml20" height="14px" src="https://img.shields.io/badge/-beta 0.0.1-orange" alt="">-->
       </div>
-      <div class="tc mt50 pt50 flex pl30">
+      <div class="tc mt50 pt50 flex-center">
         <div
           class="cp c-button button--tamaya button--border-medium"
           data-text="立即开始"

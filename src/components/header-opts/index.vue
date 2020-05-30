@@ -24,8 +24,7 @@
             </text>
           </g>
         </svg>
-<!--        <img height="14px" src="https://img.shields.io/badge/-beta 0.0.1-lightgrey" alt="">-->
-        <p class="c-aaa">快速搭建h5</p>
+        <p class="c-aaa">产品运营也能用的 H5 在线开发平台</p>
       </div>
     </div>
     <div class="flex">

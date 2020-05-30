@@ -81,6 +81,15 @@
             style="height: 500px"
             language="javascript"
             theme="vs-dark"
+            :options="{
+              fontSize: 14,
+              showUnused: true,
+              smoothScrolling: true,
+              tabCompletion: 'on',
+              tabSize: 2,
+              formatOnPaste: true,
+              detectIndentation: false
+            }"
             ref="editor"
           />
         </el-form-item>

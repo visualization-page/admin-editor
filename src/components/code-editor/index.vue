@@ -17,6 +17,15 @@
         :amdRequire="amdRequire"
         :value="code"
         :language="currentCode.language"
+        :options="{
+          fontSize: 14,
+          showUnused: true,
+          smoothScrolling: true,
+          tabCompletion: 'on',
+          tabSize: 2,
+          formatOnPaste: true,
+          detectIndentation: false
+        }"
         theme="vs-dark"
         @change="handleCodeChange"
       />

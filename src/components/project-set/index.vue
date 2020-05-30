@@ -25,7 +25,7 @@ export default defineComponent({
       // @ts-ignore
       local.find(x => x.field === 'dir').elAttrs!.disabled = !!dir
       // @ts-ignore
-      local.find(x => x.field === 'interactiveType').elAttrs!.disabled = !!dir
+      // local.find(x => x.field === 'interactiveType').elAttrs!.disabled = !!dir
     })
     return {
       local,

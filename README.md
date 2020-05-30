@@ -244,3 +244,21 @@ $$global.config = project.config = {
 
 - 全局 css 兼容vw
 - 增加角色入口，对于非开发人员，平铺所有文本/图片，以供修改。
+
+> 20/05/28
+
+- [ ] VanActionSheet v-model 不渲染
+- [x] 切换页面时，全局状态 $$global 未重置
+- [ ] 小程序 sdk 内置
+- [x] 优化 manaco editor
+  ```html
+    options="{
+      fontSize: 14,
+      showUnused: true,
+      smoothScrolling: true,
+      tabCompletion: 'on',
+      tabSize: 2,
+      formatOnPaste: true,
+      detectIndentation: false
+    }
+  ```

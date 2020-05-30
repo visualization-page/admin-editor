@@ -15,8 +15,8 @@ window.ELEMENT = {
 Vue.config.productionTip = false
 Vue.prototype.$native = new Native()
 document.addEventListener('DOMContentLoaded', () => {
-  console.log('DOMContentLoaded time', ((Date.now() - window._entryTime) / 1000), '秒')
-  window._renderStartTime = Date.now()
+  window._domloadTime = Date.now()
+  console.log('DOMContentLoaded time', ((_domloadTime - window._entryTime) / 1000), '秒')
   window.globalApp = new Vue({
     router,
     render: h => h(App)

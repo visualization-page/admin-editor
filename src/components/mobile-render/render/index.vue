@@ -97,9 +97,8 @@ export default defineComponent<{
     // 执行页面钩子
     const pageEvents = async (page?: Page, oldPage?: Page) => {
       if (page) {
-        // console.log('render index pageEvents start', ((Date.now() - window._renderStartTime) / 1000), '秒')
         await sleepUntil(() => mounted.value)
-        console.log('render index mounted', ((Date.now() - window._renderStartTime) / 1000), '秒')
+        // console.log('render page mounted', ((Date.now() - window._renderStartTime) / 1000), '秒')
         const ctx = getCtx()
         // 上一个页面 unMounted 钩子
         if (oldPage) {
@@ -164,26 +163,29 @@ export default defineComponent<{
         setGlobalUtils(globalConfig.value, utils)
       })
     } else {
-      // console.log('render index watch start', ((Date.now() - window._renderStartTime) / 1000), '秒')
-      watch([() => props.currentPage, () => props.project], ([page, project], oldVal) => {
-        const oldPage = oldVal && oldVal[0]
-        if (project && page) {
-          // console.log('render index watch doing', ((Date.now() - window._renderStartTime) / 1000), '秒')
+      watch(() => props.project, project => {
+        if (project) {
           const pro = project as Project
           setCss(pro.css)
-          // @ts-ignore
-          globalConfig.value = initGlobalConfig(page as Page)
           setGlobalConstant(globalConfig.value, pro.constant)
           setGlobalUtils(globalConfig.value, pro.utils)
           globalConfig.value.initHttp(pro.httpOptions, getCtx())
           // 执行项目初始化脚本
-          execInitScriptsOnce(project as Project)
+          execInitScriptsOnce(pro)
+        }
+      }, { flush: 'pre' })
+      console.log('render page start', ((Date.now() - window._domloadTime) / 1000), '秒')
+      watch(() => props.currentPage, (page, oldPage) => {
+        if (page) {
+          // window._renderStartTime = Date.now()
+          // @ts-ignore
+          globalConfig.value = initGlobalConfig(page as Page)
           // 页面
           setPageCode('state', page.state)
           setPageCode('methods', page.methods)
           pageEvents(page as Page, oldPage as Page)
         }
-      })
+      }, { flush: 'pre' })
     }
     onMounted(() => {
       const stop = watch(() => pageInit.value.length, len => {
