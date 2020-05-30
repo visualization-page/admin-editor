@@ -97,6 +97,17 @@ export const local = [
     info: '上面的字段如果不够用，可以在这里补充其它选项。'
   },
   {
+    label: '同步文件到目标机器',
+    field: 'syncFile',
+    type: 'checkbox'
+  },
+  {
+    relation: [
+      {
+        field: 'syncFile',
+        value: true
+      }
+    ],
     label: '所属省份',
     field: 'config.appType',
     type: 'select',
@@ -152,6 +163,12 @@ export const local = [
     ]
   },
   {
+    relation: [
+      {
+        field: 'syncFile',
+        value: true
+      }
+    ],
     label: '发布目标机器目录',
     field: 'config.path',
     type: 'textarea',

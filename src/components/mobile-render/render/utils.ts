@@ -6,10 +6,9 @@ import { FormEvent } from '@/assets/event'
 import { Loading, Dialog, Dot, Http, Toast } from 'esc-ui'
 // @ts-ignore
 import MpHttp from 'esc-ui/lib/http/miniprogram'
-import Native from '@xm/native'
 import { basicSchemaMap } from '@/components/basic-components'
 
-const native = new Native()
+const native = window.Native ? new window.Native() : {}
 export const isPc = !/android|iphone/i.test(navigator.userAgent)
 export const loadItem = (item: NodeItemBasic): Promise<{ default: any }> => {
   const basicNames = Object.keys(basicSchemaMap).map(x => `bf-${x}`)
@@ -245,7 +244,20 @@ export const initGlobalConfig = (page: Page | null) => {
     loading: Loading.instance,
     dialog: Dialog,
     cookie: {
-      get: native.cookie
+      get (name: string) {
+        let cookieValue = null
+        if (document.cookie && document.cookie !== '') {
+          let cookies = document.cookie.split(';')
+          for (let i = 0; i < cookies.length; i++) {
+            let cookie = cookies[i].trim()
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+              cookieValue = decodeURIComponent(cookie.substring(name.length + 1))
+              break
+            }
+          }
+        }
+        return cookieValue
+      }
     },
     toPage (pageId: string, query?: { [k: string]: string }) {
       let queryStr = ''

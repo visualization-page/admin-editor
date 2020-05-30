@@ -380,10 +380,19 @@ const handle = {
         .replace(`<link rel=stylesheet href=vant2.5/index.css>`, '')
         .replace(`<script src=vant2.5/index.min.js></script>`, '')
     }
-    if (isXmmp) {
-      // 去除 cdn 外网无法访问
+    // 去除 cdn 外网无法访问
+    if (!globalProject.project.syncFile) {
       renderContent = renderContent
         .replace('<script src=https://statics-china.uban360.com/config/app.js></script>', '')
+    }
+    if (isXmmp) {
+      await fs.copy(path.join(distPath, 'xmmp'), path.join(releasePath, 'xmmp'))
+      renderContent = renderContent
+        .replace(`<script src=native/native.js></script>`, '')
+    } else {
+      await fs.copy(path.join(distPath, 'native'), path.join(releasePath, 'native'))
+      renderContent = renderContent
+        .replace(`<script src=xmmp/xmmp.min.js></script>`, '')
     }
 
     // href=css href=js src=js
@@ -400,7 +409,7 @@ const handle = {
     if (fs.pathExistsSync(zipPath)) {
       utils.rm(zipPath)
     }
-    if (!isXmmp) {
+    if (globalProject.project.syncFile) {
       // 非小程序 同步机器文件
       return service.syncFile(globalProject.project)
     }

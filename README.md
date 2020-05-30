@@ -247,9 +247,9 @@ $$global.config = project.config = {
 
 > 20/05/28
 
-- [ ] VanActionSheet v-model 不渲染
+- [x] VanActionSheet v-model 不渲染
 - [x] 切换页面时，全局状态 $$global 未重置
-- [ ] 小程序 sdk 内置
+- [x] sdk 优化，拆分 native 和 小程序 sdk，根据不同的配置内置
 - [x] 优化 manaco editor
   ```html
     options="{

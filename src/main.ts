@@ -2,11 +2,8 @@ import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
 import store from './store'
-import Native from '@xm/native'
-// import './plugins/element'
 import 'tcon'
 import './style/app.less'
-// import Login from './views/login.vue'
 import { http } from './api'
 
 declare module '@vue/composition-api/dist/component/component' {
@@ -29,6 +26,7 @@ declare global {
     //   getNodeProperty?: (id: string, property: string) => any
     //   setNodeProperty?: (id: string, property: string, val: unknown) => any
     // }
+    Native: any
   }
 }
 
@@ -36,18 +34,18 @@ Vue.config.productionTip = false
 Vue.config.errorHandler = function (err, vm, info) {
   console.log(err, vm, info)
 }
-const native = Vue.prototype.$native = new Native()
+const nativeInstance = Vue.prototype.$native = new window.Native()
 Vue.prototype.$version = process.env.VUE_APP_VERSION
 
-if (!native.cookie('sso_u')) {
+if (!nativeInstance.cookie('sso_u')) {
   // new Vue({
   //   render: h => h(Login)
   // }).$mount('#app')
   location.href = `${process.env.VUE_APP_SSO}${location.href}`
 } else {
   http.get('login/user').then(res => {
-    native.name = res.data.name_
-    native.uid = res.data.uid_
+    nativeInstance.name = res.data.name_
+    nativeInstance.uid = res.data.uid_
     window.globalApp = new Vue({
       router,
       store,

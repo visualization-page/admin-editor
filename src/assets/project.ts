@@ -31,6 +31,7 @@ export type Project = {
   }
   componentDownload: NodeItemBasic[]
   componentUmd: NodeUmd[]
+  syncFile: boolean
   config: {
     appType: Number
     path: string
@@ -91,6 +92,7 @@ const defaultProject: Project = {
   ],
   componentUmd: [
   ],
+  syncFile: true,
   config: {
     appType: 1,
     path: '',
