@@ -1,15 +1,23 @@
 import { setRenderPreview } from '@/assets/render'
 import { initGlobalConfig } from '@/components/mobile-render/render/utils'
 import { initProject } from '@/assets/project'
+import { loadSdk } from '@/assets/util'
 
-const loadVConsole = () => {
-  const script = document.createElement('script')
-  script.src = 'https://unpkg.com/vconsole'
-  script.onload = () => {
-    // eslint-disable-next-line no-new
-    new VConsole()
-  }
-  document.body.appendChild(script)
+export const loadVConsole = () => {
+  return new Promise((resolve, reject) => {
+    const script = document.createElement('script')
+    script.src = 'vconsole/index.js'
+    script.id = 'vconsole'
+    script.onload = () => {
+      // eslint-disable-next-line no-new
+      new VConsole()
+      resolve()
+    }
+    script.onerror = () => {
+      reject(new Error('vconsole load error'))
+    }
+    document.body.appendChild(script)
+  })
 }
 
 let http = null
@@ -17,10 +25,15 @@ export const getProject = async (dir) => {
   setRenderPreview()
   // 正式环境
   if (window.globalProject) {
-    await initProject(window.globalProject.project)
     if (window.globalProject.project.config.openConsole) {
-      loadVConsole()
+      if (window.VConsole) {
+        // eslint-disable-next-line no-new
+        new VConsole()
+      } else {
+        console.warn('VConsole is not defined')
+      }
     }
+    await initProject(window.globalProject.project)
     // window._PUBLIC_PATH = window.globalProject.project.config.pro.publicPath
     return window.globalProject.project
   }
@@ -38,9 +51,11 @@ export const getProject = async (dir) => {
     http = global.http
   }
   const { data: { project } } = await http.get('get', { dir })
+  const arr = [loadSdk(project.interactiveType)]
   if (project.config.openConsole) {
-    loadVConsole()
+    arr.push(loadVConsole())
   }
+  await Promise.all(arr)
   await initProject(project)
   window._PUBLIC_PATH = project.config.dev.publicPath
   return project

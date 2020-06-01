@@ -76,6 +76,12 @@
           <el-tab-pane label="场景预览" :name="tabName.previewArea">
             <mobile-render />
             <node-style-tools />
+            <p
+              class="absolute tc l0 r0 c-aaa f10"
+              style="text-shadow: 1px 1px 1px rgba(0,0,0,.1);bottom:2px;user-select: none"
+            >
+              Designed by 讯盟FE - 前端运营商组
+            </p>
           </el-tab-pane>
           <el-tab-pane label="代码编辑" :name="tabName.codeEdit">
             <code-editor />

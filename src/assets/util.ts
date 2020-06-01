@@ -140,3 +140,38 @@ export const deepMerge = (origin: any, obj?: any): any => {
     })
   }
 }
+
+export function loadSdk (type: string) {
+  return new Promise((resolve) => {
+    const d = window.define
+    window.JSBridge = undefined
+    // hack monaco editor require
+    window.define = undefined
+    let oId
+    let id
+    let src
+    if (type === 'long-page') {
+      // 引入 native
+      oId = 'xmmp'
+      id = 'native'
+      src = 'native/native.js'
+    } else {
+      // 引入 xmmp
+      oId = 'native'
+      id = 'xmmp'
+      src = 'xmmp/xmmp.min.js'
+    }
+    const item = document.getElementById(oId)
+    if (item) {
+      document.body.removeChild(item)
+    }
+    const script = document.createElement('script')
+    script.id = id
+    script.src = src
+    script.onload = () => {
+      window.define = d
+      resolve()
+    }
+    document.body.appendChild(script)
+  })
+}

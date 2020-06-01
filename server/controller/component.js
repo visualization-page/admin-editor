@@ -388,11 +388,16 @@ const handle = {
     if (isXmmp) {
       await fs.copy(path.join(distPath, 'xmmp'), path.join(releasePath, 'xmmp'))
       renderContent = renderContent
-        .replace(`<script src=native/native.js></script>`, '')
+        .replace('</head>', `<script src=xmmp/xmmp.min.js></script></head>`)
     } else {
       await fs.copy(path.join(distPath, 'native'), path.join(releasePath, 'native'))
       renderContent = renderContent
-        .replace(`<script src=xmmp/xmmp.min.js></script>`, '')
+        .replace('</head>', `<script src=native/native.js></script></head>`)
+    }
+    if (globalProject.project.config.openConsole) {
+      await fs.copy(path.join(distPath, 'vconsole'), path.join(releasePath, 'vconsole'))
+      renderContent = renderContent
+        .replace('</head>', `<script src=vconsole/index.js></script></head>`)
     }
 
     // href=css href=js src=js
