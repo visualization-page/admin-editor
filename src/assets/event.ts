@@ -35,7 +35,7 @@ export const fxList = [
   },
   {
     name: '内部跳转',
-    code: '$$global.toPage(\'pageId\', {})'
+    code: '$$global.toPage(\'pageId\', {}, { methods: \'push\' })'
   },
   {
     name: '当前路由对象',

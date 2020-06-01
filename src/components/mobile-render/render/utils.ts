@@ -256,7 +256,11 @@ export const initGlobalConfig = (page: Page | null) => {
         return cookieValue
       }
     },
-    toPage (pageId: string, query?: { [k: string]: string }) {
+    toPage (
+      pageId: string,
+      query?: { [k: string]: string },
+      options?: { methods: 'push' | 'replace' }
+    ) {
       const queryStr: string[] = []
       const dir = window.globalProject ? window.globalProject.project.dir : project.dir
       if (query) {
@@ -264,7 +268,12 @@ export const initGlobalConfig = (page: Page | null) => {
           queryStr.push(`${k}=${query[k]}`)
         })
       }
-      location.href = `#/page/${dir}/${pageId}${queryStr.length ? `?${queryStr.join('&')}` : ''}`
+      const url = `#/page/${dir}/${pageId}${queryStr.length ? `?${queryStr.join('&')}` : ''}`
+      if (options && options.methods === 'replace') {
+        location.replace(url)
+      } else {
+        location.href = url
+      }
     },
     route () {
       return window.globalApp.$route

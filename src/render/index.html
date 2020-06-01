@@ -1,22 +1,16 @@
 <!DOCTYPE html>
-<html class="f12" lang="zh-cn">
+<html class="f12 font-normalize" lang="zh-cn">
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no, viewport-fit=cover">
   <title></title>
   <script>
-    window.ELEMENT = {
-      Message () {},
-      MessageBox () {}
-    }
-    window._entryTime = Date.now()
+    // hack element-ui
+    window.ELEMENT = { Message () {}, MessageBox () {} };window._entryTime = Date.now()
   </script>
   <script src="https://statics-china.uban360.com/config/app.js"></script>
   <link rel="stylesheet" href="vant2.5/index.css">
-<!--  <script id="vconsole" src="vconsole/index.js"></script>-->
-<!--  <script id="xmmp" src="xmmp/xmmp.min.js"></script>-->
-<!--  <script id="native" src="native/native.js"></script>-->
 </head>
 <body>
 <noscript>

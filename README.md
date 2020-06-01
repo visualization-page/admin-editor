@@ -262,3 +262,6 @@ $$global.config = project.config = {
       detectIndentation: false
     }
   ```
+  
+> 20/06/01  
+- [x] 内部跳转 toPage 新增第三个参数 `{ method: 'replace' | 'push' }`  
