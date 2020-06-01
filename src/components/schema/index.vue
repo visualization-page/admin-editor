@@ -151,6 +151,8 @@ export default defineComponent({
 .schema-form {
   .el-form-item__label {
     font-size: 12px;
+    padding-top: 9px;
+    line-height: 14px;
   }
 }
 </style>

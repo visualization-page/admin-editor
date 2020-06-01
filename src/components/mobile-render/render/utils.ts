@@ -129,7 +129,6 @@ export const initGlobalConfig = (page: Page | null) => {
     dotInstance: null,
     config: project.config[project.env],
     http: null,
-    // mpHttp: null,
     initHttp: function (httpOptions: Project['httpOptions'], ctx: any) {
       let other: any = {}
       const options = parseCodeValid(httpOptions.options!, ctx)
@@ -150,61 +149,58 @@ export const initGlobalConfig = (page: Page | null) => {
         ...other
       }
       const isMp = project.interactiveType === 'xmmp'
-      // @ts-ignore
-      this.http = isMp
-        ? new MpHttp({
-          ...obj,
-          miniprogramRequestHandle (method: string, url: string, data: any) {
-            return new Promise((resolve, reject) => {
-              const isPost = /post/i.test(method)
-              if (!isPost && data) {
-                const param: string[] = []
-                Object.keys(data).forEach(k => {
-                  param.push(`${k}=${encodeURIComponent(data[k])}`)
-                })
-                url += `?${param.join('&')}`
-              }
-              // setTimeout(() => {
-              //   // reject({ success: false, msg: url })
-              //   resolve({ data: {
-              //     success: true,
-              //     data: {
-              //       list: [
-              //         {
-              //           title: '111'
-              //         }
-              //       ],
-              //       count: 20
-              //     }
-              //   } })
-              // }, 2000)
-              // return
-              // eslint-disable-next-line
-              window.xm
-                .fetch(baseUrl + url, {
-                  method,
-                  headers: { 'content-type': obj.contentType },
-                  cache: 'no-cache',
-                  body: isPost && data ? JSON.stringify(data) : null,
-                  // credentials: 'same-origin'
-                  credentials: true
-                })
-                .then((res: any) => res.json())
-                .then((res: any) => {
-                  console.log('fetch 返回', res)
-                  if (res.success) {
-                    resolve({ success: true, data: res })
-                  } else {
-                    reject(res)
-                  }
-                })
-                .catch((err: any) => {
-                  console.log('fetch 报错', err)
-                  reject(err)
-                })
+      function miniprogramRequestHandle (method: string, url: string, data: any) {
+        return new Promise((resolve, reject) => {
+          const isPost = /post/i.test(method)
+          if (!isPost && data) {
+            const param: string[] = []
+            Object.keys(data).forEach(k => {
+              param.push(`${k}=${encodeURIComponent(data[k])}`)
             })
+            url += `?${param.join('&')}`
           }
-        }) : new Http(obj)
+          // setTimeout(() => {
+          //   // reject({ success: false, msg: url })
+          //   resolve({ data: {
+          //     success: true,
+          //     data: {
+          //       list: [
+          //         {
+          //           title: '111'
+          //         }
+          //       ],
+          //       count: 20
+          //     }
+          //   } })
+          // }, 2000)
+          // return
+          // eslint-disable-next-line
+          window.xm
+            .fetch(baseUrl + url, {
+              method,
+              headers: { 'content-type': obj.contentType },
+              cache: 'no-cache',
+              body: isPost && data ? JSON.stringify(data) : null,
+              // credentials: 'same-origin'
+              credentials: true
+            })
+            .then((res: any) => res.json())
+            .then((res: any) => {
+              console.log('fetch 返回', res)
+              if (res.success) {
+                resolve({ success: true, data: res })
+              } else {
+                reject(res)
+              }
+            })
+            .catch((err: any) => {
+              console.log('fetch 报错', err)
+              reject(err)
+            })
+        })
+      }
+      // @ts-ignore
+      this.http = isMp ? new MpHttp({ ...obj, miniprogramRequestHandle }) : new Http(obj)
     },
     dot: function () {
       const release = process.env.VUE_APP_RELEASE

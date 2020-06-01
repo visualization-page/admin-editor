@@ -166,6 +166,9 @@ export default defineComponent<{
       watch(() => props.project, project => {
         if (project) {
           const pro = project as Project
+          // 加载 sdk
+          // @ts-ignore
+          globalConfig.value = initGlobalConfig(null)
           setCss(pro.css)
           setGlobalConstant(globalConfig.value, pro.constant)
           setGlobalUtils(globalConfig.value, pro.utils)
@@ -177,9 +180,9 @@ export default defineComponent<{
       console.log('render page start', ((Date.now() - window._domloadTime) / 1000), '秒')
       watch(() => props.currentPage, (page, oldPage) => {
         if (page) {
-          // window._renderStartTime = Date.now()
           // @ts-ignore
-          globalConfig.value = initGlobalConfig(page as Page)
+          // globalConfig.value = initGlobalConfig(page as Page)
+          // globalConfig.value.updatePage(page)
           // 页面
           setPageCode('state', page.state)
           setPageCode('methods', page.methods)
