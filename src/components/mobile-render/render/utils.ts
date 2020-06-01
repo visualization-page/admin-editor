@@ -257,14 +257,14 @@ export const initGlobalConfig = (page: Page | null) => {
       }
     },
     toPage (pageId: string, query?: { [k: string]: string }) {
-      let queryStr = ''
+      const queryStr: string[] = []
       const dir = window.globalProject ? window.globalProject.project.dir : project.dir
       if (query) {
         Object.keys(query).forEach(k => {
-          queryStr += `${k}=${query[k]}`
+          queryStr.push(`${k}=${query[k]}`)
         })
       }
-      location.href = `#/page/${dir}/${pageId}${queryStr ? `?${queryStr}` : ''}`
+      location.href = `#/page/${dir}/${pageId}${queryStr.length ? `?${queryStr.join('&')}` : ''}`
     },
     route () {
       return window.globalApp.$route
