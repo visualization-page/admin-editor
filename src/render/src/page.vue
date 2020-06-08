@@ -1,5 +1,6 @@
 <template>
   <render
+    v-if="project.depLoaded"
     :project="project"
     :currentPage="currentPage"
   />
