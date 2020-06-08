@@ -1,6 +1,6 @@
 <template>
   <render
-    v-if="project.depLoaded"
+    v-if="project && project.depLoaded"
     :project="project"
     :currentPage="currentPage"
   />
@@ -36,6 +36,9 @@ export default defineComponent({
     }
     this.project = data
     this.setPageById(this.$route.params.id)
+    vueCompositionApi.watch(() => project.depLoaded, load => {
+      this.project.depLoaded = load
+    })
   },
   methods: {
     setPageById (id) {

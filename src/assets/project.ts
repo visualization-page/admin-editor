@@ -167,12 +167,12 @@ export const importProject = async (parseItem: Project) => {
   if (parseItem) {
     parseItem.depLoaded = false
     updateProject(parseItem)
+    if (parseItem.componentUmd) {
+      await Promise.all(parseItem.componentUmd.map(item => loadItemUmd(item)))
+    }
     // 下载资源
     if (project.env === 'dev' && parseItem.componentDownload) {
       await diffDownloadDeps([], true)
-    }
-    if (parseItem.componentUmd) {
-      await Promise.all(parseItem.componentUmd.map(item => loadItemUmd(item)))
     }
     updateProject({ depLoaded: true })
     if (parseItem.pages.length) {

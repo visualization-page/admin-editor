@@ -12,6 +12,7 @@ const handle = {
     execSync(`rm -rf ${file}`)
   },
   spawn (cmd, args, options = {}) {
+    console.log(cmd, args)
     return new Promise((resolve, reject) => {
       const handle = spawn(cmd, args, options)
       handle.stdout.setEncoding('utf8')
@@ -24,7 +25,7 @@ const handle = {
       handle.stderr.setEncoding('utf8')
       handle.stderr.on('data', (data) => {
         console.error(`${cmd} stderr: \n${data}`)
-        reject(new Error(data))
+        // reject(new Error(data))
       })
       handle.on('close', (code) => {
         if (code === 0) {

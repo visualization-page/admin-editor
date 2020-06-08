@@ -407,6 +407,17 @@ const handle = {
       const arr = group.split('=')
       return arr[0] + '=' + publicPath + arr[1]
     })
+
+    // 如果是 彩云，则手动替换 https://statics-china.uban360.com/config/app.js
+    // 因为彩云 nginx 没有处理
+    if (globalProject.project.syncFile && globalProject.project.config.appType === 1) {
+      renderContent = renderContent.replace(
+        'https://statics-china.uban360.com/config/app.js',
+        'https://statics.jituancaiyun.com/config/app.js'
+      )
+    }
+
+    // 写文件
     await fs.outputFile(path.join(releasePath, 'index.html'), renderContent)
 
     // 检查 zip 是否存在，因为 download 生成 zip 时如果存在会报错
