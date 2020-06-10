@@ -1,6 +1,7 @@
 <template>
   <render
     v-if="project && project.depLoaded"
+    ref="render"
     :project="project"
     :currentPage="currentPage"
   />
@@ -32,7 +33,7 @@ export default defineComponent({
   },
   beforeRouteUpdate (to, from, next) {
     if (this.currentPage) {
-      const ctx = { $$page: this.currentPage, $$global: initGlobalConfig(this.currentPage) }
+      const ctx = this.$refs.render.getCtx()
       const es = this.currentPage.events.filter(x => x.eventType === 'beforeRouteLeave')
       if (es.length) {
         Promise.all(es.map(ev => {

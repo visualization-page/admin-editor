@@ -167,7 +167,7 @@ export const importProject = async (parseItem: Project) => {
   if (parseItem) {
     parseItem.depLoaded = false
     updateProject(parseItem)
-    if (parseItem.componentUmd) {
+    if (project.env === 'dev' && parseItem.componentUmd) {
       await Promise.all(parseItem.componentUmd.map(item => loadItemUmd(item)))
     }
     // 下载资源

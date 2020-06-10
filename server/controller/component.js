@@ -306,30 +306,6 @@ const handle = {
     renderContent = renderContent.split('%%%%')
     renderContent = renderContent[0] + JSON.stringify(globalProject) + renderContent[1]
 
-    // 将组件 js 合并生成文件
-    let jsContent = ''
-    // 去重
-    const componentDeps = []
-    globalProject.project.componentDownload.forEach(it => {
-      if (componentDeps.every(x => x.name !== it.name)) {
-        componentDeps.push(it)
-      }
-    })
-    for (let i = 0; i < componentDeps.length; i++) {
-      const item = componentDeps[i]
-      const c = await fs.readFile(path.join(pubPath, item.jsUrl.replace('/butterfly/static', '')))
-      jsContent += `${c}\n`
-    }
-    if (jsContent) {
-      const componentMergeFileName = isDev
-        ? 'component.js'
-        : `component.${dayjs().format('MMDDHHmmss')}.js`
-      await fs.outputFile(path.join(releasePath, componentMergeFileName), jsContent, 'utf8')
-      renderContent = renderContent.replace(
-        '</body>',
-        `<script src="${publicPath + componentMergeFileName}"></script></body>`
-      )
-    }
     // 处理 umd 组件
     if (globalProject.project.componentUmd) {
       const needDownload = []
@@ -359,6 +335,31 @@ const handle = {
           `<script src="${publicPath + umdFileName}"></script></body>`
         )
       }
+    }
+
+    // 将组件 js 合并生成文件
+    let jsContent = ''
+    // 去重
+    const componentDeps = []
+    globalProject.project.componentDownload.forEach(it => {
+      if (componentDeps.every(x => x.name !== it.name)) {
+        componentDeps.push(it)
+      }
+    })
+    for (let i = 0; i < componentDeps.length; i++) {
+      const item = componentDeps[i]
+      const c = await fs.readFile(path.join(pubPath, item.jsUrl.replace('/butterfly/static', '')))
+      jsContent += `${c}\n`
+    }
+    if (jsContent) {
+      const componentMergeFileName = isDev
+        ? 'component.js'
+        : `component.${dayjs().format('MMDDHHmmss')}.js`
+      await fs.outputFile(path.join(releasePath, componentMergeFileName), jsContent, 'utf8')
+      renderContent = renderContent.replace(
+        '</body>',
+        `<script src="${publicPath + componentMergeFileName}"></script></body>`
+      )
     }
 
     const { form, vant } = globalProject.project.componentLibrary

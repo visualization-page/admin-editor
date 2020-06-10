@@ -15,7 +15,7 @@ export const common = {
     position: {},
     margin: {},
     padding: {},
-    zIndex: 0,
+    // zIndex: 0,
     code: '(function () {\n  return {\n  }\n})()'
   },
   children: [],

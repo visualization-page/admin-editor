@@ -265,3 +265,7 @@ $$global.config = project.config = {
   
 > 20/06/01  
 - [x] 内部跳转 toPage 新增第三个参数 `{ method: 'replace' | 'push' }`  
+
+> 20/06/10 
+
+- [x] 增加页面钩子函数 beforeRouteLeave

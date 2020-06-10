@@ -135,11 +135,11 @@ export default defineComponent<{
       // 更新 page.state
       watch(() => props.currentPage && props.currentPage.state, state => {
         setPageCode('state', state)
-      })
+      }, { flush: 'pre' })
       // 更新 page.methods
       watch(() => props.currentPage && props.currentPage.methods, methods => {
         setPageCode('methods', methods)
-      })
+      }, { flush: 'pre' })
       // 更新 http
       watch(() => props.project && props.project.httpOptions, opt => {
         if (opt) {
@@ -157,7 +157,7 @@ export default defineComponent<{
       // 更新 page
       watch(() => props.currentPage, (page) => {
         page && globalConfig.value.updatePage(page)
-      })
+      }, { flush: 'pre' })
       // 更新 utils
       watch(() => props.project && props.project.utils, utils => {
         setGlobalUtils(globalConfig.value, utils)
@@ -201,7 +201,8 @@ export default defineComponent<{
     return {
       pageInit,
       pageConfig,
-      globalConfig
+      globalConfig,
+      getCtx
     }
   }
 })
