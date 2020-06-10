@@ -170,19 +170,16 @@ export default defineComponent({
     ImageResource
   },
   beforeRouteLeave (to: any, from: any, next: any) {
-    MessageBox.confirm('确定要离开吗？').then(() => {
-      // @ts-ignore
-      const { dir } = this.$route.params
-      if (dir) {
-        unlock(dir).then(() => {
-          next()
-        })
-      } else {
+    window.confirm('确定要离开吗？')
+    // @ts-ignore
+    const { dir } = this.$route.params
+    if (dir) {
+      unlock(dir).then(() => {
         next()
-      }
-    }).catch(() => {
-      next(false)
-    })
+      })
+    } else {
+      next()
+    }
   },
   setup (props, ctx) {
     const dir = ctx.root.$route.params.dir

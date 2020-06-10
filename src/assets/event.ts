@@ -7,7 +7,7 @@ export type FormEvent = {
 }
 
 export const eventType = ['click', 'change', 'input', 'focus', 'blur']
-export const eventTypePage = ['onMounted', 'onUnMounted']
+export const eventTypePage = ['onMounted', 'onUnMounted', 'beforeRouteLeave']
 export const fxList = [
   {
     name: 'toast 提示',

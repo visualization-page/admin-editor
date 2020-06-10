@@ -64,7 +64,7 @@ export default {
           // const containerScrollTop = ctx.parent.$refs.scrollContainer.scrollTop
           const containerScrollTop = p.getScrolltop()
           const mobileHeaderHeight = 65
-          // console.log(top, state.parentPosition.top, mobileHeaderHeight, containerScrollTop)
+          // console.log(ctx.parent.$el, top, state.parentPosition.top, mobileHeaderHeight, containerScrollTop)
           state.position = {
             left: left - state.parentPosition.left + 'px',
             top: top - state.parentPosition.top - mobileHeaderHeight + containerScrollTop + 2 + 'px',

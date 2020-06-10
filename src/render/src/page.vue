@@ -12,6 +12,8 @@ import { defineComponent } from '@vue/composition-api'
 import { project } from '@/assets/project'
 import { getProject } from './utils'
 import { Toast } from 'esc-ui'
+import { getEventHandler, initGlobalConfig } from '../../components/mobile-render/render/utils'
+import { parseCodeValid } from '../../assets/util'
 
 export default defineComponent({
   components: {
@@ -26,6 +28,31 @@ export default defineComponent({
   watch: {
     '$route.params.id': function (id) {
       this.setPageById(id)
+    }
+  },
+  beforeRouteUpdate (to, from, next) {
+    if (this.currentPage) {
+      const ctx = { $$page: this.currentPage, $$global: initGlobalConfig(this.currentPage) }
+      const es = this.currentPage.events.filter(x => x.eventType === 'beforeRouteLeave')
+      if (es.length) {
+        Promise.all(es.map(ev => {
+          const { ok, msg, value } = parseCodeValid(ev.fxCode, ctx)
+          if (ok) {
+            return value
+          }
+          console.error(msg)
+        }).filter(Boolean))
+          .then(() => {
+            next()
+          })
+          .catch(() => {
+            next(false)
+          })
+      } else {
+        next()
+      }
+    } else {
+      next()
     }
   },
   async created () {

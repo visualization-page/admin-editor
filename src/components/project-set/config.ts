@@ -34,17 +34,6 @@ export const local = [
     }
   },
   {
-    label: '项目访问正式地址',
-    field: 'url',
-    type: 'textarea',
-    elProps: {
-    },
-    elAttrs: {
-      // readonly: true
-      placeholder: '根据你填写的目标机器目录绑定的域名来定'
-    }
-  },
-  {
     label: '调试控制台',
     field: 'config.openConsole',
     type: 'checkbox'
@@ -82,11 +71,6 @@ export const local = [
         value: 'application/x-www-form-urlencoded'
       }
     ]
-  },
-  {
-    label: 'urlMap',
-    field: 'httpOptions.urlMap',
-    type: 'input-group'
   },
   {
     label: 'Http选项',
@@ -179,6 +163,23 @@ export const local = [
     prepend: '/data/webapps/'
   },
   {
+    relation: [
+      {
+        field: 'syncFile',
+        value: true
+      }
+    ],
+    label: '项目访问正式地址',
+    field: 'url',
+    type: 'textarea',
+    elProps: {
+    },
+    elAttrs: {
+      // readonly: true
+      placeholder: '根据你填写的目标机器目录绑定的域名来定'
+    }
+  },
+  {
     label: '项目类型',
     field: 'interactiveType',
     type: 'select',
@@ -200,11 +201,11 @@ export const local = [
       disabled: false
     }
   },
-  {
-    label: '封面图',
-    field: 'thumbCover',
-    type: 'image'
-  },
+  // {
+  //   label: '封面图',
+  //   field: 'thumbCover',
+  //   type: 'image'
+  // },
   {
     label: '全局css',
     field: 'css',
@@ -239,5 +240,10 @@ export const local = [
     type: 'code',
     'info-icon': 'el-icon-mouse',
     info: '使用方法：在项目全局中任何地方，例如：$$global.constant.[fieldName]'
+  },
+  {
+    label: 'urlMap',
+    field: 'httpOptions.urlMap',
+    type: 'input-group'
   }
 ]

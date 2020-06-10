@@ -195,6 +195,7 @@ export default createComponent({
       handleConfirm,
       handleAdd () {
         showModal.value = true
+        editItemIndex.value = -1
         resetForm(defaultForm)
         if (!isFromPage.value) {
           // 从树形中查找节点并记录 path
