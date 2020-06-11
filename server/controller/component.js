@@ -404,7 +404,7 @@ const handle = {
     // href=css href=js src=js
     // 替换 publicPath
     renderContent = renderContent.replace('_PUBLIC_PATH=\'./\'', `_PUBLIC_PATH='${publicPath}'`)
-    renderContent = renderContent.replace(/(href=css|href=js|href=v|src=js|src=v)/g, (match, group) => {
+    renderContent = renderContent.replace(/(href=css|href=js|href=v|src=js|src=v|src=x|src=n)/g, (match, group) => {
       const arr = group.split('=')
       return arr[0] + '=' + publicPath + arr[1]
     })
