@@ -100,7 +100,10 @@ export default defineComponent({
     NodeProperty
   },
   beforeRouteLeave (to: any, from: any, next: any) {
-    window.confirm('确定要离开吗？')
+    const ok = window.confirm('确定要离开吗？')
+    if (!ok) {
+      return next(false)
+    }
     // @ts-ignore
     const { dir } = this.$route.params
     if (dir) {
