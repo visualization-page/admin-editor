@@ -1,16 +1,22 @@
 <template>
-  <div class="page-list">
+  <div
+    class="page-list"
+    :class="{
+      'flex': sample
+    }"
+  >
     <div
       v-for="(item) in project.pages"
       :key="item.id"
-      class="page-list__item flex-center-between c-999 relative pl15 cp"
+      class="page-list__item flex-center-between c-999 relative plr15 cp"
       :class="{
-        active: selected && selected.id === item.id
+        active: selected && selected.id === item.id,
+        mr15: sample
       }"
       @click="setSelect(item)"
     >
       <span><span v-if="item.isIndex">[首页]</span> {{ item.title || item.id }}</span>
-      <div class="pr15">
+      <div class="pr15" v-if="!sample">
         <el-tooltip v-if="false" effect="dark" content="导出页面为模版" placement="top">
           <i class="el-icon-brush mr10" @click.stop="handleExportPage(item)" />
         </el-tooltip>
@@ -22,7 +28,7 @@
         </el-tooltip>
       </div>
     </div>
-    <div class="page-list__item flex-center c-999 cp" @click="addPage">
+    <div v-if="!sample" class="page-list__item flex-center c-999 cp" @click="addPage">
       <i class="el-icon-plus f14" />
       <span>新建空白页面</span>
     </div>
@@ -39,7 +45,9 @@ import { setState as setCodeEditState } from '@/assets/code-edit'
 export default createComponent({
   components: {
   },
-
+  props: {
+    sample: Boolean
+  },
   setup () {
     return {
       project,

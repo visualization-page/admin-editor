@@ -269,3 +269,7 @@ $$global.config = project.config = {
 > 20/06/10 
 
 - [x] 增加页面钩子函数 beforeRouteLeave
+
+> 20/06/14
+
+- [x] 极简版发布

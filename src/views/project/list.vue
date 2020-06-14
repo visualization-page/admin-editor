@@ -1,17 +1,30 @@
 <template>
-  <div class="project-list__wrap height-100">
+  <div class="project-list__wrap">
     <div class="app-header">
       <header-opt
         :opts="opts"
-      />
+      >
+        <div class="flex-center">
+          <div
+            class="ml15 cp flex items-center"
+            :style="{ color: isDev ? '#fe7d37' : '#67C23A' }"
+            @click="changeMode"
+          >
+            <div>
+              <p>当前为 </p>
+              <span v-if="isDev">开发版</span>
+              <span v-else>极简版</span>
+            </div>
+            <i class="el-icon-caret-bottom" />
+          </div>
+          <div class="h30 bg-666 ml15" style="width:2px" />
+          <avatar />
+        </div>
+      </header-opt>
     </div>
     <div class="project-list__title flex justify-between">
       <div class="flex-center">
         <span class="f18 b">项目列表</span>
-        <span class="ml20 f12 c-999">当前模式：</span>
-        <span v-if="mode === 'normal'" class="f12 mr10" style="color: #fe7d37">高级开发版</span>
-        <span v-else class="f12 mr10" style="color: #67C23A">简单版</span>
-        <el-button icon="el-icon-caret-bottom" type="text" @click="changeMode">切换</el-button>
       </div>
       <el-form inline>
         <el-form-item label="搜索类型">
@@ -93,12 +106,14 @@
           width="230">
           <template slot-scope="scope">
             <el-button @click="handlePreview(scope.row)" type="text" size="small">查看</el-button>
-            <el-button @click="handleCopy(scope.row)" type="text" size="small">复制</el-button>
-            <el-button @click="handleDown(scope.row)" type="text" size="small">下载</el-button>
-            <el-button @click="handleExport(scope.row)" type="text" size="small">导出</el-button>
+            <template v-if="isDev">
+              <el-button @click="handleCopy(scope.row)" type="text" size="small">复制</el-button>
+              <el-button @click="handleDown(scope.row)" type="text" size="small">下载</el-button>
+              <el-button @click="handleExport(scope.row)" type="text" size="small">导出</el-button>
+            </template>
             <template v-if="hasPriv(scope.row)">
-              <el-button @click="handleDel(scope.row)" type="text" size="small">删除</el-button>
-              <el-button @click="$router.push(`/editor/${scope.row.dir}`)" type="text" size="small">编辑</el-button>
+              <el-button v-if="isDev" @click="handleDel(scope.row)" type="text" size="small">删除</el-button>
+              <el-button @click="$router.push(`/editor${isDev ? '' : '-sample'}/${scope.row.dir}`)" type="text" size="small">编辑</el-button>
             </template>
           </template>
         </el-table-column>
@@ -112,10 +127,17 @@ import HeaderOpt from '@/components/header-opts/index.vue'
 import { http } from '@/api'
 import { MessageBox, Message } from 'element-ui'
 import dayjs from 'dayjs'
+import Avatar from '@/components/avatar/index.vue'
 
 export default {
   components: {
-    HeaderOpt
+    HeaderOpt,
+    Avatar
+  },
+  computed: {
+    isDev () {
+      return this.mode === 'normal'
+    }
   },
   data () {
     return {
@@ -233,9 +255,9 @@ export default {
         window.open(item.url)
       } else {
         // Message.info('项目还未提供正式访问的地址，请点击编辑进入预览项目')
-        MessageBox.alert('项目未发布正式地址，即将查看预览').then(() => {
-          window.open(process.env.VUE_APP_MOBILE + `#/project/${item.dir}`)
-        })
+        // MessageBox.alert('项目未发布正式地址，即将查看预览').then(() => {
+        window.open(process.env.VUE_APP_MOBILE + `#/project/${item.dir}`)
+        // })
       }
     },
     async handleCopy (item) {

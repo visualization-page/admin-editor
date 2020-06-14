@@ -1,5 +1,5 @@
 <template>
-  <div class="editor height-100" overflow-h>
+  <div class="editor" overflow-h>
     <div class="app-header">
       <header-opt />
     </div>
@@ -244,7 +244,7 @@ export default defineComponent({
 </script>
 
 <style lang="less">
-@import '../style/hack-vant-form.less';
+@import '../../style/hack-vant-form.less';
 @import '~esc-ui/lib/button/index.css';
 @import '~esc-ui/lib/page-button/index.css';
 .editor {

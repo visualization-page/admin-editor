@@ -142,7 +142,7 @@ export const deepMerge = (origin: any, obj?: any): any => {
 }
 
 export function loadSdk (type: string) {
-  return new Promise((resolve) => {
+  return new Promise((resolve, reject) => {
     const d = window.define
     window.JSBridge = undefined
     // hack monaco editor require
@@ -171,6 +171,10 @@ export function loadSdk (type: string) {
     script.onload = () => {
       window.define = d
       resolve()
+    }
+    script.onerror = () => {
+      window.define = d
+      reject(new Error('load sdk error'))
     }
     document.body.appendChild(script)
   })

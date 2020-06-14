@@ -41,7 +41,6 @@ export const loadItem = (item: NodeItemBasic): Promise<{ default: any }> => {
 
 export const loadItemUmd = (item: NodeUmd, load: boolean = true): Promise<{ default: any }> => {
   const elem = document.querySelector(`script.${item.label}`)
-  const defineBak = window.define
   return new Promise((resolve, reject) => {
     if (!load) {
       if (elem) {
@@ -53,19 +52,22 @@ export const loadItemUmd = (item: NodeUmd, load: boolean = true): Promise<{ defa
     if (elem) {
       return resolve(window[item.umdName])
     }
+    window.defineBak = window.define
     window.define = null
     const script = document.createElement('script')
     script.src = item.url
     script.setAttribute('class', item.label)
-    document.body.appendChild(script)
+    // console.log('window.define = null')
     script.onload = () => {
-      window.define = defineBak
+      // console.log('window.define = defineBak')
+      window.define = window.defineBak
       resolve(window[item.umdName])
     }
     script.onerror = () => {
-      window.define = defineBak
+      window.define = window.defineBak
       reject(new Error(`item.label ${item.url} download fail`))
     }
+    document.body.appendChild(script)
   })
 }
 
