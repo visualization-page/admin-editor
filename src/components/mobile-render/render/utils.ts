@@ -40,10 +40,12 @@ export const loadItem = (item: NodeItemBasic): Promise<{ default: any }> => {
 }
 
 export const loadItemUmd = (item: NodeUmd, load: boolean = true): Promise<{ default: any }> => {
-  const elem = document.querySelector(`script.${item.label}`)
+  const elem = document.getElementsByClassName(item.label)[0]
+  // console.log('loadItemUmd ', item.label, elem)
   return new Promise((resolve, reject) => {
     if (!load) {
       if (elem) {
+        // @ts-ignore
         elem.remove()
         delete window[item.umdName]
       }

@@ -30,7 +30,7 @@ export default defineComponent({
     // 为了防止本地开发时，引入 sdk 方法报错
     watch(() => project.interactiveType, type => {
       loadSdk(type)
-    })
+    }, { lazy: true })
     return {
       local,
       detail: project,

@@ -3,7 +3,7 @@ import { reactive } from '@vue/composition-api'
 import { loadItem, loadItemUmd } from '@/components/mobile-render/render/utils'
 import { Page, setCurrentPage, currentPage } from './page'
 import { NodeItemBasic, NodeUmd, setCurrentNode } from './node'
-import { deepClone } from '@/assets/util'
+import { deepClone, loadSdk } from '@/assets/util'
 import { http } from '@/api'
 import { Message } from 'element-ui'
 
@@ -166,6 +166,7 @@ export const saveProject = (
 export const importProject = async (parseItem: Project) => {
   if (parseItem) {
     parseItem.depLoaded = false
+    await loadSdk(parseItem.interactiveType)
     updateProject(parseItem)
     if (project.env === 'dev' && parseItem.componentUmd) {
       await Promise.all(parseItem.componentUmd.map(item => loadItemUmd(item)))

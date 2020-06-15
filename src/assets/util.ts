@@ -143,10 +143,6 @@ export const deepMerge = (origin: any, obj?: any): any => {
 
 export function loadSdk (type: string) {
   return new Promise((resolve, reject) => {
-    const d = window.define
-    window.JSBridge = undefined
-    // hack monaco editor require
-    window.define = undefined
     let oId
     let id
     let src
@@ -161,10 +157,19 @@ export function loadSdk (type: string) {
       id = 'xmmp'
       src = 'xmmp/xmmp.min.js'
     }
+    if (document.getElementById(id)) {
+      // console.log('load sdk ', id, 'exist!')
+      return resolve()
+    }
     const item = document.getElementById(oId)
     if (item) {
       document.body.removeChild(item)
     }
+    const d = window.define
+    // console.log('loadSdk ', type, d)
+    window.JSBridge = undefined
+    // hack monaco editor require
+    window.define = undefined
     const script = document.createElement('script')
     script.id = id
     script.src = src
