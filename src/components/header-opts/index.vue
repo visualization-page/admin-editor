@@ -1,30 +1,10 @@
 <template>
   <div class="header-opt height-100 flex-center-between plr20">
     <div class="flex items-center cp" @click="$router.push('/')">
-      <span class="f32 c-fff">Butterfly</span>
+      <img height="40px" src="../../assets/img/logo.png" alt="">
       <div class="ml10">
-        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="67" height="20">
-          <linearGradient id="b" x2="0" y2="100%">
-            <stop offset="0" stop-color="#bbb" stop-opacity=".1"/>
-            <stop offset="1" stop-opacity=".1"/>
-          </linearGradient><clipPath id="a">
-          <rect width="67" height="20" rx="3" fill="#fff"/>
-        </clipPath>
-          <g clip-path="url(#a)">
-            <path fill="#9f9f9f" d="M0 0h0v20H0z"/>
-            <path fill="#9f9f9f" d="M0 0h67v20H0z"/>
-            <path fill="url(#b)" d="M0 0h67v20H0z"/>
-          </g>
-          <g fill="#fff" text-anchor="middle" font-family="DejaVu Sans,Verdana,Geneva,sans-serif" font-size="110">
-            <text x="335" y="150" fill="#010101" fill-opacity=".3" transform="scale(.1)" textLength="570">
-              {{ $version }}
-            </text>
-            <text x="335" y="140" transform="scale(.1)" textLength="570">
-              {{ $version }}
-            </text>
-          </g>
-        </svg>
-        <p class="c-aaa">产品运营也能用的 H5 在线开发平台</p>
+        <span class="f28 c-fff" style="line-height: 1;text-shadow: 2px 1px 3px rgba(0,0,0,0.1);color:rgb(255,128,41)">Butterfly</span>
+        <p class="c-ccc f10">产品运营也能用的 H5 在线开发平台</p>
       </div>
     </div>
     <div class="flex">

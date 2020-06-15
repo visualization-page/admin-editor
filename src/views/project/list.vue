@@ -4,10 +4,9 @@
       <header-opt
         :opts="opts"
       >
-        <div class="flex-center">
+        <div class="flex-center c-blue">
           <div
             class="ml15 cp flex items-center"
-            :style="{ color: isDev ? '#fe7d37' : '#67C23A' }"
             @click="changeMode"
           >
             <div>
