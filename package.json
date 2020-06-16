@@ -24,7 +24,7 @@
     "core-js": "^3.4.3",
     "dayjs": "^1.8.23",
     "element-ui": "^2.13.0",
-    "esc-ui": "^2.0.20",
+    "esc-ui": "^2.0.21",
     "express": "^4.17.1",
     "express-fileupload": "^1.1.6",
     "fs-extra": "^9.0.0",

@@ -3,7 +3,7 @@
     <div class="flex items-center cp" @click="$router.push('/')">
       <img height="40px" src="../../assets/img/logo.png" alt="">
       <div class="ml10">
-        <span class="f28 c-fff" style="line-height: 1;text-shadow: 2px 1px 3px rgba(0,0,0,0.1);color:rgb(255,128,41)">Butterfly</span>
+        <span class="f28 c-fff" style="line-height: 1;text-shadow: 2px 1px 3px rgba(0,0,0,0.1);color:#fff">Butterfly</span>
         <p class="c-ccc f10">产品运营也能用的 H5 在线开发平台</p>
       </div>
     </div>
