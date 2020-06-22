@@ -39,18 +39,26 @@ export const local = [
     type: 'checkbox'
   },
   {
-    label: '开发环境',
+    label: '本机预览环境',
     field: 'config.dev',
     type: 'input-group',
     'info-icon': 'el-icon-warning-outline',
-    info: '开发环境用到的变量键值对，使用: $$global.config.baseUrl'
+    info: '本机开发、预览环境用到的变量键值对，使用: $$global.config.baseUrl'
   },
   {
-    label: '正式环境',
+    label: '默认发布环境',
     field: 'config.pro',
     type: 'input-group',
     'info-icon': 'el-icon-warning-outline',
-    info: '正式环境用到的变量键值对，使用: $$global.config.baseUrl'
+    info: '发布环境用到的变量键值对，使用: $$global.config.baseUrl'
+  },
+  {
+    label: '其它发布环境',
+    field: 'config.proArr',
+    type: 'input-group-arr',
+    'info-icon': 'el-icon-warning-outline',
+    // block: true,
+    info: '如果默认的发布环境不够用，新增其它发布环境，在发布时选择对应环境即可'
   },
   {
     label: 'baseUrl',

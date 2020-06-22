@@ -131,7 +131,7 @@ export const initGlobalConfig = (page: Page | null) => {
     page,
     utils: {},
     dotInstance: null,
-    config: project.config[project.env],
+    config: project.config[window.globalProject ? project.env : 'dev'], // 预览时走开发环境配置
     http: null,
     initHttp: function (httpOptions: Project['httpOptions'], ctx: any) {
       let other: any = {}

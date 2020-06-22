@@ -43,57 +43,53 @@
         <avatar />
       </slot>
     </div>
+
+    <pub-modal
+      v-if="showPubModal"
+      @confirm="doPub"
+      @close="showPubModal = false"
+    />
   </div>
 </template>
 
 <script lang="ts">
 import Vue from 'vue'
-import { defineComponent } from '@vue/composition-api'
+import { defineComponent, ref } from '@vue/composition-api'
 import { project, saveProject } from '@/assets/project'
 // import { currentPage } from '@/assets/page'
-import { Message, MessageBox } from 'element-ui'
+import { Message } from 'element-ui'
 import { http } from '@/api'
 import Avatar from '@/components/avatar/index.vue'
+import PubModal from '@/views/editor/components/before-publish-modal.vue'
 
 export default defineComponent({
   props: {
     opts: Array
   },
   components: {
-    Avatar
+    Avatar,
+    PubModal
   },
   setup (props, ctx) {
-    // const handleSave = (force?: boolean, remark?: string, notify?: boolean) => http.post('project/save', {
-    //   dir: project.dir,
-    //   force,
-    //   project: {
-    //     ...project,
-    //     info: {
-    //       ...project.info,
-    //       remark,
-    //       userName: Vue.prototype.$native.name,
-    //       time: Date.now()
-    //     }
-    //   }
-    // }, {
-    //   codeCallback: {
-    //     6001: async () => {
-    //       // await MessageBox.confirm('项目已存在，不允许覆盖！')
-    //       // await handleSave(true)
-    //       Message.error('项目已存在')
-    //     }
-    //   },
-    //   notify: notify !== false
-    // })
+    const showPubModal = ref(false)
+    const doPub = async (remark: string) => {
+      showPubModal.value = false
+      // console.log(remark, project.config.selectProEnv)
+      await saveProject(true, remark, false)
+      await http.post(
+        'project/release',
+        {
+          dir: project.dir,
+          info: {
+            userName: Vue.prototype.$native.name,
+            remark,
+            time: Date.now()
+          }
+        },
+        { successMessage: '项目发布成功' }
+      )
+    }
     const localOpts = [
-      // {
-      //   label: '生成源码',
-      //   icon: 'el-icon-magic-stick f16',
-      //   action: async () => {
-      //     const res = await http.post('project/gen', { dir: project.dir })
-      //     location.href = res.data.url
-      //   }
-      // },
       {
         label: '下载项目',
         icon: 'el-icon-download f16',
@@ -104,13 +100,6 @@ export default defineComponent({
           location.href = process.env.VUE_APP_FILE_SERVER + `/butterfly/project/download/${project.dir}`
         }
       },
-      // {
-      //   label: '反馈建议',
-      //   icon: 'el-icon-chat-line-round f16',
-      //   action: () => {
-      //     ctx.root.$router.push('/suggest')
-      //   }
-      // },
       {
         label: '发布项目',
         icon: 'el-icon-position f16',
@@ -124,38 +113,17 @@ export default defineComponent({
             return Message.error('请输入项目部署目标机器目录')
           }
           // await MessageBox.confirm('发布不会保存项目，请确认已保存?')
-          const { value }: any = await MessageBox.prompt('请输入发布备注', {
-            inputPlaceholder: '至少3个字',
-            inputValue: sessionStorage.getItem('publish-remark') || ''
-          })
-          if (!value || value.length < 3) {
-            return Message.error('至少3个字')
-          }
-          sessionStorage.setItem('publish-remark', value)
-          await saveProject(true, value, false)
-          await http.post(
-            'project/release',
-            {
-              dir: project.dir,
-              info: {
-                userName: Vue.prototype.$native.name,
-                remark: value,
-                time: Date.now()
-              }
-            },
-            { successMessage: '项目发布成功' }
-          )
+          // const { value }: any = await MessageBox.prompt('请输入发布备注', {
+          //   inputPlaceholder: '至少3个字',
+          //   inputValue: sessionStorage.getItem('publish-remark') || ''
+          // })
+          // if (!value || value.length < 3) {
+          //   return Message.error('至少3个字')
+          // }
+          // sessionStorage.setItem('publish-remark', value)
+          showPubModal.value = true
         }
       },
-      // {
-      //   label: '清除本地',
-      //   icon: 'el-icon-delete f16',
-      //   action: () => {
-      //     localStorage.removeItem('local')
-      //     resetProject()
-      //     Message.success('清除成功')
-      //   }
-      // },
       {
         label: '保存项目',
         icon: 'iconfont icon-save',
@@ -172,25 +140,6 @@ export default defineComponent({
           }
         }
       },
-      // {
-      //   label: '保存本地',
-      //   icon: 'el-icon-finished f16',
-      //   action: () => {
-      //     exportProjectLocal()
-      //     Message.success('保存成功')
-      //   }
-      // },
-      // {
-      //   label: '预览页面',
-      //   icon: 'el-icon-document-remove f16',
-      //   action: () => {
-      //     if (currentPage.value) {
-      //       window.open(process.env.VUE_APP_MOBILE + `#/page/${project.dir}/${currentPage.value.id}`)
-      //     } else {
-      //       Message.info('请选中一个页面')
-      //     }
-      //   }
-      // },
       {
         label: '查看项目',
         icon: 'el-icon-folder-opened f16',
@@ -201,6 +150,8 @@ export default defineComponent({
     ]
     return {
       localOpts,
+      showPubModal,
+      doPub,
       handleResponse (res: any, item: any) {
         if (res.success) {
           Message.success('上传成功')

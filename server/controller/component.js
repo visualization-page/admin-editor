@@ -289,12 +289,18 @@ const handle = {
     })
 
     // 切换为正式环境
-    globalProject.project.env = 'pro'
+    // globalProject.project.env = 'pro'
+    // 将其它发布环境平铺出来
+    if (globalProject.project.config.proArr.length) {
+      globalProject.project.config.proArr.forEach(it => {
+        globalProject.project.config[it.name] = it.kv
+      })
+    }
     // 编译 code
     globalProject.project = await utils.babel(globalProject.project)
     // 改写 index.html 中的 publicPath
     const releaseHtmlPath = path.join(releasePath, 'index.html')
-    const publicPath = globalProject.project.config.pro.publicPath || ''
+    const publicPath = globalProject.project.config[globalProject.project.env].publicPath || ''
     let renderContent = await fs.readFile(releaseHtmlPath, 'utf8')
     renderContent = renderContent
       // 插入 data 引入 window.globalProject

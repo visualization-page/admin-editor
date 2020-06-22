@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-button type="text" @click="handleAdd">添加</el-button>
+    <el-button type="text" @click="handleAdd">{{ label }}</el-button>
     <div
       v-for="(x, i) in arr"
       :key="i"
@@ -32,7 +32,11 @@ import { getParentRef } from '@/assets/util'
 export default createComponent({
   props: {
     schema: Object,
-    schemaData: Object
+    schemaData: Object,
+    label: {
+      type: String,
+      default: '添加'
+    }
   },
 
   setup (props, context) {

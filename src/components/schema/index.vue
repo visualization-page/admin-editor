@@ -4,6 +4,7 @@ import { MessageBox } from 'element-ui'
 import { defineComponent, createElement, reactive, watch } from '@vue/composition-api'
 import { renderInput, renderInputBind, renderSelect, renderCheckbox, renderUniversal, renderCodeEditor } from './render-item'
 import RenderInputGroup from './render-input-group.vue'
+import RenderInputGroupArr from './render-input-group-arr.vue'
 import RenderEvents from './render-events.vue'
 import RenderUnitSize from './render-unit-size.vue'
 import RenderDirectionSize from './render-direction-size.vue'
@@ -96,6 +97,8 @@ export default defineComponent({
           return renderUniversal('el-color-picker', schema, props.schemaData, updateField)
         case 'input-group':
           return renderCompositeComponent(RenderInputGroup, schema)
+        case 'input-group-arr':
+          return renderCompositeComponent(RenderInputGroupArr, schema)
         case 'unit-size':
           return renderCompositeComponent(RenderUnitSize, schema)
         case 'direction-size':

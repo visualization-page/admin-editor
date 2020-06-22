@@ -44,7 +44,12 @@ export type Project = {
     pro: {
       baseUrl: string
       publicPath: string
-    }
+    },
+    proArr: Array<{
+      baseUrl: string
+      publicPath: string
+      [k: string]: string
+    }>
   }
   createUser: string
   info: {
@@ -92,7 +97,7 @@ const defaultProject: Project = {
   ],
   componentUmd: [
   ],
-  syncFile: true,
+  syncFile: false,
   config: {
     appType: 1,
     path: '',
@@ -105,7 +110,8 @@ const defaultProject: Project = {
     pro: {
       baseUrl: '/',
       publicPath: './'
-    }
+    },
+    proArr: []
   },
   // 后台第一次创建时赋值
   createUser: '',
@@ -211,10 +217,6 @@ export const diffDownloadDeps = async (items: NodeItemBasic[], init = false) => 
 }
 
 export const initProject = async (item?: Project) => {
-  // watch(() => project, val => {
-  //   console.dir(val)
-  // }, { lazy: true, deep: true })
-
   if (item) {
     await importProject(item)
   } else {
@@ -231,3 +233,7 @@ export const resetProject = () => {
   setCurrentPage(null)
   setCurrentNode(null)
 }
+
+// watch(() => project, val => {
+//   console.dir(val)
+// }, { lazy: true, deep: true })
