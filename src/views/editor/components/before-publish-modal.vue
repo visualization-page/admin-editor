@@ -6,7 +6,6 @@
     width="400px"
     @close="$emit('close')"
   >
-    <template v-if="project.config.proArr.length">
       <p class="mb10">选择发布环境</p>
       <el-radio-group
         v-model="project.env"
@@ -17,15 +16,16 @@
         <div class="mb5">
           <el-radio label="pro">默认发布环境</el-radio>
         </div>
-        <div
-          v-for="(it, i) in project.config.proArr.map(x => x.name)"
-          :key="i"
-          class="mb5"
-        >
-          <el-radio :label="it" />
-        </div>
+        <template v-if="project.config.proArr">
+          <div
+            v-for="(it, i) in project.config.proArr.map(x => x.name)"
+            :key="i"
+            class="mb5"
+          >
+            <el-radio :label="it" />
+          </div>
+        </template>
       </el-radio-group>
-    </template>
     <div class="flex items-center mt20">
       <span class="flex-shrink-0 mr15">备注</span>
       <el-input placeholder="请输入至少 3 个字符" v-model="remark" />

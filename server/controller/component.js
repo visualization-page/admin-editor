@@ -291,7 +291,7 @@ const handle = {
     // 切换为正式环境
     // globalProject.project.env = 'pro'
     // 将其它发布环境平铺出来
-    if (globalProject.project.config.proArr.length) {
+    if (globalProject.project.config.proArr && globalProject.project.config.proArr.length) {
       globalProject.project.config.proArr.forEach(it => {
         globalProject.project.config[it.name] = it.kv
       })
