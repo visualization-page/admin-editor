@@ -186,7 +186,9 @@ export const initGlobalConfig = (page: Page | null) => {
               cache: 'no-cache',
               body: isPost && data ? JSON.stringify(data) : null,
               // credentials: 'same-origin'
-              credentials: true
+              credentials: true,
+              // 小程序发起请求，由客户端拼上 baseUrl
+              isRelative: true
             })
             .then((res: any) => res.json())
             .then((res: any) => {
