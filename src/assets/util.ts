@@ -150,12 +150,12 @@ export function loadSdk (type: string) {
       // 引入 native
       oId = 'xmmp'
       id = 'native'
-      src = 'native/native.js'
+      src = (window._PUBLIC_PATH || '') + 'native/native.js'
     } else {
       // 引入 xmmp
       oId = 'native'
       id = 'xmmp'
-      src = 'xmmp/xmmp.min.js'
+      src = (window._PUBLIC_PATH || '') + 'xmmp/xmmp.min.js'
     }
     if (document.getElementById(id)) {
       // console.log('load sdk ', id, 'exist!')

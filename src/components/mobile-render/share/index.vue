@@ -24,7 +24,7 @@
 </template>
 
 <script>
-import Vue from 'vue'
+// import Vue from 'vue'
 
 export default {
   name: 'share',
@@ -78,7 +78,7 @@ export default {
     },
     share (type) {
       this.$emit('close')
-      Vue.prototype.$native.native('outershare',
+      window.JSBridge.native('outershare',
         {
           type: type,
           title: this.title,
