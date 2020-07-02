@@ -170,15 +170,16 @@ export const saveProject = (
 })
 
 export const importProject = async (parseItem: Project) => {
+  const inAdminPlatform = /tms\.uban360/.test(location.hostname)
   if (parseItem) {
     parseItem.depLoaded = false
     await loadSdk(parseItem.interactiveType)
     updateProject(parseItem)
-    if (project.env === 'dev' && parseItem.componentUmd) {
+    if (inAdminPlatform && parseItem.componentUmd) {
       await Promise.all(parseItem.componentUmd.map(item => loadItemUmd(item)))
     }
     // 下载资源
-    if (project.env === 'dev' && parseItem.componentDownload) {
+    if (inAdminPlatform && parseItem.componentDownload) {
       await diffDownloadDeps([], true)
     }
     updateProject({ depLoaded: true })
