@@ -48,7 +48,7 @@
     </div>
     <div class="project-list">
       <el-table
-        :data="searchModel.searchList || tableData"
+        :data="searchModel.searchList || currentPageData"
         border
         stripe
         style="width: 100%">
@@ -117,6 +117,17 @@
           </template>
         </el-table-column>
       </el-table>
+      <div v-show="!searchModel.keywords" class="tc ptb20">
+        <el-pagination
+          background
+          layout="prev, pager, next"
+          :total="tableData.length"
+          :page-size="pageSize"
+          @current-change="handlePage"
+          @prev-click="handlePage"
+          @next-click="handlePage"
+        />
+      </div>
     </div>
   </div>
 </template>
@@ -136,6 +147,9 @@ export default {
   computed: {
     isDev () {
       return this.mode === 'normal'
+    },
+    currentPageData () {
+      return this.tableData.slice((this.currentPage - 1) * this.pageSize, this.currentPage * this.pageSize)
     }
   },
   data () {
@@ -201,13 +215,18 @@ export default {
           }
         }
       ],
-      tableData: []
+      tableData: [],
+      currentPage: 1,
+      pageSize: 10
     }
   },
   created () {
     this.getList()
   },
   methods: {
+    handlePage (val) {
+      this.currentPage = val
+    },
     changeMode () {
       let mode = 'normal'
       if (this.mode === 'normal') {
