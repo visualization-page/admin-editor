@@ -291,3 +291,4 @@ $$global.config = project.config = {
 > 20/07/03
 
 - [ ] 列表缩略图展示
+- [ ] 展示布局新增 web，可以支持宽屏的需求

@@ -151,6 +151,18 @@ export const local = [
       {
         label: '广西和安',
         value: 51
+      },
+      {
+        label: '和办公测试',
+        value: 66
+      },
+      {
+        label: '和办公',
+        value: 88
+      },
+      {
+        label: '标准',
+        value: 100
       }
     ]
   },
