@@ -14,6 +14,7 @@
     "restart:pro": "pm2 restart pm2-pro.json"
   },
   "dependencies": {
+    "@babel/preset-env": "^7.10.4",
     "@chenfengyuan/vue-qrcode": "^1.0.2",
     "@tinymce/tinymce-vue": "^3.0.1",
     "@vue/composition-api": "^0.5.0",
@@ -21,7 +22,7 @@
     "blueimp-md5": "^2.13.0",
     "body-parser": "^1.19.0",
     "cookie-parser": "^1.4.5",
-    "core-js": "^3.4.3",
+    "core-js": "^3.6.5",
     "dayjs": "^1.8.23",
     "element-ui": "^2.13.0",
     "esc-ui": "^2.0.21",

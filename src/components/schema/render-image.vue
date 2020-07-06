@@ -24,7 +24,8 @@
       type="textarea"
       placeholder="可以直接输入链接，或点击上传后自动输入"
       :value="src"
-      @input="val => $emit('change', val)"
+      @input="val => src = val"
+      @blur="$emit('change', src)"
     />
   </div>
 </template>

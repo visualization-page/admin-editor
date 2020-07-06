@@ -35,7 +35,10 @@
             :width="200"
             :height="100"
           />
-          <p class="tc ptb5">{{ item.title }}</p>
+          <p class="tc ptb5">
+            {{ item.title }}
+            <i class="el-icon-edit cp" @click="$emit('edit')"></i>
+          </p>
         </div>
       </template>
     </div>

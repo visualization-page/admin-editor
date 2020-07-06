@@ -8,7 +8,7 @@
       <div class="flex-center-between f12">
         <div class="flex">
           <span class="flex-shrink-0 c-666 mr10">环境名称</span>
-          <el-input type="input" v-model="item.name" placeholder="请输入" />
+          <el-input type="input" v-model="item.name" @blur="handleEmit" placeholder="请输入" />
         </div>
         <el-button type="text" @click="handleDel(i)">删除</el-button>
       </div>
@@ -23,13 +23,14 @@
 </template>
 
 <script lang="js">
-import { defineComponent } from '@vue/composition-api'
+import Vue from 'vue'
+// import { defineComponent } from '@vue/composition-api'
 // @ts-ignore
 import InputGroup from './render-input-group.vue'
 import { getParentRef, deepClone } from '@/assets/util'
 import { MessageBox } from 'element-ui'
 
-export default defineComponent({
+export default {
   components: {
     InputGroup
   },
@@ -49,6 +50,7 @@ export default defineComponent({
         const { pref, field } = getParentRef(this.schema.field, val)
         if (pref[field]) {
           this.list = deepClone(pref[field])
+          // Vue.set(this, 'list', deepClone(pref[field]))
         }
       },
       deep: true
@@ -75,11 +77,14 @@ export default defineComponent({
       // console.log('handleKvChange', this.list.length)
       this.$emit('change', deepClone(this.list))
     },
+    handleEmit () {
+      this.$emit('change', deepClone(this.list))
+    },
     async handleDel (i) {
       await MessageBox.confirm('确定要删除吗')
       this.list.splice(i, 1)
       this.$emit('change', deepClone(this.list))
     }
   }
-})
+}
 </script>

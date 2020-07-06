@@ -35,6 +35,7 @@
           <sample-item
             :list="nodeImg"
             type="img"
+            @edit="showEditPanel = true"
           />
         </div>
       </div>
