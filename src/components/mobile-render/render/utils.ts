@@ -41,27 +41,41 @@ export const loadItem = (item: NodeItemBasic): Promise<{ default: any }> => {
 
 export const loadItemUmd = (item: NodeUmd, load: boolean = true): Promise<{ default: any }> => {
   const elem = document.getElementsByClassName(item.label)[0]
-  // console.log('loadItemUmd ', item.label, elem)
+  const isCss = item.type === 'css'
   return new Promise((resolve, reject) => {
     if (!load) {
       if (elem) {
         // @ts-ignore
         elem.remove()
-        delete window[item.umdName]
+        if (!isCss) {
+          delete window[item.umdName]
+        }
       }
       return resolve()
     }
     if (elem) {
-      return resolve(window[item.umdName])
+      return resolve(!isCss && window[item.umdName])
+    }
+    if (isCss) {
+      const link = document.createElement('link')
+      link.href = item.url
+      link.rel = 'stylesheet'
+      link.setAttribute('class', item.label)
+      link.onload = () => {
+        resolve()
+      }
+      link.onerror = (e) => {
+        reject(e)
+      }
+      document.head.appendChild(link)
+      return
     }
     window.defineBak = window.define
     window.define = null
     const script = document.createElement('script')
     script.src = item.url
     script.setAttribute('class', item.label)
-    // console.log('window.define = null')
     script.onload = () => {
-      // console.log('window.define = defineBak')
       window.define = window.defineBak
       resolve(window[item.umdName])
     }

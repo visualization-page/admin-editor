@@ -170,7 +170,7 @@ export const saveProject = (
 })
 
 export const importProject = async (parseItem: Project) => {
-  const inAdminPlatform = /tms\.uban360/.test(location.hostname)
+  const inAdminPlatform = /tms\.uban360/.test(location.hostname) || /808/.test(location.port)
   if (parseItem) {
     parseItem.depLoaded = false
     await loadSdk(parseItem.interactiveType)

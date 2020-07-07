@@ -1,7 +1,7 @@
 <template>
   <div class="component-umd">
     <div>
-      <el-button icon="el-icon-plus" type="text" @click="handleAddUmd()">添加umd库</el-button>
+      <el-button icon="el-icon-plus" type="text" @click="handleAddUmd()">添加cdn库</el-button>
     </div>
     <van-grid
       class="van-hairline--left"
@@ -10,7 +10,7 @@
     >
       <van-grid-item
         v-for="(item, i) in list"
-        :key="item"
+        :key="i"
         class="cp relative"
         :class="{
           active: selected.includes(item.label)
@@ -28,23 +28,31 @@
 
     <el-dialog
       :visible.sync="showDialog"
-      title="添加umd组件"
+      title="添加cdn库"
       width="500px"
       append-to-body
     >
       <el-form ref="form" :model="dialogForm" :rules="dialogFormRules">
-        <el-form-item label="组件名称" prop="label">
+        <el-form-item label="库的类型" prop="type">
+          <el-radio-group v-model="dialogForm.type">
+            <el-radio label="js">js库</el-radio>
+            <el-radio label="css">css库</el-radio>
+          </el-radio-group>
+        </el-form-item>
+        <el-form-item label="库的名称" prop="label">
           <el-input v-model="dialogForm.label" placeholder="请输入" />
         </el-form-item>
-        <el-form-item label="组件全局变量名称" prop="umdName">
-          <el-input v-model="dialogForm.umdName" placeholder="请输入" />
-        </el-form-item>
-        <el-form-item label="组件url地址" prop="url">
+        <el-form-item label="url地址" prop="url">
           <el-input v-model="dialogForm.url" placeholder="请输入" />
         </el-form-item>
-        <el-form-item label="发布时是否将url下载到文件">
-          <el-checkbox v-model="dialogForm.isReleaseDownload" />
-        </el-form-item>
+        <template v-if="dialogForm.type === 'js'">
+          <el-form-item label="全局变量名" prop="umdName">
+            <el-input v-model="dialogForm.umdName" placeholder="请输入" />
+          </el-form-item>
+          <el-form-item label="发布时是否将url下载到文件">
+            <el-checkbox v-model="dialogForm.isReleaseDownload" />
+          </el-form-item>
+        </template>
       </el-form>
       <template slot="footer">
         <el-button type="primary" @click="confirm">确定</el-button>
@@ -67,7 +75,8 @@ const empty = {
   label: '',
   umdName: '',
   url: '',
-  isReleaseDownload: false
+  isReleaseDownload: false,
+  type: 'js'
 }
 
 export default defineComponent({
@@ -81,7 +90,7 @@ export default defineComponent({
     }
     const handleAddUmd = (item?: NodeUmd) => {
       if (item) {
-        dialogForm.value = { ...item }
+        dialogForm.value = { type: 'js', ...item }
       } else {
         dialogForm.value = { ...empty }
       }
@@ -118,7 +127,7 @@ export default defineComponent({
       }
     })
     const handleAdd = async (item: NodeUmd) => {
-      const loading = Loading.service({ text: '加载 umd' })
+      const loading = Loading.service({ text: '加载中...' })
       const i = selected.value.findIndex(x => x === item.label)
       await loadItemUmd(item, i === -1).catch(err => {
         Message.error(err)

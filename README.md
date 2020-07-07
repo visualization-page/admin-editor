@@ -292,3 +292,7 @@ $$global.config = project.config = {
 
 - [ ] 列表缩略图展示
 - [ ] 展示布局新增 web，可以支持宽屏的需求
+
+> 20/07/06
+
+- [x] umd 库更名: cdn库，新增类型为 css，以便引入 animate.css 或 iconfont.css 等

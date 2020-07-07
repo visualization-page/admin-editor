@@ -39,6 +39,7 @@ export type NodeUmd = {
   url: string
   isReleaseDownload: boolean
   userName?: string
+  type: 'js' | 'css'
 }
 
 export const rootNode: NodeItem = {

@@ -324,9 +324,17 @@ const handle = {
         }
       })
       let cdnScript = ''
+      let cdnCss = ''
       cdn.forEach(it => {
-        cdnScript += `<script src="${it.url}"></script>`
+        if (it.type === 'css') {
+          cdnCss += `<link rel="stylesheet" href="${it.url}">`
+        } else {
+          cdnScript += `<script src="${it.url}"></script>`
+        }
       })
+      if (cdnCss) {
+        renderContent = renderContent.replace('</head>', cdnCss + '</head>')
+      }
       if (cdnScript) {
         renderContent = renderContent.replace('</body>', cdnScript + '</body>')
       }
@@ -480,33 +488,12 @@ const handle = {
     return exist ? fs.readJson(p) : []
   },
 
-  // async saveUmd (data) {
-  //   const index = getPath('umd')
-  //   const list = await fs.readJson(index)
-  //   if (data.id) {
-  //     // 编辑
-  //     const i = list.find(x => x.id === data.id)
-  //     if (data.delete) {
-  //       list.splice(i, 1)
-  //     } else {
-  //       list.splice(i, 1, data)
-  //     }
-  //   } else {
-  //     // 新增
-  //     list.push({
-  //       ...data,
-  //       id: Date.now()
-  //     })
-  //   }
-  //   await fs.writeJson(index, list)
-  // },
-
   async saveList (data, type) {
     const index = getPath(type)
     const list = await fs.readJson(index)
     if (data.id) {
       // 编辑
-      const i = list.find(x => x.id === data.id)
+      const i = list.findIndex(x => x.id === data.id)
       if (data.delete) {
         list.splice(i, 1)
       } else {
