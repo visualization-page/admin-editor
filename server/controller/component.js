@@ -317,7 +317,7 @@ const handle = {
       const needDownload = []
       const cdn = []
       globalProject.project.componentUmd.forEach(it => {
-        if (it.isReleaseDownload) {
+        if (it.type !== 'css' && it.isReleaseDownload) {
           needDownload.push(it)
         } else {
           cdn.push(it)

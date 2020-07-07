@@ -90,6 +90,7 @@ export default defineComponent({
     }
     const handleAddUmd = (item?: NodeUmd) => {
       if (item) {
+        // @ts-ignore
         dialogForm.value = { type: 'js', ...item }
       } else {
         dialogForm.value = { ...empty }
