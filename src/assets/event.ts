@@ -67,7 +67,7 @@ export const fxList = [
   },
   {
     name: '客户端右上角菜单',
-    code: '$$global.native.defineCallback(\'分享\', () => {\n})'
+    code: '$$global.native.menuCallJs(\'分享\', () => {\n})'
   },
   {
     name: '获取节点',

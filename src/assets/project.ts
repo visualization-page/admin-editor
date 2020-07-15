@@ -173,7 +173,7 @@ export const importProject = async (parseItem: Project) => {
   const inAdminPlatform = /tms\.uban360/.test(location.hostname) || /808/.test(location.port)
   if (parseItem) {
     parseItem.depLoaded = false
-    await loadSdk(parseItem.interactiveType)
+    // await loadSdk(parseItem.interactiveType)
     updateProject(parseItem)
     if (inAdminPlatform && parseItem.componentUmd) {
       await Promise.all(parseItem.componentUmd.map(item => loadItemUmd(item)))

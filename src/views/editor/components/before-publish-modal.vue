@@ -42,10 +42,12 @@ import { Message } from 'element-ui'
 
 export default {
   data () {
+    const sessionKey = `${this.$route.params.dir}-remark`
     return {
       localShow: true,
       project,
-      remark: ''
+      sessionKey,
+      remark: sessionStorage.getItem(sessionKey)
     }
   },
   methods: {
@@ -58,6 +60,7 @@ export default {
       } else if (this.remark.trim().length < 3) {
         Message.error('发布备注至少为3个字符')
       } else {
+        sessionStorage.setItem(this.sessionKey, this.remark)
         this.$emit('confirm', this.remark)
       }
     }

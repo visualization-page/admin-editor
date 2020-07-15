@@ -8,7 +8,7 @@
       <p class="f12 c-999 tc pb10">用手机扫一扫</p>
     </div>
   </div>
-  <div v-else id="app">
+  <div v-else id="app" class="oa">
     <router-view />
   </div>
 </template>
@@ -28,7 +28,7 @@ export default {
   },
   methods: {
     checkPc (noSign) {
-      const isPc = !/android|iphone/i.test(navigator.userAgent)
+      const isPc = !/android|iphone|ipad/i.test(navigator.userAgent)
       return noSign ? isPc : (this.isPc = isPc)
     }
   }
