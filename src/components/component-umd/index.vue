@@ -130,12 +130,17 @@ export default defineComponent({
     const handleAdd = async (item: NodeUmd) => {
       const loading = Loading.service({ text: '加载中...' })
       const i = selected.value.findIndex(x => x === item.label)
+      if (!window.defineBak) {
+        window.defineBak = window.define
+      }
+      window.define = null
       await loadItemUmd(item, i === -1).catch(err => {
         Message.error(err)
         loading.close()
         return Promise.reject(err)
       })
       loading.close()
+      window.define = window.defineBak
       if (i > -1) {
         project.componentUmd.splice(i, 1)
         Message.success('取消成功')

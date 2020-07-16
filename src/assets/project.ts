@@ -173,10 +173,14 @@ export const importProject = async (parseItem: Project) => {
   const inAdminPlatform = /tms\.uban360/.test(location.hostname) || /808/.test(location.port)
   if (parseItem) {
     parseItem.depLoaded = false
-    // await loadSdk(parseItem.interactiveType)
     updateProject(parseItem)
     if (inAdminPlatform && parseItem.componentUmd) {
+      if (!window.defineBak) {
+        window.defineBak = window.define
+      }
+      window.define = null
       await Promise.all(parseItem.componentUmd.map(item => loadItemUmd(item)))
+      window.define = window.defineBak
     }
     // 下载资源
     if (inAdminPlatform && parseItem.componentDownload) {

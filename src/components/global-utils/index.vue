@@ -59,8 +59,6 @@
 <script lang="ts">
 import Vue from 'vue'
 import { defineComponent, ref, watch, computed } from '@vue/composition-api'
-// import { NodeUmd } from '@/assets/node'
-// import { loadItemUmd } from '@/components/mobile-render/render/utils'
 import { MessageBox, Message } from 'element-ui'
 import { http } from '@/api'
 import { tabCurrent, tabName } from '@/assets/tab'

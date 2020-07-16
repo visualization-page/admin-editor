@@ -70,21 +70,13 @@ export const loadItemUmd = (item: NodeUmd, load: boolean = true): Promise<{ defa
       document.head.appendChild(link)
       return
     }
-    if (!window.defineBak) {
-      window.defineBak = window.define
-    }
-    window.define = null
-    // console.log('window.define = null', window.defineBak)
     const script = document.createElement('script')
     script.src = item.url
     script.setAttribute('class', item.label)
     script.onload = () => {
-      window.define = window.defineBak
-      // console.log('window.define = window.defineBak')
       resolve(window[item.umdName])
     }
     script.onerror = () => {
-      // window.define = window.defineBak
       reject(new Error(`item.label ${item.url} download fail`))
     }
     document.body.appendChild(script)
