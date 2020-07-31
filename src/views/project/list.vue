@@ -179,7 +179,8 @@ export default {
           icon: 'el-icon-question f16',
           action: () => {
             // this.$router.push('/tourism')
-            window.open('./render.html#/project/tourism')
+            // window.open('./render.html#/project/tourism')
+            window.open('https://docs.uban360.com/#/project-detail/17/18')
           }
         },
         {
