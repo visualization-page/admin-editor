@@ -109,6 +109,10 @@ export const local = [
         value: 0
       },
       {
+        label: 'baas 测试环境',
+        value: -1
+      },
+      {
         label: '浙江',
         value: 1
       },
