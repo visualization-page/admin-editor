@@ -230,7 +230,6 @@ export default defineComponent({
 </script>
 
 <style lang="less">
-@import '../../style/hack-vant-form.less';
 @import '~esc-ui/lib/button/index.css';
 @import '~esc-ui/lib/page-button/index.css';
 .editor {

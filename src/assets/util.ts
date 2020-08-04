@@ -158,7 +158,7 @@ export function loadSdk (type: string) {
       src = (window._PUBLIC_PATH || '') + 'xmmp/xmmp.min.js'
     }
     if (document.getElementById(id)) {
-      // console.log('load sdk ', id, 'exist!')
+      console.log('load sdk ', id, 'exist!')
       return resolve()
     }
     const item = document.getElementById(oId)

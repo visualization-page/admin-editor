@@ -126,7 +126,7 @@ export default defineComponent({
       },
       {
         label: '保存项目',
-        icon: 'iconfont icon-save',
+        icon: 'bficon icon-save',
         action: async () => {
           if (!project.dir) {
             return Message.error('项目名称必填！')

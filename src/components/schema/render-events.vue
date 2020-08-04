@@ -70,7 +70,7 @@
             type="warning"
             @click="handleClickFx(item)"
           >
-            <i class="iconfont icon-function" />
+            <i class="bficon icon-function" />
             {{ item.name }}
           </el-button>
         </el-form-item>

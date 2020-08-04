@@ -16,7 +16,7 @@
         @click="handleClick(item)"
       >
         <el-tooltip effect="dark" :content="item.title" placement="right">
-          <i :class="[{ iconfont: !item.elementUi }, item.icon]" />
+          <i :class="[{ bficon: !item.elementUi }, item.icon]" />
         </el-tooltip>
       </li>
     </ul>

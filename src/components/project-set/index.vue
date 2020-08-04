@@ -24,12 +24,12 @@ export default defineComponent({
     watch(() => ctx.root.$route.params.dir, dir => {
       // @ts-ignore
       local.find(x => x.field === 'dir').elAttrs!.disabled = !!dir
-      // @ts-ignore
-      // local.find(x => x.field === 'interactiveType').elAttrs!.disabled = !!dir
     })
     // 为了防止本地开发时，引入 sdk 方法报错
-    watch(() => project.interactiveType, type => {
-      loadSdk(type)
+    watch(() => [project.interactiveType, project.depLoaded], ([type, loaded]) => {
+      if (loaded) {
+        loadSdk(type as string)
+      }
     }, { lazy: true })
     return {
       local,

@@ -386,6 +386,7 @@ const handle = {
       renderContent = renderContent
         .replace(`<script>Vue.component('vantForm', vantForm.default)</script>`, '')
         .replace(`<script src=vant-form/vantForm.umd.min.js></script>`, '')
+        .replace(`<link rel=stylesheet href=vant-form/vantForm.css>`, '')
     }
     if (hasLibraryVant) {
       await fs.copy(path.join(distPath, 'vant2.5'), path.join(releasePath, 'vant2.5'))

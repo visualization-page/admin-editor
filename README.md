@@ -301,3 +301,7 @@ $$global.config = project.config = {
 
 - [x] 增加全局搜索
     - 当手写代码量变多了之后，找个东西会很模糊。加上搜索，具象对象，点击直接定位。
+
+> 20/08/04
+
+- [x] 修改内置 iconfont 的 font-family 为 bficon，避免与第三方冲突 
