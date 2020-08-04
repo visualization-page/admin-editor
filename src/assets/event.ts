@@ -63,7 +63,7 @@ export const fxList = [
   },
   {
     name: '客户端 native',
-    code: '$$global.native'
+    code: '$$global.native.native(\'method\', {})'
   },
   {
     name: '客户端右上角菜单',

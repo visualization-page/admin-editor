@@ -92,8 +92,8 @@ function html2Escape (sHtml: string) {
 }
 function getStringByIndexArr (str: string, val: string, arr: number[]) {
   return arr.map(index => {
-    const pre = str.substring(index - 30 > 0 ? index - 30 : 0, index)
-    const after = html2Escape(str.substring(index, index + 30)).replace(val, `<span style="color:red">${val}</span>`)
+    const pre = str.substring(index - 50 > 0 ? index - 50 : 0, index)
+    const after = html2Escape(str.substring(index, index + 50)).replace(val, `<span style="color:red">${val}</span>`)
     return html2Escape(pre) + after
   })
 }

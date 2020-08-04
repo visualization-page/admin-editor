@@ -109,6 +109,7 @@
 
     <image-resource :show.sync="showImageResource" />
     <div
+      v-if="false"
       class="fixed b50 r0 ptb10 plr5 bg-fff bd bd-ccc tc br4 c-blue cp"
       @click="$router.push('/suggest')"
     >
