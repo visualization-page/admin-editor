@@ -79,11 +79,22 @@ function findStringIndex (str: string | null, val: string) {
   }
   return indexArr
 }
+function html2Escape (sHtml: string) {
+  const m: any = {
+    '<': '&lt;',
+    '>': '&gt;',
+    '&': '&amp;',
+    '"': '&quot;'
+  }
+  return sHtml.replace(/[<>&"]/g, function (c) {
+    return m[c]
+  })
+}
 function getStringByIndexArr (str: string, val: string, arr: number[]) {
   return arr.map(index => {
-    const pre = str.substr(index - 30 >= 0 ? index - 30 : 0, index)
-    const after = str.substr(index, index + 30).replace(val, `<span style="color:#e6a23c">${val}</span>`)
-    return pre + after
+    const pre = str.substring(index - 30 > 0 ? index - 30 : 0, index)
+    const after = html2Escape(str.substring(index, index + 30)).replace(val, `<span style="color:red">${val}</span>`)
+    return html2Escape(pre) + after
   })
 }
 function doSearch (val: string) {
