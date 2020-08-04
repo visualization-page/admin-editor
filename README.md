@@ -296,3 +296,8 @@ $$global.config = project.config = {
 > 20/07/06
 
 - [x] umd 库更名: cdn库，新增类型为 css，以便引入 animate.css 或 iconfont.css 等
+
+> 20/08/03
+
+- [x] 增加全局搜索
+    - 当手写代码量变多了之后，找个东西会很模糊。加上搜索，具象对象，点击直接定位。

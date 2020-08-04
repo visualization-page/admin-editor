@@ -41,6 +41,7 @@ import { addPage, currentPage, setCurrentPage, copyPage, updatePages } from '@/a
 import { project } from '@/assets/project'
 import { setTabName, tabName } from '@/assets/tab'
 import { setState as setCodeEditState } from '@/assets/code-edit'
+import { Message } from 'element-ui'
 
 export default createComponent({
   components: {
@@ -48,7 +49,8 @@ export default createComponent({
   props: {
     sample: Boolean
   },
-  setup () {
+  setup (props, ctx) {
+    const params = ctx.parent.$route.params
     return {
       project,
       selected: currentPage,
@@ -60,8 +62,12 @@ export default createComponent({
         setTabName(['', '', '', tabName.previewArea])
       },
       addPage (item) {
-        addPage(item)
-        setTabName(['', '', tabName.pageSet])
+        if (params.dir) {
+          addPage(item)
+          setTabName(['', '', tabName.pageSet])
+        } else {
+          Message.info('请先在【项目设置】-【英文名称】输入并点击右上角保存后再【新建页面】')
+        }
       },
       handleCopyPage (item) {
         copyPage(item)

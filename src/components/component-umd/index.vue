@@ -130,7 +130,7 @@ export default defineComponent({
     const handleAdd = async (item: NodeUmd) => {
       const loading = Loading.service({ text: '加载中...' })
       const i = selected.value.findIndex(x => x === item.label)
-      if (!window.defineBak) {
+      if (!window.defineBak && window.define) {
         window.defineBak = window.define
       }
       window.define = null

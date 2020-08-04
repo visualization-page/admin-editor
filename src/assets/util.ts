@@ -165,8 +165,9 @@ export function loadSdk (type: string) {
     if (item) {
       document.body.removeChild(item)
     }
-    const d = window.define
-    // console.log('loadSdk ', type, d)
+    if (!window.defineBak && window.define) {
+      window.defineBak = window.define
+    }
     window.JSBridge = undefined
     // hack monaco editor require
     window.define = undefined
@@ -174,11 +175,11 @@ export function loadSdk (type: string) {
     script.id = id
     script.src = src
     script.onload = () => {
-      window.define = d
+      window.define = window.defineBak
       resolve()
     }
     script.onerror = () => {
-      window.define = d
+      window.define = window.defineBak
       reject(new Error('load sdk error'))
     }
     document.body.appendChild(script)

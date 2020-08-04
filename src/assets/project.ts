@@ -3,7 +3,7 @@ import { reactive } from '@vue/composition-api'
 import { loadItem, loadItemUmd } from '@/components/mobile-render/render/utils'
 import { Page, setCurrentPage, currentPage } from './page'
 import { NodeItemBasic, NodeUmd, setCurrentNode } from './node'
-import { deepClone, loadSdk } from '@/assets/util'
+import { deepClone } from '@/assets/util'
 import { http } from '@/api'
 import { Message } from 'element-ui'
 
@@ -175,7 +175,7 @@ export const importProject = async (parseItem: Project) => {
     parseItem.depLoaded = false
     updateProject(parseItem)
     if (inAdminPlatform && parseItem.componentUmd) {
-      if (!window.defineBak) {
+      if (!window.defineBak && window.define) {
         window.defineBak = window.define
       }
       window.define = null

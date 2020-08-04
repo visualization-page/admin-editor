@@ -3,11 +3,7 @@
     <div class="app-header">
       <header-opt />
     </div>
-    <div class="app-header__bar flex-center-between plr20">
-      <el-button icon="el-icon-back" type="text" @click="$router.push('/project/list')">返回项目列表</el-button>
-      <span class="b f12 c-666">{{ project.dir ? `编辑 - ${project.dir}` : '新建项目' }}</span>
-      <el-button icon="el-icon-picture-outline" type="text" @click="handleShowImage">查看图片资源</el-button>
-    </div>
+    <header-bar />
     <div class="app-content flex">
       <div class="app__side-bar relative">
         <div class="app__block height-100">
@@ -136,6 +132,7 @@ import BasicComponent from '@/components/basic-components/index.vue'
 import MobileRender from '@/components/mobile-render/index.vue'
 import CodeEditor from '@/components/code-editor/index.vue'
 import HeaderOpt from '@/components/header-opts/index.vue'
+import HeaderBar from '@/components/header-bar/index.vue'
 import ComponentLibrary from '@/components/component-library/index.vue'
 import ComponentCompose from '@/components/component-compose/index.vue'
 import ComponentUpload from '@/components/component-upload/index.vue'
@@ -145,7 +142,7 @@ import ImageResource from '@/components/image-resource/index.vue'
 import { tabCurrent, setTabName, tabName, isHideComponent, hideComponent } from '@/assets/tab'
 import { http } from '@/api'
 import { initProject, project, resetProject } from '@/assets/project'
-import { Message, MessageBox } from 'element-ui'
+import { Message } from 'element-ui'
 import { showImageResource, clearEditWrapCacheNode } from '@/assets/render'
 import { lock, unlock } from '@/assets/lock'
 
@@ -167,7 +164,8 @@ export default defineComponent({
     ComponentUpload,
     ComponentUmd,
     GlobalUtils,
-    ImageResource
+    ImageResource,
+    HeaderBar
   },
   beforeRouteLeave (to: any, from: any, next: any) {
     const ok = window.confirm('确定要离开吗？')
@@ -199,11 +197,7 @@ export default defineComponent({
         }
       }).then(item => {
         initProject(item.data.project)
-        // setTabName([tabName.pageList, tabName.basicComponent, tabName.pageSet])
         lock(dir)
-        // requestAnimationFrame(() => {
-        //   hideComponent(true)
-        // })
       })
     }
     onUnmounted(() => {
@@ -211,21 +205,12 @@ export default defineComponent({
       clearEditWrapCacheNode()
       resetProject()
     })
-    // const handleMode = () => {
-    //   if (isEdit()) {
-    //     setRenderPreview()
-    //   } else {
-    //     setRenderEdit()
-    //   }
-    // }
     return {
       tabCurrent,
       tabName,
       project,
       isHideComponent,
       showImageResource,
-      // handleMode,
-      // isEdit,
       handleClick (arr: any[]) {
         if (arr[0]) {
           if (arr[0] === tabCurrent.tab1) {
@@ -237,9 +222,6 @@ export default defineComponent({
           hideComponent(false)
         }
         setTabName(arr)
-      },
-      handleShowImage () {
-        showImageResource.value = true
       }
     }
   }
