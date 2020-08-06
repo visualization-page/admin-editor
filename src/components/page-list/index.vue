@@ -62,7 +62,7 @@ export default createComponent({
         setTabName(['', '', '', tabName.previewArea])
       },
       addPage (item) {
-        if (params.dir) {
+        if (ctx.parent.$route.params.dir) {
           addPage(item)
           setTabName(['', '', tabName.pageSet])
         } else {

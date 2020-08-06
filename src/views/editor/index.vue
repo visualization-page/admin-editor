@@ -169,10 +169,10 @@ export default defineComponent({
     HeaderBar
   },
   beforeRouteLeave (to: any, from: any, next: any) {
-    const ok = window.confirm('确定要离开吗？')
-    if (!ok) {
-      return next(false)
-    }
+    // const ok = window.confirm('确定要离开吗？')
+    // if (!ok) {
+    //   return next(false)
+    // }
     // @ts-ignore
     const { dir } = this.$route.params
     if (dir) {
