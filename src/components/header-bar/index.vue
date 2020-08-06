@@ -6,7 +6,7 @@
       </div>
       <el-button icon="el-icon-back" type="text" @click="$router.push('/project/list')">返回项目列表</el-button>
       <div>
-        <el-button icon="el-icon-picture-outline" type="text" @click="handleShowImage">图片资源</el-button>
+        <el-button icon="el-icon-picture-outline" type="text" @click="handleShowImage">图片走廊</el-button>
         <el-button icon="el-icon-search" type="text" @click.stop="handleShowSearch">搜索代码</el-button>
       </div>
 

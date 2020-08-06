@@ -74,7 +74,7 @@
             <node-style-tools />
             <p
               class="absolute tc l0 r0 c-aaa f10"
-              style="text-shadow: 1px 1px 1px rgba(0,0,0,.1);bottom:2px;user-select: none"
+              style="text-shadow: 1px 1px 1px rgba(0,0,0,.1);bottom:10px;user-select: none"
             >
               Designed by 讯盟FE - 前端运营商组
             </p>

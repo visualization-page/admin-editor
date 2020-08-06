@@ -102,7 +102,7 @@ export default defineComponent({
   left: 50%;
   transform: translateX(-50%);
   top: 20px;
-  bottom: 20px;
+  bottom: 45px;
   .app__mobile-webview {
     height: e('calc(100% - 65px)');
   }

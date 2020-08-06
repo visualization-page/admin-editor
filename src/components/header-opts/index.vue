@@ -3,9 +3,10 @@
     <div class="flex items-center cp" @click="$router.push('/')">
       <img height="40px" src="../../assets/img/logo.png" alt="">
       <div class="ml10">
-        <span class="f28 c-fff" style="line-height: 1;text-shadow: 2px 1px 3px rgba(0,0,0,0.1);color:#fff">Butterfly</span>
-        <p class="c-ccc f10">产品运营也能用的 H5 在线开发平台</p>
+        <span class="f24 c-fff" style="line-height: 1;text-shadow: 2px 1px 3px rgba(0,0,0,0.1);color:#fff">Butterfly</span>
       </div>
+      <div class="header-opt__line" />
+      <p class="c-ccc f10">讯盟 H5 在线开发平台</p>
     </div>
     <div class="flex">
       <template v-for="(item, i) in opts || localOpts">
@@ -164,3 +165,14 @@ export default defineComponent({
   }
 })
 </script>
+
+<style lang="less">
+.header-opt {
+  &__line {
+    width: 2px;
+    height: 16px;
+    background: #999;
+    margin: 0 10px;
+  }
+}
+</style>

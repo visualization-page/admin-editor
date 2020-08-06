@@ -129,6 +129,9 @@
         />
       </div>
     </div>
+    <div class="fixed width-100 tc b10">
+      <p class="c-999 f12 mt10">Designed by 讯盟FE - 前端运营商组</p>
+    </div>
   </div>
 </template>
 

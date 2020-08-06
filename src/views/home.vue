@@ -1,11 +1,10 @@
 <template>
   <div class="flex-center bg-333" style="height: 100vh">
-    <div>
+    <div style="margin-top: -100px">
       <div class="flex relative">
         <div class="tc">
-          <p class="f40 c-fff">Butterfly</p>
-          <p class="c-ccc f14 mt10">产品运营也能用的 H5 在线开发平台</p>
-          <p class="c-666 f12 mt10">@讯盟FE - 前端运营商组</p>
+          <p class="c-fff" style="font-size: 50px">Butterfly</p>
+          <p class="c-aaa f14 mt10">产品运营也能用的 H5 在线开发平台</p>
         </div>
         <svg class="ml10 absolute t0" style="right: -50px" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="67" height="20">
           <linearGradient id="b" x2="0" y2="100%">
@@ -33,10 +32,10 @@
       <div class="tc mt50 pt50 flex-center">
         <div
           class="cp c-button button--tamaya button--border-medium"
-          data-text="立即开始"
+          data-text="立即体验"
           @click="$router.push('/project/list')"
         >
-          <span>立即开始</span>
+          <span>立即体验</span>
         </div>
         <div v-if="false" class="ml20 cp c-button button--nina" data-text="项目列表">
           <span>项</span>
@@ -44,6 +43,10 @@
           <span>列</span>
           <span>表</span></div>
       </div>
+    </div>
+
+    <div class="fixed width-100 tc b10">
+      <p class="c-666 f12 mt10">Designed by 讯盟FE - 前端运营商组</p>
     </div>
   </div>
 </template>
