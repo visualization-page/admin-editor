@@ -26,6 +26,11 @@ export default {
       codeUrl: location.href
     }
   },
+  created () {
+    if (this.isPc) {
+      console.log('\n\n%cButterfly\n\n%c产品运营也能用的 H5 在线开发平台 !\n\n支持:\n  1.小程序\n  2.彩云 native h5\n  3.复杂表单\n  4.一键发布等\n没有做不到只有想不到！\n\n%c👋 立即体验: https://tms.uban360.com/butterfly-fe/index.html\n\n', 'font-weight:bolder;color:rgb(253,129,36)', 'color: rgba(253,129,36,0.5)', 'color:#3b8ff6')
+    }
+  },
   methods: {
     checkPc (noSign) {
       const isPc = !/android|iphone|ipad/i.test(navigator.userAgent)

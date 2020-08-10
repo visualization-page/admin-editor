@@ -43,7 +43,7 @@ type $$page = {
 } 
 ```
 
-## Thinking
+## Thinking & Updated Logs
 
 > 20/04/01 
 
@@ -305,3 +305,7 @@ $$global.config = project.config = {
 > 20/08/04
 
 - [x] 修改内置 iconfont 的 font-family 为 bficon，避免与第三方冲突 
+
+> 20/08/10
+
+- [ ] 将项目的创建与编辑过程分步骤

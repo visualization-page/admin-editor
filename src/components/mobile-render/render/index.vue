@@ -177,7 +177,7 @@ export default defineComponent<{
           execInitScriptsOnce(pro)
         }
       }, { flush: 'pre' })
-      console.log('render page start', ((Date.now() - window._domloadTime) / 1000), '秒')
+      // console.log('[butterfly] render page start', ((Date.now() - window._entryTime) / 1000), '秒')
       watch(() => props.currentPage, (page, oldPage) => {
         if (page) {
           // @ts-ignore
