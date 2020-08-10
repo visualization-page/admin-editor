@@ -7,6 +7,7 @@ export default {
   title: 'iconfont',
   type: 'icon',
   cover: 'el-icon-brush',
+  nodeType: 1 << 0,
   style: {
     ...common.style,
     width: '100%',

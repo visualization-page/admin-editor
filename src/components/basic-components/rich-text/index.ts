@@ -9,6 +9,7 @@ export default {
   title: '富文本',
   type: 'rich-text',
   cover: 'el-icon-edit-outline',
+  nodeType: 1 << 0,
   style: {
     ...common.style,
     height: undefined,

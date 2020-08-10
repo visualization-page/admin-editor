@@ -9,6 +9,7 @@ export default {
   title: '图片',
   type: 'img',
   cover: 'el-icon-picture-outline',
+  nodeType: 1 << 0,
   style: {
     ...common.style,
     width: '100%',

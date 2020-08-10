@@ -30,7 +30,7 @@ export default {
   setup () {
     const handleClick = (item) => {
       if (addBeforeValidate()) {
-        addNode({ ...item, nodeType: 1 << 0 })
+        addNode({ ...item })
         setTabName([tabName.nodeTree, '', tabName.nodeProperty])
         hideComponent(true)
       }

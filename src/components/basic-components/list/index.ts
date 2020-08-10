@@ -11,6 +11,7 @@ export default {
   cover: 'el-icon-s-fold',
   type: 'div',
   subType: 'list',
+  nodeType: 1 << 0,
   style: {
     ...common.style,
     width: undefined,

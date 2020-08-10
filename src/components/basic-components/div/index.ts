@@ -9,6 +9,7 @@ export default {
   title: '万能容器',
   cover: 'el-icon-folder-opened',
   type: 'div',
+  nodeType: 1 << 0,
   style: {
     ...common.style,
     height: undefined,
