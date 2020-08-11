@@ -1,11 +1,10 @@
 <script lang="tsx">
-import Vue from 'vue'
+import Vue, { VNodeData, VNode } from 'vue'
 import { defineComponent, createElement } from '@vue/composition-api'
 import { NodeItem, findNode, setCurrentNode } from '@/assets/node'
 import { isEdit, setEditWrapNode } from '@/assets/render'
 import { FormEvent } from '@/assets/event'
-import { parseCodeValid, deepMerge } from '@/assets/util'
-// import EditWrap from '../edit-wrap.vue'
+import { parseCodeValid, deepMerge, deepClone } from '@/assets/util'
 import { dealFx, getEventHandler, isPc } from './utils'
 import { setTabName, tabName } from '@/assets/tab'
 
@@ -24,9 +23,6 @@ const mergeDirectionSize = (
   const isBorder = type === 'border'
   if (type === 'position') {
     Object.assign(target, obj)
-    // Object.keys(obj).forEach(k => {
-    //   target[k] = obj[k]
-    // })
   } else {
     const newObj: any = {}
     Object.keys(obj).forEach(k => {
@@ -56,6 +52,58 @@ export default defineComponent<{
   //   return h('pre', { style: { color: 'red' } }, err.stack)
   // },
   setup (superProps, ctx) {
+    // 处理 vw 单位
+    const _dealVw = (obj: any) => {
+      Object.keys(obj).forEach(k => {
+        if (k !== 'code' && typeof obj[k] === 'string') {
+          if (isPc) {
+            obj[k] = obj[k].replace(/vw/, 'px')
+          } else if (/vw/.test(obj[k])) {
+            const val = Number(obj[k].replace('vw', ''))
+            obj[k] = (val / 3.75).toFixed(2) + 'vw'
+          }
+        }
+      })
+    }
+    // 渲染 item
+    const _renderItemSelf = (item: NodeItem, props: VNodeData, codeExecuteContext: any, children: VNode[]) => {
+      const isLibrary = item.nodeType === 1 << 2
+      if (isLibrary) {
+        const { ok, value } = parseCodeValid(item.renderString, codeExecuteContext)
+        if (ok && value) {
+          const libraryOpt = value! as {
+            template?: string
+            methods?: any,
+            option?: any,
+            children?: any[]
+          }
+          // 方式1：模版写法解析
+          if (libraryOpt.template) {
+            const res = Vue.compile(libraryOpt.template)
+            const mockVNodePrototype = Object.create(ctx.parent)
+            const mockVNode = Object.assign(
+              mockVNodePrototype,
+              {
+                $options: { staticRenderFns: res.staticRenderFns },
+                ym: codeExecuteContext,
+                render: res.render
+              },
+              libraryOpt.methods ? libraryOpt.methods : {}
+            )
+            return createElement('basic-div', props, [mockVNode.render()].concat(children))
+          }
+          // 方式2：手写vNode，合并选项
+          deepMerge(props, libraryOpt.option)
+          // 第三方组件无法通过 attrs 绑定 data-id
+          // 通过指令实现
+          // @ts-ignore
+          props.directives.push({ name: 'insert-id', value: item.id })
+          return createElement(item.name, props, (libraryOpt.children || []).concat(children))
+        }
+      }
+      return createElement(item.componentName, props, children)
+    }
+
     const renderItem = (
       items: NodeItem[],
       $$page: { [k: string]: any },
@@ -64,7 +112,7 @@ export default defineComponent<{
     ) => {
       const codeExecuteContext = { $$global, $$page, $$listBind, $$refs: ctx.parent!.$refs }
       return items.filter(x => {
-        // 判断 v-if
+        // 处理 v-if
         let vIf = true
         if (x.vIf) {
           const res = dealFx({ vIf: x.vIf }, codeExecuteContext)
@@ -72,8 +120,6 @@ export default defineComponent<{
         }
         return x.show && vIf
       }).map((item) => {
-        const isLibrary = item.nodeType === 1 << 2
-        // const active = currentNode.value && currentNode.value.id === item.id
         // 处理事件
         const on: any = {}
         const nativeOn: any = {}
@@ -85,7 +131,8 @@ export default defineComponent<{
             on[ev.eventType] = handler
           }
         })
-
+        // 编辑器页面添加点击事件
+        // 绘制焦点框和设置为当前节点
         if (isEdit()) {
           nativeOn.click = (e: any) => {
             const el = document.elementFromPoint(e.x, e.y)
@@ -112,27 +159,23 @@ export default defineComponent<{
         }
         // 处理 props
         const props = {
-          style: {
-            ...item.style,
-            // 处理圆角
-            borderRadius: item.style.borderRadius === '0px' ? undefined : item.style.borderRadius
-          },
-          class: [
-            'render-item__item',
-            item.className
-          ].concat(item.quickToolsAddClass || []),
+          style: deepClone(item.style),
+          class: ['render-item__item', dealFx({ cls: item.className }, codeExecuteContext).cls]
+            .concat(item.quickToolsAddClass || []),
           key: item.id,
           on,
           nativeOn,
           props: dealFx(item.props, codeExecuteContext),
-          attrs: {
-            'data-id': item.id
-          },
+          attrs: { 'data-id': item.id },
           directives: []
         }
         mergeDirectionSize(props.style, item.style.margin, 'margin')
         mergeDirectionSize(props.style, item.style.padding, 'padding')
         mergeDirectionSize(props.style, item.style.border, 'border')
+        // 处理圆角
+        if (item.style.borderRadius === '0px') {
+          delete props.style.borderRadius
+        }
         // 合并位置
         if (item.outDocFlow && item.style.position) {
           mergeDirectionSize(props.style, item.style.position, 'position')
@@ -144,92 +187,59 @@ export default defineComponent<{
         }
         props.style.position = item.outDocFlow ? item.style.positionType : undefined
         if (props.style.position === undefined) {
-          props.style.zIndex = undefined
+          delete props.style.zIndex
         }
         // 处理 vw 单位
-        const _dealVw = (obj: any) => {
-          Object.keys(obj).forEach(k => {
-            if (k !== 'code' && typeof obj[k] === 'string') {
-              if (isPc) {
-                obj[k] = obj[k].replace(/vw/, 'px')
-              } else if (/vw/.test(obj[k])) {
-                const val = Number(obj[k].replace('vw', ''))
-                obj[k] = (val / 3.75).toFixed(2) + 'vw'
-              }
-            }
-          })
-        }
         _dealVw(props.style)
+        // 处理样式补充代码
         const styleCodeRes = parseCodeValid(props.style.code, codeExecuteContext)
         if (styleCodeRes.ok) {
-          // 处理 vw 单位
           _dealVw(styleCodeRes.value)
           deepMerge(props.style, styleCodeRes.value)
         } else {
           console.log(props.style.code, styleCodeRes.msg)
           throw styleCodeRes.msg
         }
-        // 处理 vShow
+        // 处理 v-show
         if (item.vShow) {
           const res = dealFx({ vShow: item.vShow }, codeExecuteContext)
           if (!res.vShow) {
             props.style.display = 'none'
           }
         }
-        let children: any[] = []
+        // 处理子节点
+        const children: any[] = []
         if (item.type === 'div') {
-          // 处理子节点
           if (item.nodeType === 1 << 0 && item.bindState) {
             // 列表容器循环输出
             const bindVal = parseCodeValid(item.bindState, codeExecuteContext)
-            if (bindVal.ok) {
-              // children 用 list-item 循环输出
-              children = (Array.isArray(bindVal.value) ? bindVal.value! : []).map((listBindData, listBindIndex) => {
-                const $$listBind = { item: listBindData, index: listBindIndex }
-                return renderItem(item.children, superProps.pageConfig, superProps.globalConfig, $$listBind)
-              })
+            if (bindVal.ok && Array.isArray(bindVal.value)) {
+              const bindValue: Array<{ item: any, index: number }> = bindVal.value!
+              Array.prototype.push.apply(
+                children,
+                bindValue.map(
+                  (it, index) => renderItem(
+                    item.children,
+                    superProps.pageConfig,
+                    superProps.globalConfig,
+                    { item: it, index }
+                  )
+                )
+              )
             }
           } else {
-            children = renderItem(item.children, superProps.pageConfig, superProps.globalConfig, $$listBind)
+            Array.prototype.push.apply(
+              children,
+              renderItem(
+                item.children,
+                superProps.pageConfig,
+                superProps.globalConfig,
+                $$listBind
+              )
+            )
           }
         }
-        const _renderItemSelf = () => {
-          if (isLibrary) {
-            const { ok, value } = parseCodeValid(item.renderString, codeExecuteContext)
-            if (ok && value) {
-              const libraryOpt = value! as {
-                template?: string
-                methods?: any,
-                option?: any,
-                children?: any[]
-                data?: any
-              }
-              // 方式1：模版写法解析
-              if (libraryOpt.template) {
-                // todo 是否有必要手写 template 解析
-                const res = Vue.compile(libraryOpt.template)
-                const v = Object.assign(
-                  ctx.parent,
-                  libraryOpt.data ? libraryOpt.data() : {},
-                  libraryOpt.methods ? libraryOpt.methods : {},
-                  { ym: codeExecuteContext }
-                )
-                const vm = res.render.call(v, createElement)
-                // console.log(vm, v.ym.$$page.state.loading)
-                return createElement('basic-div', props, [vm].concat(children))
-              }
-              // 方式2：手写vNode，合并选项
-              deepMerge(props, libraryOpt.option)
-              // 第三方组件无法通过 attrs 绑定 data-id
-              // 通过指令实现
-              // @ts-ignore
-              props.directives.push({ name: 'insert-id', value: item.id })
-              return createElement(item.name, props, (libraryOpt.children || []).concat(children))
-            }
-          }
-          return createElement(item.componentName, props, children)
-        }
-        return _renderItemSelf()
+        return _renderItemSelf(item, props, codeExecuteContext, children)
       })
     }
 

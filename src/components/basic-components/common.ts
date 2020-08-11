@@ -24,5 +24,5 @@ export const common = {
   // 手写 vNode 版本
   // renderString: '(function (h) {\n  return {\n    option: {\n      props: {}\n    },\n    children: [\n    ]\n  }\n})(vueCompositionApi.createElement)'
   // template 版本
-  renderString: '(function (h) {\n  return {\n    template: `\n      <div></div>\n    `,\n    methods: {\n      // 列表容器事件的绑定：@click="handleClick"\n      // 再使用 $$listBind\n    }\n  }\n})(vueCompositionApi.createElement)'
+  renderString: '(function (h) {\n  return {\n    template: `\n      <div></div>\n    `,\n    methods: {\n      // 内置变量\n      // 获取引用 $$refs\n      // 列表容器 $$listBind.item $$listBind.index\n      // 视图 $$page.state 方法 $$page.methods\n      // 全局 $$global、$$global.constant、$$global.utils\n    }\n  }\n})(vueCompositionApi.createElement)'
 }
