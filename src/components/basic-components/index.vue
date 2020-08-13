@@ -11,7 +11,7 @@
         class="cp"
         @click="handleClick(item)"
       >
-        <div class="w40 h40 f32 tc" style="color:#409eff">
+        <div class="w40 h40 f32 tc" style="color: #ff7d00">
           <i :class="item.cover" />
         </div>
         <span class="c-666">{{ item.title }}</span>
@@ -27,6 +27,7 @@ import { basic, useBasicComponents } from './'
 
 useBasicComponents()
 export default {
+  name: 'component-basic',
   setup () {
     const handleClick = (item) => {
       if (addBeforeValidate()) {

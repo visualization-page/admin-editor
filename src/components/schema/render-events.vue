@@ -14,7 +14,63 @@
       </li>
     </ul>
 
+    <modal :show.sync="showModal" title="事件管理">
+      <div class="height-100 flex">
+        <div
+          class="flex-shrink-0 bg-333 height-100 oa"
+          style="width: 20%;border-top: 2px #1e1e1e solid"
+        >
+          <el-form
+            :model="form"
+            :rules="rules"
+            ref="form"
+          >
+            <el-form-item label="描述" prop="desc">
+              <el-input v-model="form.desc" placeholder="请输入" />
+            </el-form-item>
+            <el-form-item label="类型" prop="eventType">
+              <el-select v-model="form.eventType">
+                <el-option
+                  v-for="item in eventTypeOptions"
+                  :key="item"
+                  :label="item"
+                  :value="item"
+                />
+              </el-select>
+            </el-form-item>
+            <el-form-item
+              v-if="!isFromPage && false"
+              label="目标节点"
+              prop="targetNodeIdPath"
+            >
+              <el-cascader
+                v-model="form.targetNodeIdPath"
+                :options="currentPage.nodes"
+                :props="{
+                label: 'title',
+                value: 'id',
+                checkStrictly: true
+              }"
+                clearable
+              />
+            </el-form-item>
+          </el-form>
+          <p>内置函数</p>
+          <div
+            v-for="(item, i) in fxList"
+            :key="i"
+            class=""
+            @click="handleClickFx(item)"
+          >
+            <i class="c-main bficon icon-function" />
+            {{ item.name }}
+          </div>
+        </div>
+      </div>
+    </modal>
+
     <el-dialog
+      v-if="false"
       :visible.sync="showModal"
       title="事件管理"
       class="events-manage-dialog"
@@ -111,6 +167,7 @@ import { currentNode } from '@/assets/node'
 import { findTreePath, getParentRef, deepClone } from '@/assets/util'
 // import VueMonaco from '@/components/vue-monaco/index.vue'
 import { MessageBox } from 'element-ui'
+import Modal from '@/components/v2/modal.vue'
 
 export default createComponent({
   props: {
@@ -121,7 +178,9 @@ export default createComponent({
       default: 'node'
     }
   },
-
+  components: {
+    Modal
+  },
   setup (props, ctx) {
     type FormEvent = {
       eventType: string

@@ -4,7 +4,7 @@
       <header-opt
         :opts="opts"
       >
-        <div class="flex-center c-blue">
+        <div class="flex-center header-opt__btn">
           <div
             class="ml15 cp flex items-center"
             @click="changeMode"
@@ -100,7 +100,6 @@
           </template>
         </el-table-column>
         <el-table-column
-          fixed="right"
           label="操作"
           width="230">
           <template slot-scope="scope">

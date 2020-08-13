@@ -1,12 +1,12 @@
 <template>
-  <div class="header-opt height-100 flex-center-between plr20">
+  <div class="header-opt height-100 flex-center-between pr15">
     <div class="flex items-center cp" @click="$router.push('/')">
-      <img height="40px" src="../../assets/img/logo.png" alt="">
-      <div class="ml10">
+      <img width="160px" src="../../assets/img/logo_small.png" alt="">
+      <div class="ml10" v-if="false">
         <span class="f24 c-fff" style="line-height: 1;text-shadow: 2px 1px 3px rgba(0,0,0,0.1);color:#fff">Butterfly</span>
       </div>
-      <div class="header-opt__line" />
-      <p class="c-ccc f10">讯盟 H5 在线开发平台</p>
+      <div v-if="false" class="header-opt__line mr15" />
+      <p v-if="false" class="c-ccc f10">讯盟 H5 在线开发平台</p>
     </div>
     <div class="flex">
       <template v-for="(item, i) in opts || localOpts">
@@ -19,17 +19,21 @@
             :before-upload="item.handleBeforeUpload"
             :on-success="res => handleResponse(res, item)"
             :on-error="handleResponse"
-            class="height-100 flex-center"
-            style="color: #409eff"
+            class="height-100 flex-center header-opt__btn"
           >
             <span slot="trigger" class="flex-center flex-column">
-              <div style="height:20px">
+              <div style="height:19px">
                 <i :class="item.icon" />
               </div>
               {{ item.label }}
             </span>
           </el-upload>
-          <el-button v-else type="text" @click="item.action()">
+          <el-button
+            v-else
+            type="text"
+            class="header-opt__btn"
+            @click="item.action()"
+          >
             <span class="flex-center flex-column">
               <div style="height:20px">
                 <i :class="item.icon" />
@@ -172,7 +176,10 @@ export default defineComponent({
     width: 2px;
     height: 16px;
     background: #999;
-    margin: 0 10px;
+    /*margin: 0 10px;*/
+  }
+  &__btn {
+    color: #ff7d00 !important;
   }
 }
 </style>

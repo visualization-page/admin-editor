@@ -209,7 +209,7 @@ export const local = [
     type: 'select',
     options: [
       {
-        label: '长页面',
+        label: '普通 H5',
         value: 'long-page'
       },
       // {

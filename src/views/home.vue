@@ -2,11 +2,14 @@
   <div class="flex-center bg-333" style="height: 100vh">
     <div style="margin-top: -100px">
       <div class="flex relative">
-        <div class="tc">
+        <div class="tc" v-if="false">
           <p class="c-fff" style="font-size: 50px">Butterfly</p>
-          <p class="c-aaa f14 mt10">产品运营也能用的 H5 在线开发平台</p>
         </div>
-        <svg class="ml10 absolute t0" style="right: -50px" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="67" height="20">
+        <div class="tc">
+          <img src="../assets/img/logo_home.png" alt="" width="380px">
+          <p class="c-999 f14 mt10">产品运营也能用的 H5 在线开发平台</p>
+        </div>
+        <svg v-if="false" class="ml10 absolute t0" style="right: -50px" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="67" height="20">
           <linearGradient id="b" x2="0" y2="100%">
             <stop offset="0" stop-color="#bbb" stop-opacity=".1"/>
             <stop offset="1" stop-opacity=".1"/>
@@ -29,7 +32,14 @@
           </g>
         </svg>
       </div>
-      <div class="tc mt50 pt50 flex-center">
+      <div class="tc mt50">
+        <div
+          class="dib f12 c-fff ptb10 plr20 br4 cp"
+          :style="{ background: 'linear-gradient(90deg, #ff7d00 20%, #ffb400)' }"
+          @click="$router.push('/project/list')"
+        >立即体验</div>
+      </div>
+      <div v-if="false" class="tc mt50 pt50 flex-center">
         <div
           class="cp c-button button--tamaya button--border-medium"
           data-text="立即体验"
@@ -46,7 +56,7 @@
     </div>
 
     <div class="fixed width-100 tc b10">
-      <p class="c-666 f12 mt10">Designed by 讯盟FE - 前端运营商组</p>
+      <p class="c-666 f12 mt10">Designed by 讯盟FE - 前端运营商组 <br> 特别鸣谢 UI - 智慧城市业务组</p>
     </div>
   </div>
 </template>
@@ -60,5 +70,5 @@ export default {
 </script>
 
 <style lang="less">
-@import '../style/button';
+// @import '../style/button';
 </style>

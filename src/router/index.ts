@@ -12,9 +12,6 @@ const routes = [
   {
     path: '/editor',
     name: 'editor',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
     component: () => import(/* webpackChunkName: "editor" */ '../views/editor/index.vue'),
     children: [
       {
@@ -38,6 +35,16 @@ const routes = [
     path: '/suggest',
     name: 'suggest',
     component: () => import(/* webpackChunkName: "project" */ '../views/suggest.vue')
+  },
+  {
+    path: '/v2/editor/:dir',
+    name: 'editor_v2',
+    component: () => import(/* webpackChunkName: "editor_v2" */ '../views/v2/editor.vue')
+  },
+  {
+    path: '/v2/project-list',
+    name: 'v2_project-list',
+    component: () => import(/* webpackChunkName: "editor_v2" */ '../views/v2/project-list.vue')
   }
 ]
 
