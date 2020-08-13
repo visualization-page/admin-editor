@@ -17,14 +17,28 @@
     overflow: auto;
   }
 }
+.el-popover {
+  border-radius: 0!important;
+  padding: 0!important;
+  &__title {
+    background: #262a30;
+    color: #999;
+    padding: 10px;
+    font-size: 14px;
+    margin-bottom: 0;
+  }
+  &[x-placement^=right] .popper__arrow::after {
+    border-right-color: #262a30;
+  }
+  &[x-placement^=bottom] .popper__arrow::after {
+    border-bottom-color: #262a30;
+  }
+}
+
+/** 编辑器 v1 样式排版 **/
 .c-blue {
   color: #409eff;
 }
-
-.cp {
-  cursor: pointer;
-}
-
 .app-header {
   height: 50px;
   background-color: #4a4c55;

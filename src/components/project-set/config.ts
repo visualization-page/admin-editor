@@ -149,8 +149,12 @@ export const local = [
         value: 26
       },
       {
-        label: '广西八桂',
+        label: '广西移动',
         value: 18
+      },
+      {
+        label: '广西内部版',
+        value: 53
       },
       {
         label: '广西和安',
