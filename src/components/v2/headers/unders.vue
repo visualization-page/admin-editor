@@ -3,8 +3,8 @@
     <div class="flex">
       <p class="f18 c-333 th1 pr40" style="width: 445px">
         <i class="el-icon-edit mr10" />
-        <span>编辑 poverty-alleviation-network</span>
-        <span class="f12 c-999 ml5">| 广西八桂彩云活动</span>
+        <span>编辑 {{ info.dir }}</span>
+        <span class="f12 c-999 ml5">| {{ info.desc || '暂无项目描述' }}</span>
       </p>
       <div class="editor-v2__header-opts flex-center f12 c-666">
         <el-popover
@@ -25,13 +25,13 @@
       </div>
     </div>
     <div class="flex-center f14 c-666">
-      <div class="flex-center mr15 c-main-hover">
+      <div class="flex-center mr15 c-main-hover cp" @click="handleShowImage">
         <i class="el-icon-picture-outline mr5" />
         <span>图片走廊</span>
       </div>
       <div class="flex-center c-main-hover">
         <i class="el-icon-search mr5" />
-        <span>代码搜索</span>
+        <span class="cp" data-target="1" @click="handleShowSearchCode">代码搜索</span>
       </div>
     </div>
   </div>
@@ -40,10 +40,20 @@
 <script lang="ts">
 import { defineComponent } from '@vue/composition-api'
 import ComponentBasic from '@/components/basic-components/index.vue'
+import { project } from '@/assets/project'
+import { showImageResource, showSearchCode } from '@/assets/render'
 
 export default defineComponent({
   components: {
     ComponentBasic
+  },
+  computed: {
+    info () {
+      return {
+        dir: project.dir,
+        desc: project.desc
+      }
+    }
   },
   setup () {
     return {
@@ -73,7 +83,16 @@ export default defineComponent({
           title: '工具函数库',
           icon: 'el-icon-scissors'
         }
-      ]
+      ],
+      showImageResource
+    }
+  },
+  methods: {
+    handleShowImage () {
+      showImageResource.value = true
+    },
+    handleShowSearchCode () {
+      showSearchCode.value = true
     }
   }
 })

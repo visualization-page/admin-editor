@@ -50,6 +50,11 @@ export const env = [
     info: '发布环境用到的变量键值对，使用: $$global.config.baseUrl'
   },
   {
+    label: '预置字段说明',
+    type: 'description',
+    content: 'baseUrl: 接口请求\npublicPath: 静态资源前缀\nsyncPath: 要发布的目标机器目录\nonlineUrl: 发布后的访问地址'
+  },
+  {
     label: '其它发布环境',
     field: 'config.proArr',
     type: 'input-group-arr',
@@ -103,5 +108,134 @@ export const constant = [
     type: 'code',
     'info-icon': 'el-icon-mouse',
     info: '使用方法：在项目全局中任何地方，例如：$$global.constant.[fieldName]'
+  }
+]
+
+export const pub = [
+  {
+    label: '同步文件到目标机器',
+    field: 'syncFile',
+    type: 'checkbox'
+  },
+  {
+    relation: [
+      {
+        field: 'syncFile',
+        value: true
+      }
+    ],
+    label: '所属省份',
+    field: 'config.appType',
+    type: 'select',
+    options: [
+      {
+        label: '测试环境',
+        value: 0
+      },
+      {
+        label: 'baas 测试环境',
+        value: -1
+      },
+      {
+        label: '浙江',
+        value: 1
+      },
+      {
+        label: '上海',
+        value: 5
+      },
+      {
+        label: '湖南',
+        value: 6
+      },
+      {
+        label: '江西',
+        value: 9
+      },
+      {
+        label: '河南快马',
+        value: 8
+      },
+      {
+        label: '北京',
+        value: 34
+      },
+      {
+        label: '河北',
+        value: 20
+      },
+      {
+        label: '吉林',
+        value: 21
+      },
+      {
+        label: '山东',
+        value: 26
+      },
+      {
+        label: '广西八桂',
+        value: 18
+      },
+      {
+        label: '广西和安',
+        value: 51
+      },
+      {
+        label: '和办公测试',
+        value: 66
+      },
+      {
+        label: '和办公',
+        value: 88
+      },
+      {
+        label: '标准',
+        value: 100
+      }
+    ]
+  },
+  {
+    relation: [
+      {
+        field: 'syncFile',
+        value: true
+      }
+    ],
+    label: '发布目标机器目录',
+    field: 'config.path',
+    type: 'textarea',
+    elAttrs: {
+      // readonly: true
+      placeholder: '请输入线上机器发布目录'
+    },
+    prepend: '/data/webapps/'
+  },
+  {
+    relation: [
+      {
+        field: 'syncFile',
+        value: true
+      }
+    ],
+    label: '项目访问正式地址',
+    field: 'url',
+    type: 'textarea',
+    elProps: {
+    },
+    elAttrs: {
+      // readonly: true
+      placeholder: '根据你填写的目标机器目录绑定的域名来定'
+    }
+  },
+  {
+    relation: [
+      {
+        field: 'syncFile',
+        value: true
+      }
+    ],
+    label: '配置说明',
+    type: 'description',
+    content: '切换环境会自动填充：目标机器目录(syncPath)和发布后访问的地址(onlineUrl)，发布会以此处填充的配置为准。'
   }
 ]

@@ -18,7 +18,7 @@
       </div>
       <div class="app__mobile-webview">
         <div ref="scrollContainer" class="app__mobile-webview-mock">
-          <div class="edit-wrap-parent relative height-100">
+          <div class="height-100 oa">
             <render
               v-if="project.depLoaded"
               :project="project"
@@ -97,34 +97,20 @@ export default defineComponent({
   user-select: none;
 }
 .app__box-center {
-  // width: 320px;
   width: 375px;
   left: 50%;
   transform: translateX(-50%);
   top: 20px;
   bottom: 45px;
-  .app__mobile-webview {
-    height: e('calc(100% - 63px)');
-  }
   .app__mobile {
     width: 100%;
     box-shadow: 0 4px 10px 0 rgba(0,0,0,.1);
-    &-header {
-    }
     &-webview {
+      height: e('calc(100% - 63px)');
       transform: translate3d(0, 0, 0);
-      .edit-wrap-parent {
-      }
       &-mock {
-        position: relative;
         height: 100%;
         background-color: #fff;
-        // transform: translate3d(0, 0, 0);
-        box-shadow: 0 4px 10px 0 rgba(0,0,0,.1);
-        overflow: auto;
-        &::-webkit-scrollbar {
-          width: 0;
-        }
       }
     }
   }

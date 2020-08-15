@@ -39,6 +39,7 @@ import { defineComponent } from '@vue/composition-api'
 import { addPage, currentPage, setCurrentPage, Page, updatePages } from '@/assets/page'
 import { project } from '@/assets/project'
 import { setState as setCodeEditState } from '@/assets/code-edit'
+import { Notification } from 'element-ui'
 
 export default defineComponent({
   setup () {
@@ -56,6 +57,13 @@ export default defineComponent({
           updatePages({ pageId: oldIndexPage.id }, { isIndex: false })
         }
         updatePages({ pageId: item.id }, { isIndex: true })
+        Notification({
+          title: '成功',
+          type: 'success',
+          message: '设置首页成功',
+          position: 'top-right',
+          duration: 2000
+        })
       }
     }
   }

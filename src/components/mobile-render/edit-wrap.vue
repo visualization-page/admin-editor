@@ -63,11 +63,11 @@ export default {
           const { left, top, width, height } = edit.style
           // const containerScrollTop = ctx.parent.$refs.scrollContainer.scrollTop
           const containerScrollTop = p.getScrolltop()
-          const mobileHeaderHeight = 65
+          const mobileHeaderHeight = 63
           // console.log(ctx.parent.$el, top, state.parentPosition.top, mobileHeaderHeight, containerScrollTop)
           state.position = {
             left: left - state.parentPosition.left + 'px',
-            top: top - state.parentPosition.top - mobileHeaderHeight + containerScrollTop + 2 + 'px',
+            top: top - state.parentPosition.top - mobileHeaderHeight + containerScrollTop + 'px',
             width: width + 'px',
             height: height + 'px'
           }

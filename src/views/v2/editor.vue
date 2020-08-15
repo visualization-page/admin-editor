@@ -16,11 +16,13 @@
       </div>
     </div>
     <code-editor />
+    <image-resource :show.sync="showImageResource" />
+    <search-code :show.sync="showSearchCode" />
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from '@vue/composition-api'
+import { defineComponent } from '@vue/composition-api'
 import Headers from '@/components/v2/headers/index.vue'
 import HeaderUnders from '@/components/v2/headers/unders.vue'
 import MobileRender from '@/components/mobile-render/index.vue'
@@ -29,12 +31,14 @@ import NodeTool from '@/components/node-style-tools/index.vue'
 import PageSet from '@/components/v2/page-set/index.vue'
 import NodeSet from '@/components/v2/node-set/index.vue'
 import CodeEditor from '@/components/v2/code-editor/index.vue'
+import ImageResource from '@/components/image-resource/index.vue'
+import SearchCode from '@/components/search-code/index.vue'
 import { http } from '@/api'
 import Vue from 'vue'
 import { Message } from 'element-ui'
 import { initProject, resetProject } from '@/assets/project'
 import { lock, unlock } from '@/assets/lock'
-import { clearEditWrapCacheNode } from '@/assets/render'
+import { showImageResource, showSearchCode, clearEditWrapCacheNode } from '@/assets/render'
 
 export default defineComponent({
   components: {
@@ -45,7 +49,9 @@ export default defineComponent({
     NodeTool,
     PageSet,
     NodeSet,
-    CodeEditor
+    CodeEditor,
+    ImageResource,
+    SearchCode
   },
   beforeRouteLeave (to: any, from: any, next: any) {
     // @ts-ignore
@@ -77,6 +83,8 @@ export default defineComponent({
       lock(dir)
     })
     return {
+      showImageResource,
+      showSearchCode
     }
   }
 })

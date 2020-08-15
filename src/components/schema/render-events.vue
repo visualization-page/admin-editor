@@ -14,15 +14,21 @@
       </li>
     </ul>
 
-    <modal :show.sync="showModal" title="事件管理">
+    <modal
+      :show.sync="showModal"
+      title="事件管理"
+      @confirm="handleConfirm"
+      @cancel="showModal = false"
+    >
       <div class="height-100 flex">
         <div
-          class="flex-shrink-0 bg-333 height-100 oa"
+          class="flex-shrink-0 bg-333 height-100 oa plr15"
           style="width: 20%;border-top: 2px #1e1e1e solid"
         >
           <el-form
             :model="form"
             :rules="rules"
+            label-position="top"
             ref="form"
           >
             <el-form-item label="描述" prop="desc">
@@ -54,17 +60,42 @@
                 clearable
               />
             </el-form-item>
+            <el-form-item label="内置函数">
+              <div class="pl10">
+                <div
+                  v-for="(item, i) in fxList"
+                  :key="i"
+                  class="f12 cp c-aaa c-main-hover"
+                  style="line-height: 18px"
+                  @click="handleClickFx(item)"
+                >
+                  <i class="bficon c-main icon-function" />
+                  <span class="ml5">{{ item.name }}</span>
+                </div>
+              </div>
+            </el-form-item>
           </el-form>
-          <p>内置函数</p>
-          <div
-            v-for="(item, i) in fxList"
-            :key="i"
-            class=""
-            @click="handleClickFx(item)"
-          >
-            <i class="c-main bficon icon-function" />
-            {{ item.name }}
-          </div>
+        </div>
+        <div class="height-100" style="width: 80%">
+          <monaco-editor
+            v-if="canMount"
+            v-model="form.fxCode"
+            :amdRequire="amdRequire"
+            style="height: 100%"
+            language="javascript"
+            theme="vs-dark"
+            :options="{
+              fontSize: 14,
+              showUnused: true,
+              smoothScrolling: true,
+              tabCompletion: 'on',
+              tabSize: 2,
+              formatOnPaste: true,
+              detectIndentation: false
+            }"
+            ref="editor"
+          />
+          <p class="tc c-aaa pt50">代码准备中...</p>
         </div>
       </div>
     </modal>
@@ -131,23 +162,6 @@
           </el-button>
         </el-form-item>
         <el-form-item label="逻辑代码" prop="fxCode">
-          <monaco-editor
-            v-model="form.fxCode"
-            :amdRequire="amdRequire"
-            style="height: 500px"
-            language="javascript"
-            theme="vs-dark"
-            :options="{
-              fontSize: 14,
-              showUnused: true,
-              smoothScrolling: true,
-              tabCompletion: 'on',
-              tabSize: 2,
-              formatOnPaste: true,
-              detectIndentation: false
-            }"
-            ref="editor"
-          />
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -191,6 +205,7 @@ export default createComponent({
     }
     const eventList = ref<FormEvent[]>([])
     const showModal = ref(false)
+    const canMount = ref(false)
     const editItemIndex = ref(-1)
     const defaultForm: FormEvent = {
       eventType: '',
@@ -201,6 +216,16 @@ export default createComponent({
     const isFromPage = computed(() => props.from === 'page')
     const form = reactive<FormEvent>(deepClone(defaultForm))
     const eventTypeOptions = computed(() => isFromPage.value ? eventTypePage : eventType)
+
+    watch(() => showModal.value, val => {
+      if (val) {
+        setTimeout(() => {
+          canMount.value = val
+        }, 500)
+      } else {
+        canMount.value = val
+      }
+    })
 
     watch(() => props.schemaData, val => {
       if (val) {
@@ -237,6 +262,7 @@ export default createComponent({
 
     return {
       showModal,
+      canMount,
       form,
       eventList,
       eventTypeOptions,
@@ -294,6 +320,11 @@ export default createComponent({
 
 <style lang="less">
 .events-manage {
+  .el-input__inner {
+    background: transparent;
+    border-color: #666;
+    color: #ccc;
+  }
   &__editor {
   }
   &-dialog {

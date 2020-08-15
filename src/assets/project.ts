@@ -44,6 +44,8 @@ export type Project = {
     pro: {
       baseUrl: string
       publicPath: string
+      syncPath: string
+      onlineUrl: string
     },
     proArr: Array<{
       baseUrl: string
@@ -109,7 +111,11 @@ const defaultProject: Project = {
     },
     pro: {
       baseUrl: '/',
-      publicPath: './'
+      publicPath: './',
+      // 目标机器目录
+      syncPath: '',
+      // 线上地址
+      onlineUrl: ''
     },
     proArr: []
   },

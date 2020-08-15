@@ -32,7 +32,7 @@ export const renderInput = (item: any, data: any, updateField: any) => {
         {
           item.prepend && (
             <div
-              class="prepend bg-f2 c-999 f10 flex-center plr10"
+              class="prepend bg-f2 c-999 f10 flex-center plr10 nowrap"
               style="border:1px solid #dcdfe6;margin-right:-4px;border-radius:4px 0 0 4px"
             >
               { item.prepend }
@@ -115,4 +115,8 @@ export const renderCodeEditor = (schema: any, data: any, updateField: any) => {
     }, schema['code-language'])
   }
   return <el-button type="text" onClick={setCurrentCode}>编辑代码片段</el-button>
+}
+
+export const renderDesc = (schema: any) => {
+  return <div class="bg-f2 p10 br4 f12" style="line-height: 18px">{ schema.content.split('\n').map((x: string) => <p>{x}</p>) }</div>
 }
