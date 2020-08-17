@@ -216,7 +216,7 @@ export default {
           }
         },
         {
-          label: '反馈建议',
+          label: '吐槽',
           icon: 'el-icon-chat-line-round f16',
           action: () => {
             this.$router.push('/suggest')
