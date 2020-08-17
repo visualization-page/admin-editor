@@ -80,6 +80,10 @@ const empty = {
 }
 
 export default defineComponent({
+  name: 'component-umd',
+  props: {
+    show: Boolean
+  },
   setup (props, ctx) {
     const showDialog = ref(false)
     const list = ref([])
@@ -121,10 +125,15 @@ export default defineComponent({
         list.value = res.data
       })
     }
-    const stop = watch(() => tabCurrent.tab2, cur => {
-      if (cur === tabName.umdComponent) {
+    // const stop = watch(() => tabCurrent.tab2, cur => {
+    //   if (cur === tabName.umdComponent) {
+    //     getList()
+    //     stop()
+    //   }
+    // })
+    watch(() => props.show, val => {
+      if (val) {
         getList()
-        stop()
       }
     })
     const handleAdd = async (item: NodeUmd) => {
@@ -148,6 +157,7 @@ export default defineComponent({
         project.componentUmd.push(item)
         Message.success('添加成功')
       }
+      ctx.emit('hide')
     }
     return {
       showDialog,

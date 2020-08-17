@@ -1,3 +1,72 @@
+export const projectCreate = [
+  {
+    label: '项目名称',
+    field: 'dir',
+    type: 'input',
+    rulers: [
+      { required: true, message: '请输入项目目录名称', trigger: 'blur' }
+    ],
+    elAttrs: {
+      disabled: false
+    }
+  },
+  {
+    label: '说明',
+    type: 'description',
+    content: '项目名称会被作为目录名，规则：小写字母加短杆，a-b'
+  },
+  {
+    label: '项目类型',
+    field: 'interactiveType',
+    type: 'select',
+    options: [
+      {
+        label: '讯盟 H5',
+        value: 'long-page'
+      },
+      // {
+      //   label: '滑动海报',
+      //   value: 'poster'
+      // },
+      {
+        label: '讯盟小程序',
+        value: 'xmmp'
+      }
+    ],
+    elAttrs: {
+      disabled: false
+    }
+  },
+  {
+    label: '项目描述',
+    field: 'desc',
+    type: 'textarea',
+    elProps: {
+    },
+    elAttrs: {
+      rows: 2
+    },
+    rulers: [
+      { required: true, message: '请输入项目名称', trigger: 'blur' },
+      { min: 3, max: 500, message: '长度在 3 到 500 个字符', trigger: 'blur' }
+    ],
+    model: 'blur'
+  },
+  {
+    label: '项目白名单',
+    field: 'info.whitelist',
+    type: 'textarea',
+    elAttrs: {
+      placeholder: '请输入姓名，例如：诸炜/杨明；白名单内，项目可编辑操作；'
+    }
+  },
+  {
+    label: '调试控制台',
+    field: 'config.openConsole',
+    type: 'checkbox'
+  }
+]
+
 export const http = [
   {
     label: 'baseUrl',

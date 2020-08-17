@@ -107,7 +107,10 @@ module.exports = {
       const userName = req.query.name
       const data = await component.getProject(req.params.dir)
       const lockedBy = component.getLock(data.project.dir)
-      if (new RegExp('render.html').test(req.headers.referer)) {
+      if (
+        new RegExp('render.html').test(req.headers.referer) ||
+        !!req.query.preview
+      ) {
         // 检查 是 render.html
         res.json({ success: true, data })
         return
@@ -165,23 +168,26 @@ module.exports = {
       })
     }
   },
+  '/project/download-check/:dir': {
+    get: async (req, res) => {
+      const dir = req.params.dir
+      const releasePath = path.resolve(__dirname, '../../release', dir)
+      const zipPath = path.join(releasePath, `${dir}.zip`)
+      const success = fs.pathExistsSync(zipPath)
+      res.json({ success, msg: success ? '' : `${dir} 项目压缩包不存在，请先发布` })
+    }
+  },
   '/project/download/:dir': {
     get: async (req, res) => {
       const dir = req.params.dir
       const releasePath = path.resolve(__dirname, '../../release', dir)
-      if (fs.pathExistsSync(releasePath)) {
-        const zipPath = path.join(releasePath, `${dir}.zip`)
-        if (!fs.pathExistsSync(zipPath)) {
-          await utils.spawn('zip', ['-qr', `${dir}.zip`, './'], { cwd: releasePath })
+      const zipPath = path.join(releasePath, `${dir}.zip`)
+      await utils.spawn('zip', ['-qr', `${dir}.zip`, './'], { cwd: releasePath })
+      res.download(zipPath, err => {
+        if (err) {
+          throw err
         }
-        res.download(zipPath, err => {
-          if (err) {
-            throw err
-          }
-        })
-      } else {
-        res.json({ success: false, msg: `${dir} 项目压缩包不存在，请先发布` })
-      }
+      })
     }
   },
   '/project/lock/:dir': {

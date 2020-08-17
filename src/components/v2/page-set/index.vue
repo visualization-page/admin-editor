@@ -5,7 +5,7 @@
       <span>页面设置</span>
     </p>
     <div class="editor-v2__page-set bg-fff">
-      <tab v-model="currentTab" :tabs="['属性', '节点树']" />
+      <tab :value="currentTab" @input="onChange" :tabs="['属性', '节点树']" />
       <div v-if="!currentPage" class="tc pt50 c-ccc">
         <i class="el-icon-data-board f40" />
         <p class="mt20">请选中一个页面呢～</p>
@@ -23,11 +23,12 @@
 </template>
 
 <script>
-import { ref } from '@vue/composition-api'
+import { computed } from '@vue/composition-api'
 import { currentPage } from '@/assets/page'
 import Tab from '@/components/v2/tab/index.vue'
 import PageSetting from '@/components/page-set/index.vue'
 import NodeTree from '@/components/node-tree/index.vue'
+import { tabName, tabCurrent, setTabName } from '@/assets/tab'
 
 export default {
   components: {
@@ -37,9 +38,13 @@ export default {
   },
 
   setup () {
+    const index = [tabName.pageSetProperty, tabName.pageSetTree]
     return {
       currentPage,
-      currentTab: ref(0)
+      currentTab: computed(() => index.findIndex(x => x === tabCurrent.tab5)),
+      onChange (i) {
+        setTabName(['', '', '', '', index[i]])
+      }
     }
   }
 }

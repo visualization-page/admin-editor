@@ -1,5 +1,5 @@
 <template>
-  <div class="header-opt height-100 flex-center-between pr15">
+  <div class="header-opt bg-333 height-100 flex-center-between pr15">
     <div class="flex items-center cp" @click="$router.push('/')">
       <img width="160px" src="../../assets/img/logo_small.png" alt="">
       <div class="ml10" v-if="false">
@@ -175,11 +175,14 @@ export default defineComponent({
   &__line {
     width: 2px;
     height: 16px;
-    background: #999;
+    // background: #999;
     /*margin: 0 10px;*/
   }
   &__btn {
-    color: #ff7d00 !important;
+    color: #999;
+    &:hover {
+      color: #ff7d00;
+    }
   }
 }
 </style>

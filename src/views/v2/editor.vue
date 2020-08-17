@@ -115,6 +115,9 @@ export default defineComponent({
       border-radius: 3px;
       color: #ff7d00;
     }
+    &__transparent {
+      background-color: #f2f2f2;
+    }
   }
   .shadow {
     box-shadow: 0 0 5px rgba(0,0,0,.1);

@@ -119,7 +119,8 @@ export default defineComponent({
       this.showPubModal = true
     },
 
-    handleDown () {
+    async handleDown () {
+      await http.get('project/download-check', { dir: project.dir })
       // 先拉接口校验是否存在 zip
       location.href = process.env.VUE_APP_FILE_SERVER + `/butterfly/project/download/${project.dir}`
     },

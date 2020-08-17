@@ -73,6 +73,10 @@ const empty = {
 type NodeUtils = typeof empty
 
 export default defineComponent({
+  name: 'global-utils',
+  props: {
+    show: Boolean
+  },
   setup (props, ctx) {
     const showDialog = ref(false)
     const list = ref([])
@@ -113,12 +117,17 @@ export default defineComponent({
         list.value = res.data
       })
     }
-    const stop = watch(() => tabCurrent.tab1, cur => {
-      if (cur === tabName.globalUtils) {
+    watch(() => props.show, val => {
+      if (val) {
         getList()
-        stop()
       }
     })
+    // const stop = watch(() => tabCurrent.tab1, cur => {
+    //   if (cur === tabName.globalUtils) {
+    //     getList()
+    //     stop()
+    //   }
+    // })
     const handleAdd = async (item: NodeUtils) => {
       const { ok, value, msg } = parseCodeValid(project.utils)
       if (ok) {
@@ -128,6 +137,7 @@ export default defineComponent({
           project.utils = project.utils.replace('return {', `return {\n    ${item.name}: ${item.code},`)
           Message.success(`添加成功，调用方式：$$global.utils.${item.name}`)
         }
+        ctx.emit('hide')
       } else {
         Message.error(msg)
       }

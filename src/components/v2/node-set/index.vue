@@ -5,7 +5,7 @@
       <span>节点设置</span>
     </p>
     <div class="editor-v2__page-set bg-fff">
-      <tab :tabs="['属性', '样式']" v-model="currentTab" />
+      <tab :tabs="['属性', '样式']" :value="currentTab" @input="onChange" />
       <div v-if="!currentNode" class="tc pt50 c-ccc">
         <i class="el-icon-data-board f40" />
         <p class="mt20">请选中一个节点呢～</p>
@@ -24,10 +24,11 @@
 
 <script>
 import Tab from '@/components/v2/tab/index.vue'
-import { ref } from '@vue/composition-api'
+import { computed } from '@vue/composition-api'
 import { currentNode } from '@/assets/node'
 import NodeProperty from '@/components/node-property/index.vue'
 import NodeStyle from '@/components/node-style/index.vue'
+import { tabName, tabCurrent, setTabName } from '@/assets/tab'
 
 export default {
   components: {
@@ -37,9 +38,13 @@ export default {
   },
 
   setup () {
+    const index = [tabName.nodeSetProperty, tabName.nodeSetStyle]
     return {
       currentNode,
-      currentTab: ref(0)
+      currentTab: computed(() => index.findIndex(x => x === tabCurrent.tab6)),
+      onChange (i) {
+        setTabName(['', '', '', '', '', index[i]])
+      }
     }
   }
 }

@@ -1,11 +1,17 @@
 <template>
   <div class="editor-v2__header-under flex-center-between">
     <div class="flex">
-      <p class="f18 c-333 th1 pr40" style="width: 445px">
+      <div class="flex items-center f18 c-333 th1" style="width: 445px;padding-right: 70px">
+        <div class="editor-v2__header-opts flex-center f12 c-666 mr10" @click="$router.push('/project/list')">
+          <div class="editor-v2__header-opt">
+            <i class="mr5 el-icon-back" />
+            <span>返回</span>
+          </div>
+        </div>
         <i class="el-icon-edit mr10" />
         <span>编辑 {{ info.dir }}</span>
-        <span class="f12 c-999 ml5">| {{ info.desc || '暂无项目描述' }}</span>
-      </p>
+        <span v-if="false" class="f12 c-999 ml5">| {{ info.desc || '暂无项目描述' }}</span>
+      </div>
       <div class="editor-v2__header-opts flex-center f12 c-666">
         <el-popover
           v-for="(item, i) in opts"
@@ -13,9 +19,15 @@
           placement="bottom"
           :title="item.title"
           trigger="click"
+          @show="handleComponentShow(item, true)"
+          @hide="handleComponentShow(item, false)"
         >
-          <div class="p15 f12">
-            <component :is="item.component" />
+          <div class="p15 f12 oa" style="max-height: 60vh;width:450px">
+            <component
+              :is="item.component"
+              v-bind="{ show: localShowState[item.component] }"
+              v-on="{ hide: handleHidePopover }"
+            />
           </div>
           <div slot="reference" class="editor-v2__header-opt">
             <i :class="`mr5 ${item.icon}`" />
@@ -38,14 +50,24 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from '@vue/composition-api'
+import { defineComponent, ref } from '@vue/composition-api'
 import ComponentBasic from '@/components/basic-components/index.vue'
+import ComponentLibrary from '@/components/component-library/index.vue'
+import ComponentCompose from '@/components/component-compose/index.vue'
+import ComponentUpload from '@/components/component-upload/index.vue'
+import ComponentUmd from '@/components/component-umd/index.vue'
+import GlobalUtils from '@/components/global-utils/index.vue'
 import { project } from '@/assets/project'
 import { showImageResource, showSearchCode } from '@/assets/render'
 
 export default defineComponent({
   components: {
-    ComponentBasic
+    ComponentBasic,
+    ComponentLibrary,
+    ComponentCompose,
+    ComponentUpload,
+    ComponentUmd,
+    GlobalUtils
   },
   computed: {
     info () {
@@ -56,6 +78,12 @@ export default defineComponent({
     }
   },
   setup () {
+    const localShowState = ref<{ [k: string]: boolean }>({
+      [ComponentCompose.name]: false,
+      [ComponentUpload.name]: false,
+      [ComponentUmd.name]: false,
+      [GlobalUtils.name]: false
+    })
     return {
       opts: [
         {
@@ -65,26 +93,35 @@ export default defineComponent({
         },
         {
           title: '内置组件',
-          icon: 'el-icon-folder-opened'
+          icon: 'el-icon-folder-opened',
+          component: ComponentLibrary.name
         },
         {
           title: '封装组件',
-          icon: 'el-icon-folder-add'
+          icon: 'el-icon-folder-add',
+          component: ComponentCompose.name
         },
         {
           title: '上传组件',
-          icon: 'el-icon-folder-checked'
+          icon: 'el-icon-folder-checked',
+          component: ComponentUpload.name
         },
         {
           title: 'cdn 库',
-          icon: 'el-icon-paperclip'
+          icon: 'el-icon-paperclip',
+          component: ComponentUmd.name
         },
         {
           title: '工具函数库',
-          icon: 'el-icon-scissors'
+          icon: 'el-icon-scissors',
+          component: GlobalUtils.name
         }
       ],
-      showImageResource
+      showImageResource,
+      localShowState,
+      handleComponentShow (item: { component: string }, show: boolean) {
+        localShowState.value[item.component] = show
+      }
     }
   },
   methods: {
@@ -93,6 +130,9 @@ export default defineComponent({
     },
     handleShowSearchCode () {
       showSearchCode.value = true
+    },
+    handleHidePopover () {
+      document.body.click()
     }
   }
 })

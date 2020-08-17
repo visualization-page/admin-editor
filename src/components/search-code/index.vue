@@ -90,7 +90,7 @@ function doSearch (val: string) {
     return
   }
   // 定义搜索的字段
-  const projectField = [['css', '全局样式'], ['utils', '全局函数'], ['initScript', '初始脚本'], ['constant', '全局常量']]
+  const projectField = [['css', '全局css'], ['utils', '全局utils'], ['initScript', '初始化脚本'], ['constant', '全局constant']]
   const pageField = [['state', '视图模型'], ['methods', '页面方法'], ['events', '事件管理'], ['className', 'class']]
   const nodeField = [['className', 'class'], ['vShow', 'v-show'], ['vIf', 'v-if'], ['events', '事件管理'], ['style', '样式'], ['renderString', 'render']]
   let index = 0
@@ -241,17 +241,17 @@ export default defineComponent({
           setCurrentPage(page)
         }
         if (it.nodeId) {
-          setTabName([tabName.nodeTree, '', tabName.nodeProperty])
+          setTabName([tabName.nodeTree, '', tabName.nodeProperty, '', tabName.pageSetTree, tabName.nodeSetProperty])
           this.$nextTick().then(() => {
             const res = findNode(it.nodeId!, page!.nodes)
             res && setCurrentNode(res.data)
             if (it.isStyle) {
               // 定位到样式 tab
-              setTabName(['', '', tabName.nodeStyle])
+              setTabName(['', '', tabName.nodeStyle, '', '', tabName.nodeSetStyle])
             }
           })
         } else {
-          setTabName([tabName.pageList, '', tabName.pageSet])
+          setTabName([tabName.pageList, '', tabName.pageSet, '', tabName.pageSetProperty])
         }
       }
       hideComponent(true)

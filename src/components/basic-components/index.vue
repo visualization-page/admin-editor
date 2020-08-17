@@ -28,12 +28,13 @@ import { basic, useBasicComponents } from './'
 useBasicComponents()
 export default {
   name: 'component-basic',
-  setup () {
+  setup (p, ctx) {
     const handleClick = (item) => {
       if (addBeforeValidate()) {
         addNode({ ...item })
-        setTabName([tabName.nodeTree, '', tabName.nodeProperty])
+        setTabName([tabName.nodeTree, '', tabName.nodeProperty, '', tabName.pageSetTree, tabName.nodeSetProperty])
         hideComponent(true)
+        ctx.emit('hide')
       }
     }
     return {
