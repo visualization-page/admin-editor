@@ -61,9 +61,11 @@ import { http } from '@/api'
 import { Loading, Message, MessageBox } from 'element-ui'
 
 export default {
-  components: {
+  name: 'component-compose',
+  props: {
+    show: Boolean
   },
-  setup () {
+  setup (props, ctx) {
     const list = ref([])
     const getList = () => {
       http.get('component/list', { type: 'compose' }).then(res => {
@@ -71,10 +73,16 @@ export default {
       })
     }
 
-    const stop = watch(() => tabCurrent.tab2, cur => {
-      if (cur === tabName.highComponent) {
+    // watch(() => tabCurrent.tab2, cur => {
+    //   if (cur === tabName.highComponent) {
+    //     getList()
+    //     // stop()
+    //   }
+    // })
+
+    watch(() => props.show, val => {
+      if (val) {
         getList()
-        stop()
       }
     })
 
@@ -89,8 +97,9 @@ export default {
         // 合并节点数据
         await diffDownloadDeps(item.componentDeps)
         addComposeNode(item.node)
-        setTabName([tabName.nodeTree, '', tabName.nodeProperty])
+        setTabName([tabName.nodeTree, '', tabName.nodeProperty, '', tabName.pageSetTree, tabName.nodeSetProperty])
         hideComponent(true)
+        ctx.emit('hide')
       }
     }
     const downloadItem = async (item) => {

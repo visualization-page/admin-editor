@@ -39,6 +39,7 @@ export const http = new Http({
       release: '/butterfly/project/release/:dir',
       copy: '/butterfly/project/copy/:dir',
       download: '/butterfly/project/download/:dir',
+      'download-check': '/butterfly/project/download-check/:dir',
       lock: '/butterfly/project/lock/:dir'
     },
     delete: '/butterfly/delete/:type/:dir',

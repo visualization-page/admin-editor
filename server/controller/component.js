@@ -231,9 +231,11 @@ const handle = {
         // 初次创建保存创建人
         data.project.createUser = data.project.info.userName
       }
+      if (data.doLock !== false) {
+        await lock.lock(dir, data.project.info.userName)
+      }
       await fs.outputFile(dataPath, JSON.stringify(data))
       await handle.updateProjectList()
-      await lock.lock(dir, data.project.info.userName)
     }
   },
   lockProject: async (dir, userName, isLock) => {

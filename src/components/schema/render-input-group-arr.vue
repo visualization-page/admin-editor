@@ -4,6 +4,7 @@
     <div
       v-for="(item, i) in list"
       :key="i"
+      class="mb10"
     >
       <div class="flex-center-between f12">
         <div class="flex">
@@ -13,6 +14,7 @@
         <el-button type="text" @click="handleDel(i)">删除</el-button>
       </div>
       <input-group
+        class="bg-f2 p10 mt5 br4"
         label="添加键值对"
         :schema="item"
         :schema-data="item"
@@ -62,11 +64,13 @@ export default {
     handleAdd () {
       // @ts-ignore
       this.list.push({
-        name: '发布环境2套',
+        name: '环境名称',
         field: 'kv',
         kv: {
           baseUrl: '',
-          publicPath: './'
+          publicPath: './',
+          syncPath: '',
+          onlineUrl: ''
         }
       })
     },

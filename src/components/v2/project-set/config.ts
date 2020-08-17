@@ -1,10 +1,37 @@
-export const local = [
+export const projectCreate = [
   {
-    label: '英文名称',
+    label: '项目名称',
     field: 'dir',
     type: 'input',
     rulers: [
       { required: true, message: '请输入项目目录名称', trigger: 'blur' }
+    ],
+    elAttrs: {
+      disabled: false
+    }
+  },
+  {
+    label: '说明',
+    type: 'description',
+    content: '项目名称会被作为目录名，规则：小写字母加短杆，a-b'
+  },
+  {
+    label: '项目类型',
+    field: 'interactiveType',
+    type: 'select',
+    options: [
+      {
+        label: '讯盟 H5',
+        value: 'long-page'
+      },
+      // {
+      //   label: '滑动海报',
+      //   value: 'poster'
+      // },
+      {
+        label: '讯盟小程序',
+        value: 'xmmp'
+      }
     ],
     elAttrs: {
       disabled: false
@@ -37,29 +64,10 @@ export const local = [
     label: '调试控制台',
     field: 'config.openConsole',
     type: 'checkbox'
-  },
-  {
-    label: '本机预览环境',
-    field: 'config.dev',
-    type: 'input-group',
-    'info-icon': 'el-icon-warning-outline',
-    info: '本机开发、预览环境用到的变量键值对，使用: $$global.config.baseUrl'
-  },
-  {
-    label: '默认发布环境',
-    field: 'config.pro',
-    type: 'input-group',
-    'info-icon': 'el-icon-warning-outline',
-    info: '发布环境用到的变量键值对，使用: $$global.config.baseUrl'
-  },
-  {
-    label: '其它发布环境',
-    field: 'config.proArr',
-    type: 'input-group-arr',
-    'info-icon': 'el-icon-warning-outline',
-    // block: true,
-    info: '如果默认的发布环境不够用，新增其它发布环境，在发布时选择对应环境即可'
-  },
+  }
+]
+
+export const http = [
   {
     label: 'baseUrl',
     field: 'httpOptions.baseUrl',
@@ -81,13 +89,98 @@ export const local = [
     ]
   },
   {
+    label: 'urlMap',
+    field: 'httpOptions.urlMap',
+    type: 'input-group'
+  },
+  {
     label: 'Http选项',
     field: 'httpOptions.options',
     block: false,
     type: 'code',
     'info-icon': 'el-icon-data-analysis',
     info: '上面的字段如果不够用，可以在这里补充其它选项。'
+  }
+]
+
+export const env = [
+  {
+    label: '本机预览环境',
+    field: 'config.dev',
+    type: 'input-group',
+    'info-icon': 'el-icon-warning-outline',
+    info: '本机开发、预览环境用到的变量键值对，使用: $$global.config.baseUrl'
   },
+  {
+    label: '默认发布环境',
+    field: 'config.pro',
+    type: 'input-group',
+    'info-icon': 'el-icon-warning-outline',
+    info: '发布环境用到的变量键值对，使用: $$global.config.baseUrl'
+  },
+  {
+    label: '预置字段说明',
+    type: 'description',
+    content: 'baseUrl: 接口请求\npublicPath: 静态资源前缀\nsyncPath: 要发布的目标机器目录\nonlineUrl: 发布后的访问地址'
+  },
+  {
+    label: '其它发布环境',
+    field: 'config.proArr',
+    type: 'input-group-arr',
+    'info-icon': 'el-icon-warning-outline',
+    // block: true,
+    info: '如果默认的发布环境不够用，新增其它发布环境，在发布时选择对应环境即可'
+  }
+]
+
+export const css = [
+  {
+    label: '全局css',
+    field: 'css',
+    block: false,
+    'code-language': 'css',
+    type: 'code',
+    'info-icon': 'el-icon-brush',
+    info: '全局css，会被直接插入到 html 头部中'
+  }
+]
+
+export const utils = [
+  {
+    label: '全局函数',
+    field: 'utils',
+    block: false,
+    'code-language': 'javascript',
+    type: 'code',
+    'info-icon': 'el-icon-star-off',
+    info: '全局utils，例如：$$global.utils.deepClone'
+  }
+]
+
+export const scripts = [
+  {
+    label: '初始脚本',
+    field: 'initScripts',
+    block: false,
+    'code-language': 'javascript',
+    type: 'code',
+    'info-icon': 'el-icon-video-camera',
+    info: '本段代码会在项目初始化的时候运行'
+  }
+]
+
+export const constant = [
+  {
+    label: '项目常量',
+    field: 'constant',
+    block: false,
+    type: 'code',
+    'info-icon': 'el-icon-mouse',
+    info: '使用方法：在项目全局中任何地方，例如：$$global.constant.[fieldName]'
+  }
+]
+
+export const pub = [
   {
     label: '同步文件到目标机器',
     field: 'syncFile',
@@ -149,12 +242,8 @@ export const local = [
         value: 26
       },
       {
-        label: '广西移动',
+        label: '广西八桂',
         value: 18
-      },
-      {
-        label: '广西内部版',
-        value: 53
       },
       {
         label: '广西和安',
@@ -208,70 +297,14 @@ export const local = [
     }
   },
   {
-    label: '项目类型',
-    field: 'interactiveType',
-    type: 'select',
-    options: [
+    relation: [
       {
-        label: '普通 H5',
-        value: 'long-page'
-      },
-      // {
-      //   label: '滑动海报',
-      //   value: 'poster'
-      // },
-      {
-        label: '讯盟小程序',
-        value: 'xmmp'
+        field: 'syncFile',
+        value: true
       }
     ],
-    elAttrs: {
-      disabled: false
-    }
-  },
-  // {
-  //   label: '封面图',
-  //   field: 'thumbCover',
-  //   type: 'image'
-  // },
-  {
-    label: '全局css',
-    field: 'css',
-    block: false,
-    'code-language': 'css',
-    type: 'code',
-    'info-icon': 'el-icon-brush',
-    info: '全局css，会被直接插入到 html 头部中'
-  },
-  {
-    label: '全局函数',
-    field: 'utils',
-    block: false,
-    'code-language': 'javascript',
-    type: 'code',
-    'info-icon': 'el-icon-star-off',
-    info: '全局utils，例如：$$global.utils.deepClone'
-  },
-  {
-    label: '初始脚本',
-    field: 'initScripts',
-    block: false,
-    'code-language': 'javascript',
-    type: 'code',
-    'info-icon': 'el-icon-video-camera',
-    info: '本段代码会在项目初始化的时候运行'
-  },
-  {
-    label: '项目常量',
-    field: 'constant',
-    block: false,
-    type: 'code',
-    'info-icon': 'el-icon-mouse',
-    info: '使用方法：在项目全局中任何地方，例如：$$global.constant.[fieldName]'
-  },
-  {
-    label: 'urlMap',
-    field: 'httpOptions.urlMap',
-    type: 'input-group'
+    label: '配置说明',
+    type: 'description',
+    content: '切换环境会自动填充：目标机器目录(syncPath)和发布后访问的地址(onlineUrl)，发布会以此处填充的配置为准。'
   }
 ]

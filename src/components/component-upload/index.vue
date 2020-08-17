@@ -71,8 +71,11 @@ import { project } from '@/assets/project'
 import { currentPage } from '@/assets/page'
 
 export default defineComponent({
-  name: 'index',
-  setup () {
+  name: 'component-upload',
+  props: {
+    show: Boolean
+  },
+  setup (props, ctx) {
     const list = ref([])
     const getList = () => {
       http.get('component/list', { type: 'upload' }).then(res => {
@@ -80,10 +83,16 @@ export default defineComponent({
       })
     }
 
-    const stop = watch(() => tabCurrent.tab2, cur => {
-      if (cur === tabName.uploadComponent) {
+    // const stop = watch(() => tabCurrent.tab2, cur => {
+    //   if (cur === tabName.uploadComponent) {
+    //     getList()
+    //     stop()
+    //   }
+    // })
+
+    watch(() => props.show, val => {
+      if (val) {
         getList()
-        stop()
       }
     })
 
@@ -110,7 +119,7 @@ export default defineComponent({
     const handleClick = (item) => {
       if (addBeforeValidate()) {
         addNode({ ...item, nodeType: 1 << 0 })
-        setTabName([tabName.nodeTree, '', tabName.nodeProperty])
+        setTabName([tabName.nodeTree, '', tabName.nodeProperty, '', tabName.pageSetTree, tabName.nodeSetProperty])
         hideComponent(true)
         const currentPageDeps = project.componentDownload.filter(x => x.pageId === currentPage.value.id)
         const dep = currentPageDeps.find(x => x.name === item.name)
@@ -126,6 +135,7 @@ export default defineComponent({
             refNum: item.refNum || 1
           })
         }
+        ctx.emit('hide')
       }
     }
     const downloadItem = async (item) => {

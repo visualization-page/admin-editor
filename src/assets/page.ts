@@ -92,7 +92,7 @@ export const delPage = (target: { pageIndex?: number, pageId?: string }) => {
   setCurrentNode(null)
 }
 
-export const updatePages = (target: { pageId?: string, pageIndex?: number }, obj: Page) => {
+export const updatePages = (target: { pageId?: string, pageIndex?: number }, obj: Partial<Page>) => {
   let { pageId, pageIndex } = target
   if (pageId) {
     pageIndex = project.pages.findIndex((x: Page) => x.id === pageId)

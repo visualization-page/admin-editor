@@ -4,7 +4,7 @@
       <header-opt
         :opts="opts"
       >
-        <div class="flex-center c-blue">
+        <div class="flex-center header-opt__btn">
           <div
             class="ml15 cp flex items-center"
             @click="changeMode"
@@ -100,7 +100,6 @@
           </template>
         </el-table-column>
         <el-table-column
-          fixed="right"
           label="操作"
           width="230">
           <template slot-scope="scope">
@@ -112,7 +111,7 @@
             </template>
             <template v-if="hasPriv(scope.row)">
               <el-button v-if="isDev" @click="handleDel(scope.row)" type="text" size="small">删除</el-button>
-              <el-button @click="$router.push(`/editor${isDev ? '' : '-sample'}/${scope.row.dir}`)" type="text" size="small">编辑</el-button>
+              <el-button @click="handleEditForm(scope.row)" type="text" size="small">编辑</el-button>
             </template>
           </template>
         </el-table-column>
@@ -132,6 +131,22 @@
     <div class="fixed width-100 tc b10">
       <p class="c-999 f12 mt10">Designed by 讯盟FE - 前端运营商组</p>
     </div>
+
+    <el-dialog
+      :title="editProjectForm ? '编辑项目' : '创建项目'"
+      :visible.sync="showAddModal"
+    >
+      <schema-form
+        :schema="schema"
+        :schema-data="addProjectForm"
+        @updateByField="handleFormChange"
+      />
+      <template slot="footer">
+        <el-button @click="showAddModal = false">取消</el-button>
+        <el-button v-if="editProjectForm" type="primary" @click="handleToEditor()">编辑项目页面</el-button>
+        <el-button type="primary" @click="handleSaveForm()">保存</el-button>
+      </template>
+    </el-dialog>
   </div>
 </template>
 
@@ -141,11 +156,15 @@ import { http } from '@/api'
 import { MessageBox, Message } from 'element-ui'
 import dayjs from 'dayjs'
 import Avatar from '@/components/avatar/index.vue'
+import SchemaForm from '@/components/schema/index.vue'
+import { projectCreate } from '@/components/v2/project-set/config.ts'
+import { getParentRef } from '@/assets/util'
 
 export default {
   components: {
     HeaderOpt,
-    Avatar
+    Avatar,
+    SchemaForm
   },
   computed: {
     isDev () {
@@ -158,6 +177,16 @@ export default {
   data () {
     return {
       mode: localStorage.getItem('butterfly-mode'),
+      schema: projectCreate,
+      showAddModal: false,
+      addProjectForm: {
+        dir: '',
+        desc: '',
+        interactiveType: '',
+        config: { openConsole: false },
+        info: { whitelist: '' }
+      },
+      editProjectForm: null,
       searchField: [
         { label: '项目名称', value: 'dir' },
         { label: '项目描述', value: 'desc' },
@@ -214,8 +243,7 @@ export default {
           icon: 'el-icon-plus f16',
           action: () => {
             // project 置空
-            // resetProject()
-            this.$router.push('/editor')
+            this.handleAddForm()
           }
         }
       ],
@@ -259,7 +287,8 @@ export default {
           if (new RegExp(val).test(x[this.searchModel.field])) {
             return {
               ...x,
-              [this.searchModel.field]: x[this.searchModel.field].replace(val, `<span class="c-main">${val}</span>`)
+              [this.searchModel.field]: x[this.searchModel.field].replace(val, `<span class="c-main">${val}</span>`),
+              origin: x[this.searchModel.field]
             }
           }
         }).filter(Boolean)
@@ -307,8 +336,72 @@ export default {
         this.tableData.splice(i, 1)
       })
     },
-    handleDown (item) {
+    async handleDown (item) {
+      await http.get('project/download-check', { dir: item.dir })
       location.href = process.env.VUE_APP_FILE_SERVER + `/butterfly/project/download/${item.dir}`
+    },
+    async handleEditForm (item) {
+      const res = await http.get('project/get', { dir: item.origin || item.dir, preview: 1 })
+      const data = res.data.project
+      this.editProjectForm = data
+      this.addProjectForm = {
+        dir: data.dir,
+        interactiveType: data.interactiveType,
+        desc: data.desc,
+        info: { whitelist: data.info.whitelist },
+        config: { openConsole: data.config.openConsole }
+      }
+      this.showAddModal = true
+      // 项目名称不可修改
+      projectCreate[0].elAttrs.disabled = true
+    },
+    handleAddForm () {
+      projectCreate[0].elAttrs.disabled = false
+      this.editProjectForm = null
+      this.addProjectForm = {
+        dir: '',
+        desc: '',
+        interactiveType: 'long-page',
+        config: { openConsole: false },
+        info: { whitelist: '' }
+      }
+      this.showAddModal = true
+    },
+    handleFormChange (field, val) {
+      const res = getParentRef(field, this.addProjectForm)
+      res.pref[res.field] = val
+    },
+    async handleToEditor () {
+      this.$router.push(`${this.isDev ? '/v2' : ''}/editor${this.isDev ? '' : '-sample'}/${this.addProjectForm.dir}`)
+    },
+    async handleSaveForm () {
+      if (!this.addProjectForm.dir) {
+        Message.error('请输入项目名称')
+      } else if (!/^[a-z][a-z-_0-9]+$/.test(this.addProjectForm.dir)) {
+        Message.error('项目名称不合法，请重新输入')
+      } else if (!this.addProjectForm.interactiveType) {
+        Message.error('请选择项目类型')
+      } else {
+        const _merge = (obj, data) => {
+          Object.keys(obj).forEach(k => {
+            if (typeof obj[k] === 'object') {
+              _merge(obj[k], data[k])
+            } else {
+              data[k] = obj[k]
+            }
+          })
+        }
+        _merge(this.addProjectForm, this.editProjectForm)
+        await http.post('project/save', {
+          doLock: false,
+          force: true,
+          dir: this.addProjectForm.dir,
+          project: this.editProjectForm
+        })
+        Message.success('保存成功')
+        this.showAddModal = false
+        this.getList()
+      }
     }
   }
 }
@@ -318,7 +411,7 @@ export default {
 .project-list {
   width: 1100px;
   margin: 0 auto 20px auto;
-  height: e('calc(100% - 140px)');
+  height: e('calc(100% - 152px)');
   overflow: auto;
   &__title {
     width: 1100px;

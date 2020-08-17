@@ -4,7 +4,7 @@
       <div class="app__mobile-header relative bb bd-eee">
         <img src="../../assets/img/mobile-bar.jpg" width="100%" alt="">
         <span class="absolute l0 b0 width-100 pb10 tc f16">
-          {{ currentPage ? (currentPage.title || '请输入标题') : '未创建页面' }}
+          {{ currentPage ? (currentPage.title || '请输入标题') : '未添加页面' }}
         </span>
         <el-button
           v-if="currentPage"
@@ -13,12 +13,12 @@
           @click="handlePreviewPage"
         >
           <i class="el-icon-document-remove" />
-          <span>预览页面</span>
+          <span>预览</span>
         </el-button>
       </div>
       <div class="app__mobile-webview">
         <div ref="scrollContainer" class="app__mobile-webview-mock">
-          <div class="edit-wrap-parent relative height-100">
+          <div class="height-100 oa">
             <render
               v-if="project.depLoaded"
               :project="project"
@@ -97,37 +97,20 @@ export default defineComponent({
   user-select: none;
 }
 .app__box-center {
-  // width: 320px;
   width: 375px;
   left: 50%;
   transform: translateX(-50%);
   top: 20px;
   bottom: 45px;
-  .app__mobile-webview {
-    height: e('calc(100% - 65px)');
-  }
   .app__mobile {
     width: 100%;
     box-shadow: 0 4px 10px 0 rgba(0,0,0,.1);
-    &-header {
-    }
     &-webview {
-      // height: 480px;
-      background-color: #eee;
-      // margin: 0 -10px;
-      // padding: 0 10px;
-      // overflow: auto;
+      height: e('calc(100% - 63px)');
       transform: translate3d(0, 0, 0);
-      &::-webkit-scrollbar {
-        width: 0;
-      }
       &-mock {
-        position: relative;
         height: 100%;
         background-color: #fff;
-        // transform: translate3d(0, 0, 0);
-        box-shadow: 0 4px 10px 0 rgba(0,0,0,.1);
-        overflow: auto;
       }
     }
   }

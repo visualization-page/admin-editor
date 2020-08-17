@@ -148,7 +148,7 @@ export default defineComponent<{
               const id = reallyEl.getAttribute('data-id')
               if (id) {
                 setEditWrapNode(reallyEl)
-                setTabName([tabName.nodeTree, '', tabName.nodeProperty])
+                setTabName([tabName.nodeTree, '', tabName.nodeProperty, '', tabName.pageSetTree, tabName.nodeSetProperty])
                 const node = findNode(id)
                 if (node) {
                   setCurrentNode(node.data)

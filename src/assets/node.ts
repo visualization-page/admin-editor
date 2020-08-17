@@ -162,7 +162,7 @@ export const addNode = async (item: NodeItemBasic | NodeItemLibrary) => {
       ...item,
       title: `${it.library}/${it.name}`,
       nodeType: item.nodeType,
-      renderString: common.renderString.replace('div', it.name)
+      renderString: common.renderString.replace(/div/g, it.name)
     })
     getNewNodeParent().push(newNode)
   }

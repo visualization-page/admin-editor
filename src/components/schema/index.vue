@@ -1,8 +1,8 @@
 <script lang="jsx">
 import Vue from 'vue'
-import { MessageBox } from 'element-ui'
+import { Notification } from 'element-ui'
 import { defineComponent, createElement, reactive, watch } from '@vue/composition-api'
-import { renderInput, renderInputBind, renderSelect, renderCheckbox, renderUniversal, renderCodeEditor } from './render-item'
+import { renderInput, renderInputBind, renderSelect, renderCheckbox, renderUniversal, renderCodeEditor, renderDesc } from './render-item'
 import RenderInputGroup from './render-input-group.vue'
 import RenderInputGroupArr from './render-input-group-arr.vue'
 import RenderEvents from './render-events.vue'
@@ -45,7 +45,12 @@ export default defineComponent({
                 on: {
                   click () {
                     if (schema.info) {
-                      MessageBox.alert(schema.info)
+                      Notification({
+                        type: 'info',
+                        title: '提示',
+                        message: schema.info,
+                        position: 'top-right'
+                      })
                     }
                   }
                 }
@@ -111,6 +116,8 @@ export default defineComponent({
           return renderCodeEditor(schema, props.schemaData, updateField)
         case 'image':
           return renderCompositeComponent(RenderImage, schema)
+        case 'description':
+          return renderDesc(schema)
         default:
           return <p />
       }

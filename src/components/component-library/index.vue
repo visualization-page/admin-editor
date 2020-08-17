@@ -42,7 +42,8 @@ import { addBeforeValidate, addNode } from '@/assets/node'
 import { setTabName, tabName, hideComponent } from '@/assets/tab'
 
 export default defineComponent({
-  setup () {
+  name: 'component-library',
+  setup (p, ctx) {
     const checkData = ref<{ [k: string]: Array<string> }>({})
     watch(() => project.componentLibrary, val => {
       checkData.value = { ...val }
@@ -77,8 +78,9 @@ export default defineComponent({
     const handleAdd = (library: string, name: string) => {
       if (addBeforeValidate()) {
         addNode({ library, name, nodeType: 1 << 2, type: 'div' })
-        setTabName([tabName.nodeTree, '', tabName.nodeProperty])
+        setTabName([tabName.nodeTree, '', tabName.nodeProperty, '', tabName.pageSetTree, tabName.nodeSetProperty])
         hideComponent(true)
+        ctx.emit('hide')
       }
     }
 
