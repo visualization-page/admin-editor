@@ -92,7 +92,7 @@ export default defineComponent({
     }, { lazy: true })
     const handleNodeClick = (data: any) => {
       setCurrentNode(data)
-      setTabName(['', '', tabName.nodeProperty])
+      setTabName(['', '', tabName.nodeProperty, '', '', tabName.nodeSetProperty])
     }
     const handleCopy = (data: any, parent: any) => {
       if (parent.parent === null) {

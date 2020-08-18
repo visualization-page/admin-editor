@@ -74,6 +74,15 @@ export default defineComponent({
 .editor-v2 {
   &__page-list {
     width: 150px;
+    @media screen and (min-width: 1500px) {
+      width: 250px;
+    }
+    @media screen and (min-width: 1700px) {
+      width: 300px;
+    }
+    @media screen and (min-width: 1850px) {
+      width: 400px;
+    }
     &-item {
       height: 60px;
       background: #fff;
