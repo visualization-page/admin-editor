@@ -172,8 +172,8 @@ module.exports = {
     get: async (req, res) => {
       const dir = req.params.dir
       const releasePath = path.resolve(__dirname, '../../release', dir)
-      const zipPath = path.join(releasePath, `${dir}.zip`)
-      const success = fs.pathExistsSync(zipPath)
+      // const zipPath = path.join(releasePath, `${dir}.zip`)
+      const success = fs.pathExistsSync(releasePath)
       res.json({ success, msg: success ? '' : `${dir} 项目压缩包不存在，请先发布` })
     }
   },

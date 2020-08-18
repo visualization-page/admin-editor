@@ -135,6 +135,7 @@
     <el-dialog
       :title="editProjectForm ? '编辑项目' : '创建项目'"
       :visible.sync="showAddModal"
+      width="650px"
     >
       <schema-form
         :schema="schema"
