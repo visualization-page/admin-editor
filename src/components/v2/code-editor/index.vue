@@ -68,6 +68,8 @@ export default createComponent({
     watch(() => isEdit.value, val => {
       if (val) {
         canMountAfterLoading.value = true
+        // hide popover
+        document.body.click()
         setTimeout(() => {
           canMount.value = true
         }, 500)
@@ -124,7 +126,7 @@ export default createComponent({
     left: 0;
     right: 0;
     background: #262a30;
-    z-index: 9999;
+    z-index: 3000;
   }
 }
 </style>
