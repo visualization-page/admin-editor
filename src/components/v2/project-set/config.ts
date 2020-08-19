@@ -53,17 +53,17 @@ export const projectCreate = [
     model: 'blur'
   },
   {
+    label: '控制台开关',
+    field: 'config.openConsole',
+    type: 'checkbox'
+  },
+  {
     label: '项目白名单',
     field: 'info.whitelist',
     type: 'textarea',
     elAttrs: {
       placeholder: '请输入姓名，例如：诸炜/杨明；白名单内，项目可编辑操作；'
     }
-  },
-  {
-    label: '调试控制台',
-    field: 'config.openConsole',
-    type: 'checkbox'
   }
 ]
 
@@ -181,6 +181,11 @@ export const constant = [
 ]
 
 export const pub = [
+  {
+    label: '控制台开关',
+    field: 'config.openConsole',
+    type: 'checkbox'
+  },
   {
     label: '同步文件到目标机器',
     field: 'syncFile',

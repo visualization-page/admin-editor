@@ -144,7 +144,7 @@
       />
       <template slot="footer">
         <el-button @click="showAddModal = false">取消</el-button>
-        <el-button v-if="editProjectForm" type="primary" @click="handleToEditor()">编辑项目页面</el-button>
+        <el-button v-if="editProjectForm" type="warning" @click="handleToEditor()">开发项目</el-button>
         <el-button type="primary" @click="handleSaveForm()">保存</el-button>
       </template>
     </el-dialog>
