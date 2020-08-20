@@ -66,7 +66,7 @@ export type Project = {
   [k: string]: any
 }
 
-const defaultProject: Project = {
+export const defaultProject: Project = {
   url: '',
   depLoaded: true,
   // 环境 默认 dev，可切换 pro，目前只关联了 config 字段

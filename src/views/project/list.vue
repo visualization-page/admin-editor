@@ -159,7 +159,8 @@ import dayjs from 'dayjs'
 import Avatar from '@/components/avatar/index.vue'
 import SchemaForm from '@/components/schema/index.vue'
 import { projectCreate } from '@/components/v2/project-set/config.ts'
-import { getParentRef } from '@/assets/util'
+import { getParentRef, deepClone } from '@/assets/util'
+import { defaultProject } from '@/assets/project'
 
 export default {
   components: {
@@ -364,7 +365,7 @@ export default {
         desc: '',
         interactiveType: 'long-page',
         config: { openConsole: false },
-        info: { whitelist: '' }
+        info: { whitelist: '', userName: this.$native.name, time: Date.now() }
       }
       this.showAddModal = true
     },
@@ -392,12 +393,13 @@ export default {
             }
           })
         }
-        _merge(this.addProjectForm, this.editProjectForm)
+        const project = this.editProjectForm || deepClone(defaultProject)
+        _merge(this.addProjectForm, project)
         await http.post('project/save', {
           doLock: false,
           force: true,
-          dir: this.addProjectForm.dir,
-          project: this.editProjectForm
+          dir: project.dir,
+          project
         })
         Message.success('保存成功')
         this.showAddModal = false
