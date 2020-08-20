@@ -15,7 +15,7 @@
           >
             {{ btns[1] }}
           </div>
-          <div class="bf-btn" @click="$emit('update:show', false),$emit('confirm')">
+          <div class="bf-btn" @click="$emit('confirm')">
             <div class="bf-btn__container">
               {{ btns[0] }}
             </div>
