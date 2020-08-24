@@ -14,17 +14,24 @@ Vue.directive('insert-id', function (el, binding) {
 
 const mergeDirectionSize = (
   target: any,
-  obj: any,
+  styleObj: any,
   type: 'position' | 'margin' | 'padding' | 'border'
 ) => {
-  if (typeof obj !== 'object') {
+  if (typeof styleObj !== 'object') {
     return
   }
+  const obj = deepClone(styleObj)
   const isBorder = type === 'border'
   if (type === 'position') {
     Object.assign(target, obj)
   } else {
     const newObj: any = {}
+    if (isBorder) {
+      // 补齐其它边
+      ['top', 'right', 'bottom', 'left'].forEach(dir => {
+        obj[dir] = obj[dir] || 0
+      })
+    }
     Object.keys(obj).forEach(k => {
       newObj[`${type}${k[0].toUpperCase()}${k.slice(1)}${isBorder ? 'Width' : ''}`] = obj[k]
     })
