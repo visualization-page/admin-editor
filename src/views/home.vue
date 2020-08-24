@@ -56,7 +56,8 @@
     </div>
 
     <div class="fixed width-100 tc b10">
-      <p class="c-666 f12 mt10">Designed by 讯盟FE - 前端运营商组 <br> 特别鸣谢 UI - 智慧城市业务组</p>
+      <p class="c-666 f12 mt10">Designed by 讯盟FE</p>
+      <p v-if="false" class="c-666 f12 mt10">Designed by 讯盟FE - 前端运营商组 <br> 特别鸣谢 UI - 智慧城市业务组</p>
     </div>
   </div>
 </template>

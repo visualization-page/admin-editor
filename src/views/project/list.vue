@@ -88,6 +88,16 @@
         <el-table-column
           prop="info.remark"
           label="发布备注">
+          <template slot-scope="props">
+            <el-button
+              v-if="props.row.info.remark"
+              class="mr5"
+              type="text"
+              icon="el-icon-tickets"
+              @click="handleGetRecords(props.row)"
+            />
+            <span>{{ props.row.info.remark || '-' }}</span>
+          </template>
         </el-table-column>
         <el-table-column
           prop="info.userName"
@@ -129,7 +139,7 @@
       </div>
     </div>
     <div class="fixed width-100 tc b10">
-      <p class="c-999 f12 mt10">Designed by 讯盟FE - 前端运营商组</p>
+      <p class="c-999 f12 mt10">Designed by 讯盟FE</p>
     </div>
 
     <el-dialog
@@ -147,6 +157,23 @@
         <el-button v-if="editProjectForm" type="warning" @click="handleToEditor()">开发项目</el-button>
         <el-button type="primary" @click="handleSaveForm()">保存</el-button>
       </template>
+    </el-dialog>
+
+    <el-dialog
+      title="发布记录"
+      width="400px"
+      :visible.sync="showRecord"
+    >
+      <el-table
+        border
+        stripe
+        class="width-100"
+        :data="records"
+      >
+        <el-table-column label="发布信息" prop="remark" />
+        <el-table-column label="发布人" prop="userName" />
+        <el-table-column label="操作时间" prop="time" />
+      </el-table>
     </el-dialog>
   </div>
 </template>
@@ -181,6 +208,7 @@ export default {
       mode: localStorage.getItem('butterfly-mode'),
       schema: projectCreate,
       showAddModal: false,
+      showRecord: false,
       addProjectForm: {
         dir: '',
         desc: '',
@@ -251,13 +279,22 @@ export default {
       ],
       tableData: [],
       currentPage: 1,
-      pageSize: 10
+      pageSize: 10,
+      records: []
     }
   },
   created () {
     this.getList()
   },
   methods: {
+    async handleGetRecords (item) {
+      const res = await http.get('project/record', { dir: item.dir })
+      this.records = res.data.map(x => ({
+        ...x,
+        time: dayjs(x.time).format('MM/DD HH:mm')
+      }))
+      this.showRecord = true
+    },
     handlePage (val) {
       this.currentPage = val
     },
@@ -275,7 +312,7 @@ export default {
           ...x,
           info: {
             ...(x.info || {}),
-            time: x.info.time ? dayjs(x.info.time).format('YYYY/MM/DD HH:mm') : '-'
+            time: x.info.time ? dayjs(x.info.time).format('MM/DD HH:mm') : '-'
           }
         }))
       })
@@ -412,12 +449,12 @@ export default {
 
 <style lang="less">
 .project-list {
-  width: 1100px;
+  width: 1200px;
   margin: 0 auto 20px auto;
   height: e('calc(100% - 152px)');
   overflow: auto;
   &__title {
-    width: 1100px;
+    width: 1200px;
     margin: 20px auto 0 auto;
   }
   &__wrap {

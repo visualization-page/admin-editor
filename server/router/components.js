@@ -190,6 +190,13 @@ module.exports = {
       })
     }
   },
+  '/project/record/:dir': {
+    get: async (req, res) => {
+      const dir = req.params.dir
+      const json = await fs.readJson(path.join(pubPath, 'project', dir, 'record.json')).catch(() => [])
+      res.json({ success: true, data: json })
+    }
+  },
   '/project/lock/:dir': {
     // get (req, res) {
     //   res.json({ success: false, msg: `666` })

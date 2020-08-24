@@ -13,7 +13,7 @@ export default {
         query: this.$route.query
       })
     } else {
-      Toast('未获取到项目，请检查是否已经保存项目')
+      Toast('项目未添加页面')
     }
   }
 }

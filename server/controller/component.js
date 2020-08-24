@@ -202,9 +202,9 @@ const handle = {
     utils.rm(tmpPath)
     return msg
   },
-  updateProjectList: async () => {
+  updateProjectList: async (projectInfo) => {
     await handle.update('project', ({ project }) => {
-      return {
+      const data = {
         thumbCover: project.thumbCover,
         dir: project.dir,
         desc: project.desc,
@@ -212,6 +212,10 @@ const handle = {
         createUser: project.createUser,
         url: project.url
       }
+      if (projectInfo && projectInfo.dir === project.dir) {
+        data.info = projectInfo.info
+      }
+      return data
     })
   },
   saveProject: async (dir, data) => {
@@ -256,42 +260,62 @@ const handle = {
     const releasePath = path.resolve(__dirname, '../../release', dir)
     const distPath = path.resolve(__dirname, '../../dist-system')
     const dataPath = path.join(pubPath, 'project', dir, 'data.json')
+    const recordPath = path.join(pubPath, 'project', dir, 'record.json')
     const globalProject = await fs.readJson(dataPath)
     const isDev = process.env.APP_ENV === 'dev'
     const isXmmp = globalProject.project.interactiveType === 'xmmp'
 
-    // 改写 data.json
-    globalProject.project.info = body.info
-    await fs.writeJson(dataPath, globalProject)
-    await handle.updateProjectList()
+    // 更新列表操作记录
+    // globalProject.project.info = body.info
+    // await fs.writeJson(dataPath, globalProject)
+    await handle.updateProjectList({ dir, info: body.info })
+    // 更新操作记录文件
+    await fs.ensureFile(recordPath)
+    const records = await fs.readJson(recordPath).catch(() => [])
+    records.unshift(body.info)
+    await fs.writeJson(recordPath, records)
 
     // 先清空目标文件夹
     utils.rm(releasePath)
     // copy dist-system/ => release/项目 目录下
     const manifest = await fs.readJson(path.join(distPath, 'manifest.json'))
-    await fs.copy(dataPath, path.join(releasePath, 'data.json'))
-    await fs.copy(path.join(distPath, 'render.html'), path.join(releasePath, 'index.html'))
-    await fs.copy(path.join(distPath, 'vue2.6'), path.join(releasePath, 'vue2.6'))
-    // await fs.copy(path.join(distPath, 'vant2.5'), path.join(releasePath, 'vant2.5'))
-    fs.readdirSync(path.join(distPath, 'js')).forEach(name => {
-      if (
-        /render|chunk-vendors/.test(name) &&
-        manifest.js.some(x => x === name)
-      ) {
-        fs.copySync(path.join(distPath, 'js', name), path.join(releasePath, 'js', name))
-      }
-    })
-    fs.readdirSync(path.join(distPath, 'css')).forEach(name => {
-      if (
-        /render|chunk-vendors/.test(name) &&
-        manifest.css.some(x => x === name)
-      ) {
-        fs.copySync(path.join(distPath, 'css', name), path.join(releasePath, 'css', name))
-      }
-    })
+    const _copyVendors = async (type) => {
+      const distType = path.join(distPath, type)
+      const dirs = await fs.readdir(distType)
+      return dirs.map(name => {
+        if (
+          /render|chunk-vendors/.test(name) &&
+          manifest[type].some(x => x === name)
+        ) {
+          return fs.copy(path.join(distType, name), path.join(releasePath, type, name))
+        }
+      }).filter(Boolean)
+    }
+    const preCopyFiles = [
+      fs.copy(dataPath, path.join(releasePath, 'data.json')),
+      fs.copy(path.join(distPath, 'render.html'), path.join(releasePath, 'index.html')),
+      fs.copy(path.join(distPath, 'vue2.6'), path.join(releasePath, 'vue2.6'))
+    ]
+      .concat(_copyVendors('js'))
+      .concat(_copyVendors('css'))
+    await Promise.all(preCopyFiles)
+    // fs.readdirSync(path.join(distPath, 'js')).forEach(name => {
+    //   if (
+    //     /render|chunk-vendors/.test(name) &&
+    //     manifest.js.some(x => x === name)
+    //   ) {
+    //     fs.copySync(path.join(distPath, 'js', name), path.join(releasePath, 'js', name))
+    //   }
+    // })
+    // fs.readdirSync(path.join(distPath, 'css')).forEach(name => {
+    //   if (
+    //     /render|chunk-vendors/.test(name) &&
+    //     manifest.css.some(x => x === name)
+    //   ) {
+    //     fs.copySync(path.join(distPath, 'css', name), path.join(releasePath, 'css', name))
+    //   }
+    // })
 
-    // 切换为正式环境
-    // globalProject.project.env = 'pro'
     // 将其它发布环境平铺出来
     if (globalProject.project.config.proArr && globalProject.project.config.proArr.length) {
       globalProject.project.config.proArr.forEach(it => {
