@@ -59,7 +59,7 @@ export default defineComponent({
   async created () {
     let data = project
     if (!project.dir) {
-      console.log('init project')
+      console.log('[butterfly] Init project')
       data = await getProject(this.$route.params.dir)
     }
     this.project = data

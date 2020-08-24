@@ -140,7 +140,10 @@ export default [
   {
     label: '边框颜色',
     field: 'style.borderColor',
-    type: 'color'
+    type: 'color',
+    props: {
+      'show-alpha': true
+    }
   },
   {
     label: '圆角',

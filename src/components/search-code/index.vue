@@ -21,7 +21,12 @@
           </div>
         </div>
         <div v-show="resultSelect" class="search-wrap__result-right">
-          <pre v-for="(it, i) in resultSelect.code" :key="i" v-html="`<span style=color:#e6a23c>搜索结果(${i + 1})</span>\n${it}`" />
+          <pre
+            v-for="(it, i) in resultSelect.code"
+            class="break"
+            :key="i"
+            v-html="`<span style=color:#e6a23c>搜索结果(${i + 1})</span>\n${it}`"
+          />
         </div>
       </div>
     </div>

@@ -161,7 +161,7 @@
 
     <el-dialog
       title="发布记录"
-      width="400px"
+      width="550px"
       :visible.sync="showRecord"
     >
       <el-table
