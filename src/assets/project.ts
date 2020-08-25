@@ -52,6 +52,7 @@ export type Project = {
       publicPath: string
       [k: string]: string
     }>
+    iocSync?: boolean
   }
   createUser: string
   info: {

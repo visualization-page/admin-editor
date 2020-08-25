@@ -96,7 +96,7 @@ export const renderCheckbox = (item: any, data: any, updateField: any) => {
   const { pref, field } = getParentRef(item.field, data)
   return (
     <el-checkbox
-      value={pref[field]}
+      value={pref && pref[field]}
       on={{
         change (val: string) {
           updateField(item.field, val)

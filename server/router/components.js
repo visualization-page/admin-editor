@@ -172,17 +172,20 @@ module.exports = {
     get: async (req, res) => {
       const dir = req.params.dir
       const releasePath = path.resolve(__dirname, '../../release', dir)
-      // const zipPath = path.join(releasePath, `${dir}.zip`)
       const success = fs.pathExistsSync(releasePath)
-      res.json({ success, msg: success ? '' : `${dir} 项目压缩包不存在，请先发布` })
+      res.json({ success, msg: success ? '' : `${dir} 项目还未发布` })
     }
   },
   '/project/download/:dir': {
     get: async (req, res) => {
       const dir = req.params.dir
       const releasePath = path.resolve(__dirname, '../../release', dir)
+      // if (fs.pathExistsSync(zipPath)) {
+      //   utils.rm(zipPath)
+      // }
+      // await utils.spawn('zip', ['-qr', `${dir}.zip`, './'], { cwd: releasePath })
+      await utils.zip(dir, releasePath)
       const zipPath = path.join(releasePath, `${dir}.zip`)
-      await utils.spawn('zip', ['-qr', `${dir}.zip`, './'], { cwd: releasePath })
       res.download(zipPath, err => {
         if (err) {
           throw err

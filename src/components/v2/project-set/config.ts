@@ -313,3 +313,147 @@ export const pub = [
     content: '切换环境会自动填充：目标机器目录(syncPath)和发布后访问的地址(onlineUrl)，发布会以此处填充的配置为准。'
   }
 ]
+
+export const pubIoc = [
+  {
+    label: '发布到IOC',
+    field: 'config.iocSync',
+    type: 'checkbox'
+  },
+  {
+    relation: [
+      {
+        field: 'config.iocSync',
+        value: true
+      }
+    ],
+    label: '环境地址',
+    field: 'config.iocAddress',
+    type: 'input',
+    elAttrs: {
+      placeholder: 'http://ip:port'
+    }
+  },
+  {
+    relation: [
+      {
+        field: 'config.iocSync',
+        value: true
+      }
+    ],
+    label: '账号密码',
+    field: 'config.iocAuthInfo',
+    type: 'input',
+    elAttrs: {
+      placeholder: '可不填，默认为 zhuwei/1234567'
+    },
+    elProps: {
+    }
+  },
+  {
+    relation: [
+      {
+        field: 'config.iocSync',
+        value: true
+      }
+    ],
+    label: 'AppId',
+    field: 'config.iocAppId',
+    type: 'input',
+    elAttrs: {
+      placeholder: '请输入'
+    }
+  },
+  {
+    relation: [
+      {
+        field: 'config.iocSync',
+        value: true
+      }
+    ],
+    label: '类型',
+    field: 'config.iocAppType',
+    type: 'select',
+    options: [
+      {
+        label: '小程序',
+        value: 'mp'
+      },
+      {
+        label: '卡片',
+        value: 'card'
+      }
+    ]
+  },
+  {
+    relation: [
+      {
+        field: 'config.iocSync',
+        value: true
+      }
+    ],
+    label: '发布方式',
+    field: 'config.iocSyncMethod',
+    type: 'select',
+    options: [
+      {
+        label: '初始创建',
+        value: 'create'
+      },
+      {
+        label: '更新',
+        value: 'update'
+      }
+    ]
+  },
+  {
+    relation: [
+      {
+        field: 'config.iocSync',
+        value: true
+      }
+    ],
+    label: '卡片或小程序名称',
+    field: 'config.iocAppName',
+    type: 'input',
+    elAttrs: {
+      placeholder: '请输入'
+    }
+  },
+  {
+    relation: [
+      {
+        field: 'config.iocSync',
+        value: true
+      },
+      {
+        field: 'config.iocAppType',
+        value: 'card'
+      }
+    ],
+    label: '卡片 componentSymbol',
+    field: 'config.iocComponentSymbol',
+    type: 'input',
+    elAttrs: {
+      placeholder: '请输入'
+    }
+  },
+  {
+    relation: [
+      {
+        field: 'config.iocSync',
+        value: true
+      },
+      {
+        field: 'config.iocAppType',
+        value: 'mp'
+      }
+    ],
+    label: '小程序图标',
+    field: 'config.iocAppIcon',
+    type: 'image',
+    elAttrs: {
+      placeholder: '请输入'
+    }
+  }
+]

@@ -99,22 +99,6 @@ export default defineComponent({
     },
 
     handlePub () {
-      // const sync = project.syncFile
-      // let msg = ''
-      // if (sync && project.config.appType === undefined) {
-      //   msg = '请选择项目所属省份'
-      // } else if (sync && !project.config.path) {
-      //   msg = '请输入项目部署目标机器目录'
-      // }
-      // if (msg) {
-      //   this.$notify({
-      //     title: '错误',
-      //     type: 'error',
-      //     message: msg,
-      //     position: 'top-left',
-      //     duration: 2000
-      //   })
-      // }
       // @ts-ignore
       this.showPubModal = true
     },
@@ -129,7 +113,7 @@ export default defineComponent({
       // @ts-ignore
       this.showPubModal = false
       await saveProject(true, remark, false)
-      await http.post(
+      const { msg } = await http.post(
         'project/release',
         {
           dir: project.dir,
@@ -140,13 +124,17 @@ export default defineComponent({
           }
         }
       )
-      this.$notify({
-        title: '成功',
-        type: 'success',
-        message: '项目发布成功',
-        position: 'top-left',
-        duration: 2000
-      })
+      if (project.config.iocSync) {
+        this.$msgbox.alert(msg!, '发布成功')
+      } else {
+        this.$notify({
+          title: '成功',
+          type: 'success',
+          message: '项目发布成功',
+          position: 'top-left',
+          duration: 2000
+        })
+      }
     }
   }
 })

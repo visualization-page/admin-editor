@@ -10,6 +10,7 @@ import RenderUnitSize from './render-unit-size.vue'
 import RenderDirectionSize from './render-direction-size.vue'
 import RenderRichText from './render-rich-text.vue'
 import RenderImage from './render-image.vue'
+import { getParentRef } from '@/assets/util'
 
 export default defineComponent({
   props: {
@@ -26,7 +27,10 @@ export default defineComponent({
       // 检查 relation
       let showSchemaField = true
       if (schema.relation) {
-        showSchemaField = schema.relation.every(item => props.schemaData[item.field] === item.value)
+        showSchemaField = schema.relation.every(item => {
+          const { pref, field } = getParentRef(item.field, props.schemaData)
+          return pref && pref[field] === item.value
+        })
       }
       if (schema.relationCallback) {
         showSchemaField = schema.relationCallback(schema)

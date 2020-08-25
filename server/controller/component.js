@@ -462,14 +462,12 @@ const handle = {
     // 写文件
     await fs.outputFile(path.join(releasePath, 'index.html'), renderContent)
 
-    // 检查 zip 是否存在，因为 download 生成 zip 时如果存在会报错
-    const zipPath = path.join(releasePath, `${dir}.zip`)
-    if (fs.pathExistsSync(zipPath)) {
-      utils.rm(zipPath)
-    }
     if (globalProject.project.syncFile) {
-      // 非小程序 同步机器文件
       return service.syncFile(globalProject.project)
+    }
+    // 同步 IOC
+    if (globalProject.project.config.iocSync) {
+      return service.syncIoc(globalProject.project)
     }
   },
   async uploadProject (file, tmpPath) {

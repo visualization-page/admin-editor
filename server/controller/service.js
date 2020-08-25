@@ -2,6 +2,9 @@ const request = require('request').defaults({ jar: true })
 const MD5 = require('blueimp-md5')
 const path = require('path')
 const config = require('../config')
+const pubPath = path.resolve(__dirname, '../public')
+const fs = require('fs-extra')
+const utils = require('../controller/utils')
 
 module.exports = {
   syncFile (project) {
@@ -30,6 +33,59 @@ module.exports = {
         }
       )
     })
+  },
+  async syncIoc (project) {
+    const {
+      dir,
+      config: {
+        iocAddress,
+        iocAppId,
+        iocAppType,
+        iocSyncMethod,
+        iocAppName,
+        iocAppIcon,
+        iocComponentSymbol,
+        iocAuthInfo
+      }
+    } = project
+    const dirPath = path.join(pubPath, 'project', dir)
+    // 在项目目录下新建 xmmprc.json 文件
+    const authArr = iocAuthInfo ? iocAuthInfo.split('/') : ['zhuwei', '1234567']
+    const releasePath = path.resolve(__dirname, '../../release', dir)
+    const data = {
+      appId: iocAppId,
+      name: iocAppName,
+      file: path.join(releasePath, `${dir}.zip`)
+    }
+    if (iocAppType === 'mp') {
+      data.icon = iocAppIcon
+    } else {
+      data.componentSymbol = iocComponentSymbol
+    }
+    const config = {
+      'domain': iocAddress[iocAddress.length - 1] === '/'
+        ? iocAddress.substr(0, iocAddress.length - 1)
+        : iocAddress,
+      'loginUrl': '/baas-login/open/pwdLogin',
+      'cardUrl': '/open/smallapp/cardManager/quickCreate',
+      'mpUrl': '/open/smallapp/appManager/quickCreate',
+      'username': authArr[0],
+      'password': authArr[1],
+      cardList: [],
+      mpList: []
+    }
+    config[iocAppType === 'mp' ? 'mpList' : 'cardList'].push(data)
+    await fs.outputFile(path.join(dirPath, 'xmmprc.json'), JSON.stringify(config))
+    // 压缩 zip
+    await utils.zip(dir, releasePath)
+    let msg = ''
+    await utils.spawn(
+      'xmmp',
+      ['auto', iocAppType, iocSyncMethod, iocAppId, '--auth'],
+      { cwd: dirPath },
+      str => { msg += str }
+    )
+    return { success: true, msg }
   },
   login: async (mobile, password) => {
     const param = {

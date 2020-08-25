@@ -6,9 +6,9 @@
     width="600px"
     @close="$emit('close')"
   >
-    <div class="flex items-center mb20">
+    <div class="flex mb20">
       <span class="flex-shrink-0 f12" style="width: 80px">发布备注</span>
-      <el-input placeholder="请输入至少 3 个字符" v-model="remark" />
+      <el-input type="textarea" placeholder="请输入至少 3 个字符" v-model="remark" />
     </div>
     <div class="flex">
       <p class="f12" style="width: 80px">选择环境</p>
@@ -37,10 +37,14 @@
       :schema-data="project"
       @updateByField="updateProjectByField"
     />
-    <div v-if="project.interactiveType === 'xmmp'" class="flex mb20">
-      <span class="flex-shrink-0 f12" style="width: 80px">IOC小程序发布配置</span>
-      <el-input type="textarea" placeholder="请粘贴 xmmprc.json 中的内容" v-model="remark" :autosize="{ minRows: 5 }" />
-    </div>
+    <template v-if="project.interactiveType === 'xmmp'">
+      <p class="f12 mb10 bd bd-eee bt pt10 b">对接第三方发布</p>
+      <schema-form
+        :schema="iocSchema"
+        :schema-data="project"
+        @updateByField="updateProjectByField"
+      />
+    </template>
     <template slot="footer">
       <el-button type="primary" @click="confirm">确定</el-button>
     </template>
@@ -51,7 +55,7 @@
 import { project } from '@/assets/project'
 import { Message } from 'element-ui'
 import SchemaForm from '@/components/schema/index.vue'
-import { pub } from '@/components/v2/project-set/config'
+import { pub, pubIoc } from '@/components/v2/project-set/config'
 import { updateByField } from '@/assets/util'
 
 export default {
@@ -65,7 +69,8 @@ export default {
       project,
       sessionKey,
       remark: sessionStorage.getItem(sessionKey),
-      pubSchema: pub
+      pubSchema: pub,
+      iocSchema: pubIoc
     }
   },
   watch: {
@@ -89,16 +94,44 @@ export default {
       updateByField(project, field, val)
     },
     confirm () {
-      if (project.env === 'dev') {
-        Message.error('请选择非开发环境')
+      const {
+        env,
+        config: {
+          iocSync,
+          iocAddress,
+          iocAppId,
+          iocAppType,
+          iocSyncMethod,
+          iocAppName,
+          iocAppIcon,
+          iocComponentSymbol
+        }
+      } = project
+      if (env === 'dev') {
+        return Message.error('请选择非开发环境')
       } else if (!this.remark) {
-        Message.error('请输入发布备注')
+        return Message.error('请输入发布备注')
       } else if (this.remark.trim().length < 3) {
-        Message.error('发布备注至少为3个字符')
-      } else {
-        sessionStorage.setItem(this.sessionKey, this.remark)
-        this.$emit('confirm', this.remark)
+        return Message.error('发布备注至少为3个字符')
+      } else if (iocSync) {
+        if (!iocAddress) {
+          return Message.error('请输入环境地址')
+        } else if (!iocAppId) {
+          return Message.error('请输入AppId')
+        } else if (!iocAppType) {
+          return Message.error('请选择类型')
+        } else if (!iocSyncMethod) {
+          return Message.error('请选择方式')
+        } else if (!iocAppName) {
+          return Message.error('请输入卡片或小程序名称')
+        } else if (iocAppType === 'mp' && iocSyncMethod === 'create' && !iocAppIcon) {
+          return Message.error('请输入小程序 icon')
+        } else if (iocAppType === 'card' && iocSyncMethod === 'create' && !iocComponentSymbol) {
+          return Message.error('请输入卡片 componentSymbol')
+        }
       }
+      sessionStorage.setItem(this.sessionKey, this.remark)
+      this.$emit('confirm', this.remark)
     }
   }
 }

@@ -3,21 +3,30 @@ const path = require('path')
 const { execSync, spawn } = require('child_process')
 const babel = require('@babel/core')
 const tinify = require('tinify')
+const fs = require('fs-extra')
 
 const handle = {
+  async zip (zipName, targetDirPath) {
+    const zipPath = path.join(targetDirPath, `${zipName}.zip`)
+    if (fs.pathExistsSync(zipPath)) {
+      handle.rm(zipPath)
+    }
+    await handle.spawn('zip', ['-qr', `${zipName}.zip`, './'], { cwd: targetDirPath })
+  },
   unzip (file, dir) {
     execSync(`unzip -o ${file} -d ${dir}`)
   },
   rm (file) {
     execSync(`rm -rf ${file}`)
   },
-  spawn (cmd, args, options = {}) {
+  spawn (cmd, args, options = {}, logCallback) {
     console.log(cmd, args)
     return new Promise((resolve, reject) => {
       const handle = spawn(cmd, args, options)
       handle.stdout.setEncoding('utf8')
       handle.stdout.on('data', (data) => {
         console.log(`${cmd} stdout: \n${data}`)
+        logCallback && logCallback(data)
         if (/working tree clean/.test(data)) {
           reject(data)
         }
@@ -26,6 +35,7 @@ const handle = {
       handle.stderr.on('data', (data) => {
         console.error(`${cmd} stderr: \n${data}`)
         // reject(new Error(data))
+        logCallback && logCallback(data)
       })
       handle.on('close', (code) => {
         if (code === 0) {
