@@ -93,32 +93,6 @@ export default defineComponent({
 <style lang="less">
 .editor-v2 {
   height: 100vh;
-  .c-main {
-    color: #ff7d00;
-  }
-  .c-main-hover {
-    &:hover {
-      color: #ff7d00;
-    }
-  }
-  .bf-btn {
-    display: inline-block;
-    font-size: 12px;
-    // height: 29px;
-    color: #fff;
-    cursor: pointer;
-    padding: 1px;
-    background: linear-gradient(90deg, #ff7d00 20%, #ffb400);
-    &__container {
-      background: #333;
-      padding: 5px 20px;
-      border-radius: 3px;
-      color: #ff7d00;
-    }
-    &__transparent {
-      background-color: #f2f2f2;
-    }
-  }
   .shadow {
     box-shadow: 0 0 5px rgba(0,0,0,.1);
   }
@@ -126,13 +100,6 @@ export default defineComponent({
     &::-webkit-scrollbar {
       width: 0;
     }
-  }
-
-  &__line {
-    width: 2px;
-    background: #444;
-    height: 20px;
-    border-radius: 100%;
   }
   &__content {
     margin: 0px 20px;

@@ -1,7 +1,7 @@
 <template>
   <div class="editor-v2__header bg-333 flex-center-between">
     <div class="flex-center-align">
-      <img class="cp" src="@/assets/img/logo_home.png" alt="" width="160px" @click="$router.push('/')">
+      <img class="cp" src="@/assets/img/logo_home.png" alt="" height="60px" @click="$router.push('/')">
       <template v-for="(item, i) in opts">
         <div :key="`line${i}`" class="editor-v2__line" />
         <el-popover
@@ -153,17 +153,4 @@ export default defineComponent({
 </script>
 
 <style lang="less">
-.editor-v2 {
-  &__header {
-    font-size: 14px;
-    &-item {
-      color: #999;
-      padding: 15px 30px;
-      cursor: pointer;
-      &:hover {
-        color: #ff7d00;
-      }
-    }
-  }
-}
 </style>

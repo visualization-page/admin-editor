@@ -1,28 +1,27 @@
 <template>
   <div class="project-list__wrap">
     <div class="app-header">
-      <header-opt
-        :opts="opts"
-      >
-        <div class="flex-center header-opt__btn">
-          <div
-            class="ml15 cp flex items-center"
-            @click="changeMode"
-          >
-            <div>
-              <p>当前为 </p>
-              <span v-if="isDev">开发版</span>
-              <span v-else>极简版</span>
-            </div>
-            <i class="el-icon-caret-bottom" />
+      <header-opt>
+        <span class="c-999 mr10">你好，{{ $native.name }}</span>
+        <el-upload
+          :action="uploadAction"
+          :multiple="false"
+          :show-file-list="false"
+          :before-upload="handleBeforeUpload"
+          :on-success="handleResponse"
+          :on-error="handleResponse"
+        >
+          <div slot="trigger" class="p10 cp c-main mr10 f14">导入项目</div>
+        </el-upload>
+        <div class="bf-btn" @click="handleAddForm()">
+          <div class="bf-btn__container">
+            创建项目
           </div>
-          <div class="h30 bg-666 ml15" style="width:2px" />
-          <avatar />
         </div>
       </header-opt>
     </div>
     <div class="project-list__title flex justify-between">
-      <div class="flex-center">
+      <div class="">
         <span class="f18 b">项目列表</span>
       </div>
       <el-form inline>
@@ -139,7 +138,7 @@
       </div>
     </div>
     <div class="fixed width-100 tc b10">
-      <p class="c-999 f12 mt10">Designed by 讯盟FE</p>
+      <p class="f12 mt10 c-999">Designed by 讯盟FE</p>
     </div>
 
     <el-dialog
@@ -181,9 +180,9 @@
 <script>
 import HeaderOpt from '@/components/header-opts/index.vue'
 import { http } from '@/api'
-import { MessageBox, Message } from 'element-ui'
+import { MessageBox, Message, Notification } from 'element-ui'
 import dayjs from 'dayjs'
-import Avatar from '@/components/avatar/index.vue'
+// import Avatar from '@/components/avatar/index.vue'
 import SchemaForm from '@/components/schema/index.vue'
 import { projectCreate } from '@/components/v2/project-set/config.ts'
 import { getParentRef, deepClone } from '@/assets/util'
@@ -192,20 +191,19 @@ import { defaultProject } from '@/assets/project'
 export default {
   components: {
     HeaderOpt,
-    Avatar,
     SchemaForm
   },
   computed: {
-    isDev () {
-      return this.mode === 'normal'
-    },
     currentPageData () {
       return this.tableData.slice((this.currentPage - 1) * this.pageSize, this.currentPage * this.pageSize)
+    },
+    uploadAction () {
+      return process.env.VUE_APP_FILE_SERVER + '/butterfly/project/upload'
     }
   },
   data () {
     return {
-      mode: localStorage.getItem('butterfly-mode'),
+      isDev: localStorage.getItem('butterfly-mode') === 'normal',
       schema: projectCreate,
       showAddModal: false,
       showRecord: false,
@@ -227,56 +225,6 @@ export default {
         keywords: '',
         searchList: null
       },
-      opts: [
-        {
-          label: '关于',
-          icon: 'el-icon-s-flag f16',
-          action: () => {
-            // this.$router.push('/')
-            window.open('./render.html#/project/butterfly-about')
-          }
-        },
-        {
-          label: '教程',
-          icon: 'el-icon-question f16',
-          action: () => {
-            // this.$router.push('/tourism')
-            // window.open('./render.html#/project/tourism')
-            window.open('https://docs.uban360.com/#/project-detail/17/18')
-          }
-        },
-        {
-          label: '吐槽',
-          icon: 'el-icon-chat-line-round f16',
-          action: () => {
-            this.$router.push('/suggest')
-          }
-        },
-        {
-          label: '导入项目',
-          icon: 'el-icon-upload f16',
-          isUpload: true,
-          action: process.env.VUE_APP_FILE_SERVER + '/butterfly/project/upload',
-          handleBeforeUpload (file) {
-            const ok = file.type !== 'application/zip'
-            if (!ok) {
-              Message.error('请上传项目 data.json')
-            }
-            return ok
-          },
-          successCallback: () => {
-            this.getList()
-          }
-        },
-        {
-          label: '创建项目',
-          icon: 'el-icon-plus f16',
-          action: () => {
-            // project 置空
-            this.handleAddForm()
-          }
-        }
-      ],
       tableData: [],
       currentPage: 1,
       pageSize: 10,
@@ -287,6 +235,40 @@ export default {
     this.getList()
   },
   methods: {
+    handleBeforeUpload (file) {
+      const ok = file.type !== 'application/zip'
+      if (!ok) {
+        Notification({
+          title: '错误',
+          type: 'error',
+          message: '请上传项目 data.json',
+          position: 'top-left',
+          duration: 2000
+        })
+      }
+      return ok
+    },
+    handleResponse (res) {
+      if (res.success) {
+        Notification({
+          title: '成功',
+          type: 'success',
+          message: '上传成功',
+          position: 'top-left',
+          duration: 2000
+        })
+        // item.successCallback && item.successCallback()
+        this.getList()
+      } else {
+        Notification({
+          title: '错误',
+          type: 'error',
+          message: res.msg,
+          position: 'top-left',
+          duration: 2000
+        })
+      }
+    },
     async handleGetRecords (item) {
       const res = await http.get('project/record', { dir: item.dir })
       this.records = res.data.map(x => ({
@@ -297,14 +279,6 @@ export default {
     },
     handlePage (val) {
       this.currentPage = val
-    },
-    changeMode () {
-      let mode = 'normal'
-      if (this.mode === 'normal') {
-        mode = 'sample'
-      }
-      this.mode = mode
-      localStorage.setItem('butterfly-mode', mode)
     },
     getList () {
       http.get('component/list', { type: 'project' }).then(res => {
@@ -355,7 +329,13 @@ export default {
         inputValue: `${item.dir}_copy`
       })
       if (!value) {
-        return Message.error('请输入项目名')
+        return Notification({
+          title: '错误',
+          type: 'error',
+          message: '请输入项目名',
+          position: 'top-left',
+          duration: 2000
+        })
       }
       http.post('project/copy', {
         dir: item.dir,
@@ -438,7 +418,13 @@ export default {
           dir: project.dir,
           project
         })
-        Message.success('保存成功')
+        Notification({
+          title: '成功',
+          type: 'success',
+          message: '保存成功',
+          position: 'top-left',
+          duration: 2000
+        })
         this.showAddModal = false
         this.getList()
       }

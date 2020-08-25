@@ -1,15 +1,13 @@
 <template>
   <div class="suggest">
     <div class="app-header">
-      <header-opt
-        :opts="[{
-          label: '返回',
-          icon: 'el-icon-back f16',
-          action: () => {
-            this.$router.back()
-          }
-        }]"
-      />
+      <header-opt>
+        <div class="bf-btn" @click="$router.back()">
+          <div class="bf-btn__container">
+            返回
+          </div>
+        </div>
+      </header-opt>
     </div>
     <div class="suggest__title flex-center-between">
       <span class="f16">反馈建议</span>

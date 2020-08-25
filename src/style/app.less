@@ -38,6 +38,54 @@
   }
 }
 
+/** 编辑器 v2 样式 **/
+.c-main {
+  color: #ff7d00;
+}
+.c-main-hover {
+  &:hover {
+    color: #ff7d00;
+  }
+}
+.editor-v2 {
+  &__header {
+    height: 62px;
+    font-size: 14px;
+    &-item {
+      color: #999;
+      padding: 15px 30px;
+      cursor: pointer;
+      &:hover {
+        color: #ff7d00;
+      }
+    }
+  }
+  &__line {
+    width: 2px;
+    background: #444;
+    height: 20px;
+    border-radius: 100%;
+  }
+}
+.bf-btn {
+  display: inline-block;
+  font-size: 12px;
+  // height: 29px;
+  color: #fff;
+  cursor: pointer;
+  padding: 1px;
+  background: linear-gradient(90deg, #ff7d00 20%, #ffb400);
+  &__container {
+    background: #333;
+    padding: 5px 20px;
+    border-radius: 3px;
+    color: #ff7d00;
+  }
+  &__transparent {
+    background-color: #f2f2f2;
+  }
+}
+
 /** 编辑器 v1 样式排版 **/
 .c-blue {
   color: #409eff;
