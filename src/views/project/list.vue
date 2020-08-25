@@ -125,7 +125,7 @@
           </template>
         </el-table-column>
       </el-table>
-      <div v-show="!searchModel.keywords" class="tc ptb20">
+      <div v-show="!searchModel.keywords" class="tc ptb10">
         <el-pagination
           background
           layout="prev, pager, next"
@@ -437,7 +437,7 @@ export default {
 .project-list {
   width: 1200px;
   margin: 0 auto 20px auto;
-  height: e('calc(100% - 152px)');
+  height: e('calc(100% - 172px)');
   overflow: auto;
   &__title {
     width: 1200px;

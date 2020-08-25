@@ -37,6 +37,10 @@
       :schema-data="project"
       @updateByField="updateProjectByField"
     />
+    <div v-if="project.interactiveType === 'xmmp'" class="flex mb20">
+      <span class="flex-shrink-0 f12" style="width: 80px">IOC小程序发布配置</span>
+      <el-input type="textarea" placeholder="请粘贴 xmmprc.json 中的内容" v-model="remark" :autosize="{ minRows: 5 }" />
+    </div>
     <template slot="footer">
       <el-button type="primary" @click="confirm">确定</el-button>
     </template>
@@ -74,8 +78,8 @@ export default {
           item = project.config.proArr.find(x => x.name === env).kv
         }
         const { syncPath, onlineUrl } = item
-        project.config.path = syncPath || ''
-        project.url = onlineUrl || ''
+        project.config.path = syncPath || project.config.path || ''
+        project.url = onlineUrl || project.url || ''
       },
       immediate: true
     }
