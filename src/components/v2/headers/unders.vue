@@ -36,7 +36,11 @@
         </el-popover>
       </div>
     </div>
-    <div class="flex-center f14 c-666">
+    <div class="flex-center f12 c-666">
+      <div class="flex-center mr15 c-main-hover cp" @click="handleOpen">
+        <i class="el-icon-monitor mr5" />
+        <span>查看项目</span>
+      </div>
       <div class="flex-center mr15 c-main-hover cp" @click="handleShowImage">
         <i class="el-icon-picture-outline mr5" />
         <span>图片走廊</span>
@@ -133,6 +137,13 @@ export default defineComponent({
     },
     handleHidePopover () {
       document.body.click()
+    },
+    handleOpen () {
+      if (project.url) {
+        window.open(project.url)
+      } else {
+        window.open(process.env.VUE_APP_MOBILE + `#/project/${project.dir}`)
+      }
     }
   }
 })
