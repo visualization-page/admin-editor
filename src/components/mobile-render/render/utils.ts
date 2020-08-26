@@ -203,7 +203,7 @@ export const initGlobalConfig = (page: Page | null) => {
             .then((res: any) => res.json())
             .then((res: any) => {
               console.log('fetch 返回', res)
-              if (res.success) {
+              if (res.success || res.code === 200 || res.retcode === 0) {
                 resolve({ success: true, data: res })
               } else {
                 reject(res)

@@ -58,7 +58,9 @@ module.exports = {
       file: path.join(releasePath, `${dir}.zip`)
     }
     if (iocAppType === 'mp') {
-      data.icon = iocAppIcon
+      const localIcon = path.join(dirPath, 'icon.png')
+      await utils.downImg(iocAppIcon, localIcon)
+      data.icon = localIcon
     } else {
       data.componentSymbol = iocComponentSymbol
     }

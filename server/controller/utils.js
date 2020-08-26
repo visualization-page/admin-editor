@@ -1,11 +1,25 @@
 const path = require('path')
-// const pubPath = path.resolve(__dirname, '../public')
-const { execSync, spawn } = require('child_process')
+const { execSync } = require('child_process')
 const babel = require('@babel/core')
 const tinify = require('tinify')
 const fs = require('fs-extra')
+const request = require('request')
+const spawn = require('cross-spawn')
+// const pubPath = path.resolve(__dirname, '../public')
 
 const handle = {
+  downImg (url, dest) {
+    return new Promise((resolve, reject) => {
+      const stream = request(url).pipe(fs.createWriteStream(dest))
+      stream.on('finish', () => {
+        resolve()
+      })
+      stream.on('error', () => {
+        // eslint-disable-next-line
+        reject()
+      })
+    })
+  },
   async zip (zipName, targetDirPath) {
     const zipPath = path.join(targetDirPath, `${zipName}.zip`)
     if (fs.pathExistsSync(zipPath)) {

@@ -328,4 +328,8 @@ $$global.config = project.config = {
 
 > 20/08/25
 
-- [ ] 打通 IOC 小程序发布
+- [x] 打通 IOC 小程序发布
+
+> 20/08/26
+
+- [ ] 优化 babel 编译的结构体
