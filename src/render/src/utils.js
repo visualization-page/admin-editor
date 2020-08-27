@@ -41,7 +41,7 @@ export const getProject = async (dir) => {
   if (!http) {
     const global = initGlobalConfig(null)
     global.initHttp({
-      baseUrl: process.env.VUE_APP_FILE_SERVER,
+      baseUrl: JSON.stringify(process.env.VUE_APP_FILE_SERVER),
       urlMap: {
         get: '/butterfly/project/:dir'
       },

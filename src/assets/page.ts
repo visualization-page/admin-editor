@@ -45,8 +45,8 @@ export const addPage = () => {
       linkMain: ''
     },
     events: [],
-    state: '(function () {\n  return {\n    test: true\n  }\n})()',
-    methods: '(function () {\n  return {\n    common: () => {}\n  }\n})()',
+    state: 'function state () {\n  return {\n    test: true\n  }\n}\n\n$$global.export = state()',
+    methods: 'function methods () {\n  return {\n    common: () => {}\n  }\n}\n\n$$global.export = methods()',
     isIndex: index === 0
   })
   setCurrentPage(project.pages[index])

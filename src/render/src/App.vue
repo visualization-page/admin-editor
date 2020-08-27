@@ -5,7 +5,7 @@
     </div>
     <div class="pc-box__notice">
       <vue-qrcode :value="codeUrl" tag="img" :options="{ width: 150 }"/>
-      <p class="f12 c-999 tc pb10">用手机扫一扫</p>
+      <p class="f12 c-999 tc pb10" v-html="isMp ? '用支持讯盟小程序<br>的App扫一扫' : '用手机扫一扫'" />
     </div>
   </div>
   <div v-else id="app" class="oa">
@@ -15,6 +15,8 @@
 
 <script>
 import VueQrcode from '@chenfengyuan/vue-qrcode'
+import { project } from '@/assets/project'
+import { watch } from '@vue/composition-api'
 
 export default {
   components: {
@@ -23,12 +25,27 @@ export default {
   data () {
     return {
       isPc: this.checkPc(true),
-      codeUrl: location.href
+      isMp: false
+    }
+  },
+  computed: {
+    codeUrl () {
+      return this.isMp ? JSON.stringify({
+        data: {
+          url: location.href,
+          appId: -10000
+        },
+        target: 'smallApp',
+        isExperienceVersion: true
+      }) : location.href
     }
   },
   created () {
+    watch(() => project.interactiveType, type => {
+      this.isMp = type === 'xmmp'
+    }, { lazy: true, deep: false })
     if (this.isPc) {
-      console.log('\n\n%cButterfly\n\n%c产品运营也能用的 H5 在线开发平台 !\n\n支持:\n  1.小程序\n  2.彩云 native h5\n  3.复杂表单\n  4.一键发布等\n没有做不到只有想不到！\n\n%c👋 立即体验: https://tms.uban360.com/butterfly-fe/index.html\n\n', 'font-weight:bolder;color:rgb(253,129,36)', 'color: rgba(253,129,36,0.5)', 'color:#3b8ff6')
+      console.log('\n\n%cButterfly\n\n%c产品运营也能用的 H5 在线开发平台 !\n\n支持:\n  1.讯盟小程序\n  2.彩云 native h5\n  3.复杂表单\n  4.一键发布等\n\n%c👋 立即体验: https://tms.uban360.com/butterfly-fe/index.html\n\n', 'font-weight:bolder;color:rgb(253,129,36)', 'color: rgba(253,129,36,0.5)', 'color:#3b8ff6')
     }
   },
   methods: {

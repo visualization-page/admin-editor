@@ -83,11 +83,11 @@ export const defaultProject: Project = {
     urlMap: {
       test: '/path/to/get'
     },
-    options: '(function () {\n  return {\n    // EscHttpOptions\n    successRequestAssert: res => res.success,\n    beforeRequest: (data, attaches) => data\n  }\n})()'
+    options: 'function opt () {\n  return {\n    // EscHttpOptions\n    successRequestAssert: res => res.success,\n    beforeRequest: (data, attaches) => data\n  }\n}\n\n$$global.export = opt()'
   },
   // url: '',
   pages: [],
-  constant: '(function () {\n  return {\n    test: \'\'\n  }\n})()',
+  constant: 'function consWrap () {\n  return {\n    test: \'\'\n  }\n}\n\n$$global.export = consWrap()',
   componentLibrary: {
     // vant: ['Button']
   },
@@ -129,7 +129,7 @@ export const defaultProject: Project = {
     whitelist: ''
   },
   css: '',
-  utils: '(function () {\n  return {\n    deepClone: (obj) => JSON.parse(JSON.stringify(obj))\n  }\n})()',
+  utils: 'function utils () {\n  return {\n    deepClone: (obj) => JSON.parse(JSON.stringify(obj))\n  }\n}\n\n$$global.export = utils()',
   initScripts: ''
 }
 

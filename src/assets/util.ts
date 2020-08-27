@@ -87,16 +87,30 @@ export const getUnitValue = (str: string): { value?: string, unit?: string } => 
 export const parseCodeValid = (code: string | null, ctx?: any) => {
   const res = { ok: false, msg: '', value: null }
   if (!code) {
+    res.msg = '要执行的 code 为 null'
     return res
   }
+  let funBody = ''
+  const isFunReg = /\(function \(\)/
+  const isNewCodeReg = /(\$\$global\.export|\$\$global\["export"\]) =/
+  const isFunc = isFunReg.test(code)
+  const isNewCodeStyle = isNewCodeReg.test(code)
+  if (isNewCodeStyle) {
+    funBody = code.replace(isNewCodeReg, 'return ')
+  } else if (isFunc) {
+    funBody = code.replace(isFunReg, 'return $1')
+  } else {
+    funBody = `return ${code}`
+  }
+  if (ctx) {
+    funBody = `var ym = arguments[0];${funBody.replace(/(\$\$)/g, 'ym.$1')}`
+  }
   try {
-    if (ctx) {
-      res.value = new Function(`var ym = arguments[0];return ${code.replace(/(\$\$)/g, 'ym.$1')}`)(ctx) // eslint-disable-line no-new-func
-    } else {
-      res.value = new Function(`return ${code}`)() // eslint-disable-line no-new-func
-    }
+    res.value = new Function(funBody)(ctx) // eslint-disable-line no-new-func
     res.ok = true
   } catch (e) {
+    // console.log(code, ctx)
+    // console.log(code, e)
     res.msg = e.message || e.name || '语法错误'
   }
   return res

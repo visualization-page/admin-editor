@@ -60,11 +60,16 @@ export default defineComponent<{
       field: 'state' | 'methods',
       fieldValue: string | null
     ) => {
+      if (!fieldValue) {
+        return
+      }
       const ctx = getCtx()
-      const { ok, value } = parseCodeValid(fieldValue, ctx)
+      const { ok, value, msg } = parseCodeValid(fieldValue, ctx)
       if (ok) {
         // @ts-ignore
         pageConfig.value[field] = value!
+      } else {
+        console.warn(`[butterfly] 初始化页面[${field}]时报错: ${msg}`, fieldValue)
       }
       if (pageInit.value.length < 2) {
         pageInit.value.push(field)

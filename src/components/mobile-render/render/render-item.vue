@@ -204,7 +204,7 @@ export default defineComponent<{
           _dealVw(styleCodeRes.value)
           deepMerge(props.style, styleCodeRes.value)
         } else {
-          console.log(props.style.code, styleCodeRes.msg)
+          console.warn('[butterfly] 解析样式补充代码出错', props.style.code, styleCodeRes.msg)
           throw styleCodeRes.msg
         }
         // 处理 v-show
