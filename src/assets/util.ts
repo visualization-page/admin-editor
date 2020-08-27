@@ -91,7 +91,7 @@ export const parseCodeValid = (code: string | null, ctx?: any) => {
     return res
   }
   let funBody = ''
-  const isFunReg = /\(function \(\)/
+  const isFunReg = /(\(function \()/
   const isNewCodeReg = /(\$\$global\.export|\$\$global\["export"\]) =/
   const isFunc = isFunReg.test(code)
   const isNewCodeStyle = isNewCodeReg.test(code)
