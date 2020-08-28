@@ -88,7 +88,7 @@ export default defineComponent({
   methods: {
     async handleSave () {
       const params = this.$route.params
-      await saveProject(!!params.dir)
+      await saveProject(!!params.dir, project.info.remark)
       this.$notify({
         title: '成功',
         type: 'success',
@@ -124,6 +124,7 @@ export default defineComponent({
           }
         }
       )
+      project.info.remark = remark
       if (project.config.iocSync) {
         this.$msgbox.alert(msg!, '发布成功')
       } else {
