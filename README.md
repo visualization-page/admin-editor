@@ -323,7 +323,7 @@ $$global.config = project.config = {
 > 20/08/24
 
 - [x] 保存发布记录、操作人
-- [ ] 项目发布同步发布系统项目，可选择导入目标机器目录
+- [x] 项目发布同步发布系统项目，可选择导入目标机器目录
 - [ ] 列表容器绑定 props 提示 $$listBind.Item, $$listBind.index 
 
 > 20/08/25

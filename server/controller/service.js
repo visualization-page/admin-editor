@@ -177,5 +177,25 @@ module.exports = {
         }
       })
     })
+  },
+
+  async searchDeployProject (keyword, cookie) {
+    return new Promise((resolve, reject) => {
+      request.get(
+        {
+          url: config[process.env.APP_ENV].deploy + `/project/mylist.json?env=&title=${encodeURIComponent(keyword)}&type=1&pageSize=100&pageCount=1`,
+          headers: {
+            Cookie: `sso_u=${cookie.sso_u}; sso_c=${cookie.sso_c}`
+          }
+        },
+        (err, httpResponse, body) => {
+          if (err) {
+            reject(err)
+          } else {
+            resolve(JSON.parse(body).data.list)
+          }
+        }
+      )
+    })
   }
 }

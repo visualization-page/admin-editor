@@ -41,7 +41,8 @@ export const http = new Http({
       download: '/butterfly/project/download/:dir',
       'download-check': '/butterfly/project/download-check/:dir',
       lock: '/butterfly/project/lock/:dir',
-      record: '/butterfly/project/record/:dir'
+      record: '/butterfly/project/record/:dir',
+      pubSearch: '/butterfly/project/pub-search/:keyword'
     },
     delete: '/butterfly/delete/:type/:dir',
     login: {

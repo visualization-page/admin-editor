@@ -32,6 +32,25 @@
         </template>
       </el-radio-group>
     </div>
+    <div class="flex mtb20" v-if="project.syncFile">
+      <span class="flex-shrink-0 f12" style="width: 80px">从发布系统中导入项目配置</span>
+      <el-select
+        v-model="deployProjectKeyword"
+        filterable
+        remote
+        reserve-keyword
+        placeholder="请输入项目标题"
+        :remote-method="handleSearch"
+        :loading="loadingSearch"
+      >
+        <el-option
+          v-for="item in deployProjectList"
+          :key="item.id"
+          :label="item.label"
+          :value="item.targetPath">
+        </el-option>
+      </el-select>
+    </div>
     <schema-form
       :schema="pubSchema"
       :schema-data="project"
@@ -57,6 +76,7 @@ import { Message } from 'element-ui'
 import SchemaForm from '@/components/schema/index.vue'
 import { pub, pubIoc } from '@/components/v2/project-set/config'
 import { updateByField } from '@/assets/util'
+import { http } from '@/api'
 
 export default {
   components: {
@@ -69,8 +89,11 @@ export default {
       project,
       sessionKey,
       remark: sessionStorage.getItem(sessionKey),
+      deployProjectKeyword: '',
+      deployProjectList: [],
       pubSchema: pub,
-      iocSchema: pubIoc
+      iocSchema: pubIoc,
+      loadingSearch: false
     }
   },
   watch: {
@@ -87,9 +110,29 @@ export default {
         project.url = onlineUrl || project.url || ''
       },
       immediate: true
+    },
+    deployProjectKeyword (val) {
+      if (val) {
+        project.config.path = val.replace('/data/webapps/', '')
+      }
     }
   },
   methods: {
+    handleSearch (query) {
+      if (query) {
+        this.loadingSearch = true
+        http.get('project/pubSearch', { keyword: query }).then(res => {
+          this.loadingSearch = false
+          this.deployProjectList = res.data.map(x => ({
+            ...x,
+            // label: `${x.title}|${x.name}`
+            label: x.title
+          }))
+        })
+      } else {
+        this.loadingSearch = false
+      }
+    },
     updateProjectByField (field, val) {
       updateByField(project, field, val)
     },

@@ -328,6 +328,13 @@ module.exports = {
     }
   },
 
+  '/project/pub-search/:keyword': {
+    async get (req, res) {
+      const result = await service.searchDeployProject(req.params.keyword, req.cookies)
+      res.json({ success: true, data: result })
+    }
+  },
+
   '/checkstatus': {
     get: async (req, res) => {
       res.json({ success: true })
