@@ -86,7 +86,7 @@
         </el-table-column>
         <el-table-column
           prop="info.remark"
-          label="发布备注">
+          label="发布记录">
           <template slot-scope="props">
             <el-button
               v-if="props.row.info.remark"

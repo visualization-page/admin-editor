@@ -226,9 +226,9 @@ const handle = {
     } else {
       const dataPath = path.join(pubPath, 'project', dir, 'data.json')
       if (exist) {
-        const oldData = await fs.readJSON(dataPath)
+        // const oldData = await fs.readJSON(dataPath)
         // info.remark
-        data.project.info.remark = oldData.project.info.remark
+        // data.project.info.remark = oldData.project.info.remark
         delete data.force
       }
       if (!data.project.createUser) {
