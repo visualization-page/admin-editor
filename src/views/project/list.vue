@@ -360,7 +360,8 @@ export default {
       location.href = process.env.VUE_APP_FILE_SERVER + `/butterfly/project/download/${item.dir}`
     },
     async handleEditForm (item) {
-      const res = await http.get('project/get', { dir: item.origin || item.dir, preview: 1 })
+      const dir = this.searchModel.field === 'dir' ? item.origin : item.dir
+      const res = await http.get('project/get', { dir, preview: 1 })
       const data = res.data.project
       this.editProjectForm = data
       this.addProjectForm = {
