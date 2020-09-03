@@ -30,6 +30,7 @@ const copyDirs = [
   'server/public/upload',
   'server/public/upload-entry-template.tpl',
   'server/index.js',
+  'server/backup.sh',
   'server/config.js',
   'pm2.json',
   'pm2-pro.json',

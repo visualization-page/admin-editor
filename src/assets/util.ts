@@ -178,14 +178,15 @@ function removeNode (id: string) {
 }
 
 export function loadSdk (type: string) {
+  const isInMiniapp = /hwminiapp/i.test(navigator.userAgent)
   const typeMap: { [k: string]: { id: string, src: string } } = {
     'long-page': {
       id: 'native',
-      src: 'native/native.js'
+      src: (window._PUBLIC_PATH || '') + 'native/native.js'
     },
     xmmp: {
       id: 'xmmp',
-      src: 'xmmp/xmmp.min.js'
+      src: isInMiniapp ? 'shinemosdk://20000/index.js' : (window._PUBLIC_PATH || '') + 'xmmp/xmmp.min.js'
     }
   }
   return new Promise((resolve, reject) => {
@@ -202,7 +203,7 @@ export function loadSdk (type: string) {
     window.JSBridge = undefined
     // hack monaco editor require
     window.define = undefined
-    addScript(id, (window._PUBLIC_PATH || '') + src).then(() => {
+    addScript(id, src).then(() => {
       window.define = window.defineBak
       resolve()
     }).catch(err => {

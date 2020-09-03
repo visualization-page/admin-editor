@@ -430,7 +430,8 @@ const handle = {
     if (isXmmp) {
       await fs.copy(path.join(distPath, 'xmmp'), path.join(releasePath, 'xmmp'))
       renderContent = renderContent
-        .replace('</head>', `<script src=xmmp/xmmp.min.js></script></head>`)
+        // .replace('</head>', `<script src=xmmp/xmmp.min.js></script></head>`)
+        .replace('</head>', `<script src=shinemosdk://20000/index.js></script></head>`)
     } else {
       await fs.copy(path.join(distPath, 'native'), path.join(releasePath, 'native'))
       renderContent = renderContent
