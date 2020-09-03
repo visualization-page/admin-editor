@@ -22,7 +22,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from '@vue/composition-api'
+import { defineComponent, watch } from '@vue/composition-api'
 import Headers from '@/components/v2/headers/index.vue'
 import HeaderUnders from '@/components/v2/headers/unders.vue'
 import MobileRender from '@/components/mobile-render/index.vue'
@@ -36,9 +36,10 @@ import SearchCode from '@/components/search-code/index.vue'
 import { http } from '@/api'
 import Vue from 'vue'
 import { Message } from 'element-ui'
-import { initProject, resetProject } from '@/assets/project'
+import { initProject, project, resetProject } from '@/assets/project'
 import { lock, unlock } from '@/assets/lock'
 import { showImageResource, showSearchCode, clearEditWrapCacheNode } from '@/assets/render'
+import { loadSdk } from '@/assets/util'
 
 export default defineComponent({
   components: {
@@ -82,6 +83,13 @@ export default defineComponent({
       initProject(item.data.project)
       lock(dir)
     })
+
+    watch(() => [project.interactiveType, project.depLoaded], ([type, loaded]) => {
+      if (loaded) {
+        loadSdk(type as string)
+      }
+    }, { lazy: true })
+
     return {
       showImageResource,
       showSearchCode

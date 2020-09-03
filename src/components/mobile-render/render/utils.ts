@@ -317,7 +317,7 @@ export const initGlobalConfig = (page: Page | null) => {
 }
 
 export const getEventHandler = (ev: FormEvent, ctx: any) => {
-  const { ok, msg, value } = parseCodeValid(`(function() {${ev.fxCode}})()`, ctx)
+  const { ok, msg, value } = parseCodeValid(`(function () {\n${ev.fxCode}\n})()`, ctx)
   if (ok) {
     return value
   }

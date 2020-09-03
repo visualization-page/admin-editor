@@ -155,47 +155,59 @@ export const deepMerge = (origin: any, obj?: any): any => {
   }
 }
 
-export function loadSdk (type: string) {
+function addScript (id: string, url: string) {
   return new Promise((resolve, reject) => {
-    let oId
-    let id
-    let src
-    if (type === 'long-page') {
-      // 引入 native
-      oId = 'xmmp'
-      id = 'native'
-      src = (window._PUBLIC_PATH || '') + 'native/native.js'
-    } else {
-      // 引入 xmmp
-      oId = 'native'
-      id = 'xmmp'
-      src = (window._PUBLIC_PATH || '') + 'xmmp/xmmp.min.js'
+    const script = document.createElement('script')
+    script.id = id
+    script.src = url
+    script.onload = () => {
+      resolve()
     }
+    script.onerror = () => {
+      reject(new Error(`load [${id}] error`))
+    }
+    document.body.appendChild(script)
+  })
+}
+
+function removeNode (id: string) {
+  const item = document.getElementById(id)
+  if (item) {
+    document.body.removeChild(item)
+  }
+}
+
+export function loadSdk (type: string) {
+  const typeMap: { [k: string]: { id: string, src: string } } = {
+    'long-page': {
+      id: 'native',
+      src: 'native/native.js'
+    },
+    xmmp: {
+      id: 'xmmp',
+      src: 'xmmp/xmmp.min.js'
+    }
+  }
+  return new Promise((resolve, reject) => {
+    const { id, src } = typeMap[type]
     if (document.getElementById(id)) {
       console.log('load sdk ', id, 'exist!')
       return resolve()
     }
-    const item = document.getElementById(oId)
-    if (item) {
-      document.body.removeChild(item)
-    }
+    // 移除旧节点
+    Object.keys(typeMap).map(it => typeMap[it].id).forEach(removeNode)
     if (!window.defineBak && window.define) {
       window.defineBak = window.define
     }
     window.JSBridge = undefined
     // hack monaco editor require
     window.define = undefined
-    const script = document.createElement('script')
-    script.id = id
-    script.src = src
-    script.onload = () => {
+    addScript(id, (window._PUBLIC_PATH || '') + src).then(() => {
       window.define = window.defineBak
       resolve()
-    }
-    script.onerror = () => {
+    }).catch(err => {
       window.define = window.defineBak
-      reject(new Error('load sdk error'))
-    }
-    document.body.appendChild(script)
+      reject(err)
+    })
   })
 }
