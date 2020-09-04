@@ -4,7 +4,7 @@
     :class="['render-page', currentPage.className]"
   >
     <render-item
-      v-if="pageInit.length === 2"
+      v-if="mounted"
       :nodes="currentPage.nodes"
       :page-config="pageConfig"
       :global-config="globalConfig"
@@ -14,12 +14,12 @@
 
 <script lang="ts">
 import { defineComponent, watch, ref, onMounted } from '@vue/composition-api'
-import { parseCodeValid, sleepUntil } from '@/assets/util'
+import { loadSdk, parseCodeValid, sleepUntil } from '@/assets/util'
 import RenderItem from './render-item.vue'
 import { FormEvent } from '@/assets/event'
 import { isEdit } from '@/assets/render'
 import { Page } from '@/assets/page'
-import { Project } from '@/assets/project'
+import { project, Project } from '@/assets/project'
 import { initGlobalConfig, getEventHandler, setGlobalUtils, setGlobalConstant, isPc } from './utils'
 
 // @ts-ignore
@@ -44,7 +44,7 @@ export default defineComponent<{
     const globalConfig = ref(initGlobalConfig(props.currentPage))
     const pageConfig = ref({ state: {}, methods: {} })
     const mounted = ref(false)
-    const pageInit = ref<Array<'state' | 'methods'>>([])
+    const pageInit = ref<Array<'state' | 'methods' | 'sdk-type'>>([])
     const getCtx = () => ({ $$page: pageConfig.value, $$global: globalConfig.value })
     let hasInit = false
     const execInitScriptsOnce = (project: Project) => {
@@ -71,9 +71,9 @@ export default defineComponent<{
       } else {
         console.warn(`[butterfly] 初始化页面[${field}]时报错: ${msg}`, fieldValue)
       }
-      if (pageInit.value.length < 2) {
-        pageInit.value.push(field)
-      }
+      // if (pageInit.value.length < 2) {
+      pageInit.value.push(field)
+      // }
     }
     let styleEl: any
     const setCss = (css: string | null) => {
@@ -137,6 +137,13 @@ export default defineComponent<{
     }
 
     if (isEdit()) {
+      watch(() => [project.interactiveType, project.depLoaded], ([type, loaded]) => {
+        if (loaded) {
+          loadSdk(type as string).then(() => {
+            pageInit.value.push('sdk-type')
+          })
+        }
+      }, { flush: 'pre' })
       // 更新 page.state
       watch(() => props.currentPage && props.currentPage.state, state => {
         setPageCode('state', state)
@@ -197,14 +204,19 @@ export default defineComponent<{
     }
     onMounted(() => {
       const stop = watch(() => pageInit.value.length, len => {
-        mounted.value = len === 2
+        // console.log('pageInit.value.length', len)
+        const edit = isEdit()
+        // todo 待优化
+        // 编辑时需要处理 sdk 的加载后才能渲染
+        // 预览时是直接先在加载的 sdk
+        mounted.value = (edit && len === 3) || (!edit && len === 2)
         if (mounted.value) {
           stop && stop()
         }
       })
     })
     return {
-      pageInit,
+      mounted,
       pageConfig,
       globalConfig,
       getCtx
