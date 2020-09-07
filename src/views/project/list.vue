@@ -56,7 +56,7 @@
           label="项目"
           fixed>
           <template slot-scope="scope">
-            <div v-html="scope.row.dir" />
+            <div v-html="scope.row.dirSearch || scope.row.dir" />
           </template>
         </el-table-column>
         <el-table-column
@@ -296,12 +296,12 @@ export default {
       if (!val) {
         this.searchModel.searchList = null
       } else {
+        const isDir = this.searchModel.field === 'dir'
         this.searchModel.searchList = this.tableData.map(x => {
           if (new RegExp(val).test(x[this.searchModel.field])) {
             return {
               ...x,
-              [this.searchModel.field]: x[this.searchModel.field].replace(val, `<span class="c-main">${val}</span>`),
-              origin: x[this.searchModel.field]
+              [isDir ? 'dirSearch' : this.searchModel.field]: x[this.searchModel.field].replace(val, `<span class="c-main">${val}</span>`)
             }
           }
         }).filter(Boolean)
@@ -360,8 +360,8 @@ export default {
       location.href = process.env.VUE_APP_FILE_SERVER + `/butterfly/project/download/${item.dir}`
     },
     async handleEditForm (item) {
-      const dir = this.searchModel.field === 'dir' ? (item.origin || item.dir) : item.dir
-      const res = await http.get('project/get', { dir, preview: 1 })
+      // const dir = this.searchModel.field === 'dir' ? (item.origin || item.dir) : item.dir
+      const res = await http.get('project/get', { dir: item.dir, preview: 1 })
       const data = res.data.project
       this.editProjectForm = data
       this.addProjectForm = {

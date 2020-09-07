@@ -43,7 +43,7 @@ module.exports = {
         iocAppType,
         iocSyncMethod,
         iocAppName,
-        iocAppIcon,
+        // iocAppIcon,
         iocComponentSymbol,
         iocAuthInfo
       }
@@ -55,12 +55,10 @@ module.exports = {
     const data = {
       appId: iocAppId,
       name: iocAppName,
-      file: path.join(releasePath, `${dir}.zip`)
+      file: `${dir}.zip`
     }
     if (iocAppType === 'mp') {
-      const localIcon = path.join(dirPath, 'icon.png')
-      await utils.downImg(iocAppIcon, localIcon)
-      data.icon = localIcon
+      data.icon = 'icon.png'
     } else {
       data.componentSymbol = iocComponentSymbol
     }
@@ -74,21 +72,35 @@ module.exports = {
       'username': authArr[0],
       'password': authArr[1],
       cardList: [],
-      mpList: []
+      mpList: [],
+      cmd: ['auto', iocAppType, iocSyncMethod]
     }
     config[iocAppType === 'mp' ? 'mpList' : 'cardList'].push(data)
     await fs.outputFile(path.join(dirPath, 'xmmprc.json'), JSON.stringify(config))
     // 压缩 zip
-    await utils.zip(dir, releasePath)
-    let msg = ''
-    await utils.spawn(
-      'xmmp',
-      ['auto', iocAppType, iocSyncMethod, iocAppId, '--auth'],
-      { cwd: dirPath },
-      str => { msg += str }
-    )
+    const zipFilePath = await utils.zip(dir, releasePath)
+    // 同步
+    let msg = await _syncRemote(zipFilePath, path.join(dirPath, 'xmmprc.json'))
+    function _syncRemote (filePath1, filePath2) {
+      return new Promise((resolve, reject) => {
+        request.post(`${process.env.IOC_SERVER}/ioc-sync/exec`, {
+          formData: {
+            dir,
+            file1: fs.createReadStream(filePath1),
+            file2: fs.createReadStream(filePath2)
+          }
+        }, (err, res, body) => {
+          if (err) {
+            reject(err)
+          } else {
+            resolve(body)
+          }
+        })
+      })
+    }
     return { success: true, msg }
   },
+
   login: async (mobile, password) => {
     const param = {
       winSysName: 'Mac OS_chrome_80.0.3987',

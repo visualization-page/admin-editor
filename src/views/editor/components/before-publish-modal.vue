@@ -56,7 +56,7 @@
       :schema-data="project"
       @updateByField="updateProjectByField"
     />
-    <template v-if="project.interactiveType === 'xmmp'">
+    <template v-if="hasIoc && project.interactiveType === 'xmmp'">
       <p class="f12 mb10 bd bd-eee bt pt10 b">对接第三方发布</p>
       <schema-form
         :schema="iocSchema"
@@ -93,7 +93,8 @@ export default {
       deployProjectList: [],
       pubSchema: pub,
       iocSchema: pubIoc,
-      loadingSearch: false
+      loadingSearch: false,
+      hasIoc: !!process.env.VUE_APP_ENV_TTILE
     }
   },
   watch: {

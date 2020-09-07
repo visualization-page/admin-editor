@@ -437,23 +437,23 @@ export const pubIoc = [
     elAttrs: {
       placeholder: '请输入'
     }
-  },
-  {
-    relation: [
-      {
-        field: 'config.iocSync',
-        value: true
-      },
-      {
-        field: 'config.iocAppType',
-        value: 'mp'
-      }
-    ],
-    label: '小程序图标',
-    field: 'config.iocAppIcon',
-    type: 'image',
-    elAttrs: {
-      placeholder: '请输入'
-    }
   }
+  // {
+  //   relation: [
+  //     {
+  //       field: 'config.iocSync',
+  //       value: true
+  //     },
+  //     {
+  //       field: 'config.iocAppType',
+  //       value: 'mp'
+  //     }
+  //   ],
+  //   label: '小程序图标',
+  //   field: 'config.iocAppIcon',
+  //   type: 'image',
+  //   elAttrs: {
+  //     placeholder: '请输入'
+  //   }
+  // }
 ]

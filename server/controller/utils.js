@@ -8,24 +8,14 @@ const spawn = require('cross-spawn')
 // const pubPath = path.resolve(__dirname, '../public')
 
 const handle = {
-  downImg (url, dest) {
-    return new Promise((resolve, reject) => {
-      const stream = request(url).pipe(fs.createWriteStream(dest))
-      stream.on('finish', () => {
-        resolve()
-      })
-      stream.on('error', () => {
-        // eslint-disable-next-line
-        reject()
-      })
-    })
-  },
   async zip (zipName, targetDirPath) {
-    const zipPath = path.join(targetDirPath, `${zipName}.zip`)
+    const name = `${zipName}.zip`
+    const zipPath = path.join(targetDirPath, name)
     if (fs.pathExistsSync(zipPath)) {
       handle.rm(zipPath)
     }
-    await handle.spawn('zip', ['-qr', `${zipName}.zip`, './'], { cwd: targetDirPath })
+    await handle.spawn('zip', ['-qr', name, './'], { cwd: targetDirPath })
+    return path.join(targetDirPath, name)
   },
   unzip (file, dir) {
     execSync(`unzip -o ${file} -d ${dir}`)
