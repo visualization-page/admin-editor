@@ -1,7 +1,7 @@
 import { setRenderPreview } from '@/assets/render'
 import { initGlobalConfig } from '@/components/mobile-render/render/utils'
 import { initProject } from '@/assets/project'
-import { loadSdk } from '@/assets/util'
+import { loadSdk, loadSdkSystem } from '@/assets/util'
 
 export const loadVConsole = () => {
   return new Promise((resolve, reject) => {
@@ -51,7 +51,16 @@ export const getProject = async (dir) => {
     http = global.http
   }
   const { data: { project } } = await http.get('get', { dir })
+  // 20000
   const arr = [loadSdk(project.interactiveType)]
+  // 如果是小程序，检查 sdklist
+  if (
+    project.interactiveType === 'xmmp' &&
+    project.config.sdklist &&
+    project.config.sdklist.length
+  ) {
+    Array.prototype.push.apply(arr, loadSdkSystem(project.config.sdklist))
+  }
   if (project.config.openConsole) {
     arr.push(loadVConsole())
   }

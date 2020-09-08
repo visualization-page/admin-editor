@@ -170,6 +170,22 @@ function addScript (id: string, url: string) {
   })
 }
 
+function addStyle (id: string, url: string) {
+  return new Promise((resolve, reject) => {
+    const link = document.createElement('link')
+    link.id = id
+    link.href = url
+    link.rel = 'stylesheet'
+    link.onload = () => {
+      resolve()
+    }
+    link.onerror = () => {
+      reject(new Error(`load [${id}] error`))
+    }
+    document.body.appendChild(link)
+  })
+}
+
 function removeNode (id: string) {
   const item = document.getElementById(id)
   if (item) {
@@ -177,8 +193,21 @@ function removeNode (id: string) {
   }
 }
 
+export const isInMiniapp = /hwminiapp/i.test(navigator.userAgent)
+
+export function loadSdkSystem (sdkIds: string[]) {
+  if (isInMiniapp) {
+    return sdkIds.sort().map(id => {
+      return [
+        addScript(`J_${id}`, `shinemosdk://${id}/index.js`),
+        addStyle(`C_${id}`, `shinemosdk://${id}/index.css`)
+      ]
+    }).flat()
+  }
+  return []
+}
+
 export function loadSdk (type: string) {
-  const isInMiniapp = /hwminiapp/i.test(navigator.userAgent)
   const typeMap: { [k: string]: { id: string, src: string } } = {
     'long-page': {
       id: 'native',

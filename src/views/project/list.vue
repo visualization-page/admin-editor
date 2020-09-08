@@ -369,7 +369,7 @@ export default {
         interactiveType: data.interactiveType,
         desc: data.desc,
         info: { whitelist: data.info.whitelist },
-        config: { openConsole: data.config.openConsole }
+        config: { openConsole: data.config.openConsole, sdklist: data.config.sdklist }
       }
       this.showAddModal = true
       // 项目名称不可修改
@@ -404,7 +404,7 @@ export default {
       } else {
         const _merge = (obj, data) => {
           Object.keys(obj).forEach(k => {
-            if (typeof obj[k] === 'object') {
+            if (typeof obj[k] === 'object' && !Array.isArray(obj[k])) {
               _merge(obj[k], data[k])
             } else {
               data[k] = obj[k]

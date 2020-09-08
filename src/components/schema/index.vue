@@ -2,7 +2,7 @@
 import Vue from 'vue'
 import { Notification } from 'element-ui'
 import { defineComponent, createElement, reactive, watch } from '@vue/composition-api'
-import { renderInput, renderInputBind, renderSelect, renderCheckbox, renderUniversal, renderCodeEditor, renderDesc } from './render-item'
+import { renderInput, renderInputBind, renderSelect, renderCheckbox, renderCheckboxGroup, renderUniversal, renderCodeEditor, renderDesc } from './render-item'
 import RenderInputGroup from './render-input-group.vue'
 import RenderInputGroupArr from './render-input-group-arr.vue'
 import RenderEvents from './render-events.vue'
@@ -100,6 +100,8 @@ export default defineComponent({
           return renderSelect(schema, props.schemaData, updateField)
         case 'checkbox':
           return renderCheckbox(schema, props.schemaData, updateField)
+        case 'checkbox-group':
+          return renderCheckboxGroup(schema, props.schemaData, updateField)
         case 'slider':
           return renderUniversal('el-slider', schema, props.schemaData, updateField, true)
         case 'color':

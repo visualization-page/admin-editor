@@ -430,8 +430,15 @@ const handle = {
     if (isXmmp) {
       await fs.copy(path.join(distPath, 'xmmp'), path.join(releasePath, 'xmmp'))
       renderContent = renderContent
-        // .replace('</head>', `<script src=xmmp/xmmp.min.js></script></head>`)
         .replace('</head>', `<script src=shinemosdk://20000/index.js></script></head>`)
+      // 内置 sdklist
+      if (globalProject.project.config.sdklist) {
+        globalProject.project.config.sdklist.sort().forEach(id => {
+          renderContent = renderContent
+            .replace('</head>', `<link id="C_${id}" rel="stylesheet" href=shinemosdk://${id}/index.css></head>`)
+            .replace('</head>', `<script id="J_${id}" src=shinemosdk://${id}/index.js></script></head>`)
+        })
+      }
     } else {
       await fs.copy(path.join(distPath, 'native'), path.join(releasePath, 'native'))
       renderContent = renderContent

@@ -1,3 +1,4 @@
+import Vue from 'vue'
 import { createElement } from '@vue/composition-api'
 import { getParentRef, getUnitValue } from '@/assets/util'
 import { setCodeState } from '@/assets/code-edit'
@@ -103,6 +104,29 @@ export const renderCheckbox = (item: any, data: any, updateField: any) => {
         }
       }}
     />
+  )
+}
+
+export const renderCheckboxGroup = (item: any, data: any, updateField: any) => {
+  const { pref, field } = getParentRef(item.field, data)
+  if (!pref[field]) {
+    Vue.set(pref, field, [])
+  }
+  return (
+    <el-checkbox-group
+      value={pref[field]}
+      on={{
+        input (val: string) {
+          updateField(item.field, val)
+        }
+      }}
+    >
+      {
+        item.options.map((it: { label: string, value: number }) => (
+          <el-checkbox label={it.value}>{ it.label }</el-checkbox>
+        ))
+      }
+    </el-checkbox-group>
   )
 }
 

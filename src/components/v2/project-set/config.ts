@@ -64,6 +64,31 @@ export const projectCreate = [
     elAttrs: {
       placeholder: '请输入姓名，例如：诸炜/杨明；白名单内，项目可编辑操作；'
     }
+  },
+  {
+    relation: [
+      {
+        field: 'interactiveType',
+        value: 'xmmp'
+      }
+    ],
+    label: '小程序 sdk',
+    field: 'config.sdklist',
+    type: 'checkbox-group',
+    options: [
+      {
+        label: 'echarts',
+        value: 25000
+      },
+      {
+        label: 'xmbase',
+        value: 25001
+      },
+      {
+        label: 'xmcard',
+        value: 25002
+      }
+    ]
   }
 ]
 
