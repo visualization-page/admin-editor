@@ -94,81 +94,12 @@
               detectIndentation: false
             }"
             ref="editor"
+            @editorDidMount="handleMounted"
           />
           <p class="tc c-aaa pt50">代码准备中...</p>
         </div>
       </div>
     </modal>
-
-    <el-dialog
-      v-if="false"
-      :visible.sync="showModal"
-      title="事件管理"
-      class="events-manage-dialog"
-      top="0"
-      fullscreen
-      lock-scroll
-      :close-on-click-modal="false"
-      :close-on-press-escape="false"
-      :show-close="false"
-    >
-      <el-form
-        :model="form"
-        :rules="rules"
-        label-position="left"
-        label-width="60px"
-        ref="form"
-        class="height-100"
-        overflow-a
-      >
-        <el-form-item label="描述" prop="desc">
-          <el-input v-model="form.desc" placeholder="请输入" />
-        </el-form-item>
-        <el-form-item label="类型" prop="eventType">
-          <el-select v-model="form.eventType">
-            <el-option
-              v-for="item in eventTypeOptions"
-              :key="item"
-              :label="item"
-              :value="item"
-            />
-          </el-select>
-        </el-form-item>
-        <el-form-item
-          v-if="!isFromPage && false"
-          label="目标节点"
-          prop="targetNodeIdPath"
-        >
-          <el-cascader
-            v-model="form.targetNodeIdPath"
-            :options="currentPage.nodes"
-            :props="{
-              label: 'title',
-              value: 'id',
-              checkStrictly: true
-            }"
-            clearable
-          />
-        </el-form-item>
-        <el-form-item class="events-btn" label="内置动作" prop="fx">
-          <el-button
-            v-for="(item, i) in fxList"
-            :key="i"
-            type="warning"
-            @click="handleClickFx(item)"
-          >
-            <i class="bficon icon-function" />
-            {{ item.name }}
-          </el-button>
-        </el-form-item>
-        <el-form-item label="逻辑代码" prop="fxCode">
-        </el-form-item>
-      </el-form>
-      <div slot="footer" class="dialog-footer">
-        <el-button type="warning" @click="handleConfirm">保 存</el-button>
-        <el-button @click="showModal = false">取 消</el-button>
-      </div>
-    </el-dialog>
   </div>
 </template>
 
@@ -207,6 +138,7 @@ export default createComponent({
     const showModal = ref(false)
     const canMount = ref(false)
     const editItemIndex = ref(-1)
+    const editor = ref<{ getPosition: any, executeEdits: any }>(null)
     const defaultForm: FormEvent = {
       eventType: '',
       targetNodeIdPath: [],
@@ -256,8 +188,20 @@ export default createComponent({
       })
     }
     const handleClickFx = (item: any) => {
-      // console.log(item)
-      form.fxCode += `${item.code}`
+      if (editor.value) {
+        const position = editor.value.getPosition()
+        editor.value.executeEdits('', [
+          {
+            range: {
+              startLineNumber: position.lineNumber,
+              startColumn: position.column,
+              endLineNumber: position.lineNumber,
+              endColumn: position.column + item.code.length
+            },
+            text: item.code
+          }
+        ])
+      }
     }
 
     return {
@@ -298,11 +242,6 @@ export default createComponent({
         Vue.nextTick(() => {
           // @ts-ignore
           ctx.refs.form.clearValidate()
-          // @ts-ignore
-          // todo 获取鼠标位置插入值
-          // ctx.refs.editor.editor.onDidChangeCursorPosition((position: any) => {
-          //   console.log(position.position.toString())
-          // })
         })
       },
       handleDel (i: number) {
@@ -312,7 +251,13 @@ export default createComponent({
         })
       },
       amdRequire: window.require,
-      handleClickFx
+      handleClickFx,
+      handleMounted (editorInstance: any) {
+        editor.value = editorInstance
+        editorInstance.addCommand(window.monaco.KeyMod.CtrlCmd | window.monaco.KeyCode.KEY_S, function () {
+          handleConfirm()
+        })
+      }
     }
   }
 })

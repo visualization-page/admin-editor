@@ -168,8 +168,6 @@ export default {
           return Message.error('请选择方式')
         } else if (!iocAppName) {
           return Message.error('请输入卡片或小程序名称')
-        } else if (iocAppType === 'mp' && iocSyncMethod === 'create' && !iocAppIcon) {
-          return Message.error('请输入小程序 icon')
         } else if (iocAppType === 'card' && iocSyncMethod === 'create' && !iocComponentSymbol) {
           return Message.error('请输入卡片 componentSymbol')
         }

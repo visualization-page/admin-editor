@@ -7,7 +7,7 @@
       "env": {
         "NODE_ENV": "production",
         "APP_ENV": "dev",
-        "IOC_SERVER": "http://10.1.68.251:9411"
+        "IOC_SERVER": "http://localhost:9411"
       }
     }
   ]

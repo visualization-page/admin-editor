@@ -71,7 +71,8 @@ export default defineComponent<{
       } else {
         console.warn(`[butterfly] 初始化页面[${field}]时报错: ${msg}`, fieldValue)
       }
-      // if (pageInit.value.length < 2) {
+      // 切换页面时也会调用
+      // if (pageInit.value.length < 3) {
       pageInit.value.push(field)
       // }
     }
@@ -192,9 +193,7 @@ export default defineComponent<{
       // console.log('[butterfly] render page start', ((Date.now() - window._entryTime) / 1000), '秒')
       watch(() => props.currentPage, (page, oldPage) => {
         if (page) {
-          // @ts-ignore
-          // globalConfig.value = initGlobalConfig(page as Page)
-          // globalConfig.value.updatePage(page)
+          pageInit.value = []
           // 页面
           setPageCode('state', page.state)
           setPageCode('methods', page.methods)
@@ -204,7 +203,6 @@ export default defineComponent<{
     }
     onMounted(() => {
       const stop = watch(() => pageInit.value.length, len => {
-        // console.log('pageInit.value.length', len)
         const edit = isEdit()
         // todo 待优化
         // 编辑时需要处理 sdk 的加载后才能渲染

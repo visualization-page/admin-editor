@@ -308,8 +308,9 @@ export default {
       }
     },
     hasPriv (item) {
+      const createUser = item.createUser.replace('<span class="c-main">', '').replace('</span>', '')
       return item.lockedBy === this.$native.name || (!item.lockedBy && (
-        item.createUser === this.$native.name ||
+        createUser === this.$native.name ||
         (item.info.whitelist || '').indexOf(this.$native.name) > -1 ||
         this.$native.name === '杨明'
       ))
