@@ -19,7 +19,7 @@
       <transition name="el-fade-in">
         <div
           v-if="canMountAfterLoading"
-          class="absolute l0 r0 b0 tc c-ccc f14 pt50"
+          class="absolute l0 r0 b0 tc c-ccc f14 pt50 z1000"
           style="top: 60px;background-color: #1e1e1e"
         >
           <span>代码准备中...</span>
@@ -176,7 +176,7 @@ export default createComponent({
       if (val) {
         const { state, methods } = currentPage.value!
         const ctx = { $$page: { state: {}, methods: {} }, $$global: initGlobalConfig(currentPage.value) }
-        const isObj = (obj: any) => typeof obj === 'object' && !Array.isArray(obj)
+        const isObj = (obj: any) => obj && typeof obj === 'object' && !Array.isArray(obj)
         const _df = (
           obj: any,
           path: string[],

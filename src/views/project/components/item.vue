@@ -2,7 +2,7 @@
   <div class="folder-item">
     <div class="folder-item__bg relative">
       <div class="tc pt30">
-        <p class="f20" v-html="item.dirSearch || item.dir" />
+        <p v-if="false" class="f20" v-html="item.dirSearch || item.dir" />
         <p class="mlr20 mt10 c-666 f16" v-html="item.desc || '暂无描述'" />
         <p class="mlr20 mt10 c-666 f16">
           <i class="el-icon-user" />
@@ -20,30 +20,35 @@
       </div>
       <div v-if="item.lockedBy" class="folder-item__active flex-center f14 c-fff">{{ item.lockedBy }}编辑中</div>
     </div>
-    <div class="absolute width-100 height-100 l0 t0 cp" @click="$emit('click', item)">
+    <div class="folder-item__box absolute width-100 height-100 l0 t0 cp" @click="$emit('click', item)">
+      <div class="folder-item__title flex-center">
+        <span class="f20" v-html="item.dirSearch || item.dir" />
+      </div>
       <div class="folder-item__content flex-center">
-        <el-tooltip effect="dark" content="查看" placement="bottom">
-          <i class="el-icon-monitor" @click.stop="$emit('open', item)"></i>
-        </el-tooltip>
-        <template v-if="isDev">
-          <el-tooltip effect="dark" content="复制" placement="bottom">
-            <i class="el-icon-document-copy" @click.stop="$emit('copy', item)"></i>
+        <div class="pt10">
+          <el-tooltip effect="dark" content="查看" placement="bottom">
+            <i class="el-icon-monitor" @click.stop="$emit('open', item)"></i>
           </el-tooltip>
-          <el-tooltip effect="dark" content="下载" placement="bottom">
-            <i class="el-icon-download" @click.stop="$emit('down', item)"></i>
-          </el-tooltip>
-          <el-tooltip effect="dark" content="导出" placement="bottom">
-            <i class="el-icon-takeaway-box" @click.stop="$emit('export', item)"></i>
-          </el-tooltip>
-        </template>
-        <template v-if="hasPriv">
-          <el-tooltip v-if="isDev" effect="dark" content="删除" placement="bottom">
-            <i class="el-icon-delete" @click.stop="$emit('del', item)"></i>
-          </el-tooltip>
-          <el-tooltip effect="dark" content="编辑" placement="bottom">
-            <i class="el-icon-setting"></i>
-          </el-tooltip>
-        </template>
+          <template v-if="isDev">
+            <el-tooltip effect="dark" content="复制" placement="bottom">
+              <i class="el-icon-document-copy" @click.stop="$emit('copy', item)"></i>
+            </el-tooltip>
+            <el-tooltip effect="dark" content="下载" placement="bottom">
+              <i class="el-icon-download" @click.stop="$emit('down', item)"></i>
+            </el-tooltip>
+            <el-tooltip effect="dark" content="导出" placement="bottom">
+              <i class="el-icon-takeaway-box" @click.stop="$emit('export', item)"></i>
+            </el-tooltip>
+          </template>
+          <template v-if="hasPriv">
+            <el-tooltip v-if="isDev" effect="dark" content="删除" placement="bottom">
+              <i class="el-icon-delete" @click.stop="$emit('del', item)"></i>
+            </el-tooltip>
+            <el-tooltip effect="dark" content="编辑" placement="bottom">
+              <i class="el-icon-setting"></i>
+            </el-tooltip>
+          </template>
+        </div>
       </div>
     </div>
   </div>
@@ -109,6 +114,20 @@ export default {
     color: #666;
     z-index: 3;
   }
+  &__box {
+    &:hover {
+      .folder-item__content {
+        display: block;
+      }
+      .folder-item__title {
+        display: none;
+      }
+    }
+  }
+  &__content {
+    display: none;
+  }
+  &__title,
   &__content {
     position: absolute;
     bottom: 0;
