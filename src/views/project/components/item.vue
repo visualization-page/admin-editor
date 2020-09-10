@@ -22,7 +22,9 @@
     </div>
     <div class="folder-item__box absolute width-100 height-100 l0 t0 cp" @click="$emit('click', item)">
       <div class="folder-item__title flex-center">
-        <span class="f20" v-html="item.dirSearch || item.dir" />
+        <div class="th1">
+          <span class="f20" v-html="item.dirSearch || item.dir" />
+        </div>
       </div>
       <div class="folder-item__content flex-center">
         <div class="pt10">
