@@ -592,7 +592,7 @@ const handle = {
       return res.map(x => ({
         ...x,
         lockedBy: lock.lockMap[x.dir]
-      }))
+      })).sort((a, b) => b.info.time - a.info.time)
     }
     const [folders, projects] = await Promise.all([fs.readJson(folder), fs.readJson(project)])
     // 取出未归类的项目
@@ -641,10 +641,11 @@ const handle = {
       if (new RegExp(keyword, 'i').test(x[field])) {
         return {
           ...x,
-          [isDir ? 'dirSearch' : field]: x[field].replace(keyword, `<span class="c-main">${keyword}</span>`)
+          [isDir ? 'dirSearch' : field]: x[field].replace(keyword, `<span class="c-main">${keyword}</span>`),
+          lockedBy: lock.lockMap[x.dir]
         }
       }
-    }).filter(Boolean)
+    }).filter(Boolean).sort((a, b) => b.info.time - a.info.time)
   }
 }
 
