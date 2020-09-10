@@ -64,12 +64,12 @@ export default defineComponent<{
         return
       }
       const ctx = getCtx()
-      const { ok, value, msg } = parseCodeValid(fieldValue, ctx)
+      const { ok, value, msg, stack } = parseCodeValid(fieldValue, ctx)
       if (ok) {
         // @ts-ignore
         pageConfig.value[field] = value!
       } else {
-        console.warn(`[butterfly] 初始化页面[${field}]时报错: ${msg}`, fieldValue)
+        console.warn(`[butterfly] 初始化页面[${field}]时报错: ${msg}\n${stack}\n${fieldValue}`)
       }
       // 切换页面时也会调用
       // if (pageInit.value.length < 3) {

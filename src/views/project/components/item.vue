@@ -3,15 +3,14 @@
     <div class="folder-item__bg relative">
       <div class="tc pt30">
         <p class="f20" v-html="item.dirSearch || item.dir" />
-        <p class="mlr20 mt10 c-666 f16" v-html="item.desc" />
+        <p class="mlr20 mt10 c-666 f16" v-html="item.desc || '暂无描述'" />
         <p class="mlr20 mt10 c-666 f16">
           <i class="el-icon-user" />
-          <span v-html="item.createUser" />
+          <span class="mr5" v-html="item.createUser" />
           <i class="el-icon-edit-outline" />
           <span>{{ item.info.userName }}</span>
         </p>
       </div>
-      <div v-if="item.lockedBy" class="folder-item__active flex-center f14 c-fff">{{ item.lockedBy }}编辑中</div>
       <div
         class="folder-item__record flex-center-between f14 plr15 cp"
         @click.stop="item.info.remark ? $emit('record', item) : ''"
@@ -19,6 +18,7 @@
         <span>{{ item.info.time }}</span>
         <span>{{ item.info.remark || '-' }}</span>
       </div>
+      <div v-if="item.lockedBy" class="folder-item__active flex-center f14 c-fff">{{ item.lockedBy }}编辑中</div>
     </div>
     <div class="absolute width-100 height-100 l0 t0 cp" @click="$emit('click', item)">
       <div class="folder-item__content flex-center">
@@ -93,6 +93,7 @@ export default {
     left: 0;
     /*background: rgba(red, 0.4);*/
     background: #ff4d00;
+    z-index: 3;
   }
   &__record {
     position: absolute;

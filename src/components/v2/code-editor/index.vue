@@ -9,7 +9,7 @@
         <span class="f14 c-aaa">编辑{{ currentCode.title }}</span>
         <div class="flex-center mr15">
           <div class="p10 cp c-main mr10" @click="handleCancel">退出编辑器</div>
-          <div class="bf-btn" @click="handleConfirm">
+          <div class="bf-btn" @click="handleConfirm()">
             <div class="bf-btn__container">
               保存代码
             </div>
@@ -25,13 +25,38 @@
           <span>代码准备中...</span>
         </div>
       </transition>
-      <div :class="{ 'flex': hasFxPanel }">
+      <div :class="{ 'flex height-100': hasLeftPanel }">
         <div
-          v-if="hasFxPanel"
+          v-if="hasLeftPanel"
           class="editor-v2__code-editor--left flex-shrink-0 bg-333 height-100 oa plr15"
         >
+          <template v-if="isCodeRender">
+            <div class="oh">
+              <p class="el-form-item__label f12">视图模型</p>
+            </div>
+            <el-tree
+              :data="codeRenderNotice.state"
+              :expand-on-click-node="false"
+              @node-click="handleNodeClick"
+            />
+            <div class="oh">
+              <p class="el-form-item__label f12">页面方法</p>
+            </div>
+            <div class="pl10">
+              <div
+                v-for="(item, i) in codeRenderNotice.methods"
+                :key="i"
+                class="f12 cp c-aaa c-main-hover"
+                style="line-height: 18px"
+                @click="handleClickFx({ code: `$$page.methods${item.value}()` })"
+              >
+                <i class="bficon c-main icon-function" />
+                <span class="ml5">{{ item.label }}</span>
+              </div>
+            </div>
+          </template>
           <div class="oh">
-            <p class="el-form-item__label">内置函数</p>
+            <p class="el-form-item__label f12">内置函数</p>
           </div>
           <div class="pl10">
             <div
@@ -46,7 +71,7 @@
             </div>
           </div>
         </div>
-        <div :class="{ 'editor-v2__code-editor--right': hasFxPanel }">
+        <div :class="{ 'editor-v2__code-editor--right': hasLeftPanel }">
           <monaco-editor
             v-if="canMount"
             :style="{ height: areaHeight - 30 + 'px' }"
@@ -75,9 +100,11 @@
 <script lang="ts">
 import { createComponent, onMounted, ref, watch, computed } from '@vue/composition-api'
 import { currentCode, isEdit, setState } from '@/assets/code-edit'
-import { getDocHeight } from '@/assets/util'
+import { currentPage } from '@/assets/page'
+import { getDocHeight, parseCodeValid } from '@/assets/util'
 import { MessageBox } from 'element-ui'
 import { fxList } from '@/assets/event'
+import { initGlobalConfig } from '@/components/mobile-render/render/utils'
 
 export default createComponent({
   setup () {
@@ -109,7 +136,7 @@ export default createComponent({
     const handleCancel = () => {
       setState(false)
     }
-    const handleConfirm = async () => {
+    const handleConfirm = async (close = true) => {
       if (!isCodeValid.value) {
         await MessageBox.confirm('代码存在语法错误，不会保存错误的代码，是否继续？')
       }
@@ -121,7 +148,9 @@ export default createComponent({
         duration: 2000,
         position: 'top-left'
       })
-      handleCancel()
+      if (close) {
+        handleCancel()
+      }
     }
     const handleClickFx = (item: any) => {
       if (editor.value) {
@@ -139,6 +168,47 @@ export default createComponent({
         ])
       }
     }
+    const hasLeftCodeTitle = ['页面方法', 'render']
+    const isCodeRender = computed(() => currentCode.title === 'render')
+    type ResItem = { label: string, value: string, children: ResItem[] }
+    const codeRenderNotice = ref<{ state: ResItem[], methods: ResItem[] }>({ state: [], methods: [] })
+    watch(() => isCodeRender.value, val => {
+      if (val) {
+        const { state, methods } = currentPage.value!
+        const ctx = { $$page: { state: {}, methods: {} }, $$global: initGlobalConfig(currentPage.value) }
+        const isObj = (obj: any) => typeof obj === 'object' && !Array.isArray(obj)
+        const _df = (
+          obj: any,
+          path: string[],
+          res: Array<ResItem>
+        ): any => {
+          if (isObj(obj)) {
+            Object.keys(obj).forEach((k: string) => {
+              const item = { label: k, value: `${path.join('.')}.${k}`, children: [] }
+              res.push(item)
+              if (isObj(obj[k])) {
+                path.push(k)
+                _df(obj[k], path, item.children)
+                path.pop()
+              }
+            })
+          }
+        }
+        // 解析视图和方法
+        const stateRes = parseCodeValid(state, ctx)
+        if (stateRes.ok) {
+          const result: Array<ResItem> = []
+          _df(stateRes.value, [], result)
+          codeRenderNotice.value.state = result
+        }
+        const methodsRes = parseCodeValid(methods, ctx)
+        if (methodsRes.ok) {
+          const result: Array<ResItem> = []
+          _df(methodsRes.value, [], result)
+          codeRenderNotice.value.methods = result
+        }
+      }
+    })
     return {
       areaHeight,
       code,
@@ -147,9 +217,14 @@ export default createComponent({
       isEdit,
       currentCode,
       amdRequire: window.require,
-      hasFxPanel: computed(() => currentCode.title === '页面方法'),
+      hasLeftPanel: computed(() => hasLeftCodeTitle.includes(currentCode.title)),
+      isCodeRender,
+      codeRenderNotice,
       fxList,
       handleClickFx,
+      handleNodeClick (data: any) {
+        handleClickFx({ code: `$$page.state${data.value}` })
+      },
       handleCancel,
       handleConfirm,
       handleCodeChange (val: string) {
@@ -159,7 +234,7 @@ export default createComponent({
         editor.value = editorInstance
         canMountAfterLoading.value = false
         editorInstance.addCommand(window.monaco.KeyMod.CtrlCmd | window.monaco.KeyCode.KEY_S, function () {
-          handleConfirm()
+          handleConfirm(false)
         })
       }
     }
@@ -183,6 +258,26 @@ export default createComponent({
     }
     &--right {
       width: 80%;
+    }
+    .el-tree {
+      background: transparent;
+    }
+    .el-tree-node__label {
+      font-size: 12px;
+      color: #aaa;
+      height: 20px;
+    }
+    .el-tree-node__content>.el-tree-node__expand-icon {
+      padding: 0 3px;
+    }
+    .el-tree-node__content {
+      background-color: transparent !important;
+      &:hover {
+        background-color: transparent;
+        .el-tree-node__label {
+          color: #ff7d00;
+        }
+      }
     }
   }
 }

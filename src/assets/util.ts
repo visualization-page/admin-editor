@@ -85,7 +85,7 @@ export const getUnitValue = (str: string): { value?: string, unit?: string } => 
 }
 
 export const parseCodeValid = (code: string | null, ctx?: any) => {
-  const res = { ok: false, msg: '', value: null }
+  const res = { ok: false, msg: '', value: null, stack: '' }
   if (!code) {
     res.msg = '要执行的 code 为 null'
     return res
@@ -112,6 +112,7 @@ export const parseCodeValid = (code: string | null, ctx?: any) => {
     // console.log(code, ctx)
     // console.log(code, e)
     res.msg = e.message || e.name || '语法错误'
+    res.stack = e.stack
   }
   return res
 }

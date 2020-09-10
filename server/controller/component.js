@@ -589,13 +589,23 @@ const handle = {
         const cur = dirs.pop()
         res.push(projects.find(x => x.dir === cur))
       }
-      return res
+      return res.map(x => ({
+        ...x,
+        lockedBy: lock.lockMap[x.dir]
+      }))
     }
     const [folders, projects] = await Promise.all([fs.readJson(folder), fs.readJson(project)])
     // 取出未归类的项目
     return folders
       .sort((a, b) => b.time - a.time)
-      .concat(projects.filter(x => !x.folder).sort((a, b) => b.info.time - a.info.time))
+      .concat(
+        projects.filter(x => !x.folder)
+          .sort((a, b) => b.info.time - a.info.time)
+          .map(x => ({
+            ...x,
+            lockedBy: lock.lockMap[x.dir]
+          }))
+      )
   },
 
   async addFolderProjects (folderId, dir) {

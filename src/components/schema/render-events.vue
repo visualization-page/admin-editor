@@ -17,7 +17,7 @@
     <modal
       :show.sync="showModal"
       title="事件管理"
-      @confirm="handleConfirm"
+      @confirm="handleConfirm()"
       @cancel="showModal = false"
     >
       <div class="height-100 flex">
@@ -166,11 +166,13 @@ export default createComponent({
       }
     }, { deep: true })
 
-    const handleConfirm = () => {
+    const handleConfirm = (close = true) => {
       // @ts-ignore
       ctx.refs.form.validate((valid: boolean) => {
         if (valid) {
-          showModal.value = false
+          if (close) {
+            showModal.value = false
+          }
           if (editItemIndex.value > -1) {
             eventList.value[editItemIndex.value] = deepClone(form)
           } else {
@@ -255,7 +257,7 @@ export default createComponent({
       handleMounted (editorInstance: any) {
         editor.value = editorInstance
         editorInstance.addCommand(window.monaco.KeyMod.CtrlCmd | window.monaco.KeyCode.KEY_S, function () {
-          handleConfirm()
+          handleConfirm(false)
         })
       }
     }
