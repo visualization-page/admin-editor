@@ -12,30 +12,14 @@ function getPath (type, isIndex = true) {
 
 const handle = {
   async init () {
-    const project = getPath('project')
-    const compose = getPath('compose')
-    const upload = getPath('upload')
-    const suggest = getPath('suggest')
-    const umd = getPath('umd')
-    const utils = getPath('utils')
-    if (!fs.pathExistsSync(project)) {
-      await fs.outputFile(project, '[]')
-    }
-    if (!fs.pathExistsSync(upload)) {
-      await fs.outputFile(upload, '[]')
-    }
-    if (!fs.pathExistsSync(compose)) {
-      await fs.outputFile(compose, '[]')
-    }
-    if (!fs.pathExistsSync(suggest)) {
-      await fs.outputFile(suggest, '[]')
-    }
-    if (!fs.pathExistsSync(umd)) {
-      await fs.outputFile(umd, '[]')
-    }
-    if (!fs.pathExistsSync(utils)) {
-      await fs.outputFile(utils, '[]')
-    }
+    const dirs = ['project', 'compose', 'upload', 'suggest', 'umd', 'utils', 'folder']
+    const alls = dirs.map(async dir => {
+      const p = getPath(dir)
+      if (!fs.pathExistsSync(p)) {
+        await fs.outputFile(p, '[]')
+      }
+    })
+    return Promise.all(alls)
   },
 
   /**
@@ -194,6 +178,7 @@ const handle = {
     await handle.update('upload')
     utils.rm(tmpPath)
   },
+
   uploadComposeComponent: async (file, tmpPath) => {
     let msg = ''
     const c = await fs.readFile(file, 'utf8')
@@ -202,6 +187,7 @@ const handle = {
     utils.rm(tmpPath)
     return msg
   },
+
   updateProjectList: async (projectInfo) => {
     await handle.update('project', ({ project }) => {
       const data = {
@@ -210,14 +196,23 @@ const handle = {
         desc: project.desc,
         info: project.info,
         createUser: project.createUser,
-        url: project.url
+        url: project.url,
+        folder: project.folder || ''
       }
       if (projectInfo && projectInfo.dir === project.dir) {
         data.info = projectInfo.info
       }
+      if (project.folder) {
+        // 更新到 folder
+        handle.addFolderProjects(project.folder, project.dir)
+      } else {
+        // 检查移除
+        handle.removeFolderProjects(project.dir)
+      }
       return data
     })
   },
+
   saveProject: async (dir, data) => {
     const exist = fs.pathExistsSync(path.join(pubPath, 'project', dir))
     if (!data.force && exist) {
@@ -242,6 +237,7 @@ const handle = {
       await handle.updateProjectList()
     }
   },
+
   lockProject: async (dir, userName, isLock) => {
     if (isLock) {
       await lock.lock(dir, userName)
@@ -250,12 +246,15 @@ const handle = {
     }
     // await handle.updateProjectList()
   },
+
   getLock (dir) {
     return lock.lockMap[dir]
   },
+
   getProject: (dir) => {
     return fs.readJson(path.join(pubPath, 'project', dir, 'data.json'))
   },
+
   releaseProject: async (dir, body) => {
     const releasePath = path.resolve(__dirname, '../../release', dir)
     const distPath = path.resolve(__dirname, '../../dist-system')
@@ -478,6 +477,7 @@ const handle = {
       return service.syncIoc(globalProject.project)
     }
   },
+
   async uploadProject (file, tmpPath) {
     const projectList = await handle.list('project')
     const data = await fs.readJson(file)
@@ -540,6 +540,101 @@ const handle = {
       })
     }
     await fs.writeJson(index, list)
+  },
+
+  async saveFolder ({ name, user, id }) {
+    const index = getPath('folder')
+    const list = await fs.readJson(index)
+    let item
+    if (id) {
+      item = list.find(x => x.id === id)
+      item.name = name
+      item.time = Date.now()
+    } else {
+      item = list.find(x => x.name === name)
+      if (item) {
+        return '文件夹已存在'
+      }
+      list.unshift({
+        user,
+        name,
+        id: `${user.uid}_${Date.now()}`,
+        projects: [],
+        time: Date.now()
+      })
+    }
+    await fs.writeJson(index, list)
+  },
+
+  async deleteFolder ({ id }) {
+    const index = getPath('folder')
+    const list = await fs.readJson(index)
+    const i = list.findIndex(x => x.id === id)
+    if (list[i].projects.length) {
+      return '请先移除文件夹下的项目'
+    }
+    list.splice(i, 1)
+    await fs.writeJson(index, list)
+  },
+
+  async getCombindList (dirs) {
+    const folder = getPath('folder')
+    const project = getPath('project')
+    if (dirs) {
+      const projects = await fs.readJson(project)
+      const res = []
+      let num = 0
+      while (dirs.length && num < 1000) {
+        num++
+        const cur = dirs.pop()
+        res.push(projects.find(x => x.dir === cur))
+      }
+      return res
+    }
+    const [folders, projects] = await Promise.all([fs.readJson(folder), fs.readJson(project)])
+    // 取出未归类的项目
+    return folders
+      .sort((a, b) => b.time - a.time)
+      .concat(projects.filter(x => !x.folder).sort((a, b) => b.info.time - a.info.time))
+  },
+
+  async addFolderProjects (folderId, dir) {
+    const index = getPath('folder')
+    const list = await fs.readJson(index)
+    const folder = list.find(x => x.id === folderId)
+    const dirIndex = folder.projects.findIndex(x => x === dir)
+    if (dirIndex === -1) {
+      folder.projects.push(dir)
+      await fs.writeJson(index, list)
+    }
+  },
+
+  async removeFolderProjects (dir) {
+    const index = getPath('folder')
+    const list = await fs.readJson(index)
+    let i = -1
+    const folder = list.find(x => {
+      i = x.projects.findIndex(y => y === dir)
+      return i !== -1
+    })
+    if (folder) {
+      folder.projects.splice(i, 1)
+      await fs.writeJson(index, list)
+    }
+  },
+
+  async searchProject ({ keyword, field }) {
+    const project = getPath('project')
+    const projects = await fs.readJson(project)
+    const isDir = field === 'dir'
+    return projects.map(x => {
+      if (new RegExp(keyword, 'i').test(x[field])) {
+        return {
+          ...x,
+          [isDir ? 'dirSearch' : field]: x[field].replace(keyword, `<span class="c-main">${keyword}</span>`)
+        }
+      }
+    }).filter(Boolean)
   }
 }
 

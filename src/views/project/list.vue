@@ -11,8 +11,9 @@
           :on-success="handleResponse"
           :on-error="handleResponse"
         >
-          <div slot="trigger" class="p10 cp c-main mr10 f14">导入项目</div>
+          <div slot="trigger" class="p10 cp c-main f14">导入项目</div>
         </el-upload>
+        <div class="p10 cp c-main mr10 f14" @click="handleAddFolder()">新建文件夹</div>
         <div class="bf-btn" @click="handleAddForm()">
           <div class="bf-btn__container">
             创建项目
@@ -21,11 +22,20 @@
       </header-opt>
     </div>
     <div class="project-list__title flex justify-between">
-      <div class="">
-        <span class="f18 b">项目列表</span>
+      <div class="f18">
+        <span
+          class="b cp hover-line"
+          @click="currentFolder = null, getList()"
+        >
+          项目列表
+        </span>
+        <template v-if="currentFolder">
+          <span class="f16 c-999 mlr5">/</span>
+          <span class="f16">{{ currentFolder.name }}</span>
+        </template>
       </div>
       <el-form inline>
-        <el-form-item label="搜索类型">
+        <el-form-item label="搜索项目">
           <el-select placeholder="请选择" v-model="searchModel.field">
             <el-option
               v-for="item in searchField"
@@ -46,98 +56,37 @@
       </el-form>
     </div>
     <div class="project-list">
-      <el-table
-        :data="searchModel.searchList || currentPageData"
-        border
-        stripe
-        style="width: 100%">
-        <el-table-column
-          prop="dir"
-          label="项目"
-          fixed>
-          <template slot-scope="scope">
-            <div v-html="scope.row.dirSearch || scope.row.dir" />
-          </template>
-        </el-table-column>
-        <el-table-column
-          prop="desc"
-          label="描述">
-          <template slot-scope="scope">
-            <div v-html="scope.row.desc" />
-          </template>
-        </el-table-column>
-        <el-table-column
-          prop="createUser"
-          label="创建人"
-          width="60">
-          <template slot-scope="scope">
-            <div v-html="scope.row.createUser" />
-          </template>
-        </el-table-column>
-        <el-table-column
-          prop="info.userName"
-          label="修改人"
-          width="60">
-        </el-table-column>
-        <el-table-column
-          prop="info.time"
-          label="修改时间"
-          width="130">
-        </el-table-column>
-        <el-table-column
-          prop="info.remark"
-          label="发布记录">
-          <template slot-scope="props">
-            <el-button
-              v-if="props.row.info.remark"
-              class="mr5"
-              type="text"
-              icon="el-icon-tickets"
-              @click="handleGetRecords(props.row)"
-            />
-            <span>{{ props.row.info.remark || '-' }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column
-          prop="info.userName"
-          label="状态"
-          width="100"
-        >
-          <template slot-scope="scope">
-            <span v-if="!scope.row.lockedBy" style="color:green">正常</span>
-            <span style="color: red" v-else>{{ scope.row.lockedBy }}编辑中</span>
-          </template>
-        </el-table-column>
-        <el-table-column
-          label="操作"
-          width="230">
-          <template slot-scope="scope">
-            <el-button @click="handlePreview(scope.row)" type="text" size="small">查看</el-button>
-            <template v-if="isDev">
-              <el-button @click="handleCopy(scope.row)" type="text" size="small">复制</el-button>
-              <el-button @click="handleDown(scope.row)" type="text" size="small">下载</el-button>
-              <el-button @click="handleExport(scope.row)" type="text" size="small">导出</el-button>
-            </template>
-            <template v-if="hasPriv(scope.row)">
-              <el-button v-if="isDev" @click="handleDel(scope.row)" type="text" size="small">删除</el-button>
-              <el-button @click="handleEditForm(scope.row)" type="text" size="small">编辑</el-button>
-            </template>
-          </template>
-        </el-table-column>
-      </el-table>
-      <div v-show="!searchModel.keywords" class="tc ptb10">
-        <el-pagination
-          background
-          layout="prev, pager, next"
-          :total="tableData.length"
-          :page-size="pageSize"
-          @current-change="handlePage"
-          @prev-click="handlePage"
-          @next-click="handlePage"
-        />
+      <div class="project-list__new flex flex-wrap">
+        <div class="tc width-100 ptb50" v-if="(searchModel.searchList || tableData).length === 0">
+          <svg width="184" height="152" viewBox="0 0 184 152" xmlns="http://www.w3.org/2000/svg"><g fill="none" fillRule="evenodd"><g transform="translate(24 31.67)"><ellipse fillOpacity=".8" fill="#F5F5F7" cx="67.797" cy="106.89" rx="67.797" ry="12.668"></ellipse><path d="M122.034 69.674L98.109 40.229c-1.148-1.386-2.826-2.225-4.593-2.225h-51.44c-1.766 0-3.444.839-4.592 2.225L13.56 69.674v15.383h108.475V69.674z" fill="#AEB8C2"></path><path d="M101.537 86.214L80.63 61.102c-1.001-1.207-2.507-1.867-4.048-1.867H31.724c-1.54 0-3.047.66-4.048 1.867L6.769 86.214v13.792h94.768V86.214z" fill="url(#linearGradient-1)" transform="translate(13.56)"></path><path d="M33.83 0h67.933a4 4 0 0 1 4 4v93.344a4 4 0 0 1-4 4H33.83a4 4 0 0 1-4-4V4a4 4 0 0 1 4-4z" fill="#F5F5F7"></path><path d="M42.678 9.953h50.237a2 2 0 0 1 2 2V36.91a2 2 0 0 1-2 2H42.678a2 2 0 0 1-2-2V11.953a2 2 0 0 1 2-2zM42.94 49.767h49.713a2.262 2.262 0 1 1 0 4.524H42.94a2.262 2.262 0 0 1 0-4.524zM42.94 61.53h49.713a2.262 2.262 0 1 1 0 4.525H42.94a2.262 2.262 0 0 1 0-4.525zM121.813 105.032c-.775 3.071-3.497 5.36-6.735 5.36H20.515c-3.238 0-5.96-2.29-6.734-5.36a7.309 7.309 0 0 1-.222-1.79V69.675h26.318c2.907 0 5.25 2.448 5.25 5.42v.04c0 2.971 2.37 5.37 5.277 5.37h34.785c2.907 0 5.277-2.421 5.277-5.393V75.1c0-2.972 2.343-5.426 5.25-5.426h26.318v33.569c0 .617-.077 1.216-.221 1.789z" fill="#DCE0E6"></path></g><path d="M149.121 33.292l-6.83 2.65a1 1 0 0 1-1.317-1.23l1.937-6.207c-2.589-2.944-4.109-6.534-4.109-10.408C138.802 8.102 148.92 0 161.402 0 173.881 0 184 8.102 184 18.097c0 9.995-10.118 18.097-22.599 18.097-4.528 0-8.744-1.066-12.28-2.902z" fill="#DCE0E6"></path><g transform="translate(149.65 15.383)" fill="#FFF"><ellipse cx="20.654" cy="3.167" rx="2.849" ry="2.815"></ellipse><path d="M5.698 5.63H0L2.898.704zM9.259.704h4.985V5.63H9.259z"></path></g></g></svg>
+          <p class="f16 c-666">没有项目呢～</p>
+        </div>
+        <template v-for="item in (searchModel.searchList || tableData)">
+          <folder-item
+            v-if="item.dir"
+            :key="item.dir"
+            :item="item"
+            :is-dev="isDev"
+            @open="handlePreview"
+            @copy="handleCopy"
+            @down="handleDown"
+            @export="handleExport"
+            @del="handleDel"
+            @click="handleEditForm"
+            @record="handleGetRecords"
+          />
+          <folder
+            v-else
+            :key="item.id"
+            :item="item"
+            @delete="handleFolderDelete"
+            @edit="handleFolderEdit"
+            @click="handleFolderOpen"
+          />
+        </template>
       </div>
     </div>
-    <div class="fixed width-100 tc b10">
+    <div class="ptb50 tc">
       <p class="f12 mt10 c-999">Designed by 讯盟FE</p>
     </div>
 
@@ -182,25 +131,22 @@ import HeaderOpt from '@/components/header-opts/index.vue'
 import { http } from '@/api'
 import { MessageBox, Message, Notification } from 'element-ui'
 import dayjs from 'dayjs'
-// import Avatar from '@/components/avatar/index.vue'
+import Folder from './components/folder.vue'
+import FolderItem from './components/item.vue'
 import SchemaForm from '@/components/schema/index.vue'
 import { projectCreate } from '@/components/v2/project-set/config.ts'
 import { getParentRef, deepClone } from '@/assets/util'
 import { defaultProject } from '@/assets/project'
+import Vue from 'vue'
 
 export default {
   components: {
     HeaderOpt,
-    SchemaForm
+    SchemaForm,
+    Folder,
+    FolderItem
   },
-  computed: {
-    currentPageData () {
-      return this.tableData.slice((this.currentPage - 1) * this.pageSize, this.currentPage * this.pageSize)
-    },
-    uploadAction () {
-      return process.env.VUE_APP_FILE_SERVER + '/butterfly/project/upload'
-    }
-  },
+
   data () {
     return {
       isDev: localStorage.getItem('butterfly-mode') === 'normal',
@@ -226,14 +172,22 @@ export default {
         searchList: null
       },
       tableData: [],
-      currentPage: 1,
-      pageSize: 10,
-      records: []
+      records: [],
+      currentFolder: null,
+      searchTimer: 0
     }
   },
+
+  computed: {
+    uploadAction () {
+      return process.env.VUE_APP_FILE_SERVER + '/butterfly/project/upload'
+    }
+  },
+
   created () {
     this.getList()
   },
+
   methods: {
     handleBeforeUpload (file) {
       const ok = file.type !== 'application/zip'
@@ -248,6 +202,7 @@ export default {
       }
       return ok
     },
+
     handleResponse (res) {
       if (res.success) {
         Notification({
@@ -269,6 +224,7 @@ export default {
         })
       }
     },
+
     async handleGetRecords (item) {
       const res = await http.get('project/record', { dir: item.dir })
       this.records = res.data.map(x => ({
@@ -277,36 +233,53 @@ export default {
       }))
       this.showRecord = true
     },
-    handlePage (val) {
-      this.currentPage = val
-    },
-    getList () {
-      http.get('component/list', { type: 'project' }).then(res => {
-        this.tableData = res.data.sort((a, b) => b.info.time - a.info.time).map(x => ({
-          ...x,
-          info: {
-            ...(x.info || {}),
-            time: x.info.time ? dayjs(x.info.time).format('MM/DD HH:mm') : '-'
+
+    async getList () {
+      if (this.currentFolder && this.currentFolder.projects.length === 0) {
+        this.tableData = []
+        return
+      }
+      const { data } = await http.get('list', { dirs: this.currentFolder ? this.currentFolder.projects.join(',') : undefined })
+      this.tableData = data.map(x => {
+        if (x.dir) {
+          return {
+            ...x,
+            info: {
+              ...(x.info || {}),
+              time: x.info.time ? dayjs(x.info.time).format('MM/DD HH:mm') : '-'
+            }
           }
-        }))
+        }
+        return x
       })
+      // 赋值可选的文件夹
+      if (!this.currentFolder) {
+        const folders = data.filter(x => x.projects).map(x => ({ label: x.name, value: x.id }))
+        folders.unshift({ label: '无', value: '' })
+        projectCreate[1].options = folders
+      }
     },
+
     handleSearch (val) {
+      val = val.trim()
       this.searchModel.keywords = val
+      if (this.searchTimer) {
+        clearTimeout(this.searchTimer)
+        this.searchTimer = 0
+      }
       if (!val) {
         this.searchModel.searchList = null
       } else {
-        const isDir = this.searchModel.field === 'dir'
-        this.searchModel.searchList = this.tableData.map(x => {
-          if (new RegExp(val).test(x[this.searchModel.field])) {
-            return {
-              ...x,
-              [isDir ? 'dirSearch' : this.searchModel.field]: x[this.searchModel.field].replace(val, `<span class="c-main">${val}</span>`)
-            }
-          }
-        }).filter(Boolean)
+        this.searchTimer = setTimeout(async () => {
+          const { data } = await http.get('search', { keyword: val, field: this.searchModel.field })
+          this.searchModel.searchList = data.map(x => {
+            x.info.time = x.info.time ? dayjs(x.info.time).format('MM/DD HH:mm') : '-'
+            return x
+          })
+        }, 1000)
       }
     },
+
     hasPriv (item) {
       const createUser = item.createUser.replace('<span class="c-main">', '').replace('</span>', '')
       return item.lockedBy === this.$native.name || (!item.lockedBy && (
@@ -315,6 +288,7 @@ export default {
         this.$native.name === '杨明'
       ))
     },
+
     handlePreview (item) {
       if (item.url) {
         window.open(item.url)
@@ -325,6 +299,7 @@ export default {
         // })
       }
     },
+
     async handleCopy (item) {
       const { value } = await MessageBox.prompt('请输入复制后的项目名(文件夹名)', {
         inputValue: `${item.dir}_copy`
@@ -346,9 +321,11 @@ export default {
         this.getList()
       })
     },
+
     handleExport (item) {
       location.href = process.env.VUE_APP_FILE_SERVER + `/butterfly/project/export/${item.dir}`
     },
+
     async handleDel (item) {
       await MessageBox.confirm('确认删除吗？')
       const i = this.tableData.findIndex(x => x.dir === item.dir)
@@ -356,10 +333,12 @@ export default {
         this.tableData.splice(i, 1)
       })
     },
+
     async handleDown (item) {
       await http.get('project/download-check', { dir: item.dir })
       location.href = process.env.VUE_APP_FILE_SERVER + `/butterfly/project/download/${item.dir}`
     },
+
     async handleEditForm (item) {
       // const dir = this.searchModel.field === 'dir' ? (item.origin || item.dir) : item.dir
       const res = await http.get('project/get', { dir: item.dir, preview: 1 })
@@ -370,12 +349,14 @@ export default {
         interactiveType: data.interactiveType,
         desc: data.desc,
         info: { whitelist: data.info.whitelist },
-        config: { openConsole: data.config.openConsole, sdklist: data.config.sdklist }
+        config: { openConsole: data.config.openConsole, sdklist: data.config.sdklist },
+        folder: data.folder
       }
       this.showAddModal = true
       // 项目名称不可修改
       projectCreate[0].elAttrs.disabled = true
     },
+
     handleAddForm () {
       projectCreate[0].elAttrs.disabled = false
       this.editProjectForm = null
@@ -388,13 +369,20 @@ export default {
       }
       this.showAddModal = true
     },
-    handleFormChange (field, val) {
-      const res = getParentRef(field, this.addProjectForm)
-      res.pref[res.field] = val
+
+    handleFormChange (fieldString, val) {
+      const { pref, field } = getParentRef(fieldString, this.addProjectForm)
+      if (pref[field] === undefined) {
+        Vue.set(pref, field, val)
+      } else {
+        pref[field] = val
+      }
     },
+
     async handleToEditor () {
       this.$router.push(`${this.isDev ? '/v2' : ''}/editor${this.isDev ? '' : '-sample'}/${this.addProjectForm.dir}`)
     },
+
     async handleSaveForm () {
       if (!this.addProjectForm.dir) {
         Message.error('请输入项目名称')
@@ -430,6 +418,63 @@ export default {
         this.showAddModal = false
         this.getList()
       }
+    },
+
+    async handleAddFolder (isEdit) {
+      const { value } = await this.$prompt(
+        '文件夹为业务线，例如：彩云活动、广西活动、IOC',
+        isEdit ? '编辑文件夹' : '新建文件夹',
+        { inputPlaceholder: '请输入', inputValue: isEdit ? this.editProjectForm.name : '' }
+      )
+      if (value) {
+        await http.post('folder/save', {
+          id: isEdit ? this.editProjectForm.id : undefined,
+          name: value,
+          user: {
+            name: Vue.prototype.$native.name,
+            uid: Vue.prototype.$native.uid
+          }
+        })
+        Notification({
+          title: '成功',
+          type: 'success',
+          message: isEdit ? '编辑文件夹成功' : '新建文件夹成功',
+          position: 'top-left',
+          duration: 2000
+        })
+        await this.getList()
+      } else {
+        Notification({
+          title: '错误',
+          type: 'error',
+          message: '请输入文件夹名',
+          position: 'top-left',
+          duration: 2000
+        })
+      }
+    },
+
+    async handleFolderDelete (item) {
+      await this.$confirm('确定要删除吗？')
+      await http.post('folder/del', { id: item.id })
+      Notification({
+        title: '成功',
+        type: 'success',
+        message: '删除成功',
+        position: 'top-left',
+        duration: 2000
+      })
+      await this.getList()
+    },
+
+    handleFolderEdit (item) {
+      this.editProjectForm = item
+      this.handleAddFolder(true)
+    },
+
+    handleFolderOpen (item) {
+      this.currentFolder = item
+      this.getList()
     }
   }
 }
@@ -437,16 +482,31 @@ export default {
 
 <style lang="less">
 .project-list {
-  width: 1200px;
-  margin: 0 auto 20px auto;
-  height: e('calc(100% - 172px)');
-  overflow: auto;
+  width: 1180px;
+  margin: 0 auto;
+  // height: e('calc(100% - 172px)');
+  // overflow: auto;
   &__title {
-    width: 1200px;
-    margin: 20px auto 0 auto;
+    width: 1180px;
+    margin: 20px auto 20px auto;
   }
   &__wrap {
-    height: 100vh;
+    min-height: 100vh;
+    background: #f2f2f2;
+    .hover-line {
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+  &__new {
+    & > div {
+      margin-right: -40px;
+      margin-bottom: -40px;
+      &:nth-child(6n) {
+        margin-right: -60px;
+      }
+    }
   }
 }
 </style>

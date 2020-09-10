@@ -103,6 +103,10 @@ export default defineComponent({
     }
     const handleDelete = async (item: NodeUmd, i: number) => {
       await MessageBox.confirm('确定要删除吗？')
+      // 移除项目引用
+      const index = selected.value.findIndex(x => x === item.label)
+      project.componentUmd.splice(index, 1)
+      // 移除库
       await http.post('component/umdSave', { ...item, delete: true }, { successMessage: '删除成功' })
       list.value.splice(i, 1)
     }

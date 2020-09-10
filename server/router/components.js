@@ -335,8 +335,38 @@ module.exports = {
     }
   },
 
+  '/folder/save': {
+    async post (req, res) {
+      const msg = await component.saveFolder(req.body)
+      res.json({ success: !msg, msg })
+    }
+  },
+
+  '/folder/delete': {
+    async post (req, res) {
+      const msg = await component.deleteFolder(req.body)
+      res.json({ success: !msg, msg })
+    }
+  },
+
+  '/list': {
+    async get (req, res) {
+      const dirs = req.query.dirs
+      const data = await component.getCombindList(dirs ? dirs.split(',') : null)
+      res.json({ success: true, data })
+    }
+  },
+
+  '/search': {
+    async get (req, res) {
+      const data = await component.searchProject(req.query)
+      res.json({ success: true, data })
+    }
+  },
+
   '/checkstatus': {
     get: async (req, res) => {
+      await component.init()
       res.json({ success: true })
     }
   }

@@ -104,7 +104,6 @@ export default defineComponent<{
     const pageEvents = async (page?: Page, oldPage?: Page) => {
       if (page) {
         await sleepUntil(() => mounted.value)
-        // console.log('render page mounted', ((Date.now() - window._renderStartTime) / 1000), '秒')
         const ctx = getCtx()
         // 上一个页面 unMounted 钩子
         if (oldPage) {
@@ -113,10 +112,6 @@ export default defineComponent<{
           })
         }
         globalConfig.value.updatePage(page)
-        // 当前页面的 mounted 钩子
-        page.events.filter((x: FormEvent) => x.eventType === 'onMounted').forEach((ev: FormEvent) => {
-          getEventHandler(ev, ctx)
-        })
         // 当前页面分享
         if (page.hasShare) {
           ctx.$$global.native.menuCallJs('分享', () => {
@@ -134,6 +129,10 @@ export default defineComponent<{
           // 小程序 sdk 覆盖了 JSBridge
           ctx.$$global.native.noMenu()
         }
+        // 当前页面的 mounted 钩子
+        page.events.filter((x: FormEvent) => x.eventType === 'onMounted').forEach((ev: FormEvent) => {
+          getEventHandler(ev, ctx)
+        })
       }
     }
 

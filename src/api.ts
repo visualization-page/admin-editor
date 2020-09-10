@@ -53,7 +53,13 @@ export const http = new Http({
     suggest: {
       save: '/butterfly/suggest/save',
       get: '/butterfly/suggest/get'
-    }
+    },
+    folder: {
+      save: '/butterfly/folder/save',
+      del: '/butterfly/folder/delete'
+    },
+    list: '/butterfly/list',
+    search: '/butterfly/search'
   },
   notify: {
     success: Message.success,

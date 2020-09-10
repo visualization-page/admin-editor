@@ -11,6 +11,12 @@ export const projectCreate = [
     }
   },
   {
+    label: '所属文件夹',
+    field: 'folder',
+    type: 'select',
+    options: []
+  },
+  {
     label: '说明',
     type: 'description',
     content: '项目名称会被作为目录名，规则：小写字母加短杆，a-b'

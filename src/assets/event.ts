@@ -10,6 +10,22 @@ export const eventType = ['click', 'change', 'input', 'focus', 'blur']
 export const eventTypePage = ['onMounted', 'onUnMounted', 'beforeRouteLeave']
 export const fxList = [
   {
+    name: '视图模型引用',
+    code: '$$page.state.'
+  },
+  {
+    name: '页面方法引用',
+    code: '$$page.methods.'
+  },
+  {
+    name: '全局函数引用',
+    code: '$$global.utils.'
+  },
+  {
+    name: '全局常量引用',
+    code: '$$global.constant.'
+  },
+  {
     name: 'toast 提示',
     code: '$$global.toast(\'提示语\')'
   },
