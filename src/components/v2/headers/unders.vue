@@ -2,7 +2,7 @@
   <div class="editor-v2__header-under flex-center-between">
     <div class="flex">
       <div class="flex items-center f18 c-333 th1" style="width: 445px;padding-right: 70px">
-        <div class="editor-v2__header-opts flex-center f12 c-666 mr10" @click="$router.push('/project/list')">
+        <div class="editor-v2__header-opts flex-center f12 c-666 mr10" @click="$router.back()">
           <div class="editor-v2__header-opt">
             <i class="mr5 el-icon-back" />
             <span>返回</span>

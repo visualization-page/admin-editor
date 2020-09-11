@@ -342,6 +342,14 @@ module.exports = {
     }
   },
 
+  '/folder/get': {
+    async get (req, res) {
+      const data = await component.getFolder(req.query.id)
+      const msg = typeof data === 'string' ? data : ''
+      res.json({ success: !msg, msg, data })
+    }
+  },
+
   '/folder/delete': {
     async post (req, res) {
       const msg = await component.deleteFolder(req.body)

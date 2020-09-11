@@ -56,7 +56,8 @@ export const http = new Http({
     },
     folder: {
       save: '/butterfly/folder/save',
-      del: '/butterfly/folder/delete'
+      del: '/butterfly/folder/delete',
+      get: '/butterfly/folder/get'
     },
     list: '/butterfly/list',
     search: '/butterfly/search'

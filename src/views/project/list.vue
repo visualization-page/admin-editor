@@ -25,7 +25,7 @@
       <div class="f18">
         <span
           class="b cp hover-line"
-          @click="currentFolder = null, getList()"
+          @click="handleBackIndex()"
         >
           项目列表
         </span>
@@ -184,7 +184,11 @@ export default {
     }
   },
 
-  created () {
+  async created () {
+    if (!this.currentFolder && this.$route.query.folderId) {
+      const { data } = await http.get('folder/get', { id: this.$route.query.folderId })
+      this.currentFolder = data
+    }
     this.getList()
   },
 
@@ -473,7 +477,22 @@ export default {
     },
 
     handleFolderOpen (item) {
+      this.$router.replace({
+        path: this.$route.path,
+        query: {
+          folderId: item.id
+        }
+      })
       this.currentFolder = item
+      this.getList()
+    },
+
+    handleBackIndex () {
+      this.$router.replace({
+        path: this.$route.path,
+        query: {}
+      })
+      this.currentFolder = null
       this.getList()
     }
   }

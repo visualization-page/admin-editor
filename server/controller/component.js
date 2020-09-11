@@ -566,6 +566,16 @@ const handle = {
     await fs.writeJson(index, list)
   },
 
+  async getFolder (id) {
+    const index = getPath('folder')
+    const list = await fs.readJson(index)
+    const item = list.find(x => x.id === id)
+    if (!item) {
+      return '该文件夹不存在'
+    }
+    return item
+  },
+
   async deleteFolder ({ id }) {
     const index = getPath('folder')
     const list = await fs.readJson(index)
