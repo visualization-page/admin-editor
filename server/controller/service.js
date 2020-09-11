@@ -5,6 +5,7 @@ const config = require('../config')
 const pubPath = path.resolve(__dirname, '../public')
 const fs = require('fs-extra')
 const utils = require('../controller/utils')
+const urllib = require('urllib')
 
 module.exports = {
   syncFile (project) {
@@ -155,26 +156,37 @@ module.exports = {
 
   async caiyunUpload (fileBuffer) {
     return new Promise((resolve, reject) => {
-      request.post(
-        {
-          url: config[process.env.APP_ENV].fileServer,
-          formData: {
-            upfile: fileBuffer
-          },
-          headers: {
-            Origin: 'https://internal.jituancaiyun.com',
-            Referer: 'https://internal.jituancaiyun.com/fe/upload/index.html'
-            // Cookie: `mToken=${mToken}`
-          }
-        },
-        (err, httpResponse, body) => {
-          if (err) {
-            reject(err)
-          } else {
-            resolve(body)
-          }
+      urllib.request(config[process.env.APP_ENV].fileServer, {
+        dataType: 'text',
+        files: fileBuffer
+      }, (err, body) => {
+        if (err) {
+          reject(err)
+        } else {
+          resolve(body)
         }
-      )
+      })
+      // request.post(
+      //   {
+      //     url: config[process.env.APP_ENV].fileServer,
+      //     formData: {
+      //       upfile: fileBuffer
+      //     },
+      //     headers: {
+      //       Origin: 'https://internal.jituancaiyun.com',
+      //       Referer: 'https://internal.jituancaiyun.com/fe/upload/index.html'
+      //       // Cookie: `mToken=${mToken}`
+      //     }
+      //   },
+      //   (err, httpResponse, body) => {
+      //     console.log(err, body)
+      //     if (err) {
+      //       reject(err)
+      //     } else {
+      //       resolve(body)
+      //     }
+      //   }
+      // )
     })
   },
 

@@ -295,15 +295,12 @@ module.exports = {
           if (err) {
             throw err
           }
-          const fileBuffer = await fs.readFile(file)
-          // const data = await service.caiyunUpload(fileBuffer)
-          utils.rm(tmpPath)
-          // res.json({ success: true, data })
+          const fileBuffer = fs.createReadStream(file)
           await doBuffer(fileBuffer)
+          utils.rm(tmpPath)
         })
       } else if (req.body.base64) {
         const base64 = req.body.base64.replace(/=/g, '')
-        // const dataBuffer = Buffer.alloc(req.body.base64.length, req.body.base64, 'base64')
         const dataBuffer = Buffer.alloc(base64.length * 6 / 8, req.body.base64, 'base64')
         await doBuffer(dataBuffer)
       } else {

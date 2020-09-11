@@ -485,6 +485,8 @@ const handle = {
     if (projectList.some(x => x.dir === data.project.dir)) {
       return '项目已存在'
     }
+    data.project.folder = ''
+    await fs.writeJson(file, data)
     await fs.move(
       file,
       path.join(getPath('project', false), data.project.dir, 'data.json')
