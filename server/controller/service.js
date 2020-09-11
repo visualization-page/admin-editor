@@ -34,6 +34,7 @@ module.exports = {
       )
     })
   },
+
   async syncIoc (project) {
     const {
       dir,
@@ -193,9 +194,12 @@ module.exports = {
 
   async searchDeployProject (keyword, cookie) {
     return new Promise((resolve, reject) => {
+      // console.log(config[process.env.APP_ENV].deploy + `/project/mylist.json?env=&title=${encodeURIComponent(keyword)}&type=1&pageSize=100&pageCount=1`)
+      // console.log(`sso_u=${cookie.sso_u}; sso_c=${cookie.sso_c}`)
       request.get(
         {
           url: config[process.env.APP_ENV].deploy + `/project/mylist.json?env=&title=${encodeURIComponent(keyword)}&type=1&pageSize=100&pageCount=1`,
+          // url: config[process.env.APP_ENV].opsServer + `/inner/list?env=&title=${encodeURIComponent(keyword)}&type=1&pageSize=100&pageCount=1`,
           headers: {
             Cookie: `sso_u=${cookie.sso_u}; sso_c=${cookie.sso_c}`
           }
@@ -204,7 +208,17 @@ module.exports = {
           if (err) {
             reject(err)
           } else {
-            resolve(JSON.parse(body).data.list)
+            console.log(body)
+            try {
+              const r = JSON.parse(body)
+              if (r.success) {
+                resolve(r.data.list)
+              } else {
+                reject(r)
+              }
+            } catch (e) {
+              reject(new Error('403 forbidden 搜索失败'))
+            }
           }
         }
       )

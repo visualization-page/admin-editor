@@ -186,8 +186,8 @@ export default {
 
   async created () {
     if (!this.currentFolder && this.$route.query.folderId) {
-      const { data } = await http.get('folder/get', { id: this.$route.query.folderId })
-      this.currentFolder = data
+      const data = await this.getFolderList()
+      this.currentFolder = data.find(x => x.id === this.$route.query.folderId)
     }
     this.getList()
   },
@@ -238,12 +238,23 @@ export default {
       this.showRecord = true
     },
 
+    async getFolderList () {
+      const { data } = await http.get('folder/list')
+      // 赋值可选的文件夹
+      data.unshift({ label: '无', value: '' })
+      projectCreate[1].options = data.map(x => ({ label: x.name, value: x.id }))
+      return data
+    },
+
     async getList () {
-      if (this.currentFolder && this.currentFolder.projects.length === 0) {
-        this.tableData = []
-        return
+      let reqData
+      if (this.currentFolder) {
+        reqData = {
+          dirs: this.currentFolder.projects.join(','),
+          folderId: this.currentFolder.id
+        }
       }
-      const { data } = await http.get('list', { dirs: this.currentFolder ? this.currentFolder.projects.join(',') : undefined })
+      const { data } = await http.get('list', reqData)
       this.tableData = data.map(x => {
         if (x.dir) {
           return {
@@ -256,12 +267,6 @@ export default {
         }
         return x
       })
-      // 赋值可选的文件夹
-      if (!this.currentFolder) {
-        const folders = data.filter(x => x.projects).map(x => ({ label: x.name, value: x.id }))
-        folders.unshift({ label: '无', value: '' })
-        projectCreate[1].options = folders
-      }
     },
 
     handleSearch (val) {
@@ -365,6 +370,7 @@ export default {
       projectCreate[0].elAttrs.disabled = false
       this.editProjectForm = null
       this.addProjectForm = {
+        folder: this.$route.query.folderId || '',
         dir: '',
         desc: '',
         interactiveType: 'long-page',
@@ -420,6 +426,10 @@ export default {
           duration: 2000
         })
         this.showAddModal = false
+        if (this.$route.query.folderId) {
+          const detail = await http.get('folder/get', { id: this.$route.query.folderId })
+          this.currentFolder = detail.data
+        }
         this.getList()
       }
     },
@@ -492,6 +502,7 @@ export default {
         path: this.$route.path,
         query: {}
       })
+      this.searchModel.searchList = null
       this.currentFolder = null
       this.getList()
     }

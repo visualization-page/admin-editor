@@ -357,10 +357,17 @@ module.exports = {
     }
   },
 
+  '/folder/list': {
+    async get (req, res) {
+      const data = await component.listFolder()
+      res.json({ success: true, data })
+    }
+  },
+
   '/list': {
     async get (req, res) {
-      const dirs = req.query.dirs
-      const data = await component.getCombindList(dirs ? dirs.split(',') : null)
+      // const { folderId, dirs } = req.query
+      const data = await component.getCombindList(req.query)
       res.json({ success: true, data })
     }
   },

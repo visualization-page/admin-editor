@@ -70,6 +70,7 @@ const handle = {
   async delete (type, dir) {
     utils.rm(path.join(pubPath, type, dir))
     if (type === 'project') {
+      await handle.removeFolderProjects(dir)
       await handle.updateProjectList()
     } else {
       await handle.update(type)
@@ -576,6 +577,11 @@ const handle = {
     return item
   },
 
+  async listFolder () {
+    const index = getPath('folder')
+    return fs.readJson(index)
+  },
+
   async deleteFolder ({ id }) {
     const index = getPath('folder')
     const list = await fs.readJson(index)
@@ -587,10 +593,14 @@ const handle = {
     await fs.writeJson(index, list)
   },
 
-  async getCombindList (dirs) {
+  async getCombindList ({ folderId, dirs }) {
     const folder = getPath('folder')
     const project = getPath('project')
-    if (dirs) {
+    if (folderId) {
+      if (!dirs) {
+        return []
+      }
+      dirs = dirs.split(',')
       const projects = await fs.readJson(project)
       const res = []
       let num = 0
