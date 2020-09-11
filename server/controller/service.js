@@ -194,14 +194,13 @@ module.exports = {
 
   async searchDeployProject (keyword, cookie) {
     return new Promise((resolve, reject) => {
-      // console.log(config[process.env.APP_ENV].deploy + `/project/mylist.json?env=&title=${encodeURIComponent(keyword)}&type=1&pageSize=100&pageCount=1`)
-      // console.log(`sso_u=${cookie.sso_u}; sso_c=${cookie.sso_c}`)
       request.get(
         {
-          url: config[process.env.APP_ENV].deploy + `/project/mylist.json?env=&title=${encodeURIComponent(keyword)}&type=1&pageSize=100&pageCount=1`,
-          // url: config[process.env.APP_ENV].opsServer + `/inner/list?env=&title=${encodeURIComponent(keyword)}&type=1&pageSize=100&pageCount=1`,
+          // url: config[process.env.APP_ENV].deploy + `/project/mylist.json?env=&title=${encodeURIComponent(keyword)}&type=1&pageSize=100&pageCount=1`,
+          url: config[process.env.APP_ENV].opsServer + `/project/inner/list.json?env=&title=${encodeURIComponent(keyword)}&type=1&pageSize=100&pageCount=1`,
           headers: {
-            Cookie: `sso_u=${cookie.sso_u}; sso_c=${cookie.sso_c}`
+            // Cookie: `sso_u=${cookie.sso_u}; sso_c=${cookie.sso_c}`
+            Cookie: `sso-uid=${cookie.uid}; sso-key=73db45dfdf14`
           }
         },
         (err, httpResponse, body) => {

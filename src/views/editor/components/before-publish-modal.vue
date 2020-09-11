@@ -122,7 +122,7 @@ export default {
     handleSearch (query) {
       if (query) {
         this.loadingSearch = true
-        http.get('project/pubSearch', { keyword: query }).then(res => {
+        http.get('project/pubSearch', { keyword: query, uid: this.$native.uid }).then(res => {
           this.loadingSearch = false
           this.deployProjectList = res.data.map(x => ({
             ...x,

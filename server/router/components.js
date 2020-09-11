@@ -330,7 +330,10 @@ module.exports = {
 
   '/project/pub-search/:keyword': {
     async get (req, res) {
-      const result = await service.searchDeployProject(req.params.keyword, req.cookies)
+      const result = await service.searchDeployProject(req.params.keyword, {
+        ...req.cookies,
+        uid: req.query.uid
+      })
       res.json({ success: true, data: result })
     }
   },

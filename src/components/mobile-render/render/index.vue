@@ -40,9 +40,9 @@ export default defineComponent<{
       type: Object
     }
   },
-  setup (props) {
+  setup (props, context) {
     const globalConfig = ref(initGlobalConfig(props.currentPage))
-    const pageConfig = ref({ state: {}, methods: {} })
+    const pageConfig = ref({ state: {}, methods: {}, refs: context.refs })
     const mounted = ref(false)
     const pageInit = ref<Array<'state' | 'methods' | 'sdk-type'>>([])
     const getCtx = () => ({ $$page: pageConfig.value, $$global: globalConfig.value })
