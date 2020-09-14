@@ -54,6 +54,7 @@
                 <span class="ml5">{{ item.label }}</span>
               </div>
             </div>
+            <p class="f12" v-if="!codeRenderNotice.methods.length">暂无数据</p>
           </template>
           <div class="oh">
             <p class="el-form-item__label f12">内置函数</p>
@@ -100,7 +101,7 @@
 <script lang="ts">
 import { createComponent, onMounted, ref, watch, computed } from '@vue/composition-api'
 import { currentCode, isEdit, setState } from '@/assets/code-edit'
-import { currentPage } from '@/assets/page'
+import { currentPage, Page } from '@/assets/page'
 import { getDocHeight, parseCodeValid } from '@/assets/util'
 import { MessageBox } from 'element-ui'
 import { fxList } from '@/assets/event'
@@ -172,28 +173,32 @@ export default createComponent({
     const isCodeRender = computed(() => currentCode.title === 'render')
     type ResItem = { label: string, value: string, children: ResItem[] }
     const codeRenderNotice = ref<{ state: ResItem[], methods: ResItem[] }>({ state: [], methods: [] })
-    watch(() => isCodeRender.value, val => {
-      if (val) {
-        const { state, methods } = currentPage.value!
-        const ctx = { $$page: { state: {}, methods: {} }, $$global: initGlobalConfig(currentPage.value) }
-        const isObj = (obj: any) => obj && typeof obj === 'object' && !Array.isArray(obj)
-        const _df = (
-          obj: any,
-          path: string[],
-          res: Array<ResItem>
-        ): any => {
-          if (isObj(obj)) {
-            Object.keys(obj).forEach((k: string) => {
-              const item = { label: k, value: `${path.join('.')}.${k}`, children: [] }
-              res.push(item)
-              if (isObj(obj[k])) {
-                path.push(k)
-                _df(obj[k], path, item.children)
-                path.pop()
-              }
-            })
+    const isObj = (obj: any) => obj && typeof obj === 'object' && !Array.isArray(obj)
+    const _df = (
+      obj: any,
+      path: string[],
+      res: Array<ResItem>
+    ): any => {
+      if (isObj(obj)) {
+        Object.keys(obj).forEach((k: string) => {
+          const item = { label: k, value: `${path.join('.')}.${k}`, children: [] }
+          res.push(item)
+          if (isObj(obj[k])) {
+            path.push(k)
+            _df(obj[k], path, item.children)
+            path.pop()
           }
-        }
+        })
+      }
+    }
+    watch(() => [isCodeRender.value, currentPage.value], ([isRender, page]) => {
+      if (isRender && page) {
+        console.log('computed page`s state & methods')
+        // 重置
+        codeRenderNotice.value.state = []
+        codeRenderNotice.value.methods = []
+        const { state, methods } = page as Page
+        const ctx = { $$page: { state: {}, methods: {} }, $$global: initGlobalConfig(page as Page) }
         // 解析视图和方法
         const stateRes = parseCodeValid(state, ctx)
         if (stateRes.ok) {
@@ -223,7 +228,7 @@ export default createComponent({
       fxList,
       handleClickFx,
       handleNodeClick (data: any) {
-        handleClickFx({ code: `$$page.state${data.value}` })
+        handleClickFx({ code: `$$page.state.${data.value}` })
       },
       handleCancel,
       handleConfirm,
@@ -261,6 +266,14 @@ export default createComponent({
     }
     .el-tree {
       background: transparent;
+      &__empty-block {
+        min-height: 10px;
+        text-align: left;
+      }
+      &__empty-text {
+        position: static;
+        font-size: 12px;
+      }
     }
     .el-tree-node__label {
       font-size: 12px;
