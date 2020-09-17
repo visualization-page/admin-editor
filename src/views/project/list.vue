@@ -185,9 +185,9 @@ export default {
   },
 
   async created () {
+    const folderList = await this.getFolderList()
     if (!this.currentFolder && this.$route.query.folderId) {
-      const data = await this.getFolderList()
-      this.currentFolder = data.find(x => x.id === this.$route.query.folderId)
+      this.currentFolder = folderList.find(x => x.id === this.$route.query.folderId)
     }
     this.getList()
   },
@@ -289,14 +289,14 @@ export default {
       }
     },
 
-    hasPriv (item) {
-      const createUser = item.createUser.replace('<span class="c-main">', '').replace('</span>', '')
-      return item.lockedBy === this.$native.name || (!item.lockedBy && (
-        createUser === this.$native.name ||
-        (item.info.whitelist || '').indexOf(this.$native.name) > -1 ||
-        this.$native.name === '杨明'
-      ))
-    },
+    // hasPriv (item) {
+    //   const createUser = item.createUser.replace('<span class="c-main">', '').replace('</span>', '')
+    //   return item.lockedBy === this.$native.name || (!item.lockedBy && (
+    //     createUser === this.$native.name ||
+    //     (item.info.whitelist || '').indexOf(this.$native.name) > -1 ||
+    //     this.$native.name === '杨明'
+    //   ))
+    // },
 
     handlePreview (item) {
       if (item.url) {

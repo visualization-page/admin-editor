@@ -30,15 +30,15 @@
           v-if="hasLeftPanel"
           class="editor-v2__code-editor--left flex-shrink-0 bg-333 height-100 oa plr15"
         >
+          <div class="oh">
+            <p class="el-form-item__label f12">视图模型</p>
+          </div>
+          <el-tree
+            :data="codeRenderNotice.state"
+            :expand-on-click-node="false"
+            @node-click="handleNodeClick"
+          />
           <template v-if="isCodeRender">
-            <div class="oh">
-              <p class="el-form-item__label f12">视图模型</p>
-            </div>
-            <el-tree
-              :data="codeRenderNotice.state"
-              :expand-on-click-node="false"
-              @node-click="handleNodeClick"
-            />
             <div class="oh">
               <p class="el-form-item__label f12">页面方法</p>
             </div>
@@ -114,7 +114,12 @@ export default createComponent({
     const isCodeValid = ref(true)
     const canMount = ref(false)
     const canMountAfterLoading = ref(false)
-    const editor = ref<{ getPosition: any, executeEdits: any }>(null)
+    const editor = ref<{
+      getPosition: any,
+      executeEdits: any,
+      setPosition: any,
+      focus: any
+    }>(null)
     watch(() => currentCode.code, (val: string) => {
       code.value = val
     })
@@ -162,11 +167,14 @@ export default createComponent({
               startLineNumber: position.lineNumber,
               startColumn: position.column,
               endLineNumber: position.lineNumber,
-              endColumn: position.column + item.code.length
+              endColumn: position.column
             },
             text: item.code
           }
         ])
+        position.column += item.code.length
+        editor.value.setPosition(position)
+        editor.value.focus()
       }
     }
     const hasLeftCodeTitle = ['页面方法', 'render']
@@ -192,28 +200,34 @@ export default createComponent({
       }
     }
     watch(() => [isCodeRender.value, currentPage.value], ([isRender, page]) => {
-      if (isRender && page) {
-        console.log('computed page`s state & methods')
-        // 重置
+      if (page) {
+        console.log('computed page`s state !')
         codeRenderNotice.value.state = []
-        codeRenderNotice.value.methods = []
-        const { state, methods } = page as Page
+        const { state } = page as Page
         const ctx = { $$page: { state: {}, methods: {} }, $$global: initGlobalConfig(page as Page) }
-        // 解析视图和方法
+        // 解析视图
         const stateRes = parseCodeValid(state, ctx)
         if (stateRes.ok) {
           const result: Array<ResItem> = []
           _df(stateRes.value, [], result)
           codeRenderNotice.value.state = result
         }
-        const methodsRes = parseCodeValid(methods, ctx)
-        if (methodsRes.ok) {
-          const result: Array<ResItem> = []
-          _df(methodsRes.value, [], result)
-          codeRenderNotice.value.methods = result
+        if (isRender) {
+          console.log('computed page`s methods !')
+          // 重置
+          codeRenderNotice.value.methods = []
+          const { methods } = page as Page
+          const ctx = { $$page: { state: {}, methods: {} }, $$global: initGlobalConfig(page as Page) }
+          // 解析方法
+          const methodsRes = parseCodeValid(methods, ctx)
+          if (methodsRes.ok) {
+            const result: Array<ResItem> = []
+            _df(methodsRes.value, [], result)
+            codeRenderNotice.value.methods = result
+          }
         }
       }
-    })
+    }, { lazy: true })
     return {
       areaHeight,
       code,
@@ -228,7 +242,7 @@ export default createComponent({
       fxList,
       handleClickFx,
       handleNodeClick (data: any) {
-        handleClickFx({ code: `$$page.state.${data.value}` })
+        handleClickFx({ code: `$$page.state${data.value[0] === '.' ? '' : '.'}${data.value}` })
       },
       handleCancel,
       handleConfirm,
