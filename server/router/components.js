@@ -364,6 +364,34 @@ module.exports = {
     }
   },
 
+  '/version/list': {
+    async get (req, res) {
+      const data = await component.listVersion(req.query)
+      res.json({ success: true, data })
+    }
+  },
+
+  '/version/add': {
+    async get (req, res) {
+      const msg = await component.addVersion(req.query)
+      res.json({ success: !msg, msg })
+    }
+  },
+
+  '/version/delete': {
+    async get (req, res) {
+      const msg = await component.deleteVersion(req.query)
+      res.json({ success: !msg, msg })
+    }
+  },
+
+  '/version/switch': {
+    async get (req, res) {
+      await component.switchVersion(req.query)
+      res.json({ success: true })
+    }
+  },
+
   '/list': {
     async get (req, res) {
       // const { folderId, dirs } = req.query

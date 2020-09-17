@@ -198,7 +198,8 @@ const handle = {
         info: project.info,
         createUser: project.createUser,
         url: project.url,
-        folder: project.folder || ''
+        folder: project.folder || '',
+        versionId: project.versionId || ''
       }
       if (projectInfo && projectInfo.dir === project.dir) {
         data.info = projectInfo.info
@@ -668,6 +669,87 @@ const handle = {
         }
       }
     }).filter(Boolean).sort((a, b) => b.info.time - a.info.time)
+  },
+
+  async listVersion ({ dir }) {
+    const versionIndex = path.join(getPath('project', false), dir, 'version', 'index.json')
+    await fs.ensureFile(versionIndex)
+    return fs.readJSON(versionIndex).catch(() => [])
+  },
+
+  /**
+   * 添加版本
+   * 按照当前的 data.json 去添加
+   */
+  async addVersion ({ name, dir }) {
+    const getVersionPath = str => path.join(getPath('project', false), dir, 'version', str)
+    const dataJson = path.join(getPath('project', false), dir, 'data.json')
+    const newVersion = {
+      id: `${Date.now()}_${String(Math.random()).replace('0.', '')}`,
+      name,
+      time: Date.now()
+    }
+    // 创建版本
+    const newVersionPath = getVersionPath(`${newVersion.id}.json`)
+    const project = await fs.readJson(dataJson)
+    project.project.versionId = newVersion.id
+    await fs.outputJson(newVersionPath, project)
+    // 更新列表
+    const indexPath = getVersionPath('index.json')
+    const indexData = await fs.readJson(indexPath).catch(() => [])
+    indexData.push(newVersion)
+    return fs.writeJson(indexPath, indexData)
+  },
+
+  async deleteVersion ({ id, dir }) {
+    const getVersionPath = str => path.join(getPath('project', false), dir, 'version', str)
+    // 校验当前 data.json 是否为该版本
+    // 如果是则提示不能删除
+    const dataJson = path.join(getPath('project', false), dir, 'data.json')
+    const project = await fs.readJson(dataJson)
+    if (project.project.versionId === id) {
+      return '该版本为当前版本，不能被删除'
+    }
+
+    // 删除文件
+    utils.rm(getVersionPath(`${id}.json`))
+    // 更新列表
+    const indexPath = getVersionPath('index.json')
+    const indexData = await fs.readJson(indexPath).catch(() => [])
+    const index = indexData.findIndex(x => x.id === id)
+    indexData.splice(index, 1)
+    fs.writeJson(indexPath, indexData)
+  },
+
+  /**
+   * 切换到某个版本
+   */
+  async switchVersion ({ id, dir }) {
+    const getVersionPath = str => path.join(getPath('project', false), dir, 'version', str)
+    const versionPath = getVersionPath(`${id}.json`)
+    if (!fs.pathExistsSync(versionPath)) {
+      return '当前版本不存在'
+    }
+    // 保存当前 data.json 到版本中
+    const dataJson = path.join(getPath('project', false), dir, 'data.json')
+    const project = await fs.readJson(dataJson)
+    const versionId = project.project.versionId
+    if (versionId) {
+      const dataVersionPath = getVersionPath(`${versionId}.json`)
+      if (fs.pathExistsSync(dataVersionPath)) {
+        await fs.writeJson(dataVersionPath, project)
+      } else {
+        await fs.outputJson(dataVersionPath, project)
+      }
+    } else {
+      // 创建新版本
+      await handle.addVersion({ name: 'butterfly-main', dir })
+    }
+    // 切换当前 data.json
+    const curVersionData = await fs.readJson(versionPath)
+    fs.writeJson(dataJson, curVersionData)
+    // 更新项目列表
+    await handle.updateProjectList()
   }
 }
 

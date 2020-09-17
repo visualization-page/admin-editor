@@ -74,6 +74,7 @@
             @del="handleDel"
             @click="handleEditForm"
             @record="handleGetRecords"
+            @version="handleGetVersion"
           />
           <folder
             v-else
@@ -123,6 +124,36 @@
         <el-table-column label="操作时间" prop="time" />
       </el-table>
     </el-dialog>
+
+    <el-dialog
+      title="版本管理"
+      width="550px"
+      :visible.sync="showVersion"
+    >
+      <el-table
+        border
+        stripe
+        class="width-100"
+        :data="versions"
+      >
+        <el-table-column label="版本名称" prop="name" />
+        <el-table-column label="创建时间" prop="time" />
+        <el-table-column label="当前版本">
+          <template slot-scope="scope">
+            <span>{{ scope.row.id === editProjectForm.versionId ? '是' : '-' }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="操作">
+          <template slot-scope="scope">
+            <el-button type="text" @click="handleDeleteVersion(scope.row)">删除</el-button>
+            <el-button type="text" @click="handleSwitchVersion(scope.row)">切换</el-button>
+          </template>
+        </el-table-column>
+      </el-table>
+      <template slot="footer">
+        <el-button type="primary" icon="el-icon-plus" @click="handleAddNewVersion">新建版本</el-button>
+      </template>
+    </el-dialog>
   </div>
 </template>
 
@@ -153,6 +184,7 @@ export default {
       schema: projectCreate,
       showAddModal: false,
       showRecord: false,
+      showVersion: false,
       addProjectForm: {
         dir: '',
         desc: '',
@@ -173,6 +205,7 @@ export default {
       },
       tableData: [],
       records: [],
+      versions: [],
       currentFolder: null,
       searchTimer: 0
     }
@@ -236,6 +269,35 @@ export default {
         time: dayjs(x.time).format('MM/DD HH:mm')
       }))
       this.showRecord = true
+    },
+
+    async handleGetVersion (item) {
+      this.editProjectForm = item
+      const res = await http.get('version/list', { dir: item.dir })
+      this.versions = res.data.map(x => ({
+        ...x,
+        time: dayjs(x.time || Date.now()).format('MM/DD HH:mm')
+      }))
+      this.showVersion = true
+    },
+
+    async handleDeleteVersion (item) {
+      await this.$confirm('确定要删除该版本吗？')
+      await http.get('version/delete', { id: item.id, dir: this.editProjectForm.dir }, { successMessage: '删除版本成功' })
+      this.handleGetVersion(this.editProjectForm)
+    },
+
+    async handleSwitchVersion (item) {
+      await this.$confirm('确定要切换到该版本吗？')
+      await http.get('version/switch', { id: item.id, dir: this.editProjectForm.dir }, { successMessage: '切换版本成功' })
+      Vue.set(this.editProjectForm, 'versionId', item.id)
+      this.getList()
+    },
+
+    async handleAddNewVersion () {
+      const { value } = await this.$prompt('请输入新建的版本名称，例如：v1.3 、 ioc_1.6 、ioc_demo，请不要用中文', '新建版本')
+      await http.get('version/add', { name: value, dir: this.editProjectForm.dir }, { successMessage: '添加版本成功' })
+      this.handleGetVersion(this.editProjectForm)
     },
 
     async getFolderList () {

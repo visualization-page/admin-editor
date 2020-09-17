@@ -5,6 +5,8 @@ import store from './store'
 import 'tcon'
 import './style/app.less'
 import { http } from './api'
+import logs from './changelog'
+import { MessageBox } from 'element-ui'
 
 declare module '@vue/composition-api/dist/component/component' {
   interface SetupContext {
@@ -19,14 +21,8 @@ declare global {
     vant: {
       Toast: (msg: string) => void
     }
-    [k: string]: any
-    // $$global: {
-    //   constant: any
-    //   state: any
-    //   getNodeProperty?: (id: string, property: string) => any
-    //   setNodeProperty?: (id: string, property: string, val: unknown) => any
-    // }
     Native: any
+    [k: string]: any
   }
 }
 
@@ -52,4 +48,26 @@ if (!nativeInstance.cookie('sso_u')) {
       render: h => h(App)
     }).$mount('#app')
   })
+}
+
+// 更新提示
+const log: string[] = (logs as { [k: string]: string[] })[process.env.VUE_APP_VERSION]
+if (log) {
+  const key = 'butterfly-update'
+  const localVersion = localStorage.getItem(key)
+  if (!localVersion || localVersion !== process.env.VUE_APP_VERSION) {
+    const h = window.vueCompositionApi.createElement
+    MessageBox({
+      title: '更新提示',
+      message: h('div', null, [
+        h('p', null, '🧨 有更新啦！'),
+        h('ul', { style: { 'list-style': 'decimal', 'padding-left': '2em' } }, log.map(s => h('li', null, s)))
+      ]),
+      confirmButtonText: '我知道了',
+      beforeClose (_1, _2, done) {
+        localStorage.setItem(key, process.env.VUE_APP_VERSION)
+        done()
+      }
+    })
+  }
 }

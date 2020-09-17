@@ -46,8 +46,8 @@
             <el-tooltip v-if="isDev" effect="dark" content="删除" placement="bottom">
               <i class="el-icon-delete" @click.stop="$emit('del', item)"></i>
             </el-tooltip>
-            <el-tooltip effect="dark" content="编辑" placement="bottom">
-              <i class="el-icon-setting"></i>
+            <el-tooltip effect="dark" content="版本管理" placement="bottom">
+              <i class="el-icon-menu" @click.stop="$emit('version', item)"></i>
             </el-tooltip>
           </template>
         </div>

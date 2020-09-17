@@ -255,6 +255,9 @@ export default createComponent({
         editorInstance.addCommand(window.monaco.KeyMod.CtrlCmd | window.monaco.KeyCode.KEY_S, function () {
           handleConfirm(false)
         })
+        editorInstance.addCommand(window.monaco.KeyMod.CtrlCmd | window.monaco.KeyCode.KEY_D, function () {
+          handleCancel()
+        })
       }
     }
   }

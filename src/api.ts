@@ -61,7 +61,13 @@ export const http = new Http({
       list: '/butterfly/folder/list'
     },
     list: '/butterfly/list',
-    search: '/butterfly/search'
+    search: '/butterfly/search',
+    version: {
+      list: '/butterfly/version/list',
+      add: '/butterfly/version/add',
+      delete: '/butterfly/version/delete',
+      switch: '/butterfly/version/switch'
+    }
   },
   notify: {
     success: Message.success,

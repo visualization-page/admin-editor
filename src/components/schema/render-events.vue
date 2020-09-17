@@ -138,7 +138,12 @@ export default createComponent({
     const showModal = ref(false)
     const canMount = ref(false)
     const editItemIndex = ref(-1)
-    const editor = ref<{ getPosition: any, executeEdits: any }>(null)
+    const editor = ref<{
+      getPosition: any,
+      executeEdits: any,
+      setPosition: any,
+      focus: any
+    }>(null)
     const defaultForm: FormEvent = {
       eventType: '',
       targetNodeIdPath: [],
@@ -198,11 +203,14 @@ export default createComponent({
               startLineNumber: position.lineNumber,
               startColumn: position.column,
               endLineNumber: position.lineNumber,
-              endColumn: position.column + item.code.length
+              endColumn: position.column
             },
             text: item.code
           }
         ])
+        position.column += item.code.length
+        editor.value.setPosition(position)
+        editor.value.focus()
       }
     }
 
@@ -258,6 +266,9 @@ export default createComponent({
         editor.value = editorInstance
         editorInstance.addCommand(window.monaco.KeyMod.CtrlCmd | window.monaco.KeyCode.KEY_S, function () {
           handleConfirm(false)
+        })
+        editorInstance.addCommand(window.monaco.KeyMod.CtrlCmd | window.monaco.KeyCode.KEY_D, function () {
+          showModal.value = false
         })
       }
     }
