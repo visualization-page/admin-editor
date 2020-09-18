@@ -610,7 +610,15 @@ const handle = {
       while (dirs.length && num < 1000) {
         num++
         const cur = dirs.pop()
-        res.push(projects.find(x => x.dir === cur))
+        const item = projects.find(x => x.dir === cur)
+        if (item) {
+          res.push(item)
+        } else {
+          console.log(`${cur} 在项目列表中未找到，移除`)
+          process.nextTick(() => {
+            handle.removeFolderProjects(cur)
+          })
+        }
       }
       return res.map(x => ({
         ...x,
