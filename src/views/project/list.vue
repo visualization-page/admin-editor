@@ -96,6 +96,10 @@
       :visible.sync="showAddModal"
       width="650px"
     >
+      <p v-if="editProjectForm && editProjectForm.versionId" class="f12 c-main flex-center-align mb15">
+        <span style="width: 80px">当前版本</span>
+        <span>{{ editProjectForm.versionName }}</span>
+      </p>
       <schema-form
         :schema="schema"
         :schema-data="addProjectForm"
@@ -146,7 +150,7 @@
         <el-table-column label="操作">
           <template slot-scope="scope">
             <el-button type="text" @click="handleDeleteVersion(scope.row)">删除</el-button>
-            <el-button type="text" @click="handleSwitchVersion(scope.row)">切换</el-button>
+            <el-button v-if="scope.row.id !== editProjectForm.versionId" type="text" @click="handleSwitchVersion(scope.row)">切换</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -271,14 +275,18 @@ export default {
       this.showRecord = true
     },
 
-    async handleGetVersion (item) {
-      this.editProjectForm = item
+    async handleGetVersion (item, noModal) {
+      if (!noModal) {
+        this.editProjectForm = item
+      }
       const res = await http.get('version/list', { dir: item.dir })
       this.versions = res.data.map(x => ({
         ...x,
         time: dayjs(x.time || Date.now()).format('MM/DD HH:mm')
       }))
-      this.showVersion = true
+      if (!noModal) {
+        this.showVersion = true
+      }
     },
 
     async handleDeleteVersion (item) {
@@ -291,7 +299,8 @@ export default {
       await this.$confirm('确定要切换到该版本吗？')
       await http.get('version/switch', { id: item.id, dir: this.editProjectForm.dir }, { successMessage: '切换版本成功' })
       Vue.set(this.editProjectForm, 'versionId', item.id)
-      this.getList()
+      await this.getList()
+      this.showVersion = false
     },
 
     async handleAddNewVersion () {
@@ -426,6 +435,13 @@ export default {
       this.showAddModal = true
       // 项目名称不可修改
       projectCreate[0].elAttrs.disabled = true
+      if (data.versionId) {
+        await this.handleGetVersion(item, true)
+        const cur = this.versions.find(x => x.id === data.versionId)
+        if (cur) {
+          Vue.set(this.editProjectForm, 'versionName', cur.name)
+        }
+      }
     },
 
     handleAddForm () {
