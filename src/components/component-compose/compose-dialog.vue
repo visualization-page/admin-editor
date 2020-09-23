@@ -8,10 +8,11 @@
       <el-form-item label="组件名称">
         <el-input type="input" placeholder="字母/数字/短杠" v-model="localName" />
       </el-form-item>
-      <el-form-item label="开启 tinypng 压缩">
+      <el-form-item v-if="false" label="开启 tinypng 压缩">
         <el-checkbox v-model="minify" />
       </el-form-item>
       <el-form-item label="组件封面">
+        <p class="f12 c-main">tips: 上传功能限制内网使用</p>
         <textarea
           class="el-input__inner"
           placeholder="截图粘贴或直接输入链接地址"
@@ -27,7 +28,7 @@
 
 <script>
 import { Message } from 'element-ui'
-import { http } from '@/api'
+import { upFile } from '@/api'
 
 export default {
   props: {
@@ -86,12 +87,8 @@ export default {
           Message.error('截图大小必须小于2M')
           return false
         }
-        http.post('login/upload', {
-          file: blob,
-          minify: this.minify || ''
-        }, { isUpload: true }).then(res => {
-          const data = JSON.parse(res.data)
-          this.localCover = data.fileUrl.replace('statics.jituancaiyun', 'global.uban360') + '&fileType=2'
+        upFile(blob).then(url => {
+          this.localCover = url
         })
         // const rdr = new FileReader()
         // rdr.onloadend = () => {

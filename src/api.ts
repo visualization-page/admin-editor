@@ -74,5 +74,13 @@ export const http = new Http({
     error: Message.error
   },
   loadingMethods,
-  contentType: 'application/json'
+  contentType: 'application/json',
+  successRequestAssert: (res) => res.success || res.code === 200
 })
+
+export async function upFile (blob: any) {
+  const upurl = 'https://filesystem.api.jituancaiyun.com/sfs/webUpload/srvfile?fileType=2&src=cdn'
+  const res = await http.post(upurl, { upfile: blob }, { isUpload: true, isReallyPath: true })
+  // @ts-ignore
+  return res.fileUrl.replace('statics.jituancaiyun', 'global.uban360') + '&fileType=2'
+}

@@ -189,6 +189,22 @@ const handle = {
     return msg
   },
 
+  async readJsonStorage (filePath, clear) {
+    let content
+    if (clear) {
+      content = undefined
+      return
+    }
+    if (content) {
+      return content
+    }
+    const read = async () => {
+      content = await fs.readJSON(filePath)
+      return content
+    }
+    return read()
+  },
+
   updateProjectList: async (projectInfo) => {
     await handle.update('project', ({ project }) => {
       const data = {
@@ -641,7 +657,17 @@ const handle = {
 
   async addFolderProjects (folderId, dir) {
     const index = getPath('folder')
-    const list = await fs.readJson(index)
+    const list = await handle.readJsonStorage(index)
+    // 去除 dir 原来的 folderId
+    let oldIndex = -1
+    const oldFolder = list.find(x => {
+      oldIndex = x.projects.findIndex(y => y === dir)
+      return oldIndex !== -1
+    })
+    if (oldFolder) {
+      oldFolder.projects.splice(oldIndex, 1)
+    }
+    // 修改为新的 folderId
     const folder = list.find(x => x.id === folderId)
     const dirIndex = folder.projects.findIndex(x => x === dir)
     if (dirIndex === -1) {
@@ -652,7 +678,7 @@ const handle = {
 
   async removeFolderProjects (dir) {
     const index = getPath('folder')
-    const list = await fs.readJson(index)
+    const list = await handle.readJsonStorage(index)
     let i = -1
     const folder = list.find(x => {
       i = x.projects.findIndex(y => y === dir)
@@ -662,6 +688,8 @@ const handle = {
       folder.projects.splice(i, 1)
       await fs.writeJson(index, list)
     }
+    // 去除存储
+    await handle.readJsonStorage(index, true)
   },
 
   async searchProject ({ keyword, field }) {

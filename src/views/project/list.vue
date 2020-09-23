@@ -222,14 +222,19 @@ export default {
   },
 
   async created () {
-    const folderList = await this.getFolderList()
-    if (!this.currentFolder && this.$route.query.folderId) {
-      this.currentFolder = folderList.find(x => x.id === this.$route.query.folderId)
-    }
-    this.getList()
+    await this.setCurFolder()
+    await this.getList()
   },
 
   methods: {
+    async setCurFolder () {
+      // 更新项目可选择的文件夹列表
+      const folderList = await this.getFolderList()
+      if (this.$route.query.folderId) {
+        this.currentFolder = folderList.find(x => x.id === this.$route.query.folderId)
+      }
+    },
+
     handleBeforeUpload (file) {
       const ok = file.type !== 'application/zip'
       if (!ok) {
@@ -311,8 +316,6 @@ export default {
 
     async getFolderList () {
       const { data } = await http.get('folder/list')
-      // 赋值可选的文件夹
-      data.unshift({ label: '无', value: '' })
       projectCreate[1].options = data.map(x => ({ label: x.name, value: x.id }))
       return data
     },
@@ -393,13 +396,13 @@ export default {
           duration: 2000
         })
       }
-      http.post('project/copy', {
+      await http.post('project/copy', {
         dir: item.dir,
         name: this.$native.name,
         newDir: value
-      }, { successMessage: '复制成功' }).then(() => {
-        this.getList()
-      })
+      }, { successMessage: '复制成功' })
+      await this.setCurFolder()
+      await this.getList()
     },
 
     handleExport (item) {
@@ -508,7 +511,10 @@ export default {
           const detail = await http.get('folder/get', { id: this.$route.query.folderId })
           this.currentFolder = detail.data
         }
-        this.getList()
+        if (!this.editProjectForm) {
+          await this.setCurFolder()
+        }
+        await this.getList()
       }
     },
 

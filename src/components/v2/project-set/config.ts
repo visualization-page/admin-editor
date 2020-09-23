@@ -298,6 +298,10 @@ export const pub = [
         value: 88
       },
       {
+        label: '重庆',
+        value: 31
+      },
+      {
         label: '标准',
         value: 100
       }

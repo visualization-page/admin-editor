@@ -1,6 +1,6 @@
 <template>
   <div class="render-image">
-    <p class="flex-center-between">
+    <p v-if="false" class="flex-center-between">
       <el-checkbox v-model="minify">
         <span class="f12 c-999">开启 tinypng 压缩</span><br>
       </el-checkbox>
@@ -8,6 +8,7 @@
     </p>
     <p>
       <el-upload
+        name="upfile"
         :action="action"
         :multiple="false"
         :show-file-list="false"
@@ -15,9 +16,10 @@
         :on-success="handleResponse"
         :on-error="handleResponse"
         :data="{ minify: minify || '' }"
+        :http-request="handleUpload"
       >
         <el-button slot="trigger" type="text">上传图片</el-button>
-        <span class="f10 c-ccc ml10">(tips: 压缩比较耗时)</span>
+        <span class="f10 c-main ml10">(tips: 上传功能限制内网使用)</span>
       </el-upload>
     </p>
     <el-input
@@ -34,6 +36,7 @@
 import { getParentRef } from '@/assets/util'
 import { Message, Loading } from 'element-ui'
 import { showImageResource } from '@/assets/render'
+import { upFile } from '@/api'
 
 export default {
   props: {
@@ -44,7 +47,8 @@ export default {
   data () {
     return {
       src: '',
-      action: process.env.VUE_APP_FILE_SERVER + '/butterfly/caiyun-file/upload',
+      // action: process.env.VUE_APP_FILE_SERVER + '/butterfly/caiyun-file/upload',
+      action: '',
       loading: null,
       minify: false
     }
@@ -64,6 +68,14 @@ export default {
   },
 
   methods: {
+    async handleUpload (data) {
+      const fileUrl = await upFile(data.file)
+      return {
+        code: 200,
+        fileUrl
+      }
+    },
+
     handleBeforeUpload (file) {
       if (!['jpg', 'png', 'jpeg'].includes(file.type.split('/')[1])) {
         Message.error('文件格式只支持 jpg,png,jpeg')
@@ -76,12 +88,12 @@ export default {
       this.loading = Loading.service({ text: '上传中' })
       return true
     },
+
     handleResponse (res) {
       this.loading && this.loading.close()
-      if (res.success) {
+      if (res.code === 200) {
         Message.success('上传成功')
-        const data = JSON.parse(res.data)
-        this.$emit('change', data.fileUrl.replace('statics.jituancaiyun', 'global.uban360') + '&fileType=2')
+        this.$emit('change', res.fileUrl.replace('statics.jituancaiyun', 'global.uban360') + '&fileType=2')
       } else {
         Message.error(res.msg)
       }
