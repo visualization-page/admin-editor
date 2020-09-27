@@ -25,6 +25,9 @@
       <div class="f18">
         <span
           class="b cp hover-line"
+          :class="{
+            'c-main': $route.query.folderId
+          }"
           @click="handleBackIndex()"
         >
           项目列表
@@ -50,6 +53,7 @@
             type="input"
             placeholder="请输入关键词"
             :value="searchModel.keywords"
+            clearable
             @input="handleSearch"
           />
         </el-form-item>
@@ -203,7 +207,7 @@ export default {
         { label: '创建人', value: 'createUser' }
       ],
       searchModel: {
-        field: 'dir',
+        field: 'desc',
         keywords: '',
         searchList: null
       },
@@ -229,9 +233,10 @@ export default {
   methods: {
     async setCurFolder () {
       // 更新项目可选择的文件夹列表
-      const folderList = await this.getFolderList()
+      const { data } = await http.get('folder/list')
+      this.setProjectFolderOption(data)
       if (this.$route.query.folderId) {
-        this.currentFolder = folderList.find(x => x.id === this.$route.query.folderId)
+        this.currentFolder = data.find(x => x.id === this.$route.query.folderId)
       }
     },
 
@@ -314,10 +319,8 @@ export default {
       this.handleGetVersion(this.editProjectForm)
     },
 
-    async getFolderList () {
-      const { data } = await http.get('folder/list')
-      projectCreate[1].options = data.map(x => ({ label: x.name, value: x.id }))
-      return data
+    setProjectFolderOption (data) {
+      projectCreate[1].options = data.map(x => ({ label: x.name, value: x.id })).concat({ label: '无' })
     },
 
     async getList () {
@@ -329,6 +332,7 @@ export default {
         }
       }
       const { data } = await http.get('list', reqData)
+      const folders = []
       this.tableData = data.map(x => {
         if (x.dir) {
           return {
@@ -338,9 +342,14 @@ export default {
               time: x.info.time ? dayjs(x.info.time).format('MM/DD HH:mm') : '-'
             }
           }
+        } else {
+          folders.push(x)
         }
         return x
       })
+      if (!this.currentFolder) {
+        this.setProjectFolderOption(folders)
+      }
     },
 
     handleSearch (val) {

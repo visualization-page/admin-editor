@@ -8,10 +8,10 @@
       </div>
       <div class="editor-v2__line" />
       <div class="editor-v2__header-item" @click="handleTourism">
-        <span>教程</span>
+        <span>场景案例</span>
       </div>
-      <div class="editor-v2__line" />
-      <div class="editor-v2__header-item" @click="handleBug">
+      <div v-if="false" class="editor-v2__line" />
+      <div v-if="false" class="editor-v2__header-item" @click="handleBug">
         <span>吐槽</span>
       </div>
       <div class="editor-v2__line" />
@@ -50,10 +50,10 @@ export default {
       localStorage.setItem('butterfly-mode', mode)
     },
     handleAbout () {
-      window.open('./render.html#/project/butterfly-about')
+      window.open('https://docshare.uban360.com/share/897d1a604368484d6499b54085481569?documentId=44')
     },
     handleTourism () {
-      window.open('https://docs.uban360.com/#/project-detail/17/18')
+      window.open('https://docshare.uban360.com/share/897d1a604368484d6499b54085481569')
     },
     handleBug () {
       this.$router.push('/suggest')
