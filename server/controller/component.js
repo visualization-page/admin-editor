@@ -70,7 +70,7 @@ const handle = {
   async delete (type, dir) {
     utils.rm(path.join(pubPath, type, dir))
     if (type === 'project') {
-      await handle.removeFolderProjects(dir)
+      await handle.removeFolderProjects(dir, true)
       await handle.updateProjectList()
     } else {
       await handle.update(type)
@@ -229,6 +229,7 @@ const handle = {
       }
       return data
     })
+    await handle.readJsonStorage(null, true)
   },
 
   saveProject: async (dir, data) => {
@@ -632,7 +633,7 @@ const handle = {
         } else {
           console.log(`${cur} 在项目列表中未找到，移除`)
           process.nextTick(() => {
-            handle.removeFolderProjects(cur)
+            handle.removeFolderProjects(cur, true)
           })
         }
       }
@@ -676,7 +677,7 @@ const handle = {
     }
   },
 
-  async removeFolderProjects (dir) {
+  async removeFolderProjects (dir, removeStorage) {
     const index = getPath('folder')
     const list = await handle.readJsonStorage(index)
     let i = -1
@@ -689,7 +690,9 @@ const handle = {
       await fs.writeJson(index, list)
     }
     // 去除存储
-    await handle.readJsonStorage(index, true)
+    if (removeStorage) {
+      await handle.readJsonStorage(index, true)
+    }
   },
 
   async searchProject ({ keyword, field }) {
