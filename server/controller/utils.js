@@ -17,12 +17,15 @@ const handle = {
     await handle.spawn('zip', ['-qr', name, './'], { cwd: targetDirPath })
     return path.join(targetDirPath, name)
   },
+
   unzip (file, dir) {
     execSync(`unzip -o ${file} -d ${dir}`)
   },
+
   rm (file) {
     execSync(`rm -rf ${file}`)
   },
+
   spawn (cmd, args, options = {}, logCallback) {
     console.log(cmd, args)
     return new Promise((resolve, reject) => {
@@ -51,6 +54,7 @@ const handle = {
       })
     })
   },
+
   webpack (dir, entry) {
     console.log('----', `node build/build.component.js ${dir} false ${entry} upload`)
     return handle.spawn('node', [
@@ -61,6 +65,7 @@ const handle = {
       'upload'
     ])
   },
+
   babelTransform (code) {
     return babel.transformAsync(code, {
       root: __dirname,
@@ -77,6 +82,7 @@ const handle = {
       // eslint-disable-next-line no-useless-escape
     }).then(res => res.code.replace('\"use strict\";\n\n', ''))
   },
+
   babel: async (project) => {
     const _transform = handle.babelTransform
     const dealNode = (node) => {
@@ -139,6 +145,7 @@ const handle = {
 
     return Promise.all(transArr).then(() => project)
   },
+
   tinyfy (sourceData, key) {
     tinify.key = key || 'WmVJzJgLsjcZ3mpyZMzghGtq2FLTWTXY'
     return new Promise((resolve, reject) => {
@@ -162,6 +169,33 @@ const handle = {
         }
       })
     })
+  },
+
+  async downImgAndReplace (str, dest) {
+    const destDir = path.join(dest, 'img')
+    await fs.ensureDir(destDir)
+    function _download (url, filename) {
+      const dest = path.join(destDir, filename)
+      return new Promise((resolve, reject) => {
+        const stream = request(url).pipe(fs.createWriteStream(dest))
+        stream.on('finish', () => {
+          resolve()
+        })
+        stream.on('error', () => {
+          // eslint-disable-next-line
+          reject()
+        })
+      })
+    }
+
+    const urls = []
+    str = str.replace(/(https:\/\/global\.uban360\.com.*?)"/g, (all, match) => {
+      const key = `%%img${urls.length}%%.png`
+      urls.push(match)
+      return all.replace(match, `./img/${key}?_=${Date.now()}`)
+    })
+    await Promise.all(urls.map((x, i) => _download(x, `%%img${i}%%.png`)))
+    return str
   }
 }
 

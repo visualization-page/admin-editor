@@ -58,11 +58,11 @@ export const projectCreate = [
     ],
     model: 'blur'
   },
-  {
-    label: '控制台开关',
-    field: 'config.openConsole',
-    type: 'checkbox'
-  },
+  // {
+  //   label: '控制台开关',
+  //   field: 'config.openConsole',
+  //   type: 'checkbox'
+  // },
   {
     label: '项目白名单',
     field: 'info.whitelist',
@@ -216,6 +216,16 @@ export const pub = [
     label: '控制台开关',
     field: 'config.openConsole',
     type: 'checkbox'
+  },
+  {
+    label: '是否下载图片到本地',
+    field: 'config.downImgToLocal',
+    type: 'checkbox'
+  },
+  {
+    label: '下载图片说明',
+    type: 'description',
+    content: '本操作是将 https://global.uban360.com 域名的图片链接全部下载到本地，改为相对路径引用'
   },
   {
     label: '同步文件到目标机器',

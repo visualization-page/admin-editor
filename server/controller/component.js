@@ -51,7 +51,8 @@ const handle = {
     for (let i = 0; i < dirs.length; i++) {
       const data = await fs.readJSON(path.join(typeDir, dirs[i], 'data.json'))
       if (scopeCallback) {
-        content.push(scopeCallback(data))
+        const v = await scopeCallback(data)
+        content.push(v)
       } else {
         const p = `/butterfly/static/${type}/${dirs[i]}`
         content.push({
@@ -206,7 +207,7 @@ const handle = {
   },
 
   updateProjectList: async (projectInfo) => {
-    await handle.update('project', ({ project }) => {
+    await handle.update('project', async ({ project }) => {
       const data = {
         thumbCover: project.thumbCover,
         dir: project.dir,
@@ -222,10 +223,10 @@ const handle = {
       }
       if (project.folder) {
         // 更新到 folder
-        handle.addFolderProjects(project.folder, project.dir)
+        await handle.addFolderProjects(project.folder, project.dir)
       } else {
         // 检查移除
-        handle.removeFolderProjects(project.dir)
+        await handle.removeFolderProjects(project.dir)
       }
       return data
     })
@@ -317,22 +318,6 @@ const handle = {
       .concat(_copyVendors('js'))
       .concat(_copyVendors('css'))
     await Promise.all(preCopyFiles)
-    // fs.readdirSync(path.join(distPath, 'js')).forEach(name => {
-    //   if (
-    //     /render|chunk-vendors/.test(name) &&
-    //     manifest.js.some(x => x === name)
-    //   ) {
-    //     fs.copySync(path.join(distPath, 'js', name), path.join(releasePath, 'js', name))
-    //   }
-    // })
-    // fs.readdirSync(path.join(distPath, 'css')).forEach(name => {
-    //   if (
-    //     /render|chunk-vendors/.test(name) &&
-    //     manifest.css.some(x => x === name)
-    //   ) {
-    //     fs.copySync(path.join(distPath, 'css', name), path.join(releasePath, 'css', name))
-    //   }
-    // })
 
     // 将其它发布环境平铺出来
     if (globalProject.project.config.proArr && globalProject.project.config.proArr.length) {
@@ -354,7 +339,17 @@ const handle = {
       )
     // 正则匹配中 $$ 是关键词，必须绕开
     renderContent = renderContent.split('%%%%')
-    renderContent = renderContent[0] + JSON.stringify(globalProject) + renderContent[1]
+
+    let projectString = JSON.stringify(globalProject)
+    // 下载图片到本地
+    // 并改写路径
+    if (globalProject.project.config.downImgToLocal) {
+      projectString = await utils.downImgAndReplace(projectString, releasePath).catch(() => {
+        return Promise.reject(new Error('下载项目图片到本地失败，请重试'))
+      })
+    }
+
+    renderContent = renderContent[0] + projectString + renderContent[1]
 
     // 处理 umd 组件
     if (globalProject.project.componentUmd) {
