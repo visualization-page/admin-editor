@@ -20,7 +20,7 @@
       </div>
       <div v-if="item.lockedBy" class="folder-item__active flex-center f14 c-fff">{{ item.lockedBy }}编辑中</div>
     </div>
-    <div class="folder-item__box absolute width-100 height-100 l0 t0 cp" @click="$emit('click', item)">
+    <div class="folder-item__box absolute width-100 height-100 l0 t0 cp" @click="handleClick()">
       <div class="folder-item__title flex-center">
         <div class="th1">
           <span class="f20" v-html="item.dirSearch || item.dir" />
@@ -57,6 +57,8 @@
 </template>
 
 <script>
+import { Notification } from 'element-ui'
+
 export default {
   props: {
     item: Object,
@@ -72,6 +74,22 @@ export default {
         (item.info.whitelist || '').indexOf(this.$native.name) > -1 ||
         this.$native.name === '杨明'
       ))
+    }
+  },
+
+  methods: {
+    handleClick () {
+      if (this.hasPriv) {
+        this.$emit('click', this.item)
+      } else {
+        Notification({
+          title: '错误',
+          type: 'error',
+          message: '无操作权限',
+          position: 'top-left',
+          duration: 2000
+        })
+      }
     }
   }
 }
