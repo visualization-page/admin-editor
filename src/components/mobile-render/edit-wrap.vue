@@ -44,11 +44,12 @@ export default {
       if (node) {
         // console.log('节点变化，重置 edit wrap', node.id, style, className)
         // setTabName(['', '', tabName.nodeProperty])
-        if (!editWrapCacheNode[node.id]) {
-          editWrapCacheNode[node.id] = ctx.parent.$refs.scrollContainer.querySelector(`[data-id="${node.id}"]`)
-        }
+        // if (!editWrapCacheNode[node.id]) {
+        //   editWrapCacheNode[node.id] = ctx.parent.$refs.scrollContainer.querySelector(`[data-id="${node.id}"]`)
+        // }
         // console.log(node.style.positionType)
-        const el = editWrapCacheNode[node.id]
+        // const el = editWrapCacheNode[node.id]
+        const el = ctx.parent.$refs.scrollContainer.querySelector(`[data-id="${node.id}"]`)
         setEditBounding(el)
       }
     }

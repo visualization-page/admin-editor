@@ -50,7 +50,7 @@ export const getProject = async (dir) => {
     }, { $$global: global })
     http = global.http
   }
-  const { data: { project } } = await http.get('get', { dir })
+  const { data: { project } } = await http.get('get', { dir, preview: 1 })
   // 20000
   const arr = [loadSdk(project.interactiveType)]
   // 如果是小程序，检查 sdklist

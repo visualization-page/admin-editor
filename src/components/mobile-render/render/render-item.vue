@@ -97,7 +97,18 @@ export default defineComponent<{
               },
               libraryOpt.methods ? libraryOpt.methods : {}
             )
-            return createElement('basic-div', props, [mockVNode.render()].concat(children))
+            const v = mockVNode.render()
+            if (v.data) {
+              deepMerge(v.data, props)
+            } else {
+              v.data = props
+            }
+            v.children = (v.children || []).concat(children)
+            if (isEdit()) {
+              v.data.on.click = v.data.nativeOn.click
+            }
+            // console.log(v.data)
+            return v
           }
           // 方式2：手写vNode，合并选项
           deepMerge(props, libraryOpt.option)
