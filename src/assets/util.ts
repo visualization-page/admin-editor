@@ -170,7 +170,9 @@ function addScript (id: string, url: string) {
       resolve()
     }
     script.onerror = () => {
-      reject(new Error(`load [${id}] error`))
+      const er = new Error(`load js [${id}] error`)
+      console.log(er)
+      reject(er)
     }
     document.body.appendChild(script)
   })
@@ -186,7 +188,9 @@ function addStyle (id: string, url: string) {
       resolve()
     }
     link.onerror = () => {
-      reject(new Error(`load [${id}] error`))
+      const er = `load css [${id}] error`
+      console.log(er)
+      reject(new Error(er))
     }
     document.body.appendChild(link)
   })
@@ -206,7 +210,8 @@ export function loadSdkSystem (sdkIds: string[]) {
     return sdkIds.sort().map(id => {
       return [
         addScript(`J_${id}`, `shinemosdk://${id}/index.js`),
-        addStyle(`C_${id}`, `shinemosdk://${id}/index.css`)
+        // 样式文件可能不存在
+        addStyle(`C_${id}`, `shinemosdk://${id}/index.css`).catch(() => '')
       ]
     }).flat()
   }

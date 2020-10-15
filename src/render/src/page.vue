@@ -13,8 +13,8 @@ import { defineComponent } from '@vue/composition-api'
 import { project } from '@/assets/project'
 import { getProject } from './utils'
 import { Toast } from 'esc-ui'
-import { getEventHandler, initGlobalConfig } from '../../components/mobile-render/render/utils'
-import { parseCodeValid } from '../../assets/util'
+// import { getEventHandler, initGlobalConfig } from '../../components/mobile-render/render/utils'
+import { parseCodeValid } from '@/assets/util'
 
 export default defineComponent({
   components: {
