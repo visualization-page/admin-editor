@@ -146,16 +146,18 @@ export default createComponent({
       if (!isCodeValid.value) {
         await MessageBox.confirm('代码存在语法错误，不会保存错误的代码，是否继续？')
       }
-      currentCode.update(code.value)
-      window.globalApp.$notify({
-        title: '成功',
-        message: `保存 ${currentCode.title}`,
-        type: 'success',
-        duration: 2000,
-        position: 'top-left'
-      })
-      if (close) {
-        handleCancel()
+      const updateRes = currentCode.update(code.value)
+      if (updateRes !== false) {
+        window.globalApp.$notify({
+          title: '成功',
+          message: `保存 ${currentCode.title}`,
+          type: 'success',
+          duration: 2000,
+          position: 'top-left'
+        })
+        if (close) {
+          handleCancel()
+        }
       }
     }
     const handleClickFx = (item: any) => {

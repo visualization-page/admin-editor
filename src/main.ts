@@ -7,6 +7,7 @@ import './style/app.less'
 import { http } from './api'
 import logs from './changelog'
 import { MessageBox } from 'element-ui'
+import { parseCodeValid } from './assets/util'
 
 declare module '@vue/composition-api/dist/component/component' {
   interface SetupContext {
@@ -34,12 +35,13 @@ const nativeInstance = Vue.prototype.$native = new window.Native()
 Vue.prototype.$version = process.env.VUE_APP_VERSION
 
 if (!nativeInstance.cookie('sso_u')) {
-  // new Vue({
-  //   render: h => h(Login)
-  // }).$mount('#app')
   location.href = `${process.env.VUE_APP_SSO}${location.href}`
 } else {
-  http.get('login/user').then(res => {
+  Promise.all([
+    http.get('login/user'),
+    http.get('system')
+  ]).then(([res, config]) => {
+    Vue.prototype.$system = parseCodeValid(`$$global.export = ${config.data}`).value
     nativeInstance.name = res.data.name_
     nativeInstance.uid = res.data.uid_
     window.globalApp = new Vue({

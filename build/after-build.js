@@ -28,6 +28,7 @@ const copyDirs = [
   'server/controller',
   'server/router',
   'server/public/upload',
+  'server/public/system',
   'server/public/upload-entry-template.tpl',
   'server/index.js',
   'server/backup.sh',

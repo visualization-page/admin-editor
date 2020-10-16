@@ -10,6 +10,10 @@
       <div class="editor-v2__header-item" @click="handleTourism">
         <span>场景案例</span>
       </div>
+      <div class="editor-v2__line" />
+      <div class="editor-v2__header-item" @click="handleSystemConfig">
+        <span>系统配置</span>
+      </div>
       <div v-if="false" class="editor-v2__line" />
       <div v-if="false" class="editor-v2__header-item" @click="handleBug">
         <span>吐槽</span>
@@ -24,11 +28,21 @@
     <div class="flex-center-align">
       <slot />
     </div>
+
+    <code-editor />
   </div>
 </template>
 
 <script>
+import { currentCode, setCodeState } from '@/assets/code-edit'
+import { parseCodeValid } from '@/assets/util'
+import CodeEditor from '@/components/v2/code-editor'
+import { http } from '@/api'
+
 export default {
+  components: {
+    CodeEditor
+  },
   data () {
     return {
       mode: localStorage.getItem('butterfly-mode')
@@ -57,6 +71,28 @@ export default {
     },
     handleBug () {
       this.$router.push('/suggest')
+    },
+    handleSystemConfig () {
+      const config = JSON.stringify(this.$system, null, 2)
+      const prefix = '$$global.export = '
+      setCodeState('系统配置', prefix + config, code => {
+        const check = parseCodeValid(code)
+        if (check.ok) {
+          // 保存并更新
+          http.post('system', { data: JSON.stringify(check.value) }).then(() => {
+            this.$system = check.value
+          })
+        } else {
+          window.globalApp.$notify({
+            title: '错误',
+            message: `${currentCode.title}存在语法错误，请检查`,
+            type: 'error',
+            duration: 2000,
+            position: 'top-left'
+          })
+        }
+        return check.ok
+      })
     }
   }
 }

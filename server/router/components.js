@@ -407,6 +407,17 @@ module.exports = {
     }
   },
 
+  '/system': {
+    get: async (req, res) => {
+      const data = await fs.readJson(path.join(pubPath, 'system', 'index.json'))
+      res.json({ success: true, data: Array.isArray(data) ? {} : data })
+    },
+    post: async (req, res) => {
+      await fs.writeJson(path.join(pubPath, 'system', 'index.json'), req.body.data)
+      res.json({ success: true })
+    }
+  },
+
   '/checkstatus': {
     get: async (req, res) => {
       await component.init()

@@ -67,7 +67,8 @@ export const http = new Http({
       add: '/butterfly/version/add',
       delete: '/butterfly/version/delete',
       switch: '/butterfly/version/switch'
-    }
+    },
+    system: '/butterfly/system'
   },
   notify: {
     success: Message.success,

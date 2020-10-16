@@ -12,7 +12,7 @@ function getPath (type, isIndex = true) {
 
 const handle = {
   async init () {
-    const dirs = ['project', 'compose', 'upload', 'suggest', 'umd', 'utils', 'folder']
+    const dirs = ['project', 'compose', 'upload', 'suggest', 'umd', 'utils', 'folder', 'system']
     const alls = dirs.map(async dir => {
       const p = getPath(dir)
       if (!fs.pathExistsSync(p)) {

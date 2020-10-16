@@ -7,7 +7,7 @@ export function setState (type: boolean) {
 type CurrCode = {
   title: string
   code: string
-  update: (code: string) => void
+  update: (code: string) => void | false
   language: 'javascript' | 'css'
 }
 export const currentCode = reactive<CurrCode>({
