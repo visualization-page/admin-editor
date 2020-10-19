@@ -3,7 +3,7 @@ import { reactive } from '@vue/composition-api'
 import { loadItem, loadItemUmd } from '@/components/mobile-render/render/utils'
 import { Page, setCurrentPage, currentPage } from './page'
 import { NodeItemBasic, NodeUmd, setCurrentNode } from './node'
-import { deepClone } from '@/assets/util'
+import { deepClone, loadSdkSystem, parseCodeValid } from '@/assets/util'
 import { http } from '@/api'
 import { Message } from 'element-ui'
 
@@ -53,6 +53,7 @@ export type Project = {
       [k: string]: string
     }>
     iocSync?: boolean
+    sdklist?: string[]
   }
   createUser: string
   info: {
@@ -178,6 +179,7 @@ export const saveProject = (
 
 export const importProject = async (parseItem: Project) => {
   const inAdminPlatform = /tms\.uban360/.test(location.hostname) || /808/.test(location.port)
+  const isInEditor = /editor/.test(location.hash) && inAdminPlatform
   if (parseItem) {
     parseItem.depLoaded = false
     updateProject(parseItem)
@@ -192,6 +194,20 @@ export const importProject = async (parseItem: Project) => {
     // 下载资源
     if (inAdminPlatform && parseItem.componentDownload) {
       await diffDownloadDeps([], true)
+    }
+    // 小程序 sdk
+    if (
+      isInEditor &&
+      parseItem.interactiveType === 'xmmp' &&
+      parseItem.config.sdklist &&
+      parseItem.config.sdklist.length
+    ) {
+      if (!window.defineBak && window.define) {
+        window.defineBak = window.define
+      }
+      window.define = null
+      await Promise.all(loadSdkSystem(parseItem.config.sdklist, Vue.prototype.$system.localXmmpSdk))
+      window.define = window.defineBak
     }
     updateProject({ depLoaded: true })
     if (parseItem.pages.length) {
