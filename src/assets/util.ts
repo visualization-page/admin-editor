@@ -146,6 +146,8 @@ export const deepMerge = (origin: any, obj?: any): any => {
     for (const k in obj) {
       if (
         origin[k] === undefined ||
+        origin[k] === 0 ||
+        origin[k] === null ||
         typeof obj[k] === 'string'
       ) {
         origin[k] = obj[k]
