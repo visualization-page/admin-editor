@@ -207,20 +207,25 @@ export const isInMiniapp = /hwminiapp/i.test(navigator.userAgent)
 
 export function loadSdkSystem (sdkIds: string[], config: { [k: string]: { js: string, css?: string } }) {
   return sdkIds.sort().map(id => {
+    const jid = `J_${id}`
+    const cid = `C_${id}`
+    if (document.getElementById(jid)) {
+      return []
+    }
     if (isInMiniapp) {
       return [
-        addScript(`J_${id}`, `shinemosdk://${id}/index.js`),
+        addScript(jid, `shinemosdk://${id}/index.js`),
         // 样式文件可能不存在
-        addStyle(`C_${id}`, `shinemosdk://${id}/index.css`).catch(() => '')
+        addStyle(cid, `shinemosdk://${id}/index.css`).catch(() => '')
       ]
     } else if (config[id]) {
-      const res = [addScript(`J_${id}`, config[id].js)]
+      const res = [addScript(jid, config[id].js)]
       if (config[id].css) {
-        res.push(addStyle(`C_${id}`, config[id].css!).catch(() => ''))
+        res.push(addStyle(cid, config[id].css!).catch(() => ''))
       }
       return res
     }
-  }).flat()
+  }).flat().filter(Boolean)
 }
 
 export function loadSdk (type: string) {

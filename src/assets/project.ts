@@ -3,7 +3,7 @@ import { reactive } from '@vue/composition-api'
 import { loadItem, loadItemUmd } from '@/components/mobile-render/render/utils'
 import { Page, setCurrentPage, currentPage } from './page'
 import { NodeItemBasic, NodeUmd, setCurrentNode } from './node'
-import { deepClone, loadSdkSystem, parseCodeValid } from '@/assets/util'
+import { deepClone, loadSdkSystem } from '@/assets/util'
 import { http } from '@/api'
 import { Message } from 'element-ui'
 
