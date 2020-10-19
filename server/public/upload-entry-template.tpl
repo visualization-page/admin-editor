@@ -13,7 +13,7 @@ const common = {
   events: [],
   style: {
     width: '100%',
-    height: '60px',
+    height: undefined,
     positionType: 'absolute',
     position: {},
     margin: {},
@@ -30,14 +30,6 @@ const common = {
   renderString: '(function (h) {\n  return {\n    template: `\n      <div />\n    `,\n    methods: {\n    }\n  }\n})(vueCompositionApi.createElement)'
 }
 
-export default {
-  ...common,
-  componentName: Component.name,
-  style: {
-    ...common.style,
-    height: undefined
-  },
-  ...{{props}}
-}
+export default Object.assign(common, { componentName: Component.name }, {{props}})
 
 export const schema = {{schema}}
