@@ -127,20 +127,20 @@ const handle = {
       utils.rm(tmpPath)
       return 'package.json 不存在'
     }
-    const pkgContent = await fs.readJSON(pkg)
-    const { name, main } = pkgContent
+    const pkgContent = await fs.readFile(pkg, 'utf8')
+    const { name, main } = JSON.parse(pkgContent)
     // name = `bf-${name}`
     // console.log('----', name, main)
     const upPath = getPath('upload')
     const basicPath = getPath('basic')
     let existItem = false
     if (fs.pathExistsSync(upPath)) {
-      const arr = await fs.readJSON(upPath)
-      existItem = arr.find(x => x.name === `bf-${name}`)
+      const arr = await fs.readFile(upPath)
+      existItem = JSON.parse(arr).find(x => x.name === `bf-${name}`)
     }
     if (!existItem && fs.pathExistsSync(basicPath)) {
-      const arr = await fs.readJSON(basicPath)
-      existItem = arr.find(x => x.name === `bf-${name}`)
+      const arr = await fs.readFile(basicPath)
+      existItem = JSON.parse(arr).find(x => x.name === `bf-${name}`)
     }
     if (existItem) {
       const isAuthor = existItem.userName === body.userName
@@ -157,7 +157,9 @@ const handle = {
       utils.rm(tmpPath)
       return 'schema.js 不存在'
     }
-    const schema = require(schemaPath)
+    let schema = await fs.readFile(schemaPath, 'utf8')
+    // eslint-disable-next-line no-eval
+    schema = eval(schema.replace('module.exports = ', ''))
     // 创建入口文件格式
     const entryContent = fs.readFileSync(path.join(pubPath, 'upload-entry-template.tpl'), 'utf8')
       .replace('{{entryVue}}', main)
