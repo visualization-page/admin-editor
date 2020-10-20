@@ -144,7 +144,10 @@ export default defineComponent<{
         item.events.forEach((ev: FormEvent) => {
           const handler = () => getEventHandler(ev, codeExecuteContext)
           if (ev.eventType === 'click') {
-            nativeOn[ev.eventType] = handler
+            nativeOn[ev.eventType] = (e: Event) => {
+              e.stopPropagation()
+              handler()
+            }
           } else {
             on[ev.eventType] = handler
           }
