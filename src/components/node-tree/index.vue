@@ -24,7 +24,7 @@
         @node-drop="handleDrop"
       >
         <div class="flex-center-between width-100" slot-scope="{ node, data }">
-          <span>{{ node.label }}</span>
+          <span>{{ node.label }}<span v-if="!data.show">(隐藏)</span></span>
           <div @click.stop="" v-if="data.id !== '-1'">
             <el-button
               type="text"

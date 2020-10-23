@@ -7,7 +7,7 @@
         </div>
         <div class="tc">
           <img src="../assets/img/logo_home.png" alt="" width="380px">
-          <p class="c-999 f14 mt10">产品运营也能用的 H5 在线开发平台</p>
+          <p class="c-999 f14 mt10">小程序、H5 可视化开发平台</p>
         </div>
         <svg v-if="false" class="ml10 absolute t0" style="right: -50px" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="67" height="20">
           <linearGradient id="b" x2="0" y2="100%">
