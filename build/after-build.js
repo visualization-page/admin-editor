@@ -19,7 +19,7 @@ fs.readdirSync(distCssDir).forEach(name => {
 })
 fs.outputFileSync(path.join(__dirname, '../dist-system', 'manifest.json'), JSON.stringify(manifest))
 
-const target = path.resolve(__dirname, '../../../shinemo-gitlab/butterfly')
+const target = path.resolve(__dirname, '../../../shinemo/butterfly')
 execSync(`rm -rf ${path.join(target, 'dist-system')}`)
 fs.copySync(path.resolve(__dirname, `../dist-system`), path.join(target, 'dist-system'))
 // 不能直接覆盖 server/public

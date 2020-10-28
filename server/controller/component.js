@@ -128,9 +128,7 @@ const handle = {
       return 'package.json 不存在'
     }
     const pkgContent = await fs.readFile(pkg, 'utf8')
-    const { name, main } = JSON.parse(pkgContent)
-    // name = `bf-${name}`
-    // console.log('----', name, main)
+    const { name, main, title, cover, version } = JSON.parse(pkgContent)
     const upPath = getPath('upload')
     const basicPath = getPath('basic')
     let existItem = false
@@ -157,14 +155,12 @@ const handle = {
       utils.rm(tmpPath)
       return 'schema.js 不存在'
     }
-    let schema = await fs.readFile(schemaPath, 'utf8')
-    // eslint-disable-next-line no-eval
-    schema = eval(schema.replace('module.exports = ', ''))
+    const schema = await fs.readFile(schemaPath, 'utf8')
     // 创建入口文件格式
     const entryContent = fs.readFileSync(path.join(pubPath, 'upload-entry-template.tpl'), 'utf8')
       .replace('{{entryVue}}', main)
-      .replace('{{props}}', JSON.stringify(pkgContent))
-      .replace('{{schema}}', JSON.stringify(schema))
+      .replace('{{props}}', pkgContent)
+      .replace('{{schema}}', schema.replace('module.exports = ', ''))
     const entryPath = path.join(tmpPath, 'entry.js')
     await fs.outputFile(entryPath, entryContent)
     // console.log('---- entryPath', entryPath, entryContent)
@@ -174,9 +170,9 @@ const handle = {
     await fs.copy(file, path.join(pubPath, 'upload', name, `${name}.zip`), { overwrite: true })
     const dataPath = path.join(pubPath, 'upload', name, 'data.json')
     const dataJson = await fs.readJSON(dataPath)
-    dataJson.title = pkgContent.title
-    dataJson.cover = pkgContent.cover
-    dataJson.version = pkgContent.version
+    dataJson.title = title
+    dataJson.cover = cover
+    dataJson.version = version
     dataJson.userName = body.userName
     await fs.writeJson(dataPath, dataJson)
     await handle.update('upload')
@@ -445,7 +441,7 @@ const handle = {
     if (isXmmp) {
       await fs.copy(path.join(distPath, 'xmmp'), path.join(releasePath, 'xmmp'))
       renderContent = renderContent
-        .replace('</head>', `<script src=shinemosdk://20000/index.js></script></head>`)
+        .replace('</head>', `<script id="J_20000" src=shinemosdk://20000/index.js></script></head>`)
       // 内置 sdklist
       if (globalProject.project.config.sdklist) {
         globalProject.project.config.sdklist.sort().forEach(id => {

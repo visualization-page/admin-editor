@@ -4,6 +4,7 @@ Vue.component(Component.name, Component)
 
 const common = {
   version: '0.0.1',
+  componentName: Component.name,
   cover: '',
   className: '',
   createdUser: {
@@ -30,6 +31,6 @@ const common = {
   renderString: '(function (h) {\n  return {\n    template: `\n      <div />\n    `,\n    methods: {\n    }\n  }\n})(vueCompositionApi.createElement)'
 }
 
-export default Object.assign(common, { componentName: Component.name }, {{props}})
+export default Object.assign(common, {{props}})
 
 export const schema = {{schema}}
