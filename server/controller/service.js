@@ -52,7 +52,7 @@ module.exports = {
     } = project
     const dirPath = path.join(pubPath, 'project', dir)
     // 在项目目录下新建 xmmprc.json 文件
-    const authArr = iocAuthInfo ? iocAuthInfo.split('/') : ['zhuwei', 'shinemo123']
+    const authArr = iocAuthInfo ? iocAuthInfo.split('/') : ['zhuwei', '1234567']
     const releasePath = path.resolve(__dirname, '../../release', dir)
     const data = {
       appId: iocAppId,
