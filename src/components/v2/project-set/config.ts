@@ -58,11 +58,22 @@ export const projectCreate = [
     ],
     model: 'blur'
   },
-  // {
-  //   label: '控制台开关',
-  //   field: 'config.openConsole',
-  //   type: 'checkbox'
-  // },
+  {
+    label: '控制台开关',
+    field: 'config.openConsole',
+    type: 'checkbox',
+    elProps: {
+      default: false
+    }
+  },
+  {
+    label: 'Web 预览页面二维码',
+    field: 'config.previewQrcode',
+    type: 'checkbox',
+    elProps: {
+      default: true
+    }
+  },
   {
     label: '项目白名单',
     field: 'info.whitelist',
@@ -215,7 +226,18 @@ export const pub = [
   {
     label: '控制台开关',
     field: 'config.openConsole',
-    type: 'checkbox'
+    type: 'checkbox',
+    elProps: {
+      default: false
+    }
+  },
+  {
+    label: 'Web 预览页面二维码',
+    field: 'config.previewQrcode',
+    type: 'checkbox',
+    elProps: {
+      default: true
+    }
   },
   {
     label: '是否下载图片到本地',

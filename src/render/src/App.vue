@@ -3,7 +3,7 @@
     <div class="height-100 relative" overflow-a>
       <router-view />
     </div>
-    <div class="pc-box__notice">
+    <div v-if="showCode" class="pc-box__notice">
       <vue-qrcode :value="codeUrl" tag="img" :options="{ width: 150 }"/>
       <p class="f12 c-999 tc pb10" v-html="isMp ? '用支持讯盟小程序<br>的App扫一扫' : '用手机扫一扫'" />
     </div>
@@ -29,6 +29,16 @@ export default {
     }
   },
   computed: {
+    showCode () {
+      if (window.globalProject) {
+        return window.globalProject.project.config.previewQrcode !== false
+      }
+      if (project.dir === this.$route.params.dir) {
+        return project.config.previewQrcode !== false
+      }
+      return false
+    },
+
     codeUrl () {
       return this.isMp ? JSON.stringify({
         data: {

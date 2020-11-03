@@ -197,7 +197,7 @@ export default {
         dir: '',
         desc: '',
         interactiveType: '',
-        config: { openConsole: false },
+        config: { openConsole: false, sdklist: [], previewQrcode: true },
         info: { whitelist: '' }
       },
       editProjectForm: null,
@@ -441,7 +441,11 @@ export default {
         interactiveType: data.interactiveType,
         desc: data.desc,
         info: { whitelist: data.info.whitelist },
-        config: { openConsole: data.config.openConsole, sdklist: data.config.sdklist },
+        config: {
+          openConsole: data.config.openConsole,
+          sdklist: data.config.sdklist,
+          previewQrcode: data.config.previewQrcode
+        },
         folder: data.folder
       }
       this.showAddModal = true
@@ -464,7 +468,7 @@ export default {
         dir: '',
         desc: '',
         interactiveType: 'long-page',
-        config: { openConsole: false },
+        config: { openConsole: false, previewQrcode: true, sdklist: [] },
         info: { whitelist: '', userName: this.$native.name, time: Date.now() }
       }
       this.showAddModal = true

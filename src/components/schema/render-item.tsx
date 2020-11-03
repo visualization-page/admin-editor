@@ -95,9 +95,11 @@ export const renderUniversal = (
 
 export const renderCheckbox = (item: any, data: any, updateField: any) => {
   const { pref, field } = getParentRef(item.field, data)
+  const val = pref && pref[field]
   return (
     <el-checkbox
-      value={pref && pref[field]}
+      value={val}
+      checked={val === undefined ? item.elProps && item.elProps.default : val}
       on={{
         change (val: string) {
           updateField(item.field, val)

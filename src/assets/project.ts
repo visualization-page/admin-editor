@@ -54,6 +54,7 @@ export type Project = {
     }>
     iocSync?: boolean
     sdklist?: string[]
+    previewQrcode: boolean
   }
   createUser: string
   info: {
@@ -119,7 +120,8 @@ export const defaultProject: Project = {
       // 线上地址
       onlineUrl: ''
     },
-    proArr: []
+    proArr: [],
+    previewQrcode: true
   },
   // 后台第一次创建时赋值
   createUser: '',
