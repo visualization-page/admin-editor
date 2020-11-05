@@ -8,6 +8,7 @@
       :nodes="currentPage.nodes"
       :page-config="pageConfig"
       :global-config="globalConfig"
+      :static-config="staticConfig"
     />
   </div>
 </template>
@@ -43,6 +44,7 @@ export default defineComponent<{
   setup (props, context) {
     const globalConfig = ref(initGlobalConfig(props.currentPage))
     const pageConfig = ref({ state: {}, methods: {}, refs: context.refs })
+    const staticConfig = ref({ vwBase: project.config.vwBase || 375 })
     const mounted = ref(false)
     const pageInit = ref<Array<'state' | 'methods' | 'sdk-type'>>([])
     const getCtx = () => ({ $$page: pageConfig.value, $$global: globalConfig.value })
@@ -94,7 +96,7 @@ export default defineComponent<{
         } else if (/vw/.test(css)) {
           // eslint-disable-next-line no-useless-escape
           css = css.replace(/([\d\.]+)vw/g, (all: string, match: string) => {
-            return (Number(match) / 3.75).toFixed(2) + 'vw'
+            return (Number(match) / (staticConfig.value.vwBase / 100)).toFixed(2) + 'vw'
           })
         }
         styleEl.innerHTML = css
@@ -216,6 +218,7 @@ export default defineComponent<{
       mounted,
       pageConfig,
       globalConfig,
+      staticConfig,
       getCtx
     }
   }

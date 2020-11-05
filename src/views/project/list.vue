@@ -173,7 +173,7 @@ import dayjs from 'dayjs'
 import Folder from './components/folder.vue'
 import FolderItem from './components/item.vue'
 import SchemaForm from '@/components/schema/index.vue'
-import { projectCreate } from '@/components/v2/project-set/config.ts'
+import { projectCreate } from '@/components/v2/project-set/config'
 import { getParentRef, deepClone } from '@/assets/util'
 import { defaultProject } from '@/assets/project'
 import Vue from 'vue'
@@ -197,7 +197,7 @@ export default {
         dir: '',
         desc: '',
         interactiveType: '',
-        config: { openConsole: false, sdklist: [], previewQrcode: true },
+        config: { openConsole: false, sdklist: [], previewQrcode: true, vwBase: 375 },
         info: { whitelist: '' }
       },
       editProjectForm: null,
@@ -444,7 +444,8 @@ export default {
         config: {
           openConsole: data.config.openConsole,
           sdklist: data.config.sdklist,
-          previewQrcode: data.config.previewQrcode
+          previewQrcode: data.config.previewQrcode,
+          vwBase: data.config.vwBase || 375
         },
         folder: data.folder
       }
@@ -468,7 +469,7 @@ export default {
         dir: '',
         desc: '',
         interactiveType: 'long-page',
-        config: { openConsole: false, previewQrcode: true, sdklist: [] },
+        config: { openConsole: false, previewQrcode: true, sdklist: [], vwBase: 375 },
         info: { whitelist: '', userName: this.$native.name, time: Date.now() }
       }
       this.showAddModal = true

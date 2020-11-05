@@ -1,6 +1,6 @@
 export const local = [
   {
-    label: '英文名称',
+    label: '项目名',
     field: 'dir',
     type: 'input',
     rulers: [

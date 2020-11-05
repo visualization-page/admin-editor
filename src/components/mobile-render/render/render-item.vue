@@ -43,13 +43,15 @@ const mergeDirectionSize = (
 export default defineComponent<{
   nodes: NodeItem[],
   pageConfig: { [k: string]: any },
-  globalConfig: { [k: string]: any }
+  globalConfig: { [k: string]: any },
+  staticConfig: { [k: string]: any }
 }>({
   name: 'RenderItem',
   props: {
     nodes: Array,
     pageConfig: Object,
-    globalConfig: Object
+    globalConfig: Object,
+    staticConfig: Object
   },
   // errorCaptured (err, vm, info) {
   //   console.log(err, vm, info)
@@ -67,7 +69,7 @@ export default defineComponent<{
             obj[k] = obj[k].replace(/vw/, 'px')
           } else if (/vw/.test(obj[k])) {
             const val = Number(obj[k].replace('vw', ''))
-            obj[k] = (val / 3.75).toFixed(2) + 'vw'
+            obj[k] = (val / (superProps.staticConfig.vwBase / 100)).toFixed(2) + 'vw'
           }
         }
       })

@@ -17,6 +17,7 @@
 import VueQrcode from '@chenfengyuan/vue-qrcode'
 import { project } from '@/assets/project'
 import { watch } from '@vue/composition-api'
+import { isPc } from '@/components/mobile-render/render/utils'
 
 export default {
   components: {
@@ -60,7 +61,6 @@ export default {
   },
   methods: {
     checkPc (noSign) {
-      const isPc = !/android|iphone|ipad/i.test(navigator.userAgent)
       return noSign ? isPc : (this.isPc = isPc)
     }
   }

@@ -30,10 +30,6 @@ export const projectCreate = [
         label: '讯盟 H5',
         value: 'long-page'
       },
-      // {
-      //   label: '滑动海报',
-      //   value: 'poster'
-      // },
       {
         label: '讯盟小程序',
         value: 'xmmp'
@@ -73,6 +69,11 @@ export const projectCreate = [
     elProps: {
       default: true
     }
+  },
+  {
+    label: 'vw 单位基准设计稿尺寸',
+    field: 'config.vwBase',
+    type: 'input'
   },
   {
     label: '项目白名单',
