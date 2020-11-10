@@ -25,7 +25,7 @@
           <span>代码准备中...</span>
         </div>
       </transition>
-      <div :class="{ 'flex height-100': hasLeftPanel }">
+      <div :class="{ 'flex': hasLeftPanel }" style="height: calc(100% - 50px)">
         <div
           v-if="hasLeftPanel"
           class="editor-v2__code-editor--left flex-shrink-0 bg-333 height-100 oa plr15"
@@ -238,7 +238,8 @@ export default createComponent({
       isEdit,
       currentCode,
       amdRequire: window.require,
-      hasLeftPanel: computed(() => hasLeftCodeTitle.includes(currentCode.title)),
+      // hasLeftPanel: computed(() => hasLeftCodeTitle.includes(currentCode.title)),
+      hasLeftPanel: true,
       isCodeRender,
       codeRenderNotice,
       fxList,

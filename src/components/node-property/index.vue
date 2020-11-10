@@ -61,7 +61,8 @@ export default {
               label: 'render',
               field: 'renderString',
               block: false,
-              type: 'code'
+              type: 'code',
+              'code-language': node.subType === 'spa' ? 'html' : undefined
             }
           ]
         }

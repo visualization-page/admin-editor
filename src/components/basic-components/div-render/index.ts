@@ -7,6 +7,7 @@ export default {
   cover: 'el-icon-thumb',
   type: 'div',
   nodeType: 1 << 2,
+  // subType: 'spa',
   style: {
     ...common.style,
     height: undefined,

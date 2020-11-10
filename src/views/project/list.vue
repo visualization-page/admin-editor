@@ -188,7 +188,8 @@ export default {
 
   data () {
     return {
-      isDev: localStorage.getItem('butterfly-mode') === 'normal',
+      // isDev: localStorage.getItem('butterfly-mode') === 'normal',
+      isDev: true,
       schema: projectCreate,
       showAddModal: false,
       showRecord: false,

@@ -12,7 +12,7 @@ export default {
   nodeType: 1 << 0,
   style: {
     ...common.style,
-    width: '100%',
+    width: undefined,
     height: undefined
   },
   props: {

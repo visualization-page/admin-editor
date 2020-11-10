@@ -18,8 +18,8 @@
       <div v-if="false" class="editor-v2__header-item" @click="handleBug">
         <span>吐槽</span>
       </div>
-      <div class="editor-v2__line" />
-      <div class="editor-v2__header-item" @click="changeMode">
+      <div v-if="false" class="editor-v2__line" />
+      <div v-if="false" class="editor-v2__header-item" @click="changeMode">
         <span v-if="isDev">极简版</span>
         <span v-else>开发版</span>
         <i class="el-icon-caret-bottom" />

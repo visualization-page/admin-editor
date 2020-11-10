@@ -173,21 +173,6 @@ export const initGlobalConfig = (page: Page | null) => {
             })
             url += `?${param.join('&')}`
           }
-          // setTimeout(() => {
-          //   // reject({ success: false, msg: url })
-          //   resolve({ data: {
-          //     success: true,
-          //     data: {
-          //       list: [
-          //         {
-          //           title: '111'
-          //         }
-          //       ],
-          //       count: 20
-          //     }
-          //   } })
-          // }, 2000)
-          // return
           // eslint-disable-next-line
           window.xm
             .fetch(baseUrl + url, {
@@ -312,6 +297,48 @@ export const initGlobalConfig = (page: Page | null) => {
     },
     hideNode (nodeId: string) {
       this.showNode(nodeId, false)
+    },
+    search () {
+      let search = location.search.slice(1)
+      let searchObj: { [k: string]: any } = {}
+      let key = ''
+      let splitArr = []
+
+      if (search) {
+        let paramArr = search.split('&')
+        for (let i = 0; i < paramArr.length; i++) {
+          splitArr = paramArr[i].split('=')
+          key = splitArr[0]
+          searchObj[key] = decodeURIComponent(splitArr[1])
+        }
+        return searchObj
+      }
+      return null
+    },
+    env () {
+      const ua = navigator.userAgent
+      const inPlatformPreview = /render\.html/.test(location.pathname)
+      const inClient = /iphone|android|ipad/i.test(ua)
+      return {
+        inApp: /hwniapp/.test(ua),
+        inTv: /tv/.test(ua),
+        inClient,
+        inPlatform: /tms/.test(location.hostname),
+        inPlatformPreview,
+        inPlatformPreviewAppMode: inPlatformPreview && inClient
+      }
+    },
+    vw (num: number) {
+      const { inApp, inPlatformPreviewAppMode } = this.env()
+      if (inApp || inPlatformPreviewAppMode) {
+        return (num / (project.config.vwBase / 100)).toFixed(2) + 'vw'
+      }
+      return num + 'px'
+    },
+    objToString (obj: any) {
+      return Object.keys(obj).map(k => {
+        return `${k}=${encodeURIComponent(obj[k])}`
+      }).join('&')
     }
   }
 }
