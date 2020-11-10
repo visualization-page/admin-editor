@@ -107,6 +107,20 @@ export const projectCreate = [
         value: 25002
       }
     ]
+  },
+  {
+    relation: [
+      {
+        field: 'interactiveType',
+        value: 'xmmp'
+      }
+    ],
+    label: '小程序导航条颜色',
+    field: 'config.navColor',
+    type: 'color'
+    // elAttrs: {
+    //   placeholder: '白色不需要输入，其他颜色例如：#3b8ff6'
+    // }
   }
 ]
 

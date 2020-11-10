@@ -56,6 +56,7 @@ export type Project = {
     sdklist?: string[]
     previewQrcode: boolean
     vwBase: number
+    navColor?: string
   }
   createUser: string
   info: {
@@ -123,7 +124,8 @@ export const defaultProject: Project = {
     },
     proArr: [],
     previewQrcode: true,
-    vwBase: 375
+    vwBase: 375,
+    navColor: undefined
   },
   // 后台第一次创建时赋值
   createUser: '',

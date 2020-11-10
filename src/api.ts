@@ -22,6 +22,7 @@ const loadingMethods: {
 }
 
 export const http = new Http({
+  timeout: 60 * 1000,
   baseUrl: process.env.VUE_APP_FILE_SERVER,
   urlMap: {
     component: {

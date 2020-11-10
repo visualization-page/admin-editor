@@ -232,7 +232,7 @@ export default createComponent({
       },
       handleDel (i: number) {
         MessageBox.confirm('确定要删除吗？').then(() => {
-          showAddForm.value = true
+          showAddForm.value = false
           eventList.value.splice(i, 1)
           ctx.emit('change', eventList.value)
         })

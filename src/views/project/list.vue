@@ -198,7 +198,7 @@ export default {
         dir: '',
         desc: '',
         interactiveType: '',
-        config: { openConsole: false, sdklist: [], previewQrcode: true, vwBase: 375 },
+        config: { openConsole: false, sdklist: [], previewQrcode: true, vwBase: 375, navColor: undefined },
         info: { whitelist: '' }
       },
       editProjectForm: null,
@@ -446,7 +446,8 @@ export default {
           openConsole: data.config.openConsole,
           sdklist: data.config.sdklist,
           previewQrcode: data.config.previewQrcode,
-          vwBase: data.config.vwBase || 375
+          vwBase: data.config.vwBase || 375,
+          navColor: data.config.navColor
         },
         folder: data.folder
       }
@@ -470,7 +471,7 @@ export default {
         dir: '',
         desc: '',
         interactiveType: 'long-page',
-        config: { openConsole: false, previewQrcode: true, sdklist: [], vwBase: 375 },
+        config: { openConsole: false, previewQrcode: true, sdklist: [], vwBase: 375, navColor: undefined },
         info: { whitelist: '', userName: this.$native.name, time: Date.now() }
       }
       this.showAddModal = true
