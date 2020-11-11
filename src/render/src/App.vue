@@ -41,9 +41,12 @@ export default {
     },
 
     codeUrl () {
+      const navColor = project.config.navColor
       return this.isMp ? JSON.stringify({
         data: {
-          url: location.href,
+          url: navColor
+            ? location.href.replace('render.html', 'render.html?navibar=h5&navibarColor=' + navColor.substr(1))
+            : location.href,
           appId: -10000
         },
         target: 'smallApp',
