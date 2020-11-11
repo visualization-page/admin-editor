@@ -1,7 +1,7 @@
 import { project, Project } from '@/assets/project'
 import { Page } from '@/assets/page'
 import { NodeItem, NodeItemBasic, NodeUmd } from '@/assets/node'
-import { getParentRef, parseCodeValid } from '@/assets/util'
+import { getParentRef, parseCodeValid, addScript } from '@/assets/util'
 import { FormEvent } from '@/assets/event'
 import { Loading, Dialog, Dot, Http, Toast } from 'esc-ui'
 // @ts-ignore
@@ -339,6 +339,17 @@ export const initGlobalConfig = (page: Page | null) => {
       return Object.keys(obj).map(k => {
         return `${k}=${encodeURIComponent(obj[k])}`
       }).join('&')
+    },
+    loadScript (url: string, id: string) {
+      if (!url || !id) {
+        console.log('loadScript url 和 id 必传')
+        return
+      }
+      const dom = document.getElementById(id)
+      if (dom) {
+        dom.remove()
+      }
+      return addScript(id, url)
     }
   }
 }

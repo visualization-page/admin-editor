@@ -163,7 +163,7 @@ export const deepMerge = (origin: any, obj?: any): any => {
   }
 }
 
-function addScript (id: string, url: string) {
+export function addScript (id: string, url: string) {
   return new Promise((resolve, reject) => {
     const script = document.createElement('script')
     script.id = id

@@ -78,6 +78,10 @@ export const fxList = [
     code: '$$global.objToString({})'
   },
   {
+    name: '加载远程 JS',
+    code: '$$global.loadScript(\'url\', \'dom-id\')'
+  },
+  {
     name: '显示组件',
     code: '$$global.showNode(\'nodeId\')'
   },

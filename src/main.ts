@@ -6,7 +6,7 @@ import 'tcon'
 import './style/app.less'
 import { http } from './api'
 import logs from './changelog'
-import { MessageBox } from 'element-ui'
+import { MessageBox, Notification } from 'element-ui'
 import { parseCodeValid } from './assets/util'
 
 declare module '@vue/composition-api/dist/component/component' {
@@ -33,6 +33,25 @@ Vue.config.errorHandler = function (err, vm, info) {
 }
 const nativeInstance = Vue.prototype.$native = new window.Native()
 Vue.prototype.$version = process.env.VUE_APP_VERSION
+Vue.prototype.$notice = (content: string, error: boolean) => {
+  if (!error) {
+    Notification({
+      title: '成功',
+      type: 'success',
+      message: content,
+      position: 'top-left',
+      duration: 2000
+    })
+  } else {
+    Notification({
+      title: '错误',
+      type: 'error',
+      message: content,
+      position: 'top-left',
+      duration: 2000
+    })
+  }
+}
 
 if (!nativeInstance.cookie('sso_u')) {
   location.href = `${process.env.VUE_APP_SSO}${location.href}`
