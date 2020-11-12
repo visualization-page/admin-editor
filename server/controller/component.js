@@ -482,8 +482,12 @@ const handle = {
     await fs.outputFile(path.join(releasePath, 'index.html'), renderContent)
 
     // 写入 plugin.json
-    if (isXmmp && globalProject.project.config.navColor) {
-      await fs.outputFile(path.join(releasePath, 'plugin.json'), JSON.stringify({ color: globalProject.project.config.navColor }))
+    const projectColor = globalProject.project.config.navColor
+    if (isXmmp && projectColor) {
+      await fs.outputFile(path.join(releasePath, 'plugin.json'), JSON.stringify({
+        color: projectColor,
+        indexURL: 'index.html?navibar=h5&navibarColor=' + projectColor.substr(1)
+      }))
     }
 
     if (globalProject.project.syncFile) {

@@ -137,7 +137,7 @@ export const defaultProject: Project = {
   },
   css: '',
   utils: 'function utils () {\n  return {\n    deepClone: (obj) => JSON.parse(JSON.stringify(obj))\n  }\n}\n\n$$global.export = utils()',
-  initScripts: ''
+  initScripts: 'function wrap () {\n  return {\n    test: \'\'\n  }\n}\n\n$$global.export = wrap()'
 }
 
 export const project: Project = reactive(deepClone(defaultProject))
