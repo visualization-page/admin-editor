@@ -6,15 +6,56 @@ const fs = require('fs-extra')
 const request = require('request')
 const spawn = require('cross-spawn')
 // const pubPath = path.resolve(__dirname, '../public')
+const isMac = process.platform === 'darwin'
+const JSZip = require('jszip')
 
 const handle = {
+  doZip (zipName, distDir) {
+    return new Promise((resolve, reject) => {
+      if (isMac) {
+        console.log('🔧 使用 zip 压缩...')
+        handle.spawn('zip', ['-qr', `${zipName}.zip`, './'], { cwd: distDir }).then(() => {
+          console.log('🔧 zip 压缩完成，处理收尾...')
+          resolve()
+        }).catch((err) => {
+          reject(err)
+        })
+      } else {
+        console.log('🔧 使用 jszip 压缩...')
+        const winZip = new JSZip()
+        const deepFile = (dir, prefix = '') => {
+          for (const f of fs.readdirSync(dir)) {
+            // 判断 f 是文件还是文件夹
+            const current = path.resolve(dir, f)
+            const stat = fs.statSync(current)
+            if (stat.isFile()) {
+              winZip.file(prefix + f, fs.readFileSync(current))
+            } else if (stat.isDirectory()) {
+              // 文件夹
+              deepFile(path.join(dir, f), prefix + `${f}/`)
+            }
+          }
+        }
+        deepFile(distDir)
+        winZip
+          .generateNodeStream({ type: 'nodebuffer', streamFiles: true })
+          .pipe(fs.createWriteStream(path.resolve(distDir, `${zipName}.zip`)))
+          .on('finish', function () {
+            console.log('🔧 jszip 压缩完成，处理收尾...')
+            resolve()
+          })
+      }
+    })
+  },
+
   async zip (zipName, targetDirPath) {
     const name = `${zipName}.zip`
     const zipPath = path.join(targetDirPath, name)
     if (fs.pathExistsSync(zipPath)) {
       handle.rm(zipPath)
     }
-    await handle.spawn('zip', ['-qr', name, './'], { cwd: targetDirPath })
+    // await handle.spawn('zip', ['-qr', name, './'], { cwd: targetDirPath })
+    await handle.doZip(zipName, targetDirPath)
     return path.join(targetDirPath, name)
   },
 

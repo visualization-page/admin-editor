@@ -320,7 +320,7 @@ export const initGlobalConfig = (page: Page | null) => {
       const inPlatformPreview = /render\.html/.test(location.pathname)
       const inClient = /iphone|android|ipad/i.test(ua)
       return {
-        inApp: /hwniapp/.test(ua),
+        inApp: /hwminiapp/.test(ua),
         inTv: /tv/.test(ua),
         inClient,
         inPlatform: /tms/.test(location.hostname),
