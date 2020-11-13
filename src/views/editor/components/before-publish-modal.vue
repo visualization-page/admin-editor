@@ -94,7 +94,8 @@ export default {
       pubSchema: pub,
       iocSchema: pubIoc,
       loadingSearch: false,
-      hasIoc: !!process.env.VUE_APP_ENV_TTILE
+      // hasIoc: !!process.env.VUE_APP_ENV_TTILE
+      hasIoc: true
     }
   },
   watch: {
