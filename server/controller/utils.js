@@ -29,7 +29,11 @@ const handle = {
             const current = path.resolve(dir, f)
             const stat = fs.statSync(current)
             if (stat.isFile()) {
-              winZip.file(prefix + f, fs.readFileSync(current))
+              const isMap = path.extname(current) === '.map'
+              // 过滤 .js.map 文件
+              if (!isMap) {
+                winZip.file(prefix + f, fs.readFileSync(current))
+              }
             } else if (stat.isDirectory()) {
               // 文件夹
               deepFile(path.join(dir, f), prefix + `${f}/`)

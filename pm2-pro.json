@@ -6,7 +6,8 @@
       "log_date_format": "YYYY-MM-DD HH:mm Z",
       "env": {
         "NODE_ENV": "production",
-        "APP_ENV": "pro"
+        "APP_ENV": "pro",
+        "IOC_SERVER": "http://106.54.38.84:9411"
       }
     }
   ]
