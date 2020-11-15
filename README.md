@@ -404,7 +404,7 @@ $$global.config = project.config = {
 - 20/11/06
 
 - [ ] 自定义节点 template 写法
-- [ ] monaco-editor style 重复加载
+- [x] monaco-editor style 重复加载
 
 -2020/11/08
 

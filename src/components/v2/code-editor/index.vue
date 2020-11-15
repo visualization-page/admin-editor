@@ -179,7 +179,7 @@ export default createComponent({
         editor.value.focus()
       }
     }
-    const hasLeftCodeTitle = ['页面方法', 'render']
+    // const hasLeftCodeTitle = ['页面方法', 'render']
     const isCodeRender = computed(() => currentCode.title === 'render')
     type ResItem = { label: string, value: string, children: ResItem[] }
     const codeRenderNotice = ref<{ state: ResItem[], methods: ResItem[] }>({ state: [], methods: [] })
@@ -238,8 +238,7 @@ export default createComponent({
       isEdit,
       currentCode,
       amdRequire: window.require,
-      // hasLeftPanel: computed(() => hasLeftCodeTitle.includes(currentCode.title)),
-      hasLeftPanel: true,
+      hasLeftPanel: computed(() => currentCode.title !== '系统配置'),
       isCodeRender,
       codeRenderNotice,
       fxList,
