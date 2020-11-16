@@ -78,7 +78,17 @@ export default defineComponent<{
     const _renderItemSelf = (item: NodeItem, props: VNodeData, codeExecuteContext: any, children: VNode[]) => {
       const isLibrary = item.nodeType === 1 << 2
       if (isLibrary) {
-        const { ok, value } = parseCodeValid(item.renderString, codeExecuteContext)
+        let renderString = item.renderString
+        // spa 写法
+        if (item.subType === 'spa') {
+          // 提取 template 和 script
+          const matchTemplate = renderString.match(/<template>([\s\S]+)<\/template>/)
+          const matchScript = renderString.match(/<script>([\s\S]+)<\/script>/)
+          if (matchTemplate && matchScript) {
+            renderString = matchScript[1].replace('methods:', `template:\`${matchTemplate[1]}\`,\nmethods:`)
+          }
+        }
+        const { ok, value } = parseCodeValid(renderString, codeExecuteContext)
         if (ok && value) {
           const libraryOpt = value! as {
             template?: string
