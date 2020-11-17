@@ -133,11 +133,11 @@
         });
         editor.onDidDispose(function () {
           var arr = Array.from(document.head.childNodes)
-          var last = arr.slice(document.head.childNodes.length - 1)
+          var last = arr.slice(document.head.childNodes.length - 2)
           if (last[0].tagName === 'SCRIPT' && /monaco-editor/.test(last[0].src)) {
             // 移除上2个 style 节点
             arr.slice(
-              document.head.childNodes.length - 3,
+              document.head.childNodes.length - 4,
               document.head.childNodes.length - 2
             ).forEach(function (it) {
               it.remove()
