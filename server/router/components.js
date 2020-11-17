@@ -94,7 +94,13 @@ module.exports = {
           if (err) {
             throw err
           }
-          const msg = await component.uploadProject(file, tmpPath)
+          let msg
+          const isSyncProject = req.body.type === 'sync-project'
+          if (isSyncProject) {
+            msg = await component.syncProject(file, tmpPath)
+          } else {
+            msg = await component.uploadProject(file, tmpPath)
+          }
           res.json({ success: !msg, msg })
         })
       } else {

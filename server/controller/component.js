@@ -119,7 +119,7 @@ const handle = {
     // const force = body.force
     // 解压到 tmp/data 目录下
     // console.log('----', file)
-    utils.unzip(file, tmpPath)
+    await utils.unzip(file, tmpPath)
     // 读取 package.json name 校验唯一性
     const pkg = path.join(tmpPath, 'package.json')
     const schemaPath = path.join(tmpPath, 'schema.js')
@@ -515,6 +515,50 @@ const handle = {
     utils.rm(tmpPath)
   },
 
+  async syncProject (file, tmpPath) {
+    // 解压 zip
+    await utils.unzip(file, tmpPath)
+    // 读取 folder
+    const folder = await fs.readJson(path.join(tmpPath, 'folder', 'index.json'))
+    // 检查项目是否存在
+    const localProjects = await fs.readJson(getPath('project'))
+    const isExist = folder[0].projects.findIndex(y => localProjects.some(x => y === x.dir))
+    if (isExist > -1) {
+      return `导入的项目列表中存在相同的项目: ${folder[0].projects[isExist]}`
+    }
+    const p = getPath('project', false)
+    // 备份 project 到 public 目录
+    const bakProjectPath = path.join(pubPath, 'bak-project')
+    await fs.copy(p, bakProjectPath, { overwrite: true })
+    console.log('备份 project 到 public/bak-project')
+    let msg
+    await Promise.all(
+      folder[0].projects.map(project => {
+        // copy 到 projects 目录
+        return fs.move(
+          path.join(tmpPath, 'project', project),
+          path.join(p, project),
+          { overwrite: true }
+        )
+      })
+    ).catch(async err => {
+      msg = `执行出错：${err.message}`
+      console.log('执行出错，还原备份 bak-project 到 project')
+      await fs.copy(bakProjectPath, p, { overwrite: true })
+      await handle.updateProjectList()
+    })
+    if (!msg) {
+      // 更新项目列表
+      await handle.updateProjectList()
+    }
+    // 删除备份
+    utils.rm(bakProjectPath)
+    console.log('删除备份 public/bak-project')
+    // 删除 tmp
+    utils.rm(tmpPath)
+    return msg
+  },
+
   async saveSuggest (data) {
     const p = getPath('suggest')
     const exist = fs.pathExistsSync(p)
@@ -649,7 +693,7 @@ const handle = {
     return folders
       .sort((a, b) => b.time - a.time)
       .concat(
-        projects.filter(x => !x.folder)
+        projects.filter(x => !x.folder || folders.every(it => it.id !== x.folder))
           .sort((a, b) => b.info.time - a.info.time)
           .map(x => ({
             ...x,
@@ -672,7 +716,7 @@ const handle = {
     }
     // 修改为新的 folderId
     const folder = list.find(x => x.id === folderId)
-    const dirIndex = folder.projects.findIndex(x => x === dir)
+    const dirIndex = folder ? folder.projects.findIndex(x => x === dir) : -2
     if (dirIndex === -1) {
       folder.projects.push(dir)
       await fs.writeJson(index, list)

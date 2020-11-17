@@ -8,8 +8,23 @@ const spawn = require('cross-spawn')
 // const pubPath = path.resolve(__dirname, '../public')
 const isMac = process.platform === 'darwin'
 const JSZip = require('jszip')
+// const unzip = require('node-unzip-2')
 
 const handle = {
+  unzip (file, destDir) {
+    execSync(`unzip -o ${file} -d ${destDir}`)
+    // return new Promise((resolve, reject) => {
+    //   fs.createReadStream(file)
+    //     .pipe(unzip.Extract({ path: destDir }))
+    //     .on('finish', () => {
+    //       resolve()
+    //     })
+    //     .on('error', err => {
+    //       reject(err)
+    //     })
+    // })
+  },
+
   doZip (zipName, distDir) {
     return new Promise((resolve, reject) => {
       if (isMac) {
@@ -61,10 +76,6 @@ const handle = {
     // await handle.spawn('zip', ['-qr', name, './'], { cwd: targetDirPath })
     await handle.doZip(zipName, targetDirPath)
     return path.join(targetDirPath, name)
-  },
-
-  unzip (file, dir) {
-    execSync(`unzip -o ${file} -d ${dir}`)
   },
 
   rm (file) {
