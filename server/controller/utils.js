@@ -135,8 +135,12 @@ const handle = {
           }
         ]
       ]
+    }).then(res => {
       // eslint-disable-next-line no-useless-escape
-    }).then(res => res.code.replace('\"use strict\";\n\n', ''))
+      // console.log(res.code.replace('\"use strict\";\n\n', ''))
+      // eslint-disable-next-line no-useless-escape
+      return res.code.replace('\"use strict\";\n\n', '')
+    })
   },
 
   babel: async (project) => {

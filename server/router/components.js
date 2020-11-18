@@ -144,7 +144,10 @@ module.exports = {
   },
   '/project/release/:dir': {
     post: async (req, res) => {
-      const result = await component.releaseProject(req.params.dir, req.body)
+      const result = await component.releaseProject(req.params.dir, req.body).catch(err => ({
+        success: false,
+        msg: err ? err.message : ''
+      }))
       res.json(result || { success: true, msg: '' })
     }
   },

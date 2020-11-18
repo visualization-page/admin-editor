@@ -324,6 +324,7 @@ const handle = {
       })
     }
     // 编译 code
+    console.log('编译 code')
     globalProject.project = await utils.babel(globalProject.project)
     // 改写 index.html 中的 publicPath
     const releaseHtmlPath = path.join(releasePath, 'index.html')
@@ -342,6 +343,7 @@ const handle = {
     // 下载图片到本地
     // 并改写路径
     if (globalProject.project.config.downImgToLocal) {
+      console.log('下载图片到本地')
       projectString = await utils.downImgAndReplace(projectString, releasePath).catch(() => {
         return Promise.reject(new Error('下载项目图片到本地失败，请重试'))
       })
@@ -376,10 +378,14 @@ const handle = {
         renderContent = renderContent.replace('</body>', cdnScript + '</body>')
       }
       if (needDownload.length) {
+        console.log(`下载 componentUmd 到本地，共 ${needDownload.length} 个`)
         const umdFileName = isDev
           ? 'umd.js'
           : `umd.${dayjs().format('MMDDHHmmss')}.js`
-        const arr = await Promise.all(needDownload.map(it => service.getRemoteFileContent(it.url)))
+        const arr = await Promise.all(needDownload.map(it => service.getRemoteFileContent(it.url))).catch((err) => {
+          console.log(`下载失败`, err.message)
+          return Promise.reject(err)
+        })
         await fs.outputFile(path.join(releasePath, umdFileName), arr.join('\n'), 'utf8')
         renderContent = renderContent.replace(
           '</body>',
@@ -464,7 +470,7 @@ const handle = {
     // href=css href=js src=js
     // 替换 publicPath
     renderContent = renderContent.replace('_PUBLIC_PATH=\'./\'', `_PUBLIC_PATH='${publicPath}'`)
-    renderContent = renderContent.replace(/(href=css|href=js|href=v|src=js|src=v|src=x|src=n)/g, (match, group) => {
+    renderContent = renderContent.replace(/(href="?css|href="?js|href="?v|src="?js|src="?v|src="?x|src="?n)/g, (match, group) => {
       const arr = group.split('=')
       return arr[0] + '=' + publicPath + arr[1]
     })
@@ -480,6 +486,7 @@ const handle = {
 
     // 写文件
     await fs.outputFile(path.join(releasePath, 'index.html'), renderContent)
+    console.log('文件写入成功')
 
     // 写入 plugin.json
     const projectColor = globalProject.project.config.navColor
@@ -488,6 +495,7 @@ const handle = {
         color: projectColor,
         indexURL: 'index.html?navibar=h5&navibarColor=' + projectColor.substr(1)
       }))
+      console.log('plugin.json 写入成功')
     }
 
     if (globalProject.project.syncFile) {
@@ -495,6 +503,7 @@ const handle = {
     }
     // 同步 IOC
     if (globalProject.project.config.iocSync) {
+      console.log('开始同步 IOC')
       return service.syncIoc(globalProject.project)
     }
   },

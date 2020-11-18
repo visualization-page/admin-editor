@@ -192,13 +192,20 @@ module.exports = {
 
   async getRemoteFileContent (url) {
     return new Promise((resolve, reject) => {
-      request.get({
-        url
-      }, (err, httpResponse, body) => {
+      // request.get({
+      //   url
+      // }, (err, httpResponse, body) => {
+      //   if (err) {
+      //     reject(err)
+      //   } else {
+      //     resolve(body)
+      //   }
+      // })
+      urllib.request(url, function (err, data, res) {
         if (err) {
-          reject(err)
+          reject(err) // you need to handle error
         } else {
-          resolve(body)
+          resolve(data.toString())
         }
       })
     })
