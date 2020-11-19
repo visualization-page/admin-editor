@@ -85,7 +85,7 @@ export default defineComponent<{
           renderString = renderString.replace(/\$\$/g, '%%')
           // 提取 template 和 script
           const matchTemplate = renderString.match(/<template>([\s\S]+)<\/template>/)
-          const matchScript = renderString.match(/<script>([\s\S]+)<\/script>/)
+          const matchScript = renderString.match(/<script>([\s\S]+)<\\*\/script>/)
           if (matchTemplate && matchScript) {
             renderString = matchScript[1]
               .replace('methods:', `template:\`${matchTemplate[1]}\`,\nmethods:`)

@@ -151,9 +151,26 @@ const handle = {
         node.style.code = co
       }))
       // node.renderString
-      transArr.push(_transform(node.renderString).then(co => {
-        node.renderString = co
-      }))
+      // renderString 为 spa 形式
+      // 需要匹配 script 后编译后再拼接
+      if (node.subType === 'spa') {
+        let script = ''
+        const str = node.renderString.replace(/<script>([\s\S]+)<\/script>/, (all, mat) => {
+          script = mat
+          return all.replace(mat, '\n%%\n')
+        })
+        transArr.push(_transform(script).then(co => {
+          // co 中的 $$ 为正则关键字
+          co = co.replace(/\$\$/g, '%%')
+          node.renderString = str.replace('%%', co)
+            .replace(/(%%)/g, () => '$$')
+            .replace(/<\/script>/g, '<' + '\\' + '/script>')
+        }))
+      } else {
+        transArr.push(_transform(node.renderString).then(co => {
+          node.renderString = co
+        }))
+      }
       // node.events
       node.events.forEach((nodeEv, l) => {
         transArr.push(_transform(nodeEv.fxCode).then(fx => {

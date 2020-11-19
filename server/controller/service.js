@@ -61,6 +61,7 @@ module.exports = {
     }
     if (iocAppType === 'mp') {
       data.icon = 'icon.png'
+      data.platformFlag = /tv/i.test(iocAppName) ? 4 : 3
     } else {
       data.componentSymbol = iocComponentSymbol
     }
