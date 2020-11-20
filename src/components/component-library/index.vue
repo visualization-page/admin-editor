@@ -77,7 +77,7 @@ export default defineComponent({
     }
     const handleAdd = (library: string, name: string) => {
       if (addBeforeValidate()) {
-        addNode({ library, name, nodeType: 1 << 2, type: 'div' })
+        addNode({ library, name, nodeType: 1 << 2, type: 'div', subType: 'spa' })
         setTabName([tabName.nodeTree, '', tabName.nodeProperty, '', tabName.pageSetTree, tabName.nodeSetProperty])
         hideComponent(true)
         ctx.emit('hide')

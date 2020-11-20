@@ -29,9 +29,11 @@ export const common = {
 </template>
 
 <script>
-$$global.export = {
-  methods: {
+  $$global.export = {
+    methods: {
+      handleClick () {
+      }
+    }
   }
-}
 </script>`
 }

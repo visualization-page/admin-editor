@@ -32,6 +32,7 @@ export type NodeItemLibrary = {
   nodeType: number
   name: string
   type: 'div'
+  subType?: 'spa'
 }
 export type NodeUmd = {
   label: string
