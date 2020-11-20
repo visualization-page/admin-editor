@@ -497,6 +497,31 @@ export const pubIoc = [
       {
         field: 'config.iocSync',
         value: true
+      },
+      {
+        field: 'config.iocAppType',
+        value: 'mp'
+      }
+    ],
+    label: '应用类型',
+    field: 'config.iocApplicationType',
+    type: 'select',
+    options: [
+      {
+        label: '小屏',
+        value: 3
+      },
+      {
+        label: '中屏',
+        value: 4
+      }
+    ]
+  },
+  {
+    relation: [
+      {
+        field: 'config.iocSync',
+        value: true
       }
     ],
     label: '卡片或小程序名称',

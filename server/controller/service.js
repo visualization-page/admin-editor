@@ -45,7 +45,7 @@ module.exports = {
         iocAppType,
         iocSyncMethod,
         iocAppName,
-        // iocAppIcon,
+        iocApplicationType,
         iocComponentSymbol,
         iocAuthInfo
       }
@@ -61,7 +61,7 @@ module.exports = {
     }
     if (iocAppType === 'mp') {
       data.icon = 'icon.png'
-      data.platformFlag = /tv/i.test(iocAppName) ? 4 : 3
+      data.platformFlag = iocApplicationType ? Number(iocApplicationType) : 3
     } else {
       data.componentSymbol = iocComponentSymbol
     }

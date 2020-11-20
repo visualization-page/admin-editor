@@ -148,7 +148,7 @@ export default {
           iocAppType,
           iocSyncMethod,
           iocAppName,
-          iocAppIcon,
+          iocApplicationType,
           iocComponentSymbol
         }
       } = project
@@ -171,6 +171,8 @@ export default {
           return Message.error('请输入卡片或小程序名称')
         } else if (iocAppType === 'card' && iocSyncMethod === 'create' && !iocComponentSymbol) {
           return Message.error('请输入卡片 componentSymbol')
+        } else if (iocAppType === 'mp' && !iocApplicationType) {
+          return Message.error('请选择应用类型')
         }
       }
       sessionStorage.setItem(this.sessionKey, this.remark)
