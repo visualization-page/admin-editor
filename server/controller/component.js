@@ -499,6 +499,7 @@ const handle = {
     }
 
     if (globalProject.project.syncFile) {
+      console.log('开始同步文件')
       return service.syncFile(globalProject.project)
     }
     // 同步 IOC

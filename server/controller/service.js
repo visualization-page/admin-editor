@@ -21,18 +21,31 @@ module.exports = {
       Object.keys(data).forEach((k, i) => {
         url += `${i === 0 ? '?' : '&'}${k}=${data[k]}`
       })
-      request.get(
-        url,
-        // { formData: data },
-        // eslint-disable-next-line handle-callback-err
-        (err, httpResponse, body) => {
-          if (err) {
-            reject(err)
-          } else {
-            resolve(JSON.parse(body))
-          }
+      urllib.request(url, { method: 'GET', dataType: 'json' }, (err, data, res) => {
+        if (err) {
+          console.log('同步文件出错', err.message)
+          reject(err)
+        } else {
+          console.log('同步文件成功', data)
+          // resolve(JSON.parse(body))
+          resolve(data)
         }
-      )
+      })
+      // request.get(
+      //   url,
+      //   // { formData: data },
+      //   // eslint-disable-next-line handle-callback-err
+      //   (err, data, res) => {
+      //     if (err) {
+      //       console.log('同步文件出错', err.message)
+      //       reject(err)
+      //     } else {
+      //       console.log('同步文件成功', data)
+      //       // resolve(JSON.parse(body))
+      //       resolve(data)
+      //     }
+      //   }
+      // )
     })
   },
 
