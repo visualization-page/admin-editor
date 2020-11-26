@@ -431,7 +431,7 @@ export const pubIoc = [
     field: 'config.iocAuthInfo',
     type: 'input',
     elAttrs: {
-      placeholder: '可不填，默认为 zhuwei/1234567'
+      placeholder: '可不填，默认为 zhuwei/shinemo123'
     },
     elProps: {
     }

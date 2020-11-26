@@ -126,7 +126,20 @@ export default defineComponent({
       )
       project.info.remark = remark
       if (project.config.iocSync) {
-        this.$msgbox.alert(msg!, '发布成功')
+        const h = this.$createElement
+        const msgResult = JSON.parse(msg!)
+        this.$msgbox({
+          title: '发布成功',
+          message: h('div', {}, [
+            h('p', {}, [
+              h('span', {}, '同步 IOC：'),
+              msgResult.ok === false
+                ? h('span', { style: { color: 'red' } }, '失败')
+                : h('span', { style: { color: 'green' } }, '成功')
+            ])
+          ].concat(msgResult.out.split('\n').map((str: string) => h('p', {}, str)))),
+          showCancelButton: false
+        })
       } else {
         this.$notify({
           title: '成功',
