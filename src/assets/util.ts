@@ -180,7 +180,7 @@ export function addScript (id: string, url: string) {
   })
 }
 
-function addStyle (id: string, url: string) {
+export function addStyle (id: string, url: string) {
   return new Promise((resolve, reject) => {
     const link = document.createElement('link')
     link.id = id
@@ -198,7 +198,7 @@ function addStyle (id: string, url: string) {
   })
 }
 
-function removeNode (id: string) {
+export function removeNode (id: string) {
   const item = document.getElementById(id)
   if (item) {
     document.body.removeChild(item)

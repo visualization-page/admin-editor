@@ -82,6 +82,10 @@ export const fxList = [
     code: '$$global.loadScript(\'url\', \'dom-id\')'
   },
   {
+    name: '加载远程 CSS',
+    code: '$$global.loadStyle(\'url\', \'dom-id\')'
+  },
+  {
     name: '显示组件',
     code: '$$global.showNode(\'nodeId\')'
   },
