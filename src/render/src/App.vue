@@ -8,7 +8,7 @@
       <p class="f12 c-999 tc pb10" v-html="isMp ? '用支持讯盟小程序<br>的App扫一扫' : '用手机扫一扫'" />
     </div>
   </div>
-  <div v-else id="app" class="oa">
+  <div v-else id="app">
     <router-view />
   </div>
 </template>
@@ -54,14 +54,21 @@ export default {
       }) : location.href
     }
   },
+
   created () {
     watch(() => project.interactiveType, type => {
       this.isMp = type === 'xmmp'
     }, { lazy: true, deep: false })
+    watch(() => project.config.navColor, val => {
+      const h = val ? 'initial' : ''
+      document.documentElement.style.height = h
+      document.body.style.height = h
+    })
     if (this.isPc) {
       console.log('\n\n%cButterfly\n\n%c产品运营也能用的 H5 在线开发平台 !\n\n支持:\n  1.讯盟小程序\n  2.彩云 native h5\n  3.复杂表单\n  4.一键发布等\n\n%c👋 立即体验: https://tms.uban360.com/butterfly-fe/index.html\n\n', 'font-weight:bolder;color:rgb(253,129,36)', 'color: rgba(253,129,36,0.5)', 'color:#3b8ff6')
     }
   },
+
   methods: {
     checkPc (noSign) {
       return noSign ? isPc : (this.isPc = isPc)
