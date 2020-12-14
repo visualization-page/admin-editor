@@ -21,7 +21,7 @@ module.exports = {
       Object.keys(data).forEach((k, i) => {
         url += `${i === 0 ? '?' : '&'}${k}=${data[k]}`
       })
-      urllib.request(url, { method: 'GET', dataType: 'json' }, (err, data, res) => {
+      urllib.request(url, { method: 'GET', dataType: 'json', timeout: 60 * 1000 }, (err, data, res) => {
         if (err) {
           console.log('同步文件出错', err.message)
           reject(err)
