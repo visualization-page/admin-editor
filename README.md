@@ -424,3 +424,4 @@ $$global.config = project.config = {
 - 2020/12/15
 
 - [x] 页面的本地复制与粘贴
+- [x] 节点的本地复制与粘贴

@@ -91,8 +91,10 @@ export default defineComponent({
             await Vue.prototype.$msgbox.confirm(`即将粘贴剪切板页面：${localParse.title || localParse.id}，确定吗？`)
             copyPage(localParse)
           } catch (e) {
-            Vue.prototype.$notice('无有效的复制的页面信息', true)
+            Vue.prototype.$notice('剪切板无有效的复制页面', true)
           }
+        } else {
+          Vue.prototype.$notice('剪切板无复制的页面', true)
         }
       }
     }

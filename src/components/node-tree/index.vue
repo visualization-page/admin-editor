@@ -32,12 +32,22 @@
               @click="handleDel(data, node.parent)">
               <span style="color:red">删除</span>
             </el-button>
-            <el-button
-              type="text"
-              size="mini"
-              @click="handleCopy(data, node.parent)">
-              复制
-            </el-button>
+            <el-tooltip effect="dark" content="复制为下一个节点" placement="top">
+              <el-button
+                type="text"
+                size="mini"
+                @click="handleCopy(data, node.parent)">
+                复制
+              </el-button>
+            </el-tooltip>
+            <el-tooltip effect="dark" content="粘贴剪切板组件为下一个节点" placement="top">
+              <el-button
+                type="text"
+                size="mini"
+                @click="handlePaste(data, node.parent)">
+                粘贴
+              </el-button>
+            </el-tooltip>
             <el-button
               v-if="data.type === 'div'"
               type="text"
@@ -117,6 +127,21 @@ export default defineComponent({
         )
       }
     }
+    const handlePaste = async (data: any, parent: any) => {
+      const local = localStorage.getItem('butterfly-copy-node')
+      if (local) {
+        try {
+          const localParse = JSON.parse(local)
+          await Vue.prototype.$msgbox.confirm(`即将粘贴剪切板组件：${localParse.title || localParse.id}，确定吗？`)
+          localParse.id = data.id
+          handleCopy(localParse, parent)
+        } catch (e) {
+          Vue.prototype.$notice('剪切板无有效的复制组件', true)
+        }
+      } else {
+        Vue.prototype.$notice('剪切板无复制的组件', true)
+      }
+    }
     const handleDel = (item: any) => {
       delNode({ nodeId: item.id })
     }
@@ -190,7 +215,8 @@ export default defineComponent({
       handleNodeClick,
       handleDel,
       handleCopy,
-      handleExport
+      handleExport,
+      handlePaste
     }
   }
 })

@@ -10,7 +10,8 @@
         @updateByField="updateNodeByField"
       />
       <div class="tc mt20">
-        <el-button class="width-100" type="danger" @click="handleDel">删除节点</el-button>
+        <el-button type="primary" plain @click="handleCopy">复制到剪切板</el-button>
+        <el-button type="danger" @click="handleDel">删除节点</el-button>
       </div>
     </template>
     <div v-else class="flex-center p30">
@@ -28,6 +29,7 @@ import { updateByField } from '@/assets/util'
 import { isEdit } from '@/assets/render'
 import { currentPage } from '@/assets/page'
 import { basicSchemaMap } from '../basic-components'
+import Vue from 'vue'
 
 export default {
   components: {
@@ -79,6 +81,10 @@ export default {
       },
       handleDel () {
         delNode({ nodeId: currentNode.value.id })
+      },
+      handleCopy () {
+        localStorage.setItem('butterfly-copy-node', JSON.stringify(currentNode.value))
+        Vue.prototype.$notice('复制组件到剪切板成功')
       }
     }
   }
