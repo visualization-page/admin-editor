@@ -16,10 +16,13 @@
       >
         <div class="plr10 th1 width-100">
           <span>{{ item.title || item.id }}</span>
-          <p class="c-main mt5">
+          <p class="c-main mt10 flex-center-between">
             <i v-if="item.isIndex" class="el-icon-s-flag" />
             <el-tooltip v-else effect="dark" content="设为首页" placement="right">
               <i class="el-icon-star-off" @click.stop="handleSetIndex(item)" />
+            </el-tooltip>
+            <el-tooltip effect="dark" content="复制页面" placement="right">
+              <i class="el-icon-document-copy" @click.stop="handleCopy(item)" />
             </el-tooltip>
           </p>
         </div>
@@ -30,13 +33,20 @@
           <span>添加页面</span>
         </p>
       </div>
+      <div class="editor-v2__page-list-item flex-center cp" @click="copyPage">
+        <p class="c-999">
+          <i class="el-icon-document-checked mr5" />
+          <span>粘贴页面</span>
+        </p>
+      </div>
     </div>
   </div>
 </template>
 
 <script lang="ts">
+import Vue from 'vue'
 import { defineComponent } from '@vue/composition-api'
-import { addPage, currentPage, setCurrentPage, Page, updatePages } from '@/assets/page'
+import { addPage, currentPage, setCurrentPage, Page, updatePages, copyPage } from '@/assets/page'
 import { project } from '@/assets/project'
 import { setState as setCodeEditState } from '@/assets/code-edit'
 import { Notification } from 'element-ui'
@@ -47,10 +57,12 @@ export default defineComponent({
       project,
       currentPage,
       addPage,
+
       setSelect (item: Page) {
         setCurrentPage(item)
         setCodeEditState(false)
       },
+
       handleSetIndex (item: Page) {
         const oldIndexPage = project.pages.find(x => x.isIndex)
         if (oldIndexPage) {
@@ -64,6 +76,24 @@ export default defineComponent({
           position: 'top-right',
           duration: 2000
         })
+      },
+
+      handleCopy (item: Page) {
+        localStorage.setItem('butterfly-copy-page', JSON.stringify(item))
+        Vue.prototype.$notice('复制页面到剪切板成功')
+      },
+
+      async copyPage () {
+        const local = localStorage.getItem('butterfly-copy-page')
+        if (local) {
+          try {
+            const localParse = JSON.parse(local)
+            await Vue.prototype.$msgbox.confirm(`即将粘贴剪切板页面：${localParse.title || localParse.id}，确定吗？`)
+            copyPage(localParse)
+          } catch (e) {
+            Vue.prototype.$notice('无有效的复制的页面信息', true)
+          }
+        }
       }
     }
   }

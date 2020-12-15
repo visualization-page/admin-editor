@@ -61,7 +61,8 @@ export const copyPage = (page: Page) => {
   Vue.set(project.pages, index, Object.assign(deepClone(page), {
     id: newId,
     title: page.title ? `${page.title}_copy` : '',
-    url: ''
+    url: '',
+    isIndex: false
   }))
   setCurrentPage(project.pages[index])
   // project.componentDownload 也要复制到相应的页面一份
