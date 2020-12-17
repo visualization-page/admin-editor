@@ -129,7 +129,8 @@ module.exports = {
       // 校验权限
       const hasPriv = userName === data.project.createUser ||
         (data.project.info.whitelist || '').indexOf(userName) > -1 ||
-        userName === '杨明'
+        userName === '杨明' ||
+        userName === '诸炜'
       if (hasPriv) {
         res.json({ success: true, data })
       } else {
