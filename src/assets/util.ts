@@ -206,6 +206,8 @@ export function removeNode (id: string) {
 }
 
 export const isInMiniapp = /hwminiapp/i.test(navigator.userAgent)
+export const inAdminPlatform = /tms\.uban360/.test(location.hostname) || /808/.test(location.port)
+export const isInEditor = /editor/.test(location.hash) && inAdminPlatform
 
 export function loadSdkSystem (sdkIds: string[], config: { [k: string]: { js: string, css?: string } }) {
   return sdkIds.sort().map(id => {

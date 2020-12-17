@@ -2,6 +2,7 @@
   <div
     v-if="currentPage"
     :class="['render-page', currentPage.className]"
+    :style="{ width: isInEditor ? (staticConfig.vwBase + 'px') : null }"
   >
     <render-item
       v-if="mounted"
@@ -15,7 +16,7 @@
 
 <script lang="ts">
 import { defineComponent, watch, ref, onMounted } from '@vue/composition-api'
-import { loadSdk, parseCodeValid, sleepUntil } from '@/assets/util'
+import { loadSdk, parseCodeValid, sleepUntil, isInEditor } from '@/assets/util'
 import RenderItem from './render-item.vue'
 import { FormEvent } from '@/assets/event'
 import { isEdit } from '@/assets/render'
@@ -219,7 +220,8 @@ export default defineComponent<{
       pageConfig,
       globalConfig,
       staticConfig,
-      getCtx
+      getCtx,
+      isInEditor
     }
   }
 })

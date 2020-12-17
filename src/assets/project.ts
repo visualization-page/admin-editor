@@ -3,7 +3,7 @@ import { reactive } from '@vue/composition-api'
 import { loadItem, loadItemUmd } from '@/components/mobile-render/render/utils'
 import { Page, setCurrentPage, currentPage } from './page'
 import { NodeItemBasic, NodeUmd, setCurrentNode } from './node'
-import { deepClone, loadSdkSystem } from '@/assets/util'
+import { deepClone, loadSdkSystem, inAdminPlatform, isInEditor } from '@/assets/util'
 import { http } from '@/api'
 import { Message } from 'element-ui'
 
@@ -184,8 +184,8 @@ export const saveProject = (
 })
 
 export const importProject = async (parseItem: Project) => {
-  const inAdminPlatform = /tms\.uban360/.test(location.hostname) || /808/.test(location.port)
-  const isInEditor = /editor/.test(location.hash) && inAdminPlatform
+  // const inAdminPlatform = /tms\.uban360/.test(location.hostname) || /808/.test(location.port)
+  // const isInEditor = /editor/.test(location.hash) && inAdminPlatform
   if (parseItem) {
     parseItem.depLoaded = false
     updateProject(parseItem)

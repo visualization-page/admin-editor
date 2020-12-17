@@ -1,5 +1,5 @@
 <template>
-  <div v-if="isPc" class="pc-box height-100">
+  <div v-if="isPc" class="pc-box height-100" :style="{ width: projectData.config.vwBase + 'px' }">
     <div class="height-100 relative" overflow-a>
       <router-view />
     </div>
@@ -30,6 +30,10 @@ export default {
     }
   },
   computed: {
+    projectData () {
+      return window.globalProject ? window.globalProject.project : project
+    },
+
     showCode () {
       if (window.globalProject) {
         return window.globalProject.project.config.previewQrcode !== false
