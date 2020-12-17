@@ -65,6 +65,12 @@ export default {
     isDev: Boolean
   },
 
+  data () {
+    return {
+      innerUser: ['杨明', '诸炜']
+    }
+  },
+
   computed: {
     hasPriv () {
       const item = this.item
@@ -72,7 +78,7 @@ export default {
       return item.lockedBy === this.$native.name || (!item.lockedBy && (
         createUser === this.$native.name ||
         (item.info.whitelist || '').indexOf(this.$native.name) > -1 ||
-        this.$native.name === '杨明'
+        this.innerUser.includes(this.$native.name)
       ))
     }
   },
