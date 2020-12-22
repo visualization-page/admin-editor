@@ -4,7 +4,7 @@
       <i class="el-icon-document mr10" />
       <span>页面列表</span>
     </p>
-    <div class="editor-v2__page-list mt20">
+    <div class="editor-v2__page-list mt20" style="height: calc(100% - 40px)">
       <div
         v-for="(item) in project.pages"
         :key="item.id"
