@@ -11,7 +11,8 @@ const handle = {
     console.log('===>', dir, 'lock')
     timerHandlerMap[dir] = setTimeout(() => {
       handle.unlock(dir)
-    }, 5 * 60 * 1000)
+      // 默认锁丢失时间延长为 3h
+    }, 10 * 60 * 1000)
   },
   async unlock (dir) {
     handle.lockMap[dir] = ''

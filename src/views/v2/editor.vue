@@ -37,7 +37,7 @@ import { http } from '@/api'
 import Vue from 'vue'
 import { Message } from 'element-ui'
 import { initProject, resetProject } from '@/assets/project'
-import { lock, unlock } from '@/assets/lock'
+import { lock, unlock, useLock } from '@/assets/lock'
 import { showImageResource, showSearchCode, clearEditWrapCacheNode } from '@/assets/render'
 // import { loadSdk } from '@/assets/util'
 
@@ -90,6 +90,7 @@ export default defineComponent({
     //     loadSdk(type as string)
     //   }
     // }, { lazy: true })
+    useLock()
 
     return {
       showImageResource,

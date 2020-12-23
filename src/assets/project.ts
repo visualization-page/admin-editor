@@ -6,6 +6,7 @@ import { NodeItemBasic, NodeUmd, setCurrentNode } from './node'
 import { deepClone, loadSdkSystem, inAdminPlatform, isInEditor } from '@/assets/util'
 import { http } from '@/api'
 import { Message } from 'element-ui'
+import { clearTimer, addTimer } from '@/assets/lock'
 
 export type Project = {
   depLoaded: boolean
@@ -160,28 +161,32 @@ export const saveProject = (
   force?: boolean,
   remark?: string,
   notify?: boolean
-) => http.post('project/save', {
-  dir: project.dir,
-  force,
-  project: {
-    ...project,
-    info: {
-      ...project.info,
-      remark,
-      userName: Vue.prototype.$native.name,
-      time: Date.now()
+) => {
+  clearTimer()
+  addTimer()
+  return http.post('project/save', {
+    dir: project.dir,
+    force,
+    project: {
+      ...project,
+      info: {
+        ...project.info,
+        remark,
+        userName: Vue.prototype.$native.name,
+        time: Date.now()
+      }
     }
-  }
-}, {
-  codeCallback: {
-    6001: async () => {
-      // await MessageBox.confirm('项目已存在，不允许覆盖！')
-      // await handleSave(true)
-      Message.error('项目已存在')
-    }
-  },
-  notify: notify !== false
-})
+  }, {
+    codeCallback: {
+      6001: async () => {
+        // await MessageBox.confirm('项目已存在，不允许覆盖！')
+        // await handleSave(true)
+        Message.error('项目已存在')
+      }
+    },
+    notify: notify !== false
+  })
+}
 
 export const importProject = async (parseItem: Project) => {
   // const inAdminPlatform = /tms\.uban360/.test(location.hostname) || /808/.test(location.port)
