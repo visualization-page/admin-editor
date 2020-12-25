@@ -133,7 +133,7 @@ export const addComposeNode = (node: NodeItem) => {
 }
 
 export const deepCopyNode = (data: NodeItem, copyTitle: boolean = true) => {
-  const item = getNewNode(data, { title: copyTitle ? `${data.title}_copy` : data.title })
+  const item = getNewNode(data, { title: copyTitle ? `${data.title}` : data.title })
   if (item.children && item.children.length) {
     item.children = item.children.map(x => deepCopyNode(x, copyTitle))
   }

@@ -1,7 +1,8 @@
 import Vue from 'vue'
 import { http } from '@/api'
 import { onUnmounted, ref } from '@vue/composition-api'
-// import router from '../router'
+import router from '../router'
+import { saveProject } from '@/assets/project'
 
 export const lock = async (dir: string, isLock: boolean = true) => {
   return http.post(
@@ -15,30 +16,39 @@ export const unlock = async (dir: string) => {
   return lock(dir, false)
 }
 
-const timer = ref(0)
-
-export function clearTimer () {
-  if (timer.value) {
-    clearTimeout(timer.value)
-  }
+const setLockTimer = ref(0)
+function setLock () {
+  setLockTimer.value = setInterval(() => {
+    lock(router.currentRoute.params.dir)
+  }, 3 * 1000 * 60)
 }
 
-export function addTimer () {
-  timer.value = setTimeout(async () => {
-    // await unlock(router.currentRoute.params.dir)
-    await Vue.prototype.$msgbox.alert('请重新进入编辑', { showClose: false })
+const noUserMouseTimer = ref(0)
+function addMouseListen () {
+  // 鼠标 5 分钟内无响应
+  // 保存当前项目
+  // 停止轮询设置锁
+  // 解锁并强制退出
+  noUserMouseTimer.value = setTimeout(async () => {
+    clearInterval(setLockTimer.value)
+    await saveProject(true, 'system auto save', false)
+    await unlock(router.currentRoute.params.dir)
+    await Vue.prototype.$msgbox.alert('由于您长时间未操作，系统已为您自动保存，请重新进入编辑', { showClose: false })
     history.back()
-  }, 1000 * 7 * 60)
+  }, 5 * 1000 * 60)
+}
+
+function handleMouseMove () {
+  clearTimeout(noUserMouseTimer.value)
+  addMouseListen()
 }
 
 export function useLock () {
-  // onMounted(() => {
-  //   document.addEventListener('mousemove', handleMove)
-  // })
-  // clearTimer()
-  addTimer()
+  setLock()
+  document.addEventListener('mousemove', handleMouseMove)
   onUnmounted(() => {
-    clearTimer()
-    // document.removeEventListener('mousemove', handleMove)
+    clearTimeout(noUserMouseTimer.value)
+    clearInterval(setLockTimer.value)
+    document.removeEventListener('mousemove', handleMouseMove)
   })
 }

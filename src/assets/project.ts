@@ -6,7 +6,6 @@ import { NodeItemBasic, NodeUmd, setCurrentNode } from './node'
 import { deepClone, loadSdkSystem, inAdminPlatform, isInEditor } from '@/assets/util'
 import { http } from '@/api'
 import { Message } from 'element-ui'
-import { clearTimer, addTimer } from '@/assets/lock'
 
 export type Project = {
   depLoaded: boolean
@@ -162,8 +161,6 @@ export const saveProject = (
   remark?: string,
   notify?: boolean
 ) => {
-  clearTimer()
-  addTimer()
   return http.post('project/save', {
     dir: project.dir,
     force,

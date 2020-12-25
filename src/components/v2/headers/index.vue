@@ -21,7 +21,7 @@
     </div>
     <div class="flex-center-align pr20">
       <div class="p10 cp c-main mr10" @click="handleDown">下载</div>
-      <div class="p10 cp c-main mr10" @click="handlePub()">发布</div>
+      <div class="p10 cp c-main mr10" @click="handlePub()">保存并发布</div>
       <div class="bf-btn" @click="handleSave">
         <div class="bf-btn__container">
           保存

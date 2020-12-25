@@ -16,7 +16,7 @@ app.use(fileUpload({
 }))
 app.use(bodyParser.urlencoded({ limit: '10mb', extended: true }))
 app.use(cookieParser())
-app.use(bodyParser.json())
+app.use(bodyParser.json({ limit: '10mb' }))
 app.use('/butterfly/static', express.static(__dirname + '/public'))
 app.use('/butterfly', router)
 
