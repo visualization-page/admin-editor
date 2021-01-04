@@ -32,7 +32,15 @@
               @click="handleDel(data, node.parent)">
               <span style="color:red">删除</span>
             </el-button>
-            <el-tooltip effect="dark" content="复制为下一个节点" placement="top">
+            <el-tooltip effect="dark" content="克隆成为下一个节点" placement="top">
+              <el-button
+                type="text"
+                size="mini"
+                @click="handleClone(data, node.parent)">
+                克隆
+              </el-button>
+            </el-tooltip>
+            <el-tooltip effect="dark" content="复制到剪切板" placement="top">
               <el-button
                 type="text"
                 size="mini"
@@ -40,7 +48,7 @@
                 复制
               </el-button>
             </el-tooltip>
-            <el-tooltip effect="dark" content="粘贴剪切板组件为下一个节点" placement="top">
+            <el-tooltip effect="dark" content="粘贴剪切板组件成为下一个节点" placement="top">
               <el-button
                 type="text"
                 size="mini"
@@ -48,13 +56,15 @@
                 粘贴
               </el-button>
             </el-tooltip>
-            <el-button
-              v-if="data.type === 'div'"
-              type="text"
-              size="mini"
-              @click="handleExport(data, node.parent)">
-              封装组件
-            </el-button>
+            <el-tooltip effect="dark" content="封装节点为公共节点组件" placement="top">
+              <el-button
+                v-if="data.type === 'div'"
+                type="text"
+                size="mini"
+                @click="handleExport(data, node.parent)">
+                封装
+              </el-button>
+            </el-tooltip>
           </div>
         </div>
       </el-tree>
@@ -104,7 +114,7 @@ export default defineComponent({
       setCurrentNode(data)
       setTabName(['', '', tabName.nodeProperty, '', '', tabName.nodeSetProperty])
     }
-    const handleCopy = (data: any, parent: any) => {
+    const handleClone = (data: any, parent: any) => {
       if (parent.parent === null) {
         const index = parent.data.findIndex((x: any) => x.id === data.id)
         const target = parent.data
@@ -134,7 +144,7 @@ export default defineComponent({
           const localParse = JSON.parse(local)
           await Vue.prototype.$msgbox.confirm(`即将粘贴剪切板组件：${localParse.title || localParse.id}，确定吗？`)
           localParse.id = data.id
-          handleCopy(localParse, parent)
+          handleClone(localParse, parent)
         } catch (e) {
           Vue.prototype.$notice('剪切板无有效的复制组件', true)
         }
@@ -214,9 +224,13 @@ export default defineComponent({
       },
       handleNodeClick,
       handleDel,
-      handleCopy,
+      handleClone,
       handleExport,
-      handlePaste
+      handlePaste,
+      handleCopy () {
+        localStorage.setItem('butterfly-copy-node', JSON.stringify(currentNode.value))
+        Vue.prototype.$notice('复制组件到剪切板成功')
+      }
     }
   }
 })

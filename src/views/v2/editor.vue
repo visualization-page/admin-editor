@@ -54,10 +54,11 @@ export default defineComponent({
     ImageResource,
     SearchCode
   },
+
   beforeRouteLeave (to: any, from: any, next: any) {
     // @ts-ignore
     const { dir } = this.$route.params
-    if (dir) {
+    if (dir && !from.query.timeout) {
       unlock(dir).then(() => {
         next()
       })
@@ -65,6 +66,7 @@ export default defineComponent({
       next()
     }
   },
+
   setup (props, ctx) {
     const dir = ctx.root.$route.params.dir
     clearEditWrapCacheNode()

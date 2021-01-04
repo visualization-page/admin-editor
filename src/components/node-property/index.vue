@@ -9,7 +9,7 @@
         :schema-data="currentNode"
         @updateByField="updateNodeByField"
       />
-      <div class="tc mt20">
+      <div v-if="false" class="tc mt20">
         <el-button type="primary" plain @click="handleCopy">复制到剪切板</el-button>
         <el-button type="danger" @click="handleDel">删除节点</el-button>
       </div>

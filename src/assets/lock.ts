@@ -18,6 +18,7 @@ export const unlock = async (dir: string) => {
 
 const setLockTimer = ref(0)
 function setLock () {
+  handleMouseMove()
   setLockTimer.value = setInterval(() => {
     lock(router.currentRoute.params.dir)
   }, 3 * 1000 * 60)
@@ -33,9 +34,13 @@ function addMouseListen () {
     clearInterval(setLockTimer.value)
     await saveProject(true, 'system auto save', false)
     await unlock(router.currentRoute.params.dir)
+    cancel()
     await Vue.prototype.$msgbox.alert('由于您长时间未操作，系统已为您自动保存，请重新进入编辑', { showClose: false })
+    // @ts-ignore
+    router.currentRoute.query.timeout = 1
     history.back()
   }, 5 * 1000 * 60)
+  // }, 1000)
 }
 
 function handleMouseMove () {
@@ -43,12 +48,16 @@ function handleMouseMove () {
   addMouseListen()
 }
 
+function cancel () {
+  clearTimeout(noUserMouseTimer.value)
+  clearInterval(setLockTimer.value)
+  document.removeEventListener('mousemove', handleMouseMove)
+}
+
 export function useLock () {
   setLock()
   document.addEventListener('mousemove', handleMouseMove)
   onUnmounted(() => {
-    clearTimeout(noUserMouseTimer.value)
-    clearInterval(setLockTimer.value)
-    document.removeEventListener('mousemove', handleMouseMove)
+    cancel()
   })
 }
