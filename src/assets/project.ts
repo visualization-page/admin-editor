@@ -186,8 +186,6 @@ export const saveProject = (
 }
 
 export const importProject = async (parseItem: Project) => {
-  // const inAdminPlatform = /tms\.uban360/.test(location.hostname) || /808/.test(location.port)
-  // const isInEditor = /editor/.test(location.hash) && inAdminPlatform
   if (parseItem) {
     parseItem.depLoaded = false
     updateProject(parseItem)
@@ -205,7 +203,7 @@ export const importProject = async (parseItem: Project) => {
     }
     // 小程序 sdk
     if (
-      isInEditor &&
+      isInEditor() &&
       parseItem.interactiveType === 'xmmp' &&
       parseItem.config.sdklist &&
       parseItem.config.sdklist.length

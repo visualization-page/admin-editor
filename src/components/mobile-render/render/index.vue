@@ -2,7 +2,7 @@
   <div
     v-if="currentPage"
     :class="['render-page', currentPage.className]"
-    :style="{ width: isInEditor ? (staticConfig.vwBase + 'px') : null }"
+    :style="{ width: isInEditor() ? (staticConfig.vwBase + 'px') : null }"
   >
     <render-item
       v-if="mounted"
