@@ -423,8 +423,12 @@ module.exports = {
       res.json({ success: true, data: Array.isArray(data) ? {} : data })
     },
     post: async (req, res) => {
-      await fs.writeJson(path.join(pubPath, 'system', 'index.json'), req.body.data)
-      res.json({ success: true })
+      if (req.body.name === '杨明' || req.body.name === '诸炜') {
+        await fs.writeJson(path.join(pubPath, 'system', 'index.json'), req.body.data)
+        res.json({ success: true })
+      } else {
+        res.json({ success: false, msg: '无权限' })
+      }
     }
   },
 

@@ -79,7 +79,7 @@ export default {
         const check = parseCodeValid(code)
         if (check.ok) {
           // 保存并更新
-          http.post('system', { data: JSON.stringify(check.value) }).then(() => {
+          http.post('system', { data: JSON.stringify(check.value), name: this.$native.name }).then(() => {
             this.$system = check.value
           })
         } else {
