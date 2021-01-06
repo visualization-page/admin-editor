@@ -267,11 +267,11 @@ const handle = {
 
     const urls = []
     str = str.replace(/(https:\/\/global\.uban360\.com.*?)"/g, (all, match) => {
-      const key = `%%img${urls.length}%%.png`
+      const key = `img${urls.length}.png`
       urls.push(match)
       return all.replace(match, `./img/${key}?_=${Date.now()}`)
     })
-    await Promise.all(urls.map((x, i) => _download(x, `%%img${i}%%.png`)))
+    await Promise.all(urls.map((x, i) => _download(x, `img${i}.png`)))
     return str
   }
 }
