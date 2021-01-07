@@ -163,7 +163,7 @@ export default defineComponent<{
       }, { deep: true })
       // 更新全局 constant
       watch(() => props.project && props.project.constant, cons => {
-        setGlobalConstant(globalConfig.value, cons)
+        setGlobalConstant(globalConfig.value, cons, getCtx())
       }, { deep: true })
       // 全局 css
       watch(() => props.project && props.project.css, css => {
@@ -175,7 +175,7 @@ export default defineComponent<{
       }, { flush: 'pre' })
       // 更新 utils
       watch(() => props.project && props.project.utils, utils => {
-        setGlobalUtils(globalConfig.value, utils)
+        setGlobalUtils(globalConfig.value, utils, getCtx())
       })
     } else {
       watch(() => props.project, project => {
@@ -185,8 +185,8 @@ export default defineComponent<{
           // @ts-ignore
           globalConfig.value = initGlobalConfig(null)
           setCss(pro.css)
-          setGlobalConstant(globalConfig.value, pro.constant)
-          setGlobalUtils(globalConfig.value, pro.utils)
+          setGlobalConstant(globalConfig.value, pro.constant, getCtx())
+          setGlobalUtils(globalConfig.value, pro.utils, getCtx())
           globalConfig.value.initHttp(pro.httpOptions, getCtx())
           // 执行项目初始化脚本
           execInitScriptsOnce(pro)

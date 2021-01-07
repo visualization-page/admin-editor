@@ -119,19 +119,21 @@ export const findNode = (nodes: NodeItem[], id: string): NodeItem | undefined =>
   }
 }
 
-export const setCodeField = (field: string, obj: any, str: string | null) => {
+export const setCodeField = (field: string, obj: any, str: string | null, ctx?: any) => {
   if (str) {
-    const { ok, value } = parseCodeValid(str)
+    const { ok, value, msg } = parseCodeValid(str, ctx)
     if (ok) {
       obj[field] = value
+    } else {
+      console.warn(`set [${field}] fail: ${msg}`)
     }
   }
 }
-export const setGlobalUtils = (obj: any, utils: string | null) => {
-  setCodeField('utils', obj, utils)
+export const setGlobalUtils = (obj: any, utils: string | null, ctx: any) => {
+  setCodeField('utils', obj, utils, ctx)
 }
-export const setGlobalConstant = (obj: any, cons: string | null) => {
-  setCodeField('constant', obj, cons)
+export const setGlobalConstant = (obj: any, cons: string | null, ctx: any) => {
+  setCodeField('constant', obj, cons, ctx)
 }
 
 export const initGlobalConfig = (page: Page | null) => {
