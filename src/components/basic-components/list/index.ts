@@ -26,10 +26,12 @@ export const schema = [
   {
     label: '绑定状态',
     field: 'bindState',
-    type: 'input-bind',
+    // type: 'input-bind',
+    type: 'textarea',
     elAttrs: {
       placeholder: '请输入'
     },
+    expression: true,
     model: 'blur',
     // relationCallback: (schema: any) => {
     //   return schema.label === '绑定状态' && currentNode.value && currentNode.value.subType === 'list'

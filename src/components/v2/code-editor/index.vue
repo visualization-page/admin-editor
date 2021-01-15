@@ -28,7 +28,7 @@
       <div :class="{ 'flex': hasLeftPanel }" style="height: calc(100% - 50px)">
         <div
           v-if="hasLeftPanel"
-          class="editor-v2__code-editor--left flex-shrink-0 bg-333 height-100 oa plr15"
+          class="editor-v2__code-editor--left flex-shrink-0 bg-333 height-100 oa plr15 pb50"
         >
           <div class="oh">
             <p class="el-form-item__label f12">视图模型</p>
@@ -56,6 +56,21 @@
             </div>
             <p class="f12" v-if="!codeRenderNotice.methods.length">暂无数据</p>
           </template>
+          <div class="oh">
+            <p class="el-form-item__label f12">内置变量</p>
+          </div>
+          <div class="pl10">
+            <div
+              v-for="(item, i) in varList"
+              :key="i"
+              class="f12 cp c-aaa c-main-hover"
+              style="line-height: 18px"
+              @click="handleClickFx(item)"
+            >
+              <i class="bficon c-main icon-function" />
+              <span class="ml5">{{ item.name }}</span>
+            </div>
+          </div>
           <div class="oh">
             <p class="el-form-item__label f12">内置函数</p>
           </div>
@@ -104,7 +119,7 @@ import { currentCode, isEdit, setState } from '@/assets/code-edit'
 import { currentPage, Page } from '@/assets/page'
 import { getDocHeight, parseCodeValid } from '@/assets/util'
 import { MessageBox } from 'element-ui'
-import { fxList } from '@/assets/event'
+import { fxList, varList } from '@/assets/event'
 import { initGlobalConfig } from '@/components/mobile-render/render/utils'
 
 export default createComponent({
@@ -242,6 +257,7 @@ export default createComponent({
       isCodeRender,
       codeRenderNotice,
       fxList,
+      varList,
       handleClickFx,
       handleNodeClick (data: any) {
         handleClickFx({ code: `$$page.state${data.value[0] === '.' ? '' : '.'}${data.value}` })

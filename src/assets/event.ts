@@ -8,15 +8,29 @@ export type FormEvent = {
 
 export const eventType = ['click', 'change', 'input', 'focus', 'blur']
 export const eventTypePage = ['onMounted', 'onUnMounted', 'beforeRouteLeave']
-export const fxList = [
+export const varList = [
   {
-    name: 'utils 全局函数引用',
+    name: 'utils 工具函数引用',
     code: '$$global.utils.test()'
   },
   {
     name: 'constant 全局常量引用',
     code: '$$global.constant.TEST'
   },
+  {
+    name: 'listBind 列表每一项',
+    code: '$$listBind.item'
+  },
+  {
+    name: 'listBind 列表每一项索引',
+    code: '$$listBind.index'
+  },
+  {
+    name: 'ref 引用',
+    code: '$$page.refs'
+  }
+]
+export const fxList = [
   {
     name: 'vw 单位转换',
     code: '$$global.vw()'

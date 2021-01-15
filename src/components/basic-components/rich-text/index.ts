@@ -25,7 +25,9 @@ export const schema = [
   {
     type: 'textarea',
     label: '文本绑定',
-    field: 'props.bindState'
+    field: 'props.bindState',
+    model: 'blur',
+    expression: true
   },
   // {
   //   type: 'unit-size',

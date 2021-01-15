@@ -54,7 +54,7 @@ export default {
           } else {
             schema = schema.map(x => ({
               ...x,
-              model: x.type === 'input' ? 'blur' : 'input'
+              model: x.model || (x.type === 'input' ? 'blur' : 'input')
             }))
           }
         } else if (node.nodeType === 1 << 2) {

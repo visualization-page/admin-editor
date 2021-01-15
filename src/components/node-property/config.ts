@@ -55,7 +55,8 @@ export default [
     elAttrs: {
       placeholder: '请输入'
     },
-    model: 'blur'
+    model: 'blur',
+    expression: true
   },
   {
     label: 'v-if',
@@ -64,7 +65,8 @@ export default [
     elAttrs: {
       placeholder: '请输入'
     },
-    model: 'blur'
+    model: 'blur',
+    expression: true
   },
   {
     label: '脱离文档流',

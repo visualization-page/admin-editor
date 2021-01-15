@@ -9,6 +9,7 @@ import RenderInputBind from './render-input-bind.vue'
 export const renderInput = (item: any, data: any, updateField: any) => {
   const { pref, field } = getParentRef(item.field, data)
   const isBlur = item.model === 'blur'
+  const isExpression = item.expression
   const props = {
     attrs: {
       placeholder: item.placeholder || '请输入',
@@ -27,7 +28,7 @@ export const renderInput = (item: any, data: any, updateField: any) => {
   }
   return isBlur
     // @ts-ignore
-    ? <Input value={pref && pref[field]} item={item} onInput={val => updateField(item.field, val)} />
+    ? <Input value={pref && pref[field]} item={item} onInput={val => updateField(item.field, val)} isExpression={isExpression} />
     : (
       <div class="flex">
         {
