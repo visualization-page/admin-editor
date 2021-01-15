@@ -81,20 +81,22 @@ export default defineComponent<{
         let renderString = item.renderString
         // spa 写法
         if (item.subType === 'spa') {
+          // console.log(renderString)
           // 先将 $$ 替换，$ 是正则特殊字符
           renderString = renderString.replace(/\$\$/g, '%%')
           // 提取 template 和 script
           const matchTemplate = renderString.match(/<template>([\s\S]+)<\/template>/)
           const matchScript = renderString.match(/<script>([\s\S]+)<\\*\/script>/)
           if (matchTemplate && matchScript) {
+            const tpl = JSON.stringify(matchTemplate[1])
             renderString = matchScript[1]
-              .replace('methods:', `template:\`${matchTemplate[1]}\`,\nmethods:`)
+              .replace('methods:', `template:${tpl},\nmethods:`)
               .replace(/(%%)/g, () => {
                 return '$$'
               })
           }
         }
-        const { ok, value } = parseCodeValid(renderString, codeExecuteContext)
+        const { ok, msg, value } = parseCodeValid(renderString, codeExecuteContext)
         if (ok && value) {
           const libraryOpt = value! as {
             template?: string
@@ -135,6 +137,8 @@ export default defineComponent<{
           // @ts-ignore
           props.directives.push({ name: 'insert-id', value: item.id })
           return createElement(item.name, props, (libraryOpt.children || []).concat(children))
+        } else {
+          console.log(`渲染节点出错：【${item.title}】${msg}\n${item.renderString}`)
         }
       }
       return createElement(item.componentName, props, children)
