@@ -1,18 +1,30 @@
 <template>
-  <div class="blur-input-wrap flex">
-    <el-input
-      v-model="local"
-      :placeholder="item.elAttrs && item.elAttrs.placeholder || '请输入'"
-      :type="item.type"
-      @blur="$emit('input', local)"
-    />
-    <div
-      v-if="isExpression"
-      class="w30 h30 ml10 bd bd-eee flex-center br3 cp flex-shrink-0"
-      @click="handleFx"
-    >
-      <i class="bficon icon-function c-main" />
+  <div>
+    <div class="blur-input-wrap flex">
+      <el-input
+        v-model="local"
+        :placeholder="item.elAttrs && item.elAttrs.placeholder || '请输入'"
+        :type="item.type"
+        @blur="handleBlur"
+      />
+      <div
+        v-if="isExpression"
+        class="w30 h30 ml10 bd bd-eee flex-center br3 cp flex-shrink-0"
+        @click="handleFx"
+      >
+        <i class="bficon icon-function c-main" />
+      </div>
     </div>
+    <el-tag
+      v-for="(tag, i) in localCache"
+      :key="tag"
+      closable
+      class="mr10"
+      @close="handleDeleteCache(i)"
+      @click="handleSelect(tag)"
+    >
+      {{ tag }}
+    </el-tag>
   </div>
 </template>
 
@@ -29,6 +41,27 @@ export default defineComponent({
   },
   setup (p, ctx) {
     const local = ref()
+    const localCache = ref([])
+
+    const getCache = () => {
+      const l = localStorage.getItem(p.item.cacheKey)
+      if (l) {
+        return JSON.parse(l)
+      }
+      return []
+    }
+
+    const setCache = () => {
+      if (!localCache.value.includes(local.value.trim())) {
+        localCache.value.push(local.value.trim())
+        localStorage.setItem(p.item.cacheKey, JSON.stringify(localCache.value))
+      }
+    }
+
+    if (p.item.cache) {
+      localCache.value = getCache()
+    }
+
     watch(() => p.value, val => {
       local.value = val
     })
@@ -37,9 +70,27 @@ export default defineComponent({
       setCodeState(p.item.label, local.value, val => ctx.emit('input', val))
     }
 
+    const handleBlur = () => {
+      setCache()
+      ctx.emit('input', local.value)
+    }
+
+    const handleDeleteCache = (i) => {
+      localCache.value.splice(i, 1)
+      localStorage.setItem(p.item.cacheKey, JSON.stringify(localCache.value))
+    }
+
+    const handleSelect = (item) => {
+      ctx.emit('input', item)
+    }
+
     return {
       local,
-      handleFx
+      localCache,
+      handleFx,
+      handleBlur,
+      handleDeleteCache,
+      handleSelect
     }
   }
 })

@@ -418,7 +418,10 @@ export const pubIoc = [
     type: 'input',
     elAttrs: {
       placeholder: 'http://ip:port'
-    }
+    },
+    cache: true,
+    cacheKey: 'iocAddress',
+    model: 'blur'
   },
   {
     relation: [
@@ -431,10 +434,13 @@ export const pubIoc = [
     field: 'config.iocAuthInfo',
     type: 'input',
     elAttrs: {
-      placeholder: '可不填，默认为 zhuwei/shinemo123'
+      placeholder: '可不填，默认为 developer/a1234567'
     },
     elProps: {
-    }
+    },
+    cache: true,
+    cacheKey: 'iocAuthInfo',
+    model: 'blur'
   },
   {
     relation: [
