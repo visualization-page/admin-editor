@@ -52,7 +52,8 @@ export default defineComponent({
     }
 
     const setCache = () => {
-      if (!localCache.value.includes(local.value.trim())) {
+      const v = local.value.trim()
+      if (!localCache.value.includes(v) && v) {
         localCache.value.push(local.value.trim())
         localStorage.setItem(p.item.cacheKey, JSON.stringify(localCache.value))
       }
@@ -71,7 +72,9 @@ export default defineComponent({
     }
 
     const handleBlur = () => {
-      setCache()
+      if (p.item.cache) {
+        setCache()
+      }
       ctx.emit('input', local.value)
     }
 
