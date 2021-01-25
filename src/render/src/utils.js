@@ -38,8 +38,9 @@ export const getProject = async (dir) => {
     return window.globalProject.project
   }
   // 非正式环境
+  let global
   if (!http) {
-    const global = initGlobalConfig(null)
+    global = initGlobalConfig(null)
     global.initHttp({
       baseUrl: JSON.stringify(process.env.VUE_APP_FILE_SERVER),
       urlMap: {
@@ -57,15 +58,26 @@ export const getProject = async (dir) => {
   ])
   const system = systemRes.data
   const config = parseCodeValid(`$$global.export = ${system}`)
+  const isMp = project.interactiveType === 'xmmp'
   // 20000
   const arr = [loadSdk(project.interactiveType)]
   // 如果是小程序，检查 sdklist
   if (
-    project.interactiveType === 'xmmp' &&
+    isMp &&
     project.config.sdklist &&
     project.config.sdklist.length
   ) {
     Array.prototype.push.apply(arr, loadSdkSystem(project.config.sdklist, config.value.localXmmpSdk))
+  }
+  if (!isMp) {
+    // h5 引入彩云配置文件
+    arr.push(
+      global
+        .loadScript('//statics-china.uban360.com/config/app.js', 'J_app_config')
+        .catch(err => {
+          console.warn(err.message)
+        })
+    )
   }
   if (project.config.openConsole) {
     arr.push(loadVConsole())

@@ -440,10 +440,10 @@ const handle = {
         .replace(`<script src=vant2.5/index.min.js></script>`, '')
     }
     // 去除 cdn 外网无法访问
-    if (!globalProject.project.syncFile) {
-      renderContent = renderContent
-        .replace('<script src=//statics-china.uban360.com/config/app.js></script>', '')
-    }
+    // if (!globalProject.project.syncFile) {
+    //   renderContent = renderContent
+    //     .replace('<script src=//statics-china.uban360.com/config/app.js></script>', '')
+    // }
     if (isXmmp) {
       await fs.copy(path.join(distPath, 'xmmp'), path.join(releasePath, 'xmmp'))
       renderContent = renderContent
@@ -475,13 +475,15 @@ const handle = {
       return arr[0] + '=' + publicPath + arr[1]
     })
 
-    // 如果是 彩云，则手动替换 //statics-china.uban360.com/config/app.js
+    // H5 中的 app config，分享功能有依赖
+    // 如果是 彩云，则手动替换
     // 因为彩云 nginx 没有处理
-    if (globalProject.project.syncFile && globalProject.project.config.appType === 1) {
-      renderContent = renderContent.replace(
-        '//statics-china.uban360.com/config/app.js',
-        '//statics.jituancaiyun.com/config/app.js'
-      )
+    if (globalProject.project.syncFile) {
+      const appJs = globalProject.project.config.appType === 1
+        ? '//statics.jituancaiyun.com/config/app.js'
+        : '//statics-china.uban360.com/config/app.js'
+      renderContent = renderContent
+        .replace('</head>', `<script src=${appJs}></script></head>`)
     }
 
     // 写文件
