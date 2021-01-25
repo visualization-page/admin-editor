@@ -212,7 +212,8 @@ export const importProject = async (parseItem: Project) => {
         window.defineBak = window.define
       }
       window.define = null
-      await Promise.all(loadSdkSystem(parseItem.config.sdklist, Vue.prototype.$system.localXmmpSdk))
+      // await Promise.all(loadSdkSystem(parseItem.config.sdklist, Vue.prototype.$system.localXmmpSdk))
+      await loadSdkSystem(parseItem.config.sdklist, Vue.prototype.$system.localXmmpSdk)
       window.define = window.defineBak
     }
     updateProject({ depLoaded: true })

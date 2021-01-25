@@ -209,27 +209,42 @@ export const isInMiniapp = /hwminiapp/i.test(navigator.userAgent)
 export const inAdminPlatform = /tms\.uban360/.test(location.hostname) || /808/.test(location.port)
 export const isInEditor = () => /editor/.test(location.hash) && inAdminPlatform
 
-export function loadSdkSystem (sdkIds: string[], config: { [k: string]: { js: string, css?: string } }) {
-  return sdkIds.sort().map(id => {
+export async function loadSdkSystem (sdkIds: string[], config: { [k: string]: { js: string, css?: string } }) {
+  for (const id of sdkIds.sort()) {
     const jid = `J_${id}`
     const cid = `C_${id}`
-    if (document.getElementById(jid)) {
-      return []
-    }
     if (isInMiniapp) {
-      return [
-        addScript(jid, `shinemosdk://${id}/index.js`),
-        // 样式文件可能不存在
-        addStyle(cid, `shinemosdk://${id}/index.css`).catch(() => '')
-      ]
-    } else if (config[id]) {
-      const res = [addScript(jid, config[id].js)]
+      await addScript(jid, `shinemosdk://${id}/index.js`)
       if (config[id].css) {
-        res.push(addStyle(cid, config[id].css!).catch(() => ''))
+        await addStyle(cid, `shinemosdk://${id}/index.css`).catch(() => '')
       }
-      return res
+    } else {
+      await addScript(jid, config[id].js)
+      if (config[id].css) {
+        await addStyle(cid, config[id].css!).catch(() => '')
+      }
     }
-  }).flat().filter(Boolean)
+  }
+  // return sdkIds.sort().map(id => {
+  //   const jid = `J_${id}`
+  //   const cid = `C_${id}`
+  //   if (document.getElementById(jid)) {
+  //     return []
+  //   }
+  //   if (isInMiniapp) {
+  //     return [
+  //       addScript(jid, `shinemosdk://${id}/index.js`),
+  //       // 样式文件可能不存在
+  //       addStyle(cid, `shinemosdk://${id}/index.css`).catch(() => '')
+  //     ]
+  //   } else if (config[id]) {
+  //     const res = [addScript(jid, config[id].js)]
+  //     if (config[id].css) {
+  //       res.push(addStyle(cid, config[id].css!).catch(() => ''))
+  //     }
+  //     return res
+  //   }
+  // }).flat().filter(Boolean)
 }
 
 export function loadSdk (type: string) {

@@ -67,7 +67,8 @@ export const getProject = async (dir) => {
     project.config.sdklist &&
     project.config.sdklist.length
   ) {
-    Array.prototype.push.apply(arr, loadSdkSystem(project.config.sdklist, config.value.localXmmpSdk))
+    await loadSdkSystem(project.config.sdklist, config.value.localXmmpSdk)
+    // Array.prototype.push.apply(arr, loadSdkSystem(project.config.sdklist, config.value.localXmmpSdk))
   }
   if (!isMp) {
     // h5 引入彩云配置文件
