@@ -4,6 +4,12 @@ const utils = require('./utils')
 const pubPath = path.resolve(__dirname, '../public')
 const component = require('./component')
 const MD5 = require('blueimp-md5')
+const NodeCache = require('node-cache')
+const CACHE_TIME = 60 * 5
+const myCache = new NodeCache({
+  stdTTL: CACHE_TIME,
+  checkperiod: CACHE_TIME
+})
 
 const handle = {
   findById (arr, id) {
@@ -34,9 +40,16 @@ const handle = {
     return res.filter(x => x.categoryId === categoryId)
   },
 
-  async getApiDetail ({ categoryId }) {
-    const dataFile = path.resolve(pubPath, 'mock', 'api', `${categoryId}.json`)
-    return fs.readJson(dataFile)
+  async getApiDetail ({ id }) {
+    const cache = myCache.get(id)
+    if (cache) {
+      return cache
+    }
+    // 设置缓存时间
+    const dataFile = path.resolve(pubPath, 'mock', 'api', `${id}.json`)
+    const data = await fs.readJson(dataFile)
+    myCache.set(id, data)
+    return data
   },
 
   async apiAdd ({ id, name, data, categoryId }) {

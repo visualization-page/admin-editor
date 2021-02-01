@@ -56,14 +56,14 @@
         </div>
 
         <!--详情-->
-        <div v-if="isAdd || currentApi" class="flex-grow-1 p20">
+        <div v-if="isAdd || currentApi" class="flex-grow-1 p20 oa">
           <p class="f16 mb20">接口详情</p>
           <el-form label-width="80px" :model="apiForm">
             <el-form-item label="名称" prop="name">
               <el-input v-model="apiForm.name" type="input" placeholder="请输入" />
             </el-form-item>
             <el-form-item v-if="currentApi" label="请求地址">
-              <span>/butterfly/mock/api/detail?categoryId={{ currentApi.id }}</span>
+              <span>/butterfly/mock/api/detail?id={{ currentApi.id }}</span>
             </el-form-item>
             <el-form-item label="数据" prop="data">
               <monaco-editor
@@ -199,7 +199,7 @@ export default {
           ...data,
           data: ''
         }
-        http.get('mock/api/detail', { categoryId: data.id }).then(res => {
+        http.get('mock/api/detail', { id: data.id }).then(res => {
           this.apiForm.data = res.data
         })
       }
