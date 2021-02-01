@@ -69,7 +69,20 @@ export const http = new Http({
       delete: '/butterfly/version/delete',
       switch: '/butterfly/version/switch'
     },
-    system: '/butterfly/system'
+    system: '/butterfly/system',
+    mock: {
+      index: '/butterfly/mock/index',
+      category: {
+        add: '/butterfly/mock/category/add',
+        del: '/butterfly/mock/category/del'
+      },
+      api: {
+        list: '/butterfly/mock/api/list',
+        detail: '/butterfly/mock/api/detail',
+        add: '/butterfly/mock/api/add',
+        del: '/butterfly/mock/api/del'
+      }
+    }
   },
   notify: {
     success: Message.success,

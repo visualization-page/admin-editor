@@ -11,6 +11,7 @@ node_modules
 /server/public/umd
 /server/public/utils
 /server/public/system
+/server/public/mock
 /server/tmp
 
 # local env files

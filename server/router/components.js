@@ -1,4 +1,5 @@
 const component = require('../controller/component')
+const mock = require('../controller/mock')
 const service = require('../controller/service')
 const fs = require('fs-extra')
 const path = require('path')
@@ -429,6 +430,59 @@ module.exports = {
       } else {
         res.json({ success: false, msg: '无权限' })
       }
+    }
+  },
+
+  '/mock/index': {
+    get: async (req, res) => {
+      const data = await mock.getIndex()
+      res.json({ success: true, data: data || [] })
+    }
+  },
+
+  '/mock/api/list': {
+    get: async (req, res) => {
+      const data = await mock.getApiList(req.query)
+      res.json({ success: true, data: data || [] })
+    }
+  },
+
+  '/mock/api/detail': {
+    get: async (req, res) => {
+      const data = await mock.getApiDetail(req.query)
+      res.json({ success: true, data: data })
+    }
+  },
+
+  '/mock/api/del': {
+    post: async (req, res) => {
+      await mock.deleteApi(req.body)
+      res.json({ success: true })
+    }
+  },
+
+  '/mock/category/del': {
+    post: async (req, res) => {
+      await mock.deleteCategory(req.body)
+      res.json({ success: true })
+    }
+  },
+
+  '/mock/category/add': {
+    post: async (req, res) => {
+      const msg = await mock.categoryAdd(req.body)
+      res.json({ success: !msg, msg })
+    }
+  },
+
+  '/mock/api/add': {
+    post: async (req, res) => {
+      if (!req.body.categoryId) {
+        res.json({ success: false, msg: '请选择分类' })
+        return
+      }
+      await mock.apiAdd(req.body)
+      res.json({ success: true })
     }
   },
 

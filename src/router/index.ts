@@ -42,9 +42,9 @@ const routes = [
     component: () => import(/* webpackChunkName: "editor_v2" */ '../views/v2/editor.vue')
   },
   {
-    path: '/v2/project-list',
-    name: 'v2_project-list',
-    component: () => import(/* webpackChunkName: "editor_v2" */ '../views/v2/project-list.vue')
+    path: '/mock',
+    name: 'mock',
+    component: () => import(/* webpackChunkName: "mock" */ '../views/mock/index.vue')
   }
 ]
 

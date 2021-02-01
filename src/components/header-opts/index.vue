@@ -14,6 +14,10 @@
       <div class="editor-v2__header-item" @click="handleSystemConfig">
         <span>系统配置</span>
       </div>
+      <div class="editor-v2__line" />
+      <div class="editor-v2__header-item" @click="$router.push('/mock')">
+        <span>Mock 服务</span>
+      </div>
       <div v-if="false" class="editor-v2__line" />
       <div v-if="false" class="editor-v2__header-item" @click="handleBug">
         <span>吐槽</span>
