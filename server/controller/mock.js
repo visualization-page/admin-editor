@@ -41,15 +41,20 @@ const handle = {
   },
 
   async getApiDetail ({ id }) {
+    const dataFile = path.resolve(pubPath, 'mock', 'api', `${id}.json`)
+    // 校验文件是否存在
+    if (!fs.pathExistsSync(dataFile)) {
+      return { msg: '接口不存在' }
+    }
+
     const cache = myCache.get(id)
     if (cache) {
-      return cache
+      return { data: cache }
     }
     // 设置缓存时间
-    const dataFile = path.resolve(pubPath, 'mock', 'api', `${id}.json`)
     const data = await fs.readJson(dataFile)
     myCache.set(id, data)
-    return data
+    return { data }
   },
 
   async apiAdd ({ id, name, data, categoryId }) {
