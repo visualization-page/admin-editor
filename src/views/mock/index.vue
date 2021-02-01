@@ -63,7 +63,7 @@
               <el-input v-model="apiForm.name" type="input" placeholder="请输入" />
             </el-form-item>
             <el-form-item v-if="currentApi" label="请求地址">
-              <span>/butterfly/mock/api/detail?id={{ currentApi.id }}</span>
+              <el-button type="text" @click="handleOpen()">/butterfly/mock/api/detail?id={{ currentApi.id }}</el-button>
             </el-form-item>
             <el-form-item label="数据" prop="data">
               <monaco-editor
@@ -92,7 +92,7 @@
           <p class="f16 mb20">调用方式</p>
           <pre class="f14 c-666 bg-f7 p15 br4">Request
 
-Domain: http://uban360.com
+Domain: https://notify.uban360.com
 Method: GET
 Uri: /butterfly/mock/api/detail?id={{ currentApi && currentApi.id }}
 
@@ -143,6 +143,10 @@ export default {
   },
 
   methods: {
+    handleOpen () {
+      window.open(`https://notify.uban360.com/butterfly/mock/api/detail?id=${this.currentApi.id}`)
+    },
+
     async getCategory () {
       const res = await http.get('mock/index')
       this.category = res.data
