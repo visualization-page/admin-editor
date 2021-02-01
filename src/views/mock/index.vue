@@ -27,7 +27,7 @@
 
       <!--树形结构布局-->
       <div class="mock__content-data flex mt20">
-        <div style="width: 250px" class="bg-f7 pt10 pb20 bd br bd-eee">
+        <div style="width: 250px" class="bg-f7 pt10 pb20 bd br bd-eee flex-shrink-0">
           <p class="plr10 f16 ptb10">服务分类</p>
           <el-tree
             class="bg-f7"
@@ -41,7 +41,7 @@
             @node-click="handleSelectCategory"
           />
         </div>
-        <div style="width: 250px" class="bg-f7 pt10 pb20">
+        <div style="width: 250px" class="bg-f7 pt10 pb20 flex-shrink-0">
           <p class="plr10 f16 ptb10">接口列表</p>
           <el-tree
             class="bg-f7"
@@ -144,7 +144,7 @@ export default {
 
   methods: {
     handleOpen () {
-      window.open(`https://notify.uban360.com/butterfly/mock/api/detail?id=${this.currentApi.id}`)
+      window.open(`${process.env.VUE_APP_MOCK_PREVIEW}/butterfly/mock/api/detail?id=${this.currentApi.id}`)
     },
 
     async getCategory () {
@@ -204,7 +204,7 @@ export default {
           data: ''
         }
         http.get('mock/api/detail', { id: data.id }).then(res => {
-          this.apiForm.data = res.data
+          this.apiForm.data = JSON.stringify(res.data, null, 2)
         })
       }
     },

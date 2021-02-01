@@ -52,7 +52,8 @@ const handle = {
       return { data: cache }
     }
     // 设置缓存时间
-    const data = await fs.readJson(dataFile)
+    let data = await fs.readJson(dataFile)
+    data = data ? JSON.parse(data) : data
     myCache.set(id, data)
     return { data }
   },
@@ -64,6 +65,7 @@ const handle = {
     const writeData = (id, json) => {
       const dataFile = path.resolve(pubPath, 'mock', 'api', `${id}.json`)
       fs.ensureFileSync(dataFile)
+      myCache.set(id, json ? JSON.parse(json) : '')
       return fs.writeJson(dataFile, json)
     }
 
