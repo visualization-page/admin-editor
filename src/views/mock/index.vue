@@ -68,7 +68,7 @@
             <el-form-item label="数据" prop="data">
               <monaco-editor
                 v-model="apiForm.data"
-                :style="{ height: '400px' }"
+                :style="{ height: '500px' }"
                 :amdRequire="amdRequire"
                 :language="'json'"
                 :options="{
@@ -90,7 +90,7 @@
             </el-form-item>
           </el-form>
           <p class="f16 mb20">调用方式</p>
-          <pre class="f14 c-666 bg-f7 p15 br4">Request
+          <pre class="f14 c-666 bg-f7 p15 br4" style="white-space: pre-wrap; margin-left: 80px">Request
 
 Domain: https://notify.uban360.com
 Method: GET
@@ -98,8 +98,8 @@ Uri: /butterfly/mock/api/detail?id={{ currentApi && currentApi.id }}
 
 Response
 {
-  success: true,
-  data: {{ JSON.stringify(apiForm.data, null, 2) }}
+success: true,
+data: {{ apiForm.data }}
 }</pre>
         </div>
         <div v-else class="flex-grow-1 flex-center">
@@ -123,6 +123,8 @@ export default {
   },
 
   data () {
+    const mockPriv = ['杨明', '诸炜']
+
     return {
       category: [],
       apiList: [],
@@ -134,7 +136,8 @@ export default {
         name: '',
         data: ''
       },
-      amdRequire: window.require
+      amdRequire: window.require,
+      hasPriv: mockPriv.includes(this.$native.name)
     }
   },
 
@@ -158,6 +161,10 @@ export default {
     },
 
     async handleAddCategory (isAdd) {
+      if (!this.hasPriv) {
+        return this.$message.error('无权限')
+      }
+
       const isEdit = !isAdd
       const { value } = await this.$prompt(
         isAdd ? this.currentCategory ? `父级分类: ${this.currentCategory.name}` : '' : '',
@@ -187,6 +194,10 @@ export default {
     },
 
     handleAddApi () {
+      if (!this.hasPriv) {
+        return this.$message.error('无权限')
+      }
+
       this.currentApi = null
       this.isAdd = true
       this.apiForm = {
@@ -242,6 +253,10 @@ export default {
     },
 
     async handleDeleteCategory () {
+      if (!this.hasPriv) {
+        return this.$message.error('无权限')
+      }
+
       await this.$msgbox.confirm('确定删除吗？')
       if (this.currentCategory.children && this.currentCategory.children.length) {
         return this.$message.error('请先删除分类下的子分类')
@@ -253,6 +268,10 @@ export default {
     },
 
     async handleDeleteApi () {
+      if (!this.hasPriv) {
+        return this.$message.error('无权限')
+      }
+
       await this.$msgbox.confirm('确定删除吗？')
       await http.post('mock/api/del', {
         id: this.currentApi.id
