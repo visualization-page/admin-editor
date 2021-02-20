@@ -450,7 +450,11 @@ module.exports = {
   '/mock/api/detail': {
     get: async (req, res) => {
       const { data, msg } = await mock.getApiDetail(req.query)
-      res.json({ success: !msg, msg, data: data })
+      if (req.query.callback) {
+        res.jsonp(data)
+      } else {
+        res.json({ success: !msg, msg, data: data })
+      }
     }
   },
 
