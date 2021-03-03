@@ -92,7 +92,7 @@
           <p class="f16 mb20">调用方式</p>
           <pre class="f14 c-666 bg-f7 p15 br4" style="white-space: pre-wrap; margin-left: 80px">Request
 
-Domain: https://notify.uban360.com
+Domain: https://mock.uban360.com
 Method: GET
 Uri: /butterfly/mock/api/detail?id={{ currentApi && currentApi.id }}
 
