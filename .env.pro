@@ -6,4 +6,4 @@ VUE_APP_AVATAR=//filesystem.api.jituancaiyun.com/sfs/avatar?uid=
 VUE_APP_SSO=https://sso.uban360.com/sso/#/login?target=
 VUE_APP_RELEASE=1
 VUE_APP_VERSION=2.7
-VUE_APP_MOCK_PREVIEW=https://notify.uban360.com
+VUE_APP_MOCK_PREVIEW=https://mock.uban360.com
