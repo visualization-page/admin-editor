@@ -118,6 +118,7 @@ export default defineComponent({
         {
           dir: project.dir,
           info: {
+            ...project.info,
             userName: Vue.prototype.$native.name,
             remark,
             time: Date.now()
