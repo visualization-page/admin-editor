@@ -1,5 +1,9 @@
 <template>
-  <div v-if="isPc" class="pc-box height-100" :style="{ width: projectData.config.vwBase + 'px' }">
+  <div
+    v-if="inAdminPlatform"
+    class="pc-box height-100"
+    :style="{ width: projectData.config.vwBase + 'px' }"
+  >
     <div class="height-100 relative" overflow-a>
       <router-view />
     </div>
@@ -18,6 +22,7 @@ import VueQrcode from '@chenfengyuan/vue-qrcode'
 import { project } from '@/assets/project'
 import { watch } from '@vue/composition-api'
 import { isPc } from '@/components/mobile-render/render/utils'
+import { inAdminPlatform } from '@/assets/util'
 
 export default {
   components: {
@@ -25,8 +30,8 @@ export default {
   },
   data () {
     return {
-      isPc: this.checkPc(true),
-      isMp: false
+      isMp: false,
+      inAdminPlatform
     }
   },
   computed: {
@@ -68,15 +73,12 @@ export default {
       document.documentElement.style.height = h
       document.body.style.height = h
     })
-    if (this.isPc) {
+    if (isPc) {
       console.log('\n\n%cButterfly\n\n%c产品运营也能用的 H5 在线开发平台 !\n\n支持:\n  1.讯盟小程序\n  2.彩云 native h5\n  3.复杂表单\n  4.一键发布等\n\n%c👋 立即体验: https://tms.uban360.com/butterfly-fe/index.html\n\n', 'font-weight:bolder;color:rgb(253,129,36)', 'color: rgba(253,129,36,0.5)', 'color:#3b8ff6')
     }
   },
 
   methods: {
-    checkPc (noSign) {
-      return noSign ? isPc : (this.isPc = isPc)
-    }
   }
 }
 </script>

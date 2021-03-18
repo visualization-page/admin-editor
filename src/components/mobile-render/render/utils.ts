@@ -9,7 +9,7 @@ import MpHttp from 'esc-ui/lib/http/miniprogram'
 import { basicSchemaMap } from '@/components/basic-components'
 
 const getNative = () => window.Native ? new window.Native() : {}
-export const isPc = !/android|iphone|ipad|tv/i.test(navigator.userAgent)
+export const isPc = !/android|iphone|ipad|pc/i.test(navigator.userAgent)
 export const loadItem = (item: NodeItemBasic): Promise<{ default: any }> => {
   const basicNames = Object.keys(basicSchemaMap).map(x => `bf-${x}`)
   return new Promise((resolve, reject) => {

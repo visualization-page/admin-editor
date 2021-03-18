@@ -62,9 +62,14 @@
             <el-form-item label="名称" prop="name">
               <el-input v-model="apiForm.name" type="input" placeholder="请输入" />
             </el-form-item>
-            <el-form-item v-if="currentApi" label="请求地址">
-              <el-button type="text" @click="handleOpen()">/butterfly/mock/api/detail?id={{ currentApi.id }}</el-button>
-            </el-form-item>
+            <template v-if="currentApi">
+              <el-form-item label="数据 id">
+                <span class="c-666">{{ currentApi.id }}</span>
+              </el-form-item>
+              <el-form-item label="请求地址">
+                <el-button type="text" @click="handleOpen()">/butterfly/mock/api/detail?id={{ currentApi.id }}</el-button>
+              </el-form-item>
+            </template>
             <el-form-item label="数据" prop="data">
               <monaco-editor
                 v-model="apiForm.data"
@@ -82,7 +87,6 @@
                 }"
                 theme="vs-dark"
               />
-              <el-input v-if="false" v-model="apiForm.data" type="textarea" placeholder="请输入" />
             </el-form-item>
             <el-form-item label="">
               <el-button v-if="currentApi" type="danger" @click="handleDeleteApi">删 除</el-button>
@@ -123,8 +127,7 @@ export default {
   },
 
   data () {
-    const mockPriv = ['杨明', '诸炜']
-
+    const mockPriv = process.env.VUE_APP_MOCK_USERS.split(',')
     return {
       category: [],
       apiList: [],
