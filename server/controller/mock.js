@@ -74,7 +74,7 @@ const handle = {
       item.name = name
       await writeData(id, data)
     } else {
-      const id = MD5(name)
+      const id = MD5(name + Date.now() + Math.random())
       const item = {
         id,
         name,
