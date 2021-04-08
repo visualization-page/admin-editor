@@ -40,7 +40,7 @@
 <script>
 import { currentCode, setCodeState } from '@/assets/code-edit'
 import { parseCodeValid } from '@/assets/util'
-import CodeEditor from '@/components/v2/code-editor'
+import CodeEditor from '@/components/v2/code-editor-modal'
 import { http } from '@/api'
 
 export default {

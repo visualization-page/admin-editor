@@ -10,12 +10,12 @@
         </div>
       </div>
       <page-list class="flex-shrink-0" />
-      <div class="flex flex-grow-1">
+      <div v-show="!isEditCode" class="flex flex-grow-1">
         <page-set />
         <node-set />
       </div>
+      <code-editor />
     </div>
-    <code-editor />
     <image-resource :show.sync="showImageResource" />
     <search-code :show.sync="showSearchCode" />
   </div>
@@ -30,7 +30,7 @@ import PageList from '@/components/v2/page-list/index.vue'
 import NodeTool from '@/components/node-style-tools/index.vue'
 import PageSet from '@/components/v2/page-set/index.vue'
 import NodeSet from '@/components/v2/node-set/index.vue'
-import CodeEditor from '@/components/v2/code-editor/index.vue'
+import CodeEditor from '@/components/v2/code-editor2/index.vue'
 import ImageResource from '@/components/image-resource/index.vue'
 import SearchCode from '@/components/search-code/index.vue'
 import { http } from '@/api'
@@ -40,6 +40,7 @@ import { initProject, resetProject } from '@/assets/project'
 import { lock, unlock, useLock } from '@/assets/lock'
 import { showImageResource, showSearchCode, clearEditWrapCacheNode } from '@/assets/render'
 // import { loadSdk } from '@/assets/util'
+import { isEditNew } from '@/assets/code-edit'
 
 export default defineComponent({
   components: {
@@ -96,7 +97,8 @@ export default defineComponent({
 
     return {
       showImageResource,
-      showSearchCode
+      showSearchCode,
+      isEditCode: isEditNew
     }
   }
 })

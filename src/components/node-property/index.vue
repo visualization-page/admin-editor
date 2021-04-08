@@ -64,7 +64,8 @@ export default {
               field: 'renderString',
               block: false,
               type: 'code',
-              'code-language': node.subType === 'spa' ? 'html' : undefined
+              'code-language': node.subType === 'spa' ? 'html' : undefined,
+              codeEditorV3: true
             }
           ]
         }

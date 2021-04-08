@@ -156,7 +156,8 @@ export const http = [
     block: false,
     type: 'code',
     'info-icon': 'el-icon-data-analysis',
-    info: '上面的字段如果不够用，可以在这里补充其它选项。'
+    info: '上面的字段如果不够用，可以在这里补充其它选项。',
+    codeEditorV3: true
   }
 ]
 
@@ -198,7 +199,8 @@ export const css = [
     'code-language': 'css',
     type: 'code',
     'info-icon': 'el-icon-brush',
-    info: '全局css，会被直接插入到 html 头部中'
+    info: '全局css，会被直接插入到 html 头部中',
+    codeEditorV3: true
   }
 ]
 
@@ -210,7 +212,8 @@ export const utils = [
     'code-language': 'javascript',
     type: 'code',
     'info-icon': 'el-icon-star-off',
-    info: '全局utils，例如：$$global.utils.deepClone'
+    info: '全局utils，例如：$$global.utils.deepClone',
+    codeEditorV3: true
   }
 ]
 
@@ -222,7 +225,8 @@ export const scripts = [
     'code-language': 'javascript',
     type: 'code',
     'info-icon': 'el-icon-video-camera',
-    info: '本段代码会在项目初始化的时候运行'
+    info: '本段代码会在项目初始化的时候运行',
+    codeEditorV3: true
   }
 ]
 
@@ -233,7 +237,8 @@ export const constant = [
     block: false,
     type: 'code',
     'info-icon': 'el-icon-mouse',
-    info: '使用方法：在项目全局中任何地方，例如：$$global.constant.[fieldName]'
+    info: '使用方法：在项目全局中任何地方，例如：$$global.constant.[fieldName]',
+    codeEditorV3: true
   }
 ]
 

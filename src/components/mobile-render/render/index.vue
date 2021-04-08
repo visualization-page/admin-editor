@@ -140,8 +140,9 @@ export default defineComponent<{
     }
 
     if (isEdit()) {
-      watch(() => [project.interactiveType, project.depLoaded], ([type, loaded]) => {
-        if (loaded) {
+      watch(() => [project.interactiveType, project.depLoaded, props.currentPage], ([type, loaded, currentPage]) => {
+        if (loaded && currentPage) {
+          console.log('render/index.vue load sdk....')
           loadSdk(type as string).then(() => {
             pageInit.value.push('sdk-type')
           })

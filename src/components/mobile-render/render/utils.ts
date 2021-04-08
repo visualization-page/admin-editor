@@ -54,6 +54,7 @@ export const loadItemUmd = (item: NodeUmd, load: boolean = true): Promise<{ defa
       return resolve()
     }
     if (elem) {
+      // 避免重复加载
       return resolve(!isCss && window[item.umdName])
     }
     if (isCss) {

@@ -101,7 +101,8 @@ export default [
     block: false,
     type: 'code',
     'info-icon': 'el-icon-warning-outline',
-    info: '使用方法：在当前页面组件属性的输入框内可以绑定字段，例如：$$page.state.test'
+    info: '使用方法：在当前页面组件属性的输入框内可以绑定字段，例如：$$page.state.test',
+    codeEditorV3: true
   },
   {
     label: '页面方法',
@@ -109,6 +110,7 @@ export default [
     block: false,
     type: 'code',
     'info-icon': 'el-icon-warning-outline',
-    info: '使用方法：$$page.methods.common()'
+    info: '使用方法：$$page.methods.common()',
+    codeEditorV3: true
   }
 ]

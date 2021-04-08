@@ -160,7 +160,7 @@ export default createComponent({
         if (form.eventType) {
           handleConfirm()
         }
-      })
+      }, undefined, true)
     }
     // const handleClickFx = (item: any) => {
     //   if (editor.value) {

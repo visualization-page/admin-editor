@@ -4,6 +4,7 @@ import { loadItem, loadItemUmd } from '@/components/mobile-render/render/utils'
 import { Page, setCurrentPage, currentPage } from './page'
 import { NodeItemBasic, NodeUmd, setCurrentNode } from './node'
 import { deepClone, loadSdkSystem, inAdminPlatform, isInEditor } from '@/assets/util'
+import { setState as setCodeState, setStateNew as setCodeStateNew } from '@/assets/code-edit'
 import { http } from '@/api'
 import { Message } from 'element-ui'
 
@@ -185,17 +186,26 @@ export const saveProject = (
   })
 }
 
+async function downloadUmdWrap (cb: any) {
+  if (!window.defineBak && window.define) {
+    window.defineBak = window.define
+  }
+  window.define = null
+  await cb()
+  window.define = window.defineBak
+}
+
 export const importProject = async (parseItem: Project) => {
   if (parseItem) {
     parseItem.depLoaded = false
     updateProject(parseItem)
     if (inAdminPlatform && parseItem.componentUmd) {
-      if (!window.defineBak && window.define) {
-        window.defineBak = window.define
-      }
-      window.define = null
-      await Promise.all(parseItem.componentUmd.map(item => loadItemUmd(item)))
-      window.define = window.defineBak
+      await downloadUmdWrap(async () => {
+        // umd 的下载也是有顺序的
+        for (let i = 0; i < parseItem.componentUmd.length; i++) {
+          await loadItemUmd(parseItem.componentUmd[i])
+        }
+      })
     }
     // 下载资源
     if (inAdminPlatform && parseItem.componentDownload) {
@@ -208,13 +218,7 @@ export const importProject = async (parseItem: Project) => {
       parseItem.config.sdklist &&
       parseItem.config.sdklist.length
     ) {
-      if (!window.defineBak && window.define) {
-        window.defineBak = window.define
-      }
-      window.define = null
-      // await Promise.all(loadSdkSystem(parseItem.config.sdklist, Vue.prototype.$system.localXmmpSdk))
-      await loadSdkSystem(parseItem.config.sdklist, Vue.prototype.$system.localXmmpSdk)
-      window.define = window.defineBak
+      await downloadUmdWrap(() => loadSdkSystem(parseItem.config.sdklist!, Vue.prototype.$system.localXmmpSdk))
     }
     updateProject({ depLoaded: true })
     if (parseItem.pages.length) {
@@ -267,6 +271,8 @@ export const resetProject = () => {
   updateProject(deepClone(defaultProject))
   setCurrentPage(null)
   setCurrentNode(null)
+  setCodeState(false)
+  setCodeStateNew(false)
 }
 
 // watch(() => project, val => {

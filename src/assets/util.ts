@@ -169,6 +169,7 @@ export function addScript (id: string, url: string) {
     script.id = id
     script.src = url
     script.onload = () => {
+      // console.log(id, window.define)
       resolve()
     }
     script.onerror = () => {
@@ -209,6 +210,7 @@ export const isInMiniapp = /hwminiapp/i.test(navigator.userAgent)
 export const inAdminPlatform = /tms\.uban360/.test(location.hostname) || /808/.test(location.port)
 export const isInEditor = () => /editor/.test(location.hash) && inAdminPlatform
 
+// sdk 的加载是有顺序的
 export async function loadSdkSystem (sdkIds: string[], config: { [k: string]: { js: string, css?: string } }) {
   for (const id of sdkIds.sort()) {
     const jid = `J_${id}`
@@ -219,32 +221,15 @@ export async function loadSdkSystem (sdkIds: string[], config: { [k: string]: { 
         await addStyle(cid, `shinemosdk://${id}/index.css`).catch(() => '')
       }
     } else {
+      removeNode(jid)
+      removeNode(cid)
+      // console.log('---loadSdkSystem', window.define)
       await addScript(jid, config[id].js)
       if (config[id].css) {
         await addStyle(cid, config[id].css!).catch(() => '')
       }
     }
   }
-  // return sdkIds.sort().map(id => {
-  //   const jid = `J_${id}`
-  //   const cid = `C_${id}`
-  //   if (document.getElementById(jid)) {
-  //     return []
-  //   }
-  //   if (isInMiniapp) {
-  //     return [
-  //       addScript(jid, `shinemosdk://${id}/index.js`),
-  //       // 样式文件可能不存在
-  //       addStyle(cid, `shinemosdk://${id}/index.css`).catch(() => '')
-  //     ]
-  //   } else if (config[id]) {
-  //     const res = [addScript(jid, config[id].js)]
-  //     if (config[id].css) {
-  //       res.push(addStyle(cid, config[id].css!).catch(() => ''))
-  //     }
-  //     return res
-  //   }
-  // }).flat().filter(Boolean)
 }
 
 export function loadSdk (type: string) {
