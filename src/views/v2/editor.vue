@@ -15,6 +15,7 @@
         <node-set />
       </div>
       <code-editor />
+      <code-editor-new />
     </div>
     <image-resource :show.sync="showImageResource" />
     <search-code :show.sync="showSearchCode" />
@@ -30,7 +31,8 @@ import PageList from '@/components/v2/page-list/index.vue'
 import NodeTool from '@/components/node-style-tools/index.vue'
 import PageSet from '@/components/v2/page-set/index.vue'
 import NodeSet from '@/components/v2/node-set/index.vue'
-import CodeEditor from '@/components/v2/code-editor2/index.vue'
+import CodeEditorNew from '@/components/v2/code-editor2/index.vue'
+import CodeEditor from '@/components/v2/code-editor-modal/index.vue'
 import ImageResource from '@/components/image-resource/index.vue'
 import SearchCode from '@/components/search-code/index.vue'
 import { http } from '@/api'
@@ -39,7 +41,6 @@ import { Message } from 'element-ui'
 import { initProject, resetProject } from '@/assets/project'
 import { lock, unlock, useLock } from '@/assets/lock'
 import { showImageResource, showSearchCode, clearEditWrapCacheNode } from '@/assets/render'
-// import { loadSdk } from '@/assets/util'
 import { isEditNew } from '@/assets/code-edit'
 
 export default defineComponent({
@@ -52,6 +53,7 @@ export default defineComponent({
     PageSet,
     NodeSet,
     CodeEditor,
+    CodeEditorNew,
     ImageResource,
     SearchCode
   },

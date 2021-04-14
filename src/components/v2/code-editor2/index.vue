@@ -24,13 +24,16 @@
       </div>
     </transition>
     <div class="flex" style="height: calc(100% - 40px)">
-      <div class="editor-v3__code-editor--left bg-fff flex-shrink-0 height-100 oa plr15 pb50">
+      <div class="editor-v3__code-editor--left bg-fff flex-shrink-0 height-100 oa plr10 pb50">
         <left-block title="可编辑的代码块" @on-refresh="handleCollectionBlock()">
           <i class="el-icon-refresh" slot="right" />
           <div
             v-for="(item, i) in editBlockList"
             :key="i"
-            class="f12 ptb5 cp hover-main c-999"
+            :class="{
+              'active-code-item': currentCode.title === item.label
+            }"
+            class="f12 p5 cp hover-main c-999"
             @click="handleOpenCodeBlock(item)"
           >
             <i class="el-icon-edit c-main mr5" />
@@ -41,7 +44,13 @@
             :expand-on-click-node="false"
             @node-click="handleOpenCodeBlock"
           >
-            <div class="flex-center-between f12 ptb5 c-999 flex-grow-1" slot-scope="{ data }">
+            <div
+              class="flex-center-between f12 p5 c-999 flex-grow-1 hover-main"
+              slot-scope="{ data }"
+              :class="{
+                'active-code-item': currentCode.title === (data.events && data.events.length ? data.events[0].title : data.title)
+              }"
+            >
               <span>
                 <i v-if="data.title.startsWith('页面事件')" class="el-icon-edit c-main mr5" />
                 <span>{{ data.title }}</span>
@@ -171,24 +180,6 @@ export default createComponent({
     const handleCancel = () => {
       setStateNew(false)
     }
-    // const handleConfirm = async (close = true) => {
-    //   if (!isCodeValid.value) {
-    //     await MessageBox.confirm('代码存在语法错误，不会保存错误的代码，是否继续？')
-    //   }
-    //   const updateRes = currentCode.update(code.value)
-    //   if (updateRes !== false) {
-    //     window.globalApp.$notify({
-    //       title: '成功',
-    //       message: `保存 ${currentCode.title}`,
-    //       type: 'success',
-    //       duration: 2000,
-    //       position: 'top-left'
-    //     })
-    //     if (close) {
-    //       handleCancel()
-    //     }
-    //   }
-    // }
     const handleClickFx = (item: any) => {
       if (editor.value) {
         const position = editor.value.getPosition()
@@ -314,13 +305,28 @@ export default createComponent({
         // 节点编辑
         if (item.isSpa || item.isBlockEvent) {
           const update = (val: string) => {
+            // 更新节点树自己
+            if (item.isSpa) {
+              item.renderString = val
+            } else {
+              item.fxCode = val
+            }
+            // 更新源代码
             updateByField(item.self, item.field, val)
           }
           setCodeState(item.title, item.isSpa ? item.renderString : item.fxCode, update, item.language, true)
         }
       } else {
         const data = item.getData()
-        setCodeState(item.label, data[item.field], (val: string) => { updateByField(data, item.field, val) }, item.language, true)
+        setCodeState(
+          item.label,
+          data[item.field],
+          (val: string) => {
+            updateByField(data, item.field, val)
+          },
+          item.language,
+          true
+        )
       }
     }
 
@@ -397,10 +403,13 @@ export default createComponent({
 
 <style lang="less">
 .editor-v3 {
-  .hover-main:hover {
-    color: #ff7d00;
-  }
   &__code-editor {
+    .hover-main:hover {
+      color: #ff7d00;
+    }
+    .active-code-item {
+      background-color: rgba(#ff7d00, .1);
+    }
     // background: #262a30;
     &--left {
       width: 200px;
