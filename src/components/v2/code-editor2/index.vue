@@ -6,7 +6,7 @@
     <div class="flex justify-between mb10">
       <p>
         <i class="el-icon-edit mr10" />
-        <span>代码编辑</span>
+        <span>代码编辑 <span class="f12 c-999">(ctrl+s保存｜ctrl+d退出)</span></span>
       </p>
       <div class="bf-btn" @click="handleCancel()">
         <div class="bf-btn__container" style="background-color: #f2f2f2;">
@@ -106,7 +106,16 @@
         </left-block>
       </div>
       <div class="editor-v3__code-editor--right">
-        <div class="plr20 ptb10 bg-333 c-fff f12">编辑 {{ currentCode.title }}</div>
+        <div class="plr20 ptb10 bg-333 c-fff f12 flex-center-between">
+          <div class="flex-center">
+            <span>编辑</span>
+            <div v-show="codeChangeTimer > 0" class="bg-fff br5 pl5 pt5 ml5" />
+            <span class="ml5">{{ currentCode.title }}</span>
+          </div>
+          <div v-if="codeChangeTimer === 0" style="color: #67C23A">
+            <span class=""><i class="el-icon-success" /> 保存成功</span>
+          </div>
+        </div>
         <monaco-editor
           v-if="canMount"
           :style="{ height: `${areaHeight - 190 - 37}px` }"
@@ -132,7 +141,7 @@
 </template>
 
 <script lang="ts">
-import { createComponent, onMounted, ref, watch, computed, reactive } from '@vue/composition-api'
+import { createComponent, onMounted, ref, watch, reactive } from '@vue/composition-api'
 // import { project } from '@/assets/project'
 import { currentCode, isEditNew, setCodeState, setStateNew } from '@/assets/code-edit'
 import { currentPage, Page } from '@/assets/page'
@@ -165,7 +174,6 @@ export default createComponent({
   setup () {
     const areaHeight = ref(0)
     const code = ref('')
-    // const isCodeValid = ref(true)
     const canMount = ref(false)
     const canMountAfterLoading = ref(false)
     const editor = ref<Editor>(null)
@@ -175,7 +183,7 @@ export default createComponent({
       methods: [],
       nodes: []
     })
-    let codeChangeTimer = 0
+    const codeChangeTimer = ref(-1)
 
     const handleCancel = () => {
       setStateNew(false)
@@ -258,6 +266,7 @@ export default createComponent({
         // 解析节点事件和自定义render
         events.forEach((item) => {
           codeRenderNotice.value.nodes.push({
+            id: page.id,
             title: `页面事件 ${item.desc || item.eventType}`,
             fxCode: item.fxCode,
             self: item,
@@ -272,6 +281,7 @@ export default createComponent({
           const isBlockEvent = !!node.events.length
           const isSpa = node.nodeType === 4
           const res = {
+            id: node.id,
             title: node.title,
             events: [],
             renderString: '',
@@ -283,6 +293,7 @@ export default createComponent({
           }
           if (isBlockEvent) {
             res.events = node.events.map((x :any) => ({
+              id: node.id,
               title: `${node.title} ${x.desc || x.eventType}`,
               fxCode: x.fxCode,
               self: x,
@@ -296,8 +307,6 @@ export default createComponent({
           return res
         }
         _dfBy(nodes, codeRenderNotice.value.nodes, asserts, dealItem)
-        // console.log('1111', codeRenderNotice.value.nodes)
-        // handleOpenCodeBlock(editBlockList[0])
       }
     }
     const handleOpenCodeBlock = (item: any) => {
@@ -314,7 +323,13 @@ export default createComponent({
             // 更新源代码
             updateByField(item.self, item.field, val)
           }
-          setCodeState(item.title, item.isSpa ? item.renderString : item.fxCode, update, item.language, true)
+          setCodeState(
+            item.title,
+            item.isSpa ? item.renderString : item.fxCode,
+            update,
+            item.language,
+            { isNew: true, itemId: item.id, eventIndex: item.isBlockEvent ? 0 : undefined }
+          )
         }
       } else {
         const data = item.getData()
@@ -325,7 +340,7 @@ export default createComponent({
             updateByField(data, item.field, val)
           },
           item.language,
-          true
+          { isNew: true, itemId: data.id }
         )
       }
     }
@@ -336,6 +351,26 @@ export default createComponent({
     // 必须等到动画过完才能渲染编辑器
     watch(() => isEditNew.value, val => {
       if (val) {
+        if (currentCode.attaches && currentCode.attaches.setInSchema) {
+          const { itemId, eventIndex } = currentCode.attaches
+          // 递归找到这个节点或事件
+          const res: any = []
+          _dfBy(
+            codeRenderNotice.value.nodes,
+            res,
+            (item: any) => item.id === itemId && (eventIndex !== undefined && item.events.length),
+            (item: any) => item
+          )
+          // console.log(eventIndex)
+          // console.log(res)
+          if (res.length) {
+            if (eventIndex !== undefined) {
+              handleOpenCodeBlock(res[0].events[eventIndex])
+            } else {
+              handleOpenCodeBlock(res[0])
+            }
+          }
+        }
         canMountAfterLoading.value = true
         // hide popover
         document.body.click()
@@ -362,6 +397,7 @@ export default createComponent({
       amdRequire: window.require,
       // hasLeftPanel: computed(() => currentCode.title !== '系统配置'),
       codeRenderNotice,
+      codeChangeTimer,
       fxList,
       varList,
       editBlockList,
@@ -375,22 +411,33 @@ export default createComponent({
       handleCollectionBlock,
       handleCodeChange (val: string) {
         code.value = val
-        if (codeChangeTimer) {
-          clearTimeout(codeChangeTimer)
-          codeChangeTimer = 0
+        if (codeChangeTimer.value) {
+          clearTimeout(codeChangeTimer.value)
+          codeChangeTimer.value = 0
         }
         // 自动保存
-        codeChangeTimer = setTimeout(() => {
-          console.log(`auto save ${currentCode.title}`)
+        codeChangeTimer.value = setTimeout(() => {
+          // console.log(`auto save ${currentCode.title}`)
           currentCode.update(val)
-        }, 500)
+          codeChangeTimer.value = 0
+        }, 1000)
       },
       handleMounted (editorInstance: any) {
         editor.value = editorInstance
         canMountAfterLoading.value = false
         editorInstance.addCommand(window.monaco.KeyMod.CtrlCmd | window.monaco.KeyCode.KEY_S, function () {
-          // handleConfirm(false)
           currentCode.update(code.value)
+          codeChangeTimer.value = 1
+          setTimeout(() => {
+            codeChangeTimer.value = 0
+          }, 100)
+          // window.globalApp.$notify({
+          //   title: '成功',
+          //   message: `保存 ${currentCode.title}`,
+          //   type: 'success',
+          //   duration: 2000,
+          //   position: 'top-left'
+          // })
         })
         editorInstance.addCommand(window.monaco.KeyMod.CtrlCmd | window.monaco.KeyCode.KEY_D, function () {
           handleCancel()

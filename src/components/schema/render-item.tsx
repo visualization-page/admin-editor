@@ -137,9 +137,13 @@ export const renderCodeEditor = (schema: any, data: any, updateField: any) => {
   const setCurrentCode = () => {
     const { pref, field } = getParentRef(schema.field, data)
     setTabName(['', '', '', tabName.codeEdit])
-    setCodeState(schema.label, pref[field], (val: string) => {
-      updateField(schema.field, val || '')
-    }, schema['code-language'], schema.codeEditorV3)
+    setCodeState(
+      schema.label,
+      pref[field],
+      (val: string) => { updateField(schema.field, val || '') },
+      schema['code-language'],
+      { isNew: schema.codeEditorV3, itemId: data.id, setInSchema: true }
+    )
   }
   return <el-button type="text" onClick={setCurrentCode}>编辑代码片段</el-button>
 }

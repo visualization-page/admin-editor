@@ -218,7 +218,7 @@ export default createComponent({
     }
     watch(() => [isCodeRender.value, currentPage.value], ([isRender, page]) => {
       if (page) {
-        console.log('computed page`s state !')
+        // console.log('computed page`s state !')
         codeRenderNotice.value.state = []
         const { state } = page as Page
         const ctx = { $$page: { state: {}, methods: {} }, $$global: initGlobalConfig(page as Page) }
@@ -230,7 +230,7 @@ export default createComponent({
           codeRenderNotice.value.state = result
         }
         if (isRender) {
-          console.log('computed page`s methods !')
+          // console.log('computed page`s methods !')
           // 重置
           codeRenderNotice.value.methods = []
           const { methods } = page as Page

@@ -13,7 +13,8 @@ type CurrCode = {
   title: string
   code: string
   update: (code: string) => void | false
-  language: 'javascript' | 'css'
+  language: 'javascript' | 'css',
+  attaches?: { isNew?: boolean, itemId: string, eventIndex?: number, setInSchema?: boolean }
 }
 export const currentCode = reactive<CurrCode>({
   title: '',
@@ -27,11 +28,12 @@ export const setCodeState = (
   code: string,
   update: (code: string) => void,
   language: CurrCode['language'] = 'javascript',
-  isNew?: boolean
+  attaches?: CurrCode['attaches']
 ) => {
   currentCode.title = title
   currentCode.code = code
   currentCode.language = language
   currentCode.update = update
-  isNew ? setStateNew(true) : setState(true)
+  currentCode.attaches = attaches
+  attaches && attaches.isNew ? setStateNew(true) : setState(true)
 }
