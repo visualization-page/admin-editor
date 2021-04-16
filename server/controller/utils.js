@@ -266,7 +266,7 @@ const handle = {
     }
 
     const urls = []
-    str = str.replace(/(https:\/\/global\.uban360\.com.*?)"/g, (all, match) => {
+    str = str.replace(/(https:\/\/global\.uban360\.com.*?)\\?"/g, (all, match) => {
       const key = `img${urls.length}.png`
       urls.push(match)
       return all.replace(match, `./img/${key}?_=${Date.now()}`)
