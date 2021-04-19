@@ -387,11 +387,14 @@ export default createComponent({
       () => currentPage.value,
       (page) => {
         handleCollectionBlock(page)
-        // 切换页面时，切换编辑器内容
-        if (codeRenderNotice.value.nodes[0]) {
-          handleOpenCodeBlock(codeRenderNotice.value.nodes[0])
-        } else {
-          handleOpenCodeBlock(editBlockList[0])
+        if (isEditNew.value) {
+          // 编辑器状态
+          // 切换页面时，切换编辑器内容
+          if (codeRenderNotice.value.nodes[0]) {
+            handleOpenCodeBlock(codeRenderNotice.value.nodes[0])
+          } else {
+            handleOpenCodeBlock(editBlockList[0])
+          }
         }
       },
       { lazy: true }
