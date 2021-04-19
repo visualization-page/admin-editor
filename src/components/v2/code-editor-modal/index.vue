@@ -2,9 +2,9 @@
   <transition name="el-zoom-in-bottom">
     <div
       v-if="isEdit"
-      class="editor-v2__code-editor"
+      class="editor-modal__code-editor"
     >
-      <div class="editor-v2__code-editor-header flex-center-between">
+      <div class="editor-modal__code-editor-header flex-center-between">
         <img src="@/assets/img/logo_small.png" alt="" width="160px">
         <span class="f14 c-aaa">编辑{{ currentCode.title }}</span>
         <div class="flex-center mr15">
@@ -28,7 +28,7 @@
       <div :class="{ 'flex': hasLeftPanel }" style="height: calc(100% - 50px)">
         <div
           v-if="hasLeftPanel"
-          class="editor-v2__code-editor--left flex-shrink-0 bg-333 height-100 oa plr15 pb50"
+          class="editor-modal__code-editor--left flex-shrink-0 bg-333 height-100 oa plr15 pb50"
         >
           <div class="oh">
             <p class="el-form-item__label f12">视图模型</p>
@@ -87,7 +87,7 @@
             </div>
           </div>
         </div>
-        <div :class="{ 'editor-v2__code-editor--right': hasLeftPanel }">
+        <div :class="{ 'editor-modal__code-editor--right': hasLeftPanel }">
           <monaco-editor
             v-if="canMount"
             :style="{ height: areaHeight - 30 + 'px' }"
@@ -283,7 +283,7 @@ export default createComponent({
 </script>
 
 <style lang="less">
-.editor-v2 {
+.editor-modal {
   &__code-editor {
     position: fixed;
     top: 0;

@@ -1,7 +1,7 @@
 <template>
   <div
     v-if="isEditNew"
-    class="editor-v3__code-editor flex-grow-1 f14 relative"
+    class="editor-tab__code-editor flex-grow-1 f14 relative"
   >
     <div class="flex justify-between mb10">
       <p>
@@ -24,7 +24,7 @@
       </div>
     </transition>
     <div class="flex" style="height: calc(100% - 40px)">
-      <div class="editor-v3__code-editor--left bg-fff flex-shrink-0 height-100 oa plr10 pb50">
+      <div class="editor-tab__code-editor--left bg-fff flex-shrink-0 height-100 oa plr10 pb50">
         <left-block title="可编辑的代码块" @on-refresh="handleCollectionBlock()">
           <i class="el-icon-refresh" slot="right" />
           <div
@@ -105,7 +105,7 @@
           </div>
         </left-block>
       </div>
-      <div class="editor-v3__code-editor--right">
+      <div class="editor-tab__code-editor--right">
         <div class="plr20 ptb10 bg-333 c-fff f12 flex-center-between">
           <div class="flex-center">
             <span>编辑</span>
@@ -358,7 +358,9 @@ export default createComponent({
           _dfBy(
             codeRenderNotice.value.nodes,
             res,
-            (item: any) => item.id === itemId && (eventIndex !== undefined && item.events.length),
+            (item: any) => {
+              return item.id === itemId && (eventIndex !== undefined && item.events && item.events.length)
+            },
             (item: any) => item
           )
           // console.log(eventIndex)
@@ -381,7 +383,19 @@ export default createComponent({
         canMount.value = false
       }
     })
-    watch(() => currentPage.value, (page) => { handleCollectionBlock(page) }, { lazy: true })
+    watch(
+      () => currentPage.value,
+      (page) => {
+        handleCollectionBlock(page)
+        // 切换页面时，切换编辑器内容
+        if (codeRenderNotice.value.nodes[0]) {
+          handleOpenCodeBlock(codeRenderNotice.value.nodes[0])
+        } else {
+          handleOpenCodeBlock(editBlockList[0])
+        }
+      },
+      { lazy: true }
+    )
 
     onMounted(() => {
       areaHeight.value = getDocHeight()
@@ -449,7 +463,7 @@ export default createComponent({
 </script>
 
 <style lang="less">
-.editor-v3 {
+.editor-tab {
   &__code-editor {
     .hover-main:hover {
       color: #ff7d00;
