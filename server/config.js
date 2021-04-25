@@ -2,7 +2,8 @@ module.exports = {
   dev: {
     opsServer: 'http://10.0.10.67:8880',
     fileServer: 'https://filesystem.api.jituancaiyun.com/sfs/webUpload/srvfile?fileType=2&src=cdn',
-    deploy: 'http://deploy.uban360.net'
+    deploy: 'http://deploy.uban360.net',
+    bakGit: 'https://git.shinemo.com/scm/ub-web/butterfly-bak.git'
   },
   pro: {
     opsServer: 'http://192.168.200.3:8888',

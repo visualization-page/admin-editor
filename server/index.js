@@ -5,6 +5,7 @@ const router = require('./router')
 const fileUpload = require('express-fileupload')
 const path = require('path')
 const cookieParser = require('cookie-parser')
+const schedule = require('./schedule')
 
 app.use(fileUpload({
   limits: { fileSize: 5 * 1024 * 1024 },
@@ -22,4 +23,5 @@ app.use('/butterfly', router)
 
 app.listen(9422, function () {
   console.log('butterfly app listening on port 9422!')
+  schedule.run()
 })

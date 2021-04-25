@@ -52,7 +52,7 @@
               }"
             >
               <span>
-                <i v-if="data.title.startsWith('页面事件')" class="el-icon-edit c-main mr5" />
+                <i v-if="data.id.startsWith('page')" class="el-icon-edit c-main mr5" />
                 <span>{{ data.title }}</span>
               </span>
               <a
@@ -264,14 +264,18 @@ export default createComponent({
           codeRenderNotice.value.methods = result
         }
         // 解析节点事件和自定义render
-        events.forEach((item) => {
-          codeRenderNotice.value.nodes.push({
-            id: page.id,
-            title: `页面事件 ${item.desc || item.eventType}`,
-            fxCode: item.fxCode,
-            self: item,
-            field: 'fxCode',
-            isBlockEvent: true
+        codeRenderNotice.value.nodes.push({
+          id: page.id,
+          title: page.title,
+          events: events.map((item) => {
+            return {
+              id: page.id,
+              title: `${page.title} ${item.desc || item.eventType}`,
+              fxCode: item.fxCode,
+              self: item,
+              field: 'fxCode',
+              isBlockEvent: true
+            }
           })
         })
         const asserts = (node: NodeItem) => {
@@ -331,7 +335,7 @@ export default createComponent({
             { isNew: true, itemId: item.id, eventIndex: item.isBlockEvent ? 0 : undefined }
           )
         }
-      } else {
+      } else if (item.getData) {
         const data = item.getData()
         setCodeState(
           item.label,
@@ -363,8 +367,8 @@ export default createComponent({
             },
             (item: any) => item
           )
-          // console.log(eventIndex)
           // console.log(res)
+          // console.log(eventIndex)
           if (res.length) {
             if (eventIndex !== undefined) {
               handleOpenCodeBlock(res[0].events[eventIndex])

@@ -2878,6 +2878,14 @@ cache-loader@^4.1.0:
     neo-async "^2.6.1"
     schema-utils "^2.0.0"
 
+call-bind@^1.0.0:
+  version "1.0.2"
+  resolved "https://registry.npm.taobao.org/call-bind/download/call-bind-1.0.2.tgz#b1d4e89e688119c3c9a903ad30abb2f6a919be3c"
+  integrity sha1-sdTonmiBGcPJqQOtMKuy9qkZvjw=
+  dependencies:
+    function-bind "^1.1.1"
+    get-intrinsic "^1.0.2"
+
 call-me-maybe@^1.0.1:
   version "1.0.1"
   resolved "https://registry.npm.taobao.org/call-me-maybe/download/call-me-maybe-1.0.1.tgz"
@@ -3503,6 +3511,14 @@ create-hmac@^1.1.0, create-hmac@^1.1.2, create-hmac@^1.1.4:
     ripemd160 "^2.0.0"
     safe-buffer "^5.0.1"
     sha.js "^2.4.8"
+
+cron-parser@^3.1.0:
+  version "3.4.0"
+  resolved "https://registry.nlark.com/cron-parser/download/cron-parser-3.4.0.tgz#6aa3216461c3f6ff6ff5aecbff67381834ac2a59"
+  integrity sha1-aqMhZGHD9v9v9a7L/2c4GDSsKlk=
+  dependencies:
+    is-nan "^1.3.2"
+    luxon "^1.26.0"
 
 cron@1.8.2:
   version "1.8.2"
@@ -5229,6 +5245,15 @@ get-caller-file@^2.0.1:
   resolved "https://registry.npm.taobao.org/get-caller-file/download/get-caller-file-2.0.5.tgz"
   integrity sha1-T5RBKoLbMvNuOwuXQfipf+sDH34=
 
+get-intrinsic@^1.0.2:
+  version "1.1.1"
+  resolved "https://registry.npm.taobao.org/get-intrinsic/download/get-intrinsic-1.1.1.tgz#15f59f376f855c446963948f0d24cd3637b4abc6"
+  integrity sha1-FfWfN2+FXERpY5SPDSTNNje0q8Y=
+  dependencies:
+    function-bind "^1.1.1"
+    has "^1.0.3"
+    has-symbols "^1.0.1"
+
 get-stream@^3.0.0:
   version "3.0.0"
   resolved "https://registry.npm.taobao.org/get-stream/download/get-stream-3.0.0.tgz"
@@ -6112,6 +6137,14 @@ is-glob@^4.0.0, is-glob@^4.0.1, is-glob@~4.0.1:
   integrity sha1-dWfb6fL14kZ7x3q4PEopSCQHpdw=
   dependencies:
     is-extglob "^2.1.1"
+
+is-nan@^1.3.2:
+  version "1.3.2"
+  resolved "https://registry.npm.taobao.org/is-nan/download/is-nan-1.3.2.tgz#043a54adea31748b55b6cd4e09aadafa69bd9e1d"
+  integrity sha1-BDpUreoxdItVts1OCara+mm9nh0=
+  dependencies:
+    call-bind "^1.0.0"
+    define-properties "^1.1.3"
 
 is-number@^3.0.0:
   version "3.0.0"
@@ -7163,6 +7196,11 @@ loglevel@^1.6.6:
   resolved "https://registry.npm.taobao.org/loglevel/download/loglevel-1.6.6.tgz?cache=0&sync_timestamp=1573148697652&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Floglevel%2Fdownload%2Floglevel-1.6.6.tgz"
   integrity sha1-DuYwDMBY22s1UfocS/c7g7t3ExI=
 
+long-timeout@0.1.1:
+  version "0.1.1"
+  resolved "https://registry.npm.taobao.org/long-timeout/download/long-timeout-0.1.1.tgz#9721d788b47e0bcb5a24c2e2bee1a0da55dab514"
+  integrity sha1-lyHXiLR+C8taJMLivuGg2lXatRQ=
+
 loose-envify@^1.0.0:
   version "1.4.0"
   resolved "https://registry.npm.taobao.org/loose-envify/download/loose-envify-1.4.0.tgz"
@@ -7189,6 +7227,11 @@ lru-cache@^5.1.1:
   integrity sha1-HaJ+ZxAnGUdpXa9oSOhH8B2EuSA=
   dependencies:
     yallist "^3.0.2"
+
+luxon@^1.26.0:
+  version "1.26.0"
+  resolved "https://registry.npm.taobao.org/luxon/download/luxon-1.26.0.tgz#d3692361fda51473948252061d0f8561df02b578"
+  integrity sha1-02kjYf2lFHOUglIGHQ+FYd8CtXg=
 
 make-dir@^2.0.0, make-dir@^2.1.0:
   version "2.1.0"
@@ -7707,6 +7750,15 @@ node-releases@^1.1.66:
   version "1.1.67"
   resolved "https://registry.npm.taobao.org/node-releases/download/node-releases-1.1.67.tgz?cache=0&sync_timestamp=1605581566811&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fnode-releases%2Fdownload%2Fnode-releases-1.1.67.tgz"
   integrity sha1-KOv8zNC6pqrY6NTY/ky8Sa4jnBI=
+
+node-schedule@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.npm.taobao.org/node-schedule/download/node-schedule-2.0.0.tgz#73ab4957d056c63708409cc1fab676e0e149c191"
+  integrity sha1-c6tJV9BWxjcIQJzB+rZ24OFJwZE=
+  dependencies:
+    cron-parser "^3.1.0"
+    long-timeout "0.1.1"
+    sorted-array-functions "^1.3.0"
 
 nopt@~4.0.1:
   version "4.0.1"
@@ -9942,6 +9994,11 @@ sort-keys@^1.0.0:
   integrity sha1-RBttTTRnmPG05J6JIK37oOVD+a0=
   dependencies:
     is-plain-obj "^1.0.0"
+
+sorted-array-functions@^1.3.0:
+  version "1.3.0"
+  resolved "https://registry.npm.taobao.org/sorted-array-functions/download/sorted-array-functions-1.3.0.tgz#8605695563294dffb2c9796d602bd8459f7a0dd5"
+  integrity sha1-hgVpVWMpTf+yyXltYCvYRZ96DdU=
 
 source-list-map@^2.0.0:
   version "2.0.1"
