@@ -20,6 +20,7 @@ async function cloneGit () {
       log('clone git 到本地成功', 'success')
     }).catch(err => {
       log('clone git 到本地失败' + err.toString(), 'error')
+      return Promise.reject(err.toString())
     })
   }
 }
@@ -48,7 +49,7 @@ module.exports = {
     if (!fs.pathExistsSync(logFile)) {
       await fs.outputFile(logFile, 'init file at ' + new Date().toString())
     }
-    // doBak()
+    doBak()
     const job = schedule.scheduleJob('0 0 */12 * * *', function () {
       doBak()
       // utils.spawn('bash', ['backup.sh'], { cwd: __dirname })

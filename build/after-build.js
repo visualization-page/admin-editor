@@ -32,6 +32,7 @@ const copyDirs = [
   'server/index.js',
   'server/backup.sh',
   'server/config.js',
+  'server/schedule.js',
   'pm2.json',
   'pm2-pro.json',
   'publish.sh',
