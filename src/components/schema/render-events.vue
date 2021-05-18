@@ -124,6 +124,7 @@ export default createComponent({
       showAddForm.value = false
     }
     const handleEditCode = () => {
+      // console.log({ isNew: true, itemId, eventIndex: editItemIndex.value, setInSchema: true })
       setCodeState(`${itemTitle} ${form.eventType}`, form.fxCode, (val: string) => {
         form.fxCode = val
         if (form.eventType) {

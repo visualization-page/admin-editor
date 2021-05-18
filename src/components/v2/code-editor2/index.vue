@@ -221,7 +221,19 @@ export default createComponent({
         })
       }
     }
-    const _dfBy = (arr: any[], newArr: any = [], assert: any, cb: any) => {
+    const _dfBy = (arr: any[], newArr: any = [], assert: any, cb?: any) => {
+      const deepAdd = !cb
+      if (deepAdd) {
+        for (let i = 0; i < arr.length; i++) {
+          if (assert(arr[i])) {
+            newArr.push(arr[i])
+          }
+          if (arr[i].children) {
+            _dfBy(arr[i].children, newArr, assert, cb)
+          }
+        }
+        return false
+      }
       let flag = false
       for (let i = 0; i < arr.length; i++) {
         const tmp = cb(arr[i])
@@ -364,8 +376,8 @@ export default createComponent({
             res,
             (item: any) => {
               return item.id === itemId && (eventIndex !== undefined && item.events && item.events.length)
-            },
-            (item: any) => item
+            }
+            // (item: any) => JSON.parse(JSON.stringify(item))
           )
           // console.log(res)
           // console.log(eventIndex)
