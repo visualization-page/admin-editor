@@ -30,7 +30,7 @@ async function doBak () {
     await cloneGit()
   }
   // 将 server/public 目录拷贝到 git
-  await fs.copy(path.resolve(__dirname, 'public'), path.join(gitDir, 'dev'), { overwrite: true })
+  await fs.copy(path.resolve(__dirname, 'public'), path.join(gitDir, process.env.APP_ENV), { overwrite: true })
   await log('拷贝 server/public 到 git 目录', 'success')
   // pull
   await log('git pull ...')
@@ -39,7 +39,7 @@ async function doBak () {
   // 提交
   await log('git push ...')
   await utils.spawn('git', ['add', '.'], { cwd: gitDir })
-  await utils.spawn('git', ['commit', '-m', 'bak by system'], { cwd: gitDir }).catch(() => {})
+  await utils.spawn('git', ['commit', '-m', `[${process.env.APP_ENV}] bak by system`], { cwd: gitDir }).catch(() => {})
   await utils.spawn('git', ['push'], { cwd: gitDir })
   await log('git push', 'success')
 }
