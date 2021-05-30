@@ -7,7 +7,7 @@
       "env": {
         "NODE_ENV": "production",
         "APP_ENV": "pro",
-        "IOC_SERVER": "http://106.54.38.84:9411"
+        "IOC_SERVER": "http://1.117.74.21:9411"
       }
     }
   ]
